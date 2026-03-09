@@ -1,0 +1,162 @@
+{
+  "id": "marketing-report",
+  "title": "Q4 Marketing Report",
+  "description": "Marketing performance and campaign metrics for Q4",
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "rowHeight": 80,
+    "gap": 8,
+    "padding": 16
+  },
+  "theme": {
+    "name": "default",
+    "colors": {
+      "primary": "#f97316",
+      "secondary": "#64748b",
+      "background": "#f8fafc",
+      "surface": "#ffffff",
+      "text": "#0f172a",
+      "border": "#e2e8f0"
+    }
+  },
+  "variables": [],
+  "dataSources": [
+    {
+      "id": "marketing-data",
+      "type": "inline",
+      "data": {
+        "impressions": 2450000,
+        "clicks": 89500,
+        "conversions": 3420,
+        "spend": 45600,
+        "roi": 287,
+        "channelPerformance": [
+          { "channel": "Social Media", "impressions": 980000, "clicks": 32500, "conversions": 1250 },
+          { "channel": "Search Ads", "impressions": 650000, "clicks": 28000, "conversions": 980 },
+          { "channel": "Display", "impressions": 520000, "clicks": 18500, "conversions": 620 },
+          { "channel": "Email", "impressions": 300000, "clicks": 10500, "conversions": 570 }
+        ],
+        "weeklyTrend": [
+          { "week": "W1", "impressions": 520000, "conversions": 680 },
+          { "week": "W2", "impressions": 580000, "conversions": 720 },
+          { "week": "W3", "impressions": 610000, "conversions": 890 },
+          { "week": "W4", "impressions": 740000, "conversions": 1130 }
+        ]
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "id": "report-header",
+      "type": "text",
+      "title": "",
+      "position": { "x": 0, "y": 0, "w": 12, "h": 1 },
+      "config": {
+        "format": "markdown",
+        "content": "## Q4 Marketing Performance Report\n\nThis dashboard summarizes our marketing performance across all channels for Q4 2024."
+      }
+    },
+    {
+      "id": "impressions",
+      "type": "metric",
+      "title": "Total Impressions",
+      "position": { "x": 0, "y": 1, "w": 3, "h": 2 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "valueField": "impressions",
+        "format": "compact",
+        "comparison": {
+          "enabled": true,
+          "value": 23.5,
+          "label": "vs Q3"
+        }
+      }
+    },
+    {
+      "id": "clicks",
+      "type": "metric",
+      "title": "Total Clicks",
+      "position": { "x": 3, "y": 1, "w": 3, "h": 2 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "valueField": "clicks",
+        "format": "compact",
+        "comparison": {
+          "enabled": true,
+          "value": 18.2,
+          "label": "vs Q3"
+        }
+      }
+    },
+    {
+      "id": "conversions",
+      "type": "metric",
+      "title": "Conversions",
+      "position": { "x": 6, "y": 1, "w": 3, "h": 2 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "valueField": "conversions",
+        "format": "number",
+        "comparison": {
+          "enabled": true,
+          "value": 31.4,
+          "label": "vs Q3"
+        }
+      }
+    },
+    {
+      "id": "roi",
+      "type": "metric",
+      "title": "ROI",
+      "position": { "x": 9, "y": 1, "w": 3, "h": 2 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "valueField": "roi",
+        "format": "percent"
+      }
+    },
+    {
+      "id": "weekly-trend",
+      "type": "chart",
+      "title": "Weekly Performance Trend",
+      "position": { "x": 0, "y": 3, "w": 8, "h": 4 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "geometry": "line",
+        "xField": "week",
+        "yField": "conversions",
+        "colorScheme": ["#f97316"],
+        "showGrid": true,
+        "smooth": true
+      }
+    },
+    {
+      "id": "spend-note",
+      "type": "text",
+      "title": "Ad Spend Summary",
+      "position": { "x": 8, "y": 3, "w": 4, "h": 4 },
+      "config": {
+        "format": "markdown",
+        "content": "### Total Ad Spend\n\n**$45,600** spent across all channels\n\n#### Breakdown:\n- Social Media: $18,200 (40%)\n- Search Ads: $14,500 (32%)\n- Display: $8,200 (18%)\n- Email: $4,700 (10%)\n\n*Note: Email has the highest ROI at 412%*"
+      }
+    },
+    {
+      "id": "channel-performance",
+      "type": "table",
+      "title": "Channel Performance",
+      "position": { "x": 0, "y": 7, "w": 12, "h": 3 },
+      "datasourceId": "marketing-data",
+      "config": {
+        "columns": [
+          { "field": "channel", "header": "Channel", "width": "25%" },
+          { "field": "impressions", "header": "Impressions", "width": "25%", "format": "compact" },
+          { "field": "clicks", "header": "Clicks", "width": "25%", "format": "compact" },
+          { "field": "conversions", "header": "Conversions", "width": "25%", "format": "number" }
+        ],
+        "sortable": true,
+        "striped": true
+      }
+    }
+  ]
+}

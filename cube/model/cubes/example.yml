@@ -1,0 +1,97 @@
+# Example Cube definition for Dashforge
+# This is a YAML-based cube that demonstrates the semantic layer capabilities
+# Replace this with your actual data model
+
+cubes:
+  - name: Orders
+    title: Orders
+    description: Customer orders with products and revenue
+
+    sql: >
+      SELECT * FROM orders
+
+    # Join to other cubes
+    joins: []
+      # - name: Customers
+      #   relationship: many_to_one
+      #   sql: "{CUBE}.customer_id = {Customers}.id"
+
+    measures:
+      - name: count
+        title: Total Orders
+        type: count
+        description: Total number of orders
+
+      - name: totalRevenue
+        title: Total Revenue
+        type: sum
+        sql: total_amount
+        format: currency
+
+      - name: averageOrderValue
+        title: Average Order Value
+        type: avg
+        sql: total_amount
+        format: currency
+
+    dimensions:
+      - name: id
+        title: Order ID
+        type: string
+        sql: id
+        primaryKey: true
+
+      - name: status
+        title: Status
+        type: string
+        sql: status
+
+      - name: createdAt
+        title: Created At
+        type: time
+        sql: created_at
+
+      - name: customerId
+        title: Customer ID
+        type: string
+        sql: customer_id
+
+  - name: Products
+    title: Products
+    description: Product catalog
+
+    sql: >
+      SELECT * FROM products
+
+    measures:
+      - name: count
+        title: Total Products
+        type: count
+
+      - name: totalInventory
+        title: Total Inventory
+        type: sum
+        sql: inventory_count
+
+    dimensions:
+      - name: id
+        title: Product ID
+        type: string
+        sql: id
+        primaryKey: true
+
+      - name: name
+        title: Product Name
+        type: string
+        sql: name
+
+      - name: category
+        title: Category
+        type: string
+        sql: category
+
+      - name: price
+        title: Price
+        type: number
+        sql: price
+        format: currency
