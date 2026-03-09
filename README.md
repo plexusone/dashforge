@@ -72,35 +72,35 @@ Full documentation is available at [docs/](docs/):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Dashforge                                 │
+│                        Dashforge                                │
 ├─────────────────────────────────────────────────────────────────┤
-│  builder/               Visual dashboard builder (React)         │
-│    ├── src/components/  Canvas, widgets, chart builder           │
-│    ├── src/ai/          AI generation schemas & prompts          │
-│    └── src/api/         Dashforge & Cube.js clients              │
+│  builder/               Visual dashboard builder (React)        │
+│    ├── src/components/  Canvas, widgets, chart builder          │
+│    ├── src/ai/          AI generation schemas & prompts         │
+│    └── src/api/         Dashforge & Cube.js clients             │
 ├─────────────────────────────────────────────────────────────────┤
-│  cube/                  Cube.js semantic layer                   │
-│    └── model/cubes/     Data models (YAML)                       │
+│  cube/                  Cube.js semantic layer                  │
+│    └── model/cubes/     Data models (YAML)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  cmd/dashforge/         Static CLI (validate, convert)           │
-│  cmd/dashforge-server/  Full server with API                     │
+│  cmd/dashforge/         Static CLI (validate, convert)          │
+│  cmd/dashforge-server/  Full server with API                    │
 ├─────────────────────────────────────────────────────────────────┤
-│  dashboardir/           Dashboard JSON schema & types            │
-│  viewer/                Embedded static HTML/JS viewer           │
+│  dashboardir/           Dashboard JSON schema & types           │
+│  viewer/                Embedded static HTML/JS viewer          │
 ├─────────────────────────────────────────────────────────────────┤
-│  datasource/            Plugin-style data source providers       │
-│    ├── providers/       PostgreSQL, MySQL implementations        │
-│    ├── manager.go       Connection pool management               │
-│    └── query.go         Query execution engine                   │
+│  datasource/            Plugin-style data source providers      │
+│    ├── providers/       PostgreSQL, MySQL implementations       │
+│    ├── manager.go       Connection pool management              │
+│    └── query.go         Query execution engine                  │
 ├─────────────────────────────────────────────────────────────────┤
-│  internal/server/                                                │
-│    ├── api/             REST API handlers                        │
-│    ├── auth/            JWT + OAuth (GitHub, Google)             │
-│    ├── db/              PostgreSQL with Ent ORM                  │
-│    └── middleware/      Tenant context, logging                  │
+│  internal/server/                                               │
+│    ├── api/             REST API handlers                       │
+│    ├── auth/            JWT + OAuth (GitHub, Google)            │
+│    ├── db/              PostgreSQL with Ent ORM                 │
+│    └── middleware/      Tenant context, logging                 │
 ├─────────────────────────────────────────────────────────────────┤
-│  ent/                   Ent schema & generated code              │
-│    └── schema/          User, Dashboard, Tenant, etc.            │
+│  ent/                   Ent schema & generated code             │
+│    └── schema/          User, Dashboard, Tenant, etc.           │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -116,17 +116,17 @@ The visual builder provides a Metabase-style drag-and-drop interface:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   Dashboard Builder UI                           │
+│                   Dashboard Builder UI                          │
 │         (React + TypeScript + react-grid-layout)                │
 ├─────────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐ │
-│  │ Widget      │  │ Canvas      │  │ Properties Panel        │ │
-│  │ Palette     │  │ (Grid)      │  │ ├── Chart Builder       │ │
-│  │ ├── Chart   │  │             │  │ ├── Query Builder       │ │
-│  │ ├── Metric  │  │  [Widget]   │  │ └── Style Editor        │ │
-│  │ ├── Table   │  │  [Widget]   │  │                         │ │
-│  │ └── Text    │  │  [Widget]   │  │                         │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
+│  │ Widget      │  │ Canvas      │  │ Properties Panel        │  │
+│  │ Palette     │  │ (Grid)      │  │ ├── Chart Builder       │  │
+│  │ ├── Chart   │  │             │  │ ├── Query Builder       │  │
+│  │ ├── Metric  │  │  [Widget]   │  │ └── Style Editor        │  │
+│  │ ├── Table   │  │  [Widget]   │  │                         │  │
+│  │ └── Text    │  │  [Widget]   │  │                         │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
