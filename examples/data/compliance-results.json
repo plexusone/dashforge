@@ -1,0 +1,285 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-02-25T10:30:00Z",
+  "summary": {
+    "totalRepos": 15,
+    "compliantRepos": 4,
+    "partialRepos": 7,
+    "nonCompliant": 4,
+    "skipped": 0,
+    "errors": 0,
+    "complianceRate": 26.7,
+    "byLanguage": [
+      {
+        "language": "Go",
+        "totalRepos": 10,
+        "compliantRepos": 3,
+        "complianceRate": 30.0
+      },
+      {
+        "language": "TypeScript",
+        "totalRepos": 5,
+        "compliantRepos": 1,
+        "complianceRate": 20.0
+      }
+    ]
+  },
+  "repos": [
+    {
+      "owner": "grokify",
+      "name": "mogo",
+      "fullName": "grokify/mogo",
+      "htmlUrl": "https://github.com/grokify/mogo",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-sast-codeql", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-sast-codeql", "severity": "low" }
+      ],
+      "scanTimeMs": 234
+    },
+    {
+      "owner": "grokify",
+      "name": "echartify",
+      "fullName": "grokify/echartify",
+      "htmlUrl": "https://github.com/grokify/echartify",
+      "languages": ["Go", "TypeScript"],
+      "compliant": true,
+      "complianceLevel": "full",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": true, "matchType": "exact" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": true, "matchType": "exact" },
+        { "workflowType": "ts-ci", "present": true, "usesReusable": true, "matchType": "exact" }
+      ],
+      "missing": [],
+      "scanTimeMs": 312
+    },
+    {
+      "owner": "grokify",
+      "name": "pipelineconductor",
+      "fullName": "grokify/pipelineconductor",
+      "htmlUrl": "https://github.com/grokify/pipelineconductor",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-sast-codeql", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-sast-codeql", "severity": "low" }
+      ],
+      "scanTimeMs": 198
+    },
+    {
+      "owner": "grokify",
+      "name": "schemago",
+      "fullName": "grokify/schemago",
+      "htmlUrl": "https://github.com/grokify/schemago",
+      "languages": ["Go"],
+      "compliant": true,
+      "complianceLevel": "full",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": true, "matchType": "exact" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": true, "matchType": "exact" }
+      ],
+      "missing": [],
+      "scanTimeMs": 156
+    },
+    {
+      "owner": "agentplexus",
+      "name": "bedrock-client",
+      "fullName": "agentplexus/bedrock-client",
+      "htmlUrl": "https://github.com/agentplexus/bedrock-client",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "none",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": false, "matchType": "none" },
+        { "workflowType": "go-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-ci", "severity": "high" },
+        { "workflowType": "go-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 89
+    },
+    {
+      "owner": "agentplexus",
+      "name": "vertex-client",
+      "fullName": "agentplexus/vertex-client",
+      "htmlUrl": "https://github.com/agentplexus/vertex-client",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 145
+    },
+    {
+      "owner": "grokify",
+      "name": "gogithub",
+      "fullName": "grokify/gogithub",
+      "htmlUrl": "https://github.com/grokify/gogithub",
+      "languages": ["Go"],
+      "compliant": true,
+      "complianceLevel": "full",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": true, "matchType": "exact" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": true, "matchType": "exact" }
+      ],
+      "missing": [],
+      "scanTimeMs": 178
+    },
+    {
+      "owner": "grokify",
+      "name": "gocharts",
+      "fullName": "grokify/gocharts",
+      "htmlUrl": "https://github.com/grokify/gocharts",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": false, "matchType": "equivalent" }
+      ],
+      "missing": [],
+      "scanTimeMs": 167
+    },
+    {
+      "owner": "grokify",
+      "name": "ringcentral-sdk-ts",
+      "fullName": "grokify/ringcentral-sdk-ts",
+      "htmlUrl": "https://github.com/grokify/ringcentral-sdk-ts",
+      "languages": ["TypeScript"],
+      "compliant": false,
+      "complianceLevel": "none",
+      "requiredWorkflows": [
+        { "workflowType": "ts-ci", "present": false, "matchType": "none" },
+        { "workflowType": "ts-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "ts-ci", "severity": "high" },
+        { "workflowType": "ts-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 98
+    },
+    {
+      "owner": "grokify",
+      "name": "ringcentral-embeddable-ts",
+      "fullName": "grokify/ringcentral-embeddable-ts",
+      "htmlUrl": "https://github.com/grokify/ringcentral-embeddable-ts",
+      "languages": ["TypeScript"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "ts-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "ts-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "ts-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 123
+    },
+    {
+      "owner": "grokify",
+      "name": "glip-webhook-ts",
+      "fullName": "grokify/glip-webhook-ts",
+      "htmlUrl": "https://github.com/grokify/glip-webhook-ts",
+      "languages": ["TypeScript"],
+      "compliant": true,
+      "complianceLevel": "full",
+      "requiredWorkflows": [
+        { "workflowType": "ts-ci", "present": true, "usesReusable": true, "matchType": "exact" },
+        { "workflowType": "ts-lint", "present": true, "usesReusable": true, "matchType": "exact" }
+      ],
+      "missing": [],
+      "scanTimeMs": 134
+    },
+    {
+      "owner": "grokify",
+      "name": "oauth2more-ts",
+      "fullName": "grokify/oauth2more-ts",
+      "htmlUrl": "https://github.com/grokify/oauth2more-ts",
+      "languages": ["TypeScript"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "ts-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "ts-lint", "present": true, "usesReusable": false, "matchType": "equivalent" }
+      ],
+      "missing": [],
+      "scanTimeMs": 112
+    },
+    {
+      "owner": "agentplexus",
+      "name": "anthropic-client",
+      "fullName": "agentplexus/anthropic-client",
+      "htmlUrl": "https://github.com/agentplexus/anthropic-client",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "none",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": false, "matchType": "none" },
+        { "workflowType": "go-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-ci", "severity": "high" },
+        { "workflowType": "go-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 76
+    },
+    {
+      "owner": "grokify",
+      "name": "goauth",
+      "fullName": "grokify/goauth",
+      "htmlUrl": "https://github.com/grokify/goauth",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": true, "usesReusable": false, "matchType": "equivalent" }
+      ],
+      "missing": [],
+      "scanTimeMs": 189
+    },
+    {
+      "owner": "agentplexus",
+      "name": "openai-client",
+      "fullName": "agentplexus/openai-client",
+      "htmlUrl": "https://github.com/agentplexus/openai-client",
+      "languages": ["Go"],
+      "compliant": false,
+      "complianceLevel": "partial",
+      "requiredWorkflows": [
+        { "workflowType": "go-ci", "present": true, "usesReusable": false, "matchType": "equivalent" },
+        { "workflowType": "go-lint", "present": false, "matchType": "none" }
+      ],
+      "missing": [
+        { "workflowType": "go-lint", "severity": "medium" }
+      ],
+      "scanTimeMs": 134
+    }
+  ],
+  "scanDurationMs": 2345,
+  "config": {
+    "orgs": ["agentplexus"],
+    "users": ["grokify"],
+    "refRepo": "grokify/.github",
+    "refBranch": "main",
+    "languages": ["Go", "TypeScript"],
+    "strict": false
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/grokify/dashforge/schema/dashboard.schema.json",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "layout": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "integer"
+        },
+        "rowHeight": {
+          "type": "integer"
+        },
+        "gap": {
+          "type": "integer"
+        },
+        "padding": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "dataSources": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "data": true,
+          "connection": {
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "host": {
+                "type": "string"
+              },
+              "port": {
+                "type": "integer"
+              },
+              "database": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "passwordEnv": {
+                "type": "string"
+              },
+              "sslMode": {
+                "type": "string"
+              },
+              "connectionString": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "query": {
+            "type": "string"
+          },
+          "derivedFrom": {
+            "type": "string"
+          },
+          "transform": {
+            "items": {
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "config": true
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "refresh": {
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "intervalSeconds": {
+                "type": "integer"
+              },
+              "onFocus": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "cache": {
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "ttlSeconds": {
+                "type": "integer"
+              },
+              "key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "widgets": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "position": {
+            "properties": {
+              "x": {
+                "type": "integer"
+              },
+              "y": {
+                "type": "integer"
+              },
+              "w": {
+                "type": "integer"
+              },
+              "h": {
+                "type": "integer"
+              },
+              "minW": {
+                "type": "integer"
+              },
+              "minH": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "dataSourceId": {
+            "type": "string"
+          },
+          "transform": {
+            "items": {
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "config": true
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "config": true,
+          "visible": {
+            "type": "boolean"
+          },
+          "refreshOverride": {
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "intervalSeconds": {
+                "type": "integer"
+              },
+              "onFocus": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "drillDown": {
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "params": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "theme": {
+      "properties": {
+        "mode": {
+          "type": "string"
+        },
+        "primaryColor": {
+          "type": "string"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "fontFamily": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "variables": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "default": {
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "dataSourceId": {
+            "type": "string"
+          },
+          "labelField": {
+            "type": "string"
+          },
+          "valueField": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Dashboard",
+  "description": "Dashforge dashboard definition"
+}
