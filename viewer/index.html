@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashforge Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666666;
+      --border-color: #e0e0e0;
+      --accent-color: #3b82f6;
+      --success-color: #22c55e;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2d2d2d;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --border-color: #404040;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .dashboard-header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dashboard-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .dashboard-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .widget {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .widget-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .widget-content {
+      flex: 1;
+      padding: 16px;
+      min-height: 200px;
+    }
+
+    .metric-widget {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .metric-comparison {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .metric-comparison.positive { color: var(--success-color); }
+    .metric-comparison.negative { color: var(--error-color); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      font-weight: 600;
+      background: var(--bg-secondary);
+    }
+
+    tr:hover { background: var(--bg-secondary); }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--text-secondary);
+    }
+
+    .error {
+      color: var(--error-color);
+      padding: 16px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-badge.full { background: #dcfce7; color: #166534; }
+    .status-badge.partial { background: #fef3c7; color: #92400e; }
+    .status-badge.none { background: #fee2e2; color: #991b1b; }
+
+    /* Variable filter bar */
+    .filter-bar {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .filter-control {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      min-width: 150px;
+    }
+
+    .filter-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .filter-control.date-range {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filter-control.date-range input {
+      padding: 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .filter-control.date-range span {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .filter-reset {
+      padding: 8px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .filter-reset:hover {
+      background: var(--border-color);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="loading">Loading dashboard...</div>
+  </div>
+
+  <script>
+    // Dashforge Viewer - Static Dashboard Renderer
+    class DashforgeViewer {
+      constructor(container) {
+        this.container = container;
+        this.dashboard = null;
+        this.dataSources = new Map();
+        this.charts = new Map();
+        this.variables = new Map(); // Current variable values
+        this.variableDefaults = new Map(); // Default values
+      }
+
+      async load(dashboardUrl) {
+        try {
+          // Fetch dashboard definition
+          const response = await fetch(dashboardUrl);
+          if (!response.ok) throw new Error(`Failed to load dashboard: ${response.status}`);
+          this.dashboard = await response.json();
+
+          // Initialize variables from defaults and URL params
+          this.initializeVariables();
+
+          // Fetch all data sources
+          await this.loadDataSources();
+
+          // Render
+          this.render();
+        } catch (error) {
+          this.container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+          console.error(error);
+        }
+      }
+
+      initializeVariables() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        for (const variable of this.dashboard.variables || []) {
+          // Store default
+          this.variableDefaults.set(variable.id, variable.default || '');
+
+          // Check URL params first, then use default
+          const urlValue = urlParams.get(`var_${variable.id}`);
+          if (urlValue !== null) {
+            // Handle daterange which has start and end
+            if (variable.type === 'daterange') {
+              const endValue = urlParams.get(`var_${variable.id}_end`);
+              this.variables.set(variable.id, { start: urlValue, end: endValue || '' });
+            } else {
+              this.variables.set(variable.id, urlValue);
+            }
+          } else if (variable.default) {
+            if (variable.type === 'daterange') {
+              // Parse default as "start,end" format
+              const [start, end] = variable.default.split(',');
+              this.variables.set(variable.id, { start: start || '', end: end || '' });
+            } else {
+              this.variables.set(variable.id, variable.default);
+            }
+          } else {
+            this.variables.set(variable.id, variable.type === 'daterange' ? { start: '', end: '' } : '');
+          }
+        }
+      }
+
+      updateURLParams() {
+        const url = new URL(window.location);
+
+        // Clear existing var_ params
+        for (const key of [...url.searchParams.keys()]) {
+          if (key.startsWith('var_')) {
+            url.searchParams.delete(key);
+          }
+        }
+
+        // Add current values (skip defaults to keep URL clean)
+        for (const [id, value] of this.variables) {
+          const defaultVal = this.variableDefaults.get(id);
+          if (typeof value === 'object') {
+            // daterange
+            if (value.start || value.end) {
+              url.searchParams.set(`var_${id}`, value.start);
+              url.searchParams.set(`var_${id}_end`, value.end);
+            }
+          } else if (value && value !== defaultVal) {
+            url.searchParams.set(`var_${id}`, value);
+          }
+        }
+
+        window.history.replaceState({}, '', url);
+      }
+
+      async loadDataSources() {
+        const promises = this.dashboard.dataSources.map(async (ds) => {
+          try {
+            let data;
+            if (ds.type === 'url') {
+              const response = await fetch(ds.url);
+              if (!response.ok) throw new Error(`Failed to load ${ds.url}`);
+              data = await response.json();
+            } else if (ds.type === 'inline') {
+              data = ds.data;
+            }
+
+            // Apply transforms
+            if (ds.transform) {
+              data = this.applyTransforms(data, ds.transform);
+            }
+
+            this.dataSources.set(ds.id, data);
+          } catch (error) {
+            console.error(`Error loading data source ${ds.id}:`, error);
+            this.dataSources.set(ds.id, { error: error.message });
+          }
+        });
+
+        await Promise.all(promises);
+      }
+
+      applyTransforms(data, transforms) {
+        let result = data;
+        for (const transform of transforms) {
+          result = this.applyTransform(result, transform);
+        }
+        return result;
+      }
+
+      applyTransform(data, transform) {
+        const config = transform.config || {};
+
+        switch (transform.type) {
+          case 'extract':
+            return this.getNestedValue(data, config.path);
+
+          case 'filter':
+            return Array.isArray(data) ? data.filter(row => {
+              const value = row[config.field];
+              const filterValue = this.interpolateValue(config.value);
+              const filterValues = config.values?.map(v => this.interpolateValue(v));
+
+              // Skip filter if variable value is empty
+              if (config.variable && !filterValue) {
+                return true;
+              }
+
+              switch (config.operator) {
+                case 'eq': return value === filterValue;
+                case 'ne': return value !== filterValue;
+                case 'gt': return value > filterValue;
+                case 'gte': return value >= filterValue;
+                case 'lt': return value < filterValue;
+                case 'lte': return value <= filterValue;
+                case 'contains': return String(value).toLowerCase().includes(String(filterValue).toLowerCase());
+                case 'in': return filterValues?.includes(value);
+                case 'between': {
+                  // For date range filters
+                  const rangeValue = this.interpolateValue(config.value);
+                  if (typeof rangeValue === 'object' && rangeValue.start && rangeValue.end) {
+                    return value >= rangeValue.start && value <= rangeValue.end;
+                  }
+                  return true;
+                }
+                default: return true;
+              }
+            }) : data;
+
+          case 'sort':
+            return Array.isArray(data) ? [...data].sort((a, b) => {
+              const aVal = a[config.field];
+              const bVal = b[config.field];
+              const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+              return config.direction === 'desc' ? -cmp : cmp;
+            }) : data;
+
+          case 'limit':
+            return Array.isArray(data) ? data.slice(config.offset || 0, (config.offset || 0) + config.count) : data;
+
+          default:
+            return data;
+        }
+      }
+
+      // Interpolate variable references like "${var:variableId}"
+      interpolateValue(value) {
+        if (typeof value !== 'string') return value;
+
+        // Check for variable reference pattern ${var:variableId}
+        const varMatch = value.match(/^\$\{var:(\w+)\}$/);
+        if (varMatch) {
+          return this.variables.get(varMatch[1]);
+        }
+
+        // Also support inline interpolation for partial strings
+        return value.replace(/\$\{var:(\w+)\}/g, (_, varId) => {
+          const varValue = this.variables.get(varId);
+          if (typeof varValue === 'object') {
+            return JSON.stringify(varValue);
+          }
+          return varValue || '';
+        });
+      }
+
+      getNestedValue(obj, path) {
+        return path.split('.').reduce((o, k) => o?.[k], obj);
+      }
+
+      render() {
+        const { dashboard } = this;
+        const layout = dashboard.layout || { type: 'grid', columns: 12, rowHeight: 80, gap: 16 };
+
+        // Build HTML
+        let html = `
+          <header class="dashboard-header">
+            <div>
+              <h1 class="dashboard-title">${this.escapeHtml(dashboard.title)}</h1>
+              ${dashboard.description ? `<p class="dashboard-description">${this.escapeHtml(dashboard.description)}</p>` : ''}
+            </div>
+          </header>
+        `;
+
+        // Add filter bar if there are variables
+        if (dashboard.variables && dashboard.variables.length > 0) {
+          html += this.renderFilterBar(dashboard.variables);
+        }
+
+        html += `
+          <div class="dashboard-grid" style="
+            grid-template-columns: repeat(${layout.columns}, 1fr);
+            gap: ${layout.gap || 16}px;
+            padding: ${layout.padding || 16}px;
+          ">
+        `;
+
+        for (const widget of dashboard.widgets) {
+          const pos = widget.position;
+          html += `
+            <div class="widget"
+                 id="widget-${widget.id}"
+                 style="
+                   grid-column: ${pos.x + 1} / span ${pos.w};
+                   grid-row: ${pos.y + 1} / span ${pos.h};
+                   min-height: ${pos.h * (layout.rowHeight || 80)}px;
+                 ">
+              ${widget.title ? `<div class="widget-header">${this.escapeHtml(widget.title)}</div>` : ''}
+              <div class="widget-content" id="content-${widget.id}">
+                <div class="loading">Loading...</div>
+              </div>
+            </div>
+          `;
+        }
+
+        html += '</div>';
+        this.container.innerHTML = html;
+
+        // Render each widget
+        for (const widget of dashboard.widgets) {
+          this.renderWidget(widget);
+        }
+
+        // Attach filter event handlers
+        this.attachFilterHandlers();
+      }
+
+      renderFilterBar(variables) {
+        let html = '<div class="filter-bar">';
+
+        for (const variable of variables) {
+          html += `<div class="filter-group">`;
+          html += `<label class="filter-label" for="filter-${variable.id}">${this.escapeHtml(variable.name)}</label>`;
+
+          const currentValue = this.variables.get(variable.id);
+
+          switch (variable.type) {
+            case 'select':
+              html += this.renderSelectFilter(variable, currentValue);
+              break;
+            case 'text':
+              html += this.renderTextFilter(variable, currentValue);
+              break;
+            case 'date':
+              html += this.renderDateFilter(variable, currentValue);
+              break;
+            case 'daterange':
+              html += this.renderDateRangeFilter(variable, currentValue);
+              break;
+            default:
+              html += this.renderTextFilter(variable, currentValue);
+          }
+
+          html += '</div>';
+        }
+
+        // Reset button
+        html += '<button class="filter-reset" id="filter-reset">Reset</button>';
+        html += '</div>';
+
+        return html;
+      }
+
+      renderSelectFilter(variable, currentValue) {
+        let options = variable.options || [];
+
+        // If dynamic options from data source
+        if (variable.dataSourceId) {
+          const data = this.dataSources.get(variable.dataSourceId);
+          if (Array.isArray(data)) {
+            const labelField = variable.labelField || 'label';
+            const valueField = variable.valueField || 'value';
+            options = data.map(item => ({
+              label: item[labelField],
+              value: String(item[valueField])
+            }));
+          }
+        }
+
+        let html = `<select class="filter-control" id="filter-${variable.id}" data-variable="${variable.id}">`;
+        html += `<option value="">All</option>`;
+        for (const opt of options) {
+          const selected = currentValue === opt.value ? 'selected' : '';
+          html += `<option value="${this.escapeHtml(opt.value)}" ${selected}>${this.escapeHtml(opt.label)}</option>`;
+        }
+        html += '</select>';
+        return html;
+      }
+
+      renderTextFilter(variable, currentValue) {
+        return `<input type="text" class="filter-control" id="filter-${variable.id}"
+                  data-variable="${variable.id}"
+                  value="${this.escapeHtml(currentValue || '')}"
+                  placeholder="Enter ${variable.name.toLowerCase()}...">`;
+      }
+
+      renderDateFilter(variable, currentValue) {
+        return `<input type="date" class="filter-control" id="filter-${variable.id}"
+                  data-variable="${variable.id}"
+                  value="${currentValue || ''}">`;
+      }
+
+      renderDateRangeFilter(variable, currentValue) {
+        const start = currentValue?.start || '';
+        const end = currentValue?.end || '';
+        return `<div class="filter-control date-range" id="filter-${variable.id}">
+                  <input type="date" data-variable="${variable.id}" data-range="start" value="${start}">
+                  <span>to</span>
+                  <input type="date" data-variable="${variable.id}" data-range="end" value="${end}">
+                </div>`;
+      }
+
+      attachFilterHandlers() {
+        // Handle select and single input changes
+        this.container.querySelectorAll('.filter-control[data-variable]').forEach(el => {
+          const variableId = el.dataset.variable;
+          el.addEventListener('change', (e) => {
+            this.variables.set(variableId, e.target.value);
+            this.onFilterChange();
+          });
+        });
+
+        // Handle text input with debounce
+        this.container.querySelectorAll('input[type="text"].filter-control').forEach(el => {
+          let timeout;
+          el.addEventListener('input', (e) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+              this.variables.set(el.dataset.variable, e.target.value);
+              this.onFilterChange();
+            }, 300);
+          });
+        });
+
+        // Handle date range inputs
+        this.container.querySelectorAll('.date-range input').forEach(el => {
+          el.addEventListener('change', (e) => {
+            const variableId = el.dataset.variable;
+            const range = el.dataset.range;
+            const current = this.variables.get(variableId) || { start: '', end: '' };
+            current[range] = e.target.value;
+            this.variables.set(variableId, current);
+            this.onFilterChange();
+          });
+        });
+
+        // Reset button
+        const resetBtn = this.container.querySelector('#filter-reset');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => this.resetFilters());
+        }
+      }
+
+      onFilterChange() {
+        this.updateURLParams();
+        // Re-render widgets with new filter values
+        for (const widget of this.dashboard.widgets) {
+          this.renderWidget(widget);
+        }
+      }
+
+      resetFilters() {
+        // Reset to defaults
+        for (const variable of this.dashboard.variables || []) {
+          if (variable.type === 'daterange') {
+            const [start, end] = (variable.default || ',').split(',');
+            this.variables.set(variable.id, { start: start || '', end: end || '' });
+          } else {
+            this.variables.set(variable.id, variable.default || '');
+          }
+        }
+
+        // Update UI
+        this.updateURLParams();
+
+        // Re-render filter bar and widgets
+        this.render();
+      }
+
+      getVariableValue(variableId) {
+        return this.variables.get(variableId);
+      }
+
+      renderWidget(widget) {
+        const container = document.getElementById(`content-${widget.id}`);
+        let data = this.dataSources.get(widget.dataSourceId);
+
+        if (data?.error) {
+          container.innerHTML = `<div class="error">Data error: ${data.error}</div>`;
+          return;
+        }
+
+        // Apply widget-level transforms
+        if (widget.transform) {
+          data = this.applyTransforms(data, widget.transform);
+        }
+
+        switch (widget.type) {
+          case 'chart':
+            this.renderChart(container, widget, data);
+            break;
+          case 'metric':
+            this.renderMetric(container, widget, data);
+            break;
+          case 'table':
+            this.renderTable(container, widget, data);
+            break;
+          case 'text':
+            this.renderText(container, widget);
+            break;
+          default:
+            container.innerHTML = `<div class="error">Unknown widget type: ${widget.type}</div>`;
+        }
+      }
+
+      renderChart(container, widget, data) {
+        const config = widget.config;
+        if (!config) {
+          container.innerHTML = '<div class="error">No chart config</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        const chart = echarts.init(container);
+        this.charts.set(widget.id, chart);
+
+        // Convert ChartIR to ECharts options
+        const option = this.compileChartIR(config, data);
+        chart.setOption(option);
+
+        // Handle resize
+        new ResizeObserver(() => chart.resize()).observe(container);
+      }
+
+      compileChartIR(ir, data) {
+        // Simple ChartIR to ECharts compiler
+        const option = {
+          dataset: { source: data },
+          tooltip: ir.tooltip?.show !== false ? { trigger: ir.tooltip?.trigger || 'axis' } : undefined,
+          legend: ir.legend?.show !== false ? {
+            show: true,
+            top: ir.legend?.position === 'bottom' ? 'bottom' : 'top'
+          } : undefined,
+          grid: ir.grid || { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        };
+
+        if (ir.title) {
+          option.title = { text: ir.title };
+        }
+
+        // Build axes
+        if (ir.axes) {
+          option.xAxis = ir.axes.filter(a => a.position === 'bottom' || a.position === 'top')
+            .map(a => ({ type: a.type, name: a.name, position: a.position }));
+          option.yAxis = ir.axes.filter(a => a.position === 'left' || a.position === 'right')
+            .map(a => ({ type: a.type, name: a.name, position: a.position }));
+        } else {
+          // Default axes based on marks
+          const firstMark = ir.marks?.[0];
+          if (firstMark && firstMark.geometry !== 'pie') {
+            option.xAxis = { type: 'category' };
+            option.yAxis = { type: 'value' };
+          }
+        }
+
+        // Build series from marks
+        option.series = (ir.marks || []).map(mark => {
+          const series = {
+            type: mark.geometry === 'area' ? 'line' : mark.geometry,
+            name: mark.name || mark.id,
+            encode: mark.encode,
+            smooth: mark.smooth,
+            stack: mark.stack,
+          };
+
+          if (mark.geometry === 'area') {
+            series.areaStyle = {};
+          }
+
+          if (mark.style) {
+            series.itemStyle = {
+              color: mark.style.color,
+              opacity: mark.style.opacity,
+            };
+          }
+
+          return series;
+        });
+
+        return option;
+      }
+
+      renderMetric(container, widget, data) {
+        const config = widget.config || {};
+        let value = data;
+
+        if (config.valueField && typeof data === 'object') {
+          value = Array.isArray(data) ? data[0]?.[config.valueField] : data[config.valueField];
+        }
+
+        // Format value
+        let displayValue = value;
+        if (config.format === 'percent') {
+          displayValue = `${(value * (value < 1 ? 100 : 1)).toFixed(config.formatOptions?.decimals || 1)}%`;
+        } else if (config.format === 'number') {
+          displayValue = new Intl.NumberFormat(config.formatOptions?.locale || 'en-US', {
+            maximumFractionDigits: config.formatOptions?.decimals || 0
+          }).format(value);
+        }
+
+        // Apply threshold colors
+        let color = '';
+        if (config.thresholds) {
+          for (const t of config.thresholds.sort((a, b) => b.value - a.value)) {
+            if (value >= t.value) {
+              color = t.color;
+              break;
+            }
+          }
+        }
+
+        container.innerHTML = `
+          <div class="metric-widget">
+            <div class="metric-value" ${color ? `style="color: ${color}"` : ''}>${displayValue}</div>
+            ${config.labelField ? `<div class="metric-label">${this.escapeHtml(data[config.labelField] || '')}</div>` : ''}
+          </div>
+        `;
+      }
+
+      renderTable(container, widget, data) {
+        const config = widget.config || {};
+        const rows = Array.isArray(data) ? data : [];
+        const columns = config.columns || Object.keys(rows[0] || {}).map(f => ({ field: f }));
+
+        let html = '<table><thead><tr>';
+        for (const col of columns) {
+          html += `<th style="${col.width ? `width:${col.width}` : ''}">${this.escapeHtml(col.header || col.field)}</th>`;
+        }
+        html += '</tr></thead><tbody>';
+
+        for (const row of rows) {
+          html += '<tr>';
+          for (const col of columns) {
+            let value = row[col.field];
+
+            // Format
+            if (col.format === 'percent') {
+              value = `${(value * 100).toFixed(col.formatOptions?.decimals || 1)}%`;
+            }
+
+            // Status badge
+            if (col.field === 'complianceLevel' || col.field === 'status') {
+              const level = String(value).toLowerCase();
+              value = `<span class="status-badge ${level}">${value}</span>`;
+              html += `<td>${value}</td>`;
+            } else {
+              html += `<td style="${col.align ? `text-align:${col.align}` : ''}">${this.escapeHtml(String(value ?? ''))}</td>`;
+            }
+          }
+          html += '</tr>';
+        }
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      }
+
+      renderText(container, widget) {
+        const config = widget.config || {};
+        container.innerHTML = `<div style="white-space: pre-wrap;">${this.escapeHtml(config.content || '')}</div>`;
+      }
+
+      escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const dashboardUrl = params.get('dashboard') || './examples/compliance-dashboard.json';
+
+      const viewer = new DashforgeViewer(document.getElementById('app'));
+      viewer.load(dashboardUrl);
+    });
+  </script>
+</body>
+</html>

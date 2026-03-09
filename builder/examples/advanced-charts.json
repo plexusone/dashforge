@@ -1,0 +1,161 @@
+{
+  "id": "advanced-charts",
+  "title": "Advanced Chart Showcase",
+  "description": "Demonstrates radar, funnel, gauge, heatmap, treemap, and sankey charts",
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "rowHeight": 80,
+    "gap": 8,
+    "padding": 16
+  },
+  "theme": {
+    "name": "default",
+    "colors": {
+      "primary": "#10b981",
+      "secondary": "#64748b",
+      "background": "#f8fafc",
+      "surface": "#ffffff",
+      "text": "#0f172a",
+      "border": "#e2e8f0"
+    }
+  },
+  "variables": [],
+  "dataSources": [
+    {
+      "id": "chart-data",
+      "type": "inline",
+      "data": {
+        "skillsRadar": [
+          { "skill": "JavaScript", "level": 90 },
+          { "skill": "TypeScript", "level": 85 },
+          { "skill": "React", "level": 88 },
+          { "skill": "Node.js", "level": 82 },
+          { "skill": "Go", "level": 75 },
+          { "skill": "Python", "level": 70 }
+        ],
+        "salesFunnel": [
+          { "stage": "Visitors", "value": 10000 },
+          { "stage": "Leads", "value": 5000 },
+          { "stage": "Qualified", "value": 2500 },
+          { "stage": "Proposals", "value": 1200 },
+          { "stage": "Closed", "value": 500 }
+        ],
+        "performanceScore": 78,
+        "heatmapData": [
+          { "day": "Mon", "hour": "9am", "value": 120 },
+          { "day": "Mon", "hour": "12pm", "value": 200 },
+          { "day": "Mon", "hour": "3pm", "value": 150 },
+          { "day": "Tue", "hour": "9am", "value": 80 },
+          { "day": "Tue", "hour": "12pm", "value": 180 },
+          { "day": "Tue", "hour": "3pm", "value": 220 }
+        ],
+        "treemapData": [
+          { "name": "Engineering", "value": 450 },
+          { "name": "Sales", "value": 280 },
+          { "name": "Marketing", "value": 180 },
+          { "name": "Support", "value": 120 },
+          { "name": "HR", "value": 70 }
+        ],
+        "sankeyData": {
+          "nodes": ["Source A", "Source B", "Process X", "Process Y", "Output"],
+          "links": [
+            { "source": "Source A", "target": "Process X", "value": 100 },
+            { "source": "Source A", "target": "Process Y", "value": 50 },
+            { "source": "Source B", "target": "Process X", "value": 75 },
+            { "source": "Process X", "target": "Output", "value": 150 },
+            { "source": "Process Y", "target": "Output", "value": 75 }
+          ]
+        }
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "id": "header-text",
+      "type": "text",
+      "title": "",
+      "position": { "x": 0, "y": 0, "w": 12, "h": 1 },
+      "config": {
+        "format": "markdown",
+        "content": "## Advanced Chart Types\n\nThis dashboard showcases advanced visualization types available in the builder."
+      }
+    },
+    {
+      "id": "skills-radar",
+      "type": "chart",
+      "title": "Skills Assessment (Radar)",
+      "position": { "x": 0, "y": 1, "w": 4, "h": 4 },
+      "datasourceId": "chart-data",
+      "config": {
+        "geometry": "radar",
+        "nameField": "skill",
+        "valueField": "level",
+        "colorScheme": ["#10b981"],
+        "showGrid": true
+      }
+    },
+    {
+      "id": "sales-funnel",
+      "type": "chart",
+      "title": "Sales Funnel",
+      "position": { "x": 4, "y": 1, "w": 4, "h": 4 },
+      "datasourceId": "chart-data",
+      "config": {
+        "geometry": "funnel",
+        "nameField": "stage",
+        "valueField": "value",
+        "colorScheme": ["#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef"],
+        "showLabels": true
+      }
+    },
+    {
+      "id": "performance-gauge",
+      "type": "chart",
+      "title": "Performance Score (Gauge)",
+      "position": { "x": 8, "y": 1, "w": 4, "h": 4 },
+      "datasourceId": "chart-data",
+      "config": {
+        "geometry": "gauge",
+        "valueField": "performanceScore",
+        "min": 0,
+        "max": 100,
+        "colorScheme": ["#ef4444", "#f59e0b", "#10b981"]
+      }
+    },
+    {
+      "id": "department-treemap",
+      "type": "chart",
+      "title": "Department Headcount (Treemap)",
+      "position": { "x": 0, "y": 5, "w": 6, "h": 4 },
+      "datasourceId": "chart-data",
+      "config": {
+        "geometry": "treemap",
+        "nameField": "name",
+        "valueField": "value",
+        "showLabels": true
+      }
+    },
+    {
+      "id": "flow-sankey",
+      "type": "chart",
+      "title": "Resource Flow (Sankey)",
+      "position": { "x": 6, "y": 5, "w": 6, "h": 4 },
+      "datasourceId": "chart-data",
+      "config": {
+        "geometry": "sankey",
+        "showLabels": true
+      }
+    },
+    {
+      "id": "chart-notes",
+      "type": "text",
+      "title": "Chart Types Reference",
+      "position": { "x": 0, "y": 9, "w": 12, "h": 2 },
+      "config": {
+        "format": "markdown",
+        "content": "### Available Chart Types\n\n| Basic | Advanced |\n|-------|----------|\n| Line, Bar, Area | Radar, Funnel |\n| Pie, Scatter | Gauge, Heatmap |\n| | Treemap, Sankey |"
+      }
+    }
+  ]
+}

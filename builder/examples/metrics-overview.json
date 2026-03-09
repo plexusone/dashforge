@@ -1,0 +1,193 @@
+{
+  "id": "metrics-overview",
+  "title": "System Metrics Overview",
+  "description": "Monitor key system and application metrics",
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "rowHeight": 80,
+    "gap": 8,
+    "padding": 16
+  },
+  "theme": {
+    "name": "default",
+    "colors": {
+      "primary": "#8b5cf6",
+      "secondary": "#64748b",
+      "background": "#f8fafc",
+      "surface": "#ffffff",
+      "text": "#0f172a",
+      "border": "#e2e8f0"
+    }
+  },
+  "variables": [],
+  "dataSources": [
+    {
+      "id": "system-metrics",
+      "type": "inline",
+      "data": {
+        "cpu": 67,
+        "memory": 82,
+        "disk": 45,
+        "network": 234,
+        "requests": 15420,
+        "errors": 23,
+        "latency": 145,
+        "uptime": 99.98,
+        "cpuHistory": [
+          { "time": "00:00", "value": 45 },
+          { "time": "04:00", "value": 32 },
+          { "time": "08:00", "value": 78 },
+          { "time": "12:00", "value": 89 },
+          { "time": "16:00", "value": 72 },
+          { "time": "20:00", "value": 56 }
+        ],
+        "memoryHistory": [
+          { "time": "00:00", "value": 68 },
+          { "time": "04:00", "value": 65 },
+          { "time": "08:00", "value": 75 },
+          { "time": "12:00", "value": 85 },
+          { "time": "16:00", "value": 82 },
+          { "time": "20:00", "value": 78 }
+        ],
+        "requestsByEndpoint": [
+          { "endpoint": "/api/users", "count": 4521 },
+          { "endpoint": "/api/products", "count": 3890 },
+          { "endpoint": "/api/orders", "count": 2845 },
+          { "endpoint": "/api/auth", "count": 2100 },
+          { "endpoint": "/api/search", "count": 1564 }
+        ]
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "id": "cpu-usage",
+      "type": "metric",
+      "title": "CPU Usage",
+      "position": { "x": 0, "y": 0, "w": 3, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "cpu",
+        "format": "percent",
+        "sparkline": {
+          "enabled": true,
+          "field": "cpuHistory"
+        }
+      }
+    },
+    {
+      "id": "memory-usage",
+      "type": "metric",
+      "title": "Memory Usage",
+      "position": { "x": 3, "y": 0, "w": 3, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "memory",
+        "format": "percent",
+        "sparkline": {
+          "enabled": true,
+          "field": "memoryHistory"
+        }
+      }
+    },
+    {
+      "id": "disk-usage",
+      "type": "metric",
+      "title": "Disk Usage",
+      "position": { "x": 6, "y": 0, "w": 3, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "disk",
+        "format": "percent"
+      }
+    },
+    {
+      "id": "uptime",
+      "type": "metric",
+      "title": "Uptime",
+      "position": { "x": 9, "y": 0, "w": 3, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "uptime",
+        "format": "percent"
+      }
+    },
+    {
+      "id": "total-requests",
+      "type": "metric",
+      "title": "Total Requests (24h)",
+      "position": { "x": 0, "y": 2, "w": 4, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "requests",
+        "format": "compact"
+      }
+    },
+    {
+      "id": "error-count",
+      "type": "metric",
+      "title": "Errors (24h)",
+      "position": { "x": 4, "y": 2, "w": 4, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "errors",
+        "format": "number"
+      }
+    },
+    {
+      "id": "avg-latency",
+      "type": "metric",
+      "title": "Avg Latency",
+      "position": { "x": 8, "y": 2, "w": 4, "h": 2 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "valueField": "latency",
+        "format": "number",
+        "suffix": "ms"
+      }
+    },
+    {
+      "id": "cpu-chart",
+      "type": "chart",
+      "title": "CPU Usage (24h)",
+      "position": { "x": 0, "y": 4, "w": 6, "h": 3 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "geometry": "area",
+        "xField": "time",
+        "yField": "value",
+        "colorScheme": ["#8b5cf6"],
+        "showGrid": true
+      }
+    },
+    {
+      "id": "memory-chart",
+      "type": "chart",
+      "title": "Memory Usage (24h)",
+      "position": { "x": 6, "y": 4, "w": 6, "h": 3 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "geometry": "area",
+        "xField": "time",
+        "yField": "value",
+        "colorScheme": ["#ec4899"],
+        "showGrid": true
+      }
+    },
+    {
+      "id": "requests-by-endpoint",
+      "type": "chart",
+      "title": "Requests by Endpoint",
+      "position": { "x": 0, "y": 7, "w": 12, "h": 3 },
+      "datasourceId": "system-metrics",
+      "config": {
+        "geometry": "bar",
+        "xField": "endpoint",
+        "yField": "count",
+        "colorScheme": ["#0ea5e9"],
+        "showGrid": true
+      }
+    }
+  ]
+}
