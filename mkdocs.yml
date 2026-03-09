@@ -1,0 +1,61 @@
+site_name: Dashforge
+site_description: A JSON-first dashboard framework with AI-powered visual builder
+site_url: https://grokify.github.io/dashforge/
+repo_url: https://github.com/grokify/dashforge
+repo_name: grokify/dashforge
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - toc.follow
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Dashboard Builder:
+      - Overview: builder.md
+      - Cube.js Integration: cube-integration.md
+      - AI Features: ai-features.md
+  - User Guide:
+      - Dashboard IR: dashboard-ir.md
+      - Widgets: widgets.md
+      - Data Sources: data-sources.md
+      - Transforms: transforms.md
+  - Server:
+      - Configuration: server-config.md
+      - Authentication: authentication.md
+      - Multi-tenancy: multi-tenancy.md
+  - API Reference: api-reference.md
+  - Development: development.md
