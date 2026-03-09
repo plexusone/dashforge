@@ -1,0 +1,58 @@
+# Dashforge Server Configuration
+# Copy this file and customize for your environment.
+
+server:
+  port: 8080
+  host: 0.0.0.0
+  readTimeout: 30s
+  writeTimeout: 60s
+  shutdownTimeout: 10s
+
+# Database connections
+databases:
+  - id: primary
+    name: Analytics Database
+    type: postgres
+    # Use environment variable for sensitive connection string
+    urlEnv: DATABASE_URL
+    # Or specify directly (not recommended for production)
+    # url: postgres://user:pass@localhost:5432/analytics?sslmode=disable
+    maxConns: 10
+    readOnly: false
+
+  # Add more databases as needed
+  # - id: readonly
+  #   name: Read Replica
+  #   type: postgres
+  #   urlEnv: DATABASE_READONLY_URL
+  #   readOnly: true
+
+# Authentication (optional)
+auth:
+  enabled: false
+  provider: local  # local, github, google, oidc
+
+  # Local authentication settings
+  local:
+    allowSignup: false
+
+  # OAuth settings (for github, google, oidc providers)
+  # oauth:
+  #   clientIdEnv: OAUTH_CLIENT_ID
+  #   clientSecretEnv: OAUTH_CLIENT_SECRET
+  #   authUrl: https://github.com/login/oauth/authorize
+  #   tokenUrl: https://github.com/login/oauth/access_token
+  #   scopes:
+  #     - read:user
+  #     - user:email
+
+  # JWT settings
+  jwt:
+    secretEnv: JWT_SECRET
+    expiresIn: 24h
+    refreshIn: 168h  # 7 days
+
+# Dashboard storage
+storage:
+  type: file          # file or database
+  path: ./dashboards  # for file storage

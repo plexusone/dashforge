@@ -1,0 +1,242 @@
+{
+  "$schema": "../schema/dashboard.schema.json",
+  "id": "compliance-overview",
+  "title": "Workflow Compliance Dashboard",
+  "description": "Overview of GitHub Actions workflow compliance across repositories",
+  "version": "1.0.0",
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "rowHeight": 80,
+    "gap": 16,
+    "padding": 24
+  },
+  "variables": [
+    {
+      "id": "language",
+      "name": "Language",
+      "type": "select",
+      "default": "",
+      "options": [
+        { "label": "Go", "value": "Go" },
+        { "label": "TypeScript", "value": "TypeScript" },
+        { "label": "Crystal", "value": "Crystal" }
+      ]
+    },
+    {
+      "id": "complianceLevel",
+      "name": "Compliance Level",
+      "type": "select",
+      "default": "",
+      "options": [
+        { "label": "Full", "value": "full" },
+        { "label": "Partial", "value": "partial" },
+        { "label": "None", "value": "none" }
+      ]
+    },
+    {
+      "id": "repoSearch",
+      "name": "Repository",
+      "type": "text",
+      "default": ""
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "compliance-results",
+      "type": "url",
+      "url": "./data/compliance-results.json",
+      "format": "json"
+    },
+    {
+      "id": "language-stats",
+      "type": "derived",
+      "derivedFrom": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "summary.byLanguage" }
+        }
+      ]
+    },
+    {
+      "id": "repos",
+      "type": "derived",
+      "derivedFrom": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "repos" }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "id": "total-repos",
+      "type": "metric",
+      "title": "Total Repositories",
+      "position": { "x": 0, "y": 0, "w": 3, "h": 2 },
+      "dataSourceId": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "summary" }
+        }
+      ],
+      "config": {
+        "valueField": "totalRepos",
+        "format": "number"
+      }
+    },
+    {
+      "id": "compliant-repos",
+      "type": "metric",
+      "title": "Fully Compliant",
+      "position": { "x": 3, "y": 0, "w": 3, "h": 2 },
+      "dataSourceId": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "summary" }
+        }
+      ],
+      "config": {
+        "valueField": "compliantRepos",
+        "format": "number",
+        "thresholds": [
+          { "value": 0, "color": "#ef4444" },
+          { "value": 1, "color": "#22c55e" }
+        ]
+      }
+    },
+    {
+      "id": "partial-repos",
+      "type": "metric",
+      "title": "Partial Compliance",
+      "position": { "x": 6, "y": 0, "w": 3, "h": 2 },
+      "dataSourceId": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "summary" }
+        }
+      ],
+      "config": {
+        "valueField": "partialRepos",
+        "format": "number",
+        "thresholds": [
+          { "value": 0, "color": "#22c55e" },
+          { "value": 1, "color": "#f59e0b" }
+        ]
+      }
+    },
+    {
+      "id": "compliance-rate",
+      "type": "metric",
+      "title": "Compliance Rate",
+      "position": { "x": 9, "y": 0, "w": 3, "h": 2 },
+      "dataSourceId": "compliance-results",
+      "transform": [
+        {
+          "type": "extract",
+          "config": { "path": "summary" }
+        }
+      ],
+      "config": {
+        "valueField": "complianceRate",
+        "format": "percent",
+        "formatOptions": { "decimals": 1 },
+        "thresholds": [
+          { "value": 0, "color": "#ef4444" },
+          { "value": 50, "color": "#f59e0b" },
+          { "value": 80, "color": "#22c55e" }
+        ]
+      }
+    },
+    {
+      "id": "language-chart",
+      "type": "chart",
+      "title": "Compliance by Language",
+      "position": { "x": 0, "y": 2, "w": 6, "h": 4 },
+      "dataSourceId": "language-stats",
+      "config": {
+        "marks": [
+          {
+            "id": "compliance-bars",
+            "geometry": "bar",
+            "encode": {
+              "x": "language",
+              "y": "complianceRate"
+            },
+            "style": {
+              "color": "#3b82f6"
+            }
+          }
+        ],
+        "axes": [
+          { "id": "x", "type": "category", "position": "bottom" },
+          { "id": "y", "type": "value", "position": "left", "name": "Compliance %" }
+        ],
+        "tooltip": { "show": true, "trigger": "axis" },
+        "grid": { "left": "3%", "right": "4%", "bottom": "3%", "containLabel": true }
+      }
+    },
+    {
+      "id": "repos-by-language",
+      "type": "chart",
+      "title": "Repositories by Language",
+      "position": { "x": 6, "y": 2, "w": 6, "h": 4 },
+      "dataSourceId": "language-stats",
+      "config": {
+        "marks": [
+          {
+            "id": "repo-pie",
+            "geometry": "pie",
+            "encode": {
+              "value": "totalRepos",
+              "name": "language"
+            }
+          }
+        ],
+        "tooltip": { "show": true, "trigger": "item" },
+        "legend": { "show": true, "position": "right" }
+      }
+    },
+    {
+      "id": "repos-table",
+      "type": "table",
+      "title": "Repository Details",
+      "position": { "x": 0, "y": 6, "w": 12, "h": 5 },
+      "dataSourceId": "repos",
+      "transform": [
+        {
+          "type": "filter",
+          "config": { "field": "complianceLevel", "operator": "eq", "value": "${var:complianceLevel}", "variable": "complianceLevel" }
+        },
+        {
+          "type": "filter",
+          "config": { "field": "fullName", "operator": "contains", "value": "${var:repoSearch}", "variable": "repoSearch" }
+        },
+        {
+          "type": "sort",
+          "config": { "field": "complianceLevel", "direction": "asc" }
+        }
+      ],
+      "config": {
+        "columns": [
+          { "field": "fullName", "header": "Repository", "width": "30%" },
+          { "field": "languages", "header": "Languages", "width": "20%" },
+          { "field": "complianceLevel", "header": "Status", "width": "15%" },
+          { "field": "scanTimeMs", "header": "Scan Time (ms)", "width": "15%", "align": "right" }
+        ],
+        "sortable": true,
+        "striped": true
+      }
+    }
+  ],
+  "theme": {
+    "mode": "light",
+    "primaryColor": "#3b82f6"
+  }
+}
