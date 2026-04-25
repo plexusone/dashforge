@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/omnillm"
-	"github.com/plexusone/omnillm/models"
-	"github.com/plexusone/omnillm/provider"
+	omnillm "github.com/plexusone/omnillm-core"
+	"github.com/plexusone/omnillm-core/models"
+	"github.com/plexusone/omnillm-core/provider"
 )
 
 // AIHandler handles AI generation requests using omnillm.

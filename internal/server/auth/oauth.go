@@ -2,8 +2,6 @@ package auth
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log/slog"
@@ -16,7 +14,8 @@ import (
 	"golang.org/x/oauth2/google"
 
 	"github.com/plexusone/dashforge/ent"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/human"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthConfig holds OAuth provider configurations.
@@ -83,14 +82,7 @@ func (h *OAuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.mux.ServeHTTP(w, r)
 }
 
-// generateState creates a random state string for CSRF protection.
-func generateState() (string, error) {
-	b := make([]byte, 32)
-	if _, err := rand.Read(b); err != nil {
-		return "", err
-	}
-	return base64.URLEncoding.EncodeToString(b), nil
-}
+// generateState is provided by CoreForge oauth package via providers.go
 
 // GitHub OAuth handlers
 
@@ -100,7 +92,7 @@ func (h *OAuthHandler) handleGitHubLogin(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	state, err := generateState()
+	state, err := GenerateState()
 	if err != nil {
 		h.logger.Error("failed to generate state", "error", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -177,7 +169,7 @@ func (h *OAuthHandler) handleGoogleLogin(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	state, err := generateState()
+	state, err := GenerateState()
 	if err != nil {
 		h.logger.Error("failed to generate state", "error", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -254,7 +246,7 @@ func (h *OAuthHandler) handleCoreControlLogin(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	state, err := generateState()
+	state, err := GenerateState()
 	if err != nil {
 		h.logger.Error("failed to generate state", "error", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -379,24 +371,24 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// Find or create user via CoreControl principal ID
-	u, err := h.findOrCreateUserViaCoreControl(ctx, userInfo)
+	// Find or create principal via CoreControl principal ID
+	p, hum, err := h.findOrCreatePrincipalViaCoreControl(ctx, userInfo)
 	if err != nil {
-		h.logger.Error("failed to find/create user", "error", err, "email", userInfo.Email)
+		h.logger.Error("failed to find/create principal", "error", err, "email", userInfo.Email)
 		http.Error(w, "Failed to create user account", http.StatusInternalServerError)
 		return
 	}
 
-	// Update last login
-	_, err = h.client.User.UpdateOneID(u.ID).
+	// Update last login on Human
+	_, err = h.client.Human.UpdateOneID(hum.ID).
 		SetLastLoginAt(time.Now()).
 		Save(ctx)
 	if err != nil {
 		h.logger.Warn("failed to update last login", "error", err)
 	}
 
-	// Generate JWT tokens
-	tokens, err := h.jwtService.GenerateTokenPair(u.ID, u.Email, "")
+	// Generate JWT tokens using principal ID
+	tokens, err := h.jwtService.GenerateTokenPair(p.ID, hum.Email, p.DisplayName)
 	if err != nil {
 		h.logger.Error("failed to generate tokens", "error", err)
 		http.Error(w, "Failed to generate session", http.StatusInternalServerError)
@@ -417,90 +409,113 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 	}
 }
 
-func (h *OAuthHandler) findOrCreateUserViaCoreControl(ctx context.Context, userInfo *CoreControlUserInfo) (*ent.User, error) {
-	// Parse the principal ID from sub claim
-	principalID, err := parseUUID(userInfo.Sub)
+func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, userInfo *CoreControlUserInfo) (*ent.Principal, *ent.Human, error) {
+	// Parse the CoreControl principal ID from sub claim
+	coreControlPrincipalID, err := parseUUID(userInfo.Sub)
 	if err != nil {
-		return nil, fmt.Errorf("invalid principal ID: %w", err)
+		return nil, nil, fmt.Errorf("invalid principal ID: %w", err)
 	}
 
-	// Try to find existing user by CoreControl principal ID
-	u, err := h.client.User.Query().
-		Where(user.CoreControlPrincipalIDEQ(*principalID)).
+	// Try to find existing principal by CoreControl principal ID
+	p, err := h.client.Principal.Query().
+		Where(principal.CoreControlPrincipalIDEQ(*coreControlPrincipalID)).
+		WithHuman().
 		Only(ctx)
 
 	if err == nil {
-		// Found existing user - update info if needed
-		updateQuery := h.client.User.UpdateOneID(u.ID)
+		// Found existing principal - update Human info if needed
+		hum := p.Edges.Human
+		if hum == nil {
+			return nil, nil, fmt.Errorf("principal has no human extension")
+		}
+
+		updateQuery := h.client.Human.UpdateOneID(hum.ID)
 		needsUpdate := false
 
-		if userInfo.Name != "" && userInfo.Name != u.Name {
+		if userInfo.Name != "" && userInfo.Name != hum.Name {
 			updateQuery.SetName(userInfo.Name)
 			needsUpdate = true
 		}
-		if userInfo.Picture != "" && userInfo.Picture != u.AvatarURL {
+		if userInfo.Picture != "" && (hum.AvatarURL == nil || userInfo.Picture != *hum.AvatarURL) {
 			updateQuery.SetAvatarURL(userInfo.Picture)
 			needsUpdate = true
 		}
 
 		if needsUpdate {
-			u, err = updateQuery.Save(ctx)
+			hum, err = updateQuery.Save(ctx)
 			if err != nil {
-				return nil, fmt.Errorf("updating user: %w", err)
+				return nil, nil, fmt.Errorf("updating human: %w", err)
 			}
 		}
-		return u, nil
+		return p, hum, nil
 	}
 
 	if !ent.IsNotFound(err) {
-		return nil, fmt.Errorf("querying user by principal ID: %w", err)
+		return nil, nil, fmt.Errorf("querying principal by CoreControl ID: %w", err)
 	}
 
-	// No user found by principal ID - check if user exists by email (for account linking)
+	// No principal found by CoreControl ID - check if human exists by email (for account linking)
 	if userInfo.Email != "" {
-		u, err = h.client.User.Query().
-			Where(user.EmailEQ(userInfo.Email)).
+		hum, err := h.client.Human.Query().
+			Where(human.EmailEQ(userInfo.Email)).
+			WithPrincipal().
 			Only(ctx)
 
 		if err == nil {
-			// User exists with this email - link to CoreControl principal
-			u, err = h.client.User.UpdateOneID(u.ID).
-				SetCoreControlPrincipalID(*principalID).
+			// Human exists with this email - link principal to CoreControl
+			p := hum.Edges.Principal
+			p, err = h.client.Principal.UpdateOneID(p.ID).
+				SetCoreControlPrincipalID(*coreControlPrincipalID).
 				Save(ctx)
 			if err != nil {
-				return nil, fmt.Errorf("linking user to CoreControl: %w", err)
+				return nil, nil, fmt.Errorf("linking principal to CoreControl: %w", err)
 			}
-			h.logger.Info("linked existing user to CoreControl", "user_id", u.ID, "principal_id", principalID)
-			return u, nil
+			h.logger.Info("linked existing principal to CoreControl", "principal_id", p.ID, "core_control_id", coreControlPrincipalID)
+			return p, hum, nil
 		}
 
 		if !ent.IsNotFound(err) {
-			return nil, fmt.Errorf("querying user by email: %w", err)
+			return nil, nil, fmt.Errorf("querying human by email: %w", err)
 		}
 	}
 
-	// Create new user with CoreControl principal ID
+	// Create new Principal + Human with CoreControl principal ID
 	name := userInfo.Name
 	if name == "" {
 		name = userInfo.Email
 	}
 
-	u, err = h.client.User.Create().
+	// Create principal first
+	p, err = h.client.Principal.Create().
+		SetType(principal.TypeHuman).
+		SetIdentifier(userInfo.Email).
+		SetDisplayName(name).
+		SetCoreControlPrincipalID(*coreControlPrincipalID).
+		SetActive(true).
+		Save(ctx)
+	if err != nil {
+		return nil, nil, fmt.Errorf("creating principal: %w", err)
+	}
+
+	// Create human extension
+	hum, err := h.client.Human.Create().
+		SetPrincipalID(p.ID).
 		SetEmail(userInfo.Email).
 		SetName(name).
-		SetCoreControlPrincipalID(*principalID).
 		SetAvatarURL(userInfo.Picture).
 		Save(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("creating user: %w", err)
+		// Rollback principal creation
+		_ = h.client.Principal.DeleteOneID(p.ID).Exec(ctx)
+		return nil, nil, fmt.Errorf("creating human: %w", err)
 	}
 
-	h.logger.Info("created new user via CoreControl",
-		"user_id", u.ID,
-		"email", u.Email,
-		"principal_id", principalID)
+	h.logger.Info("created new principal via CoreControl",
+		"principal_id", p.ID,
+		"email", userInfo.Email,
+		"core_control_id", coreControlPrincipalID)
 
-	return u, nil
+	return p, hum, nil
 }
 
 // parseUUID parses a string into a UUID pointer.
@@ -521,26 +536,26 @@ func (h *OAuthHandler) completeOAuthLogin(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// Find or create user
-	u, err := h.findOrCreateUser(ctx, oauthUser, provider)
+	// Find or create principal
+	p, hum, err := h.findOrCreatePrincipal(ctx, oauthUser, provider)
 	if err != nil {
-		h.logger.Error("failed to find/create user", "error", err, "email", oauthUser.Email)
+		h.logger.Error("failed to find/create principal", "error", err, "email", oauthUser.Email)
 		http.Error(w, "Failed to create user account", http.StatusInternalServerError)
 		return
 	}
 
-	// Update last login
-	_, err = h.client.User.UpdateOneID(u.ID).
+	// Update last login on Human
+	_, err = h.client.Human.UpdateOneID(hum.ID).
 		SetLastLoginAt(time.Now()).
 		Save(ctx)
 	if err != nil {
 		h.logger.Warn("failed to update last login", "error", err)
 	}
 
-	// Generate JWT tokens
+	// Generate JWT tokens using principal ID
 	// Role is determined by membership, so we pass empty here
 	// The actual role will be checked per-organization when needed
-	tokens, err := h.jwtService.GenerateTokenPair(u.ID, u.Email, "")
+	tokens, err := h.jwtService.GenerateTokenPair(p.ID, hum.Email, p.DisplayName)
 	if err != nil {
 		h.logger.Error("failed to generate tokens", "error", err)
 		http.Error(w, "Failed to generate session", http.StatusInternalServerError)
@@ -562,22 +577,23 @@ func (h *OAuthHandler) completeOAuthLogin(w http.ResponseWriter, r *http.Request
 	}
 }
 
-// findOrCreateUser finds an existing user by email or creates a new one.
-func (h *OAuthHandler) findOrCreateUser(ctx context.Context, oauthUser *OAuthUser, provider string) (*ent.User, error) {
-	// Try to find existing user
-	u, err := h.client.User.Query().
-		Where(user.EmailEQ(oauthUser.Email)).
+// findOrCreatePrincipal finds an existing principal by email or creates a new one.
+func (h *OAuthHandler) findOrCreatePrincipal(ctx context.Context, oauthUser *OAuthUser, provider string) (*ent.Principal, *ent.Human, error) {
+	// Try to find existing human by email
+	hum, err := h.client.Human.Query().
+		Where(human.EmailEQ(oauthUser.Email)).
+		WithPrincipal().
 		Only(ctx)
 
 	if err == nil {
-		return u, nil
+		return hum.Edges.Principal, hum, nil
 	}
 
 	if !ent.IsNotFound(err) {
-		return nil, fmt.Errorf("querying user: %w", err)
+		return nil, nil, fmt.Errorf("querying human: %w", err)
 	}
 
-	// Create new user
+	// Create new Principal + Human
 	// Note: In multi-org setup, you'd need to determine the organization here
 	// For now, we create without organization (would need to be assigned later via membership)
 	name := oauthUser.Name
@@ -585,45 +601,49 @@ func (h *OAuthHandler) findOrCreateUser(ctx context.Context, oauthUser *OAuthUse
 		name = oauthUser.Email
 	}
 
-	u, err = h.client.User.Create().
+	// Create principal first
+	p, err := h.client.Principal.Create().
+		SetType(principal.TypeHuman).
+		SetIdentifier(oauthUser.Email).
+		SetDisplayName(name).
+		SetActive(true).
+		Save(ctx)
+	if err != nil {
+		return nil, nil, fmt.Errorf("creating principal: %w", err)
+	}
+
+	// Create human extension
+	hum, err = h.client.Human.Create().
+		SetPrincipalID(p.ID).
 		SetEmail(oauthUser.Email).
 		SetName(name).
 		Save(ctx)
-
 	if err != nil {
-		return nil, fmt.Errorf("creating user: %w", err)
+		// Rollback principal creation
+		_ = h.client.Principal.DeleteOneID(p.ID).Exec(ctx)
+		return nil, nil, fmt.Errorf("creating human: %w", err)
 	}
 
-	h.logger.Info("created new user via OAuth",
-		"user_id", u.ID,
-		"email", u.Email,
+	h.logger.Info("created new principal via OAuth",
+		"principal_id", p.ID,
+		"email", oauthUser.Email,
 		"provider", provider)
 
-	return u, nil
+	return p, hum, nil
 }
 
 // Token handlers
 
 func (h *OAuthHandler) handleRefreshToken(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		RefreshToken string `json:"refreshToken"`
-	}
-
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
-	}
-
-	tokens, err := h.jwtService.RefreshTokens(req.RefreshToken)
-	if err != nil {
-		http.Error(w, "Invalid refresh token", http.StatusUnauthorized)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(tokens); err != nil {
-		h.logger.Error("failed to encode response", "error", err)
-	}
+	// TODO: Implement refresh token validation using RefreshToken entity in DB.
+	// For now, return error - clients should re-authenticate via OAuth.
+	// Implementation would:
+	// 1. Look up refresh token in DB
+	// 2. Verify it hasn't been revoked and hasn't expired
+	// 3. Get the associated principal
+	// 4. Generate new token pair
+	// 5. Optionally rotate the refresh token
+	http.Error(w, "Refresh token validation not implemented - please re-authenticate", http.StatusUnauthorized)
 }
 
 func (h *OAuthHandler) handleLogout(w http.ResponseWriter, _ *http.Request) {
@@ -639,27 +659,43 @@ func (h *OAuthHandler) handleMe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Fetch full user info
-	u, err := h.client.User.Get(r.Context(), claims.UserID)
+	// Fetch principal with human extension
+	p, err := h.client.Principal.Query().
+		Where(principal.ID(claims.PrincipalID)).
+		WithHuman().
+		Only(r.Context())
 	if err != nil {
 		if ent.IsNotFound(err) {
 			http.Error(w, "User not found", http.StatusNotFound)
 			return
 		}
-		h.logger.Error("failed to get user", "error", err)
+		h.logger.Error("failed to get principal", "error", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
+	hum := p.Edges.Human
+	var isPlatformAdmin bool
+	var lastLoginAt *time.Time
+	var email, name string
+
+	if hum != nil {
+		isPlatformAdmin = hum.IsPlatformAdmin
+		lastLoginAt = hum.LastLoginAt
+		email = hum.Email
+		name = hum.Name
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(map[string]any{
-		"id":              u.ID,
-		"email":           u.Email,
-		"name":            u.Name,
-		"isPlatformAdmin": u.IsPlatformAdmin,
-		"active":          u.Active,
-		"lastLoginAt":     u.LastLoginAt,
-		"createdAt":       u.CreatedAt,
+		"id":              p.ID,
+		"email":           email,
+		"name":            name,
+		"displayName":     p.DisplayName,
+		"isPlatformAdmin": isPlatformAdmin,
+		"active":          p.Active,
+		"lastLoginAt":     lastLoginAt,
+		"createdAt":       p.CreatedAt,
 	}); err != nil {
 		h.logger.Error("failed to encode response", "error", err)
 	}
