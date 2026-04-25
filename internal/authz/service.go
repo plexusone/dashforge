@@ -9,8 +9,8 @@ import (
 	"github.com/grokify/coreforge/authz/simple"
 	"github.com/grokify/coreforge/authz/spicedb"
 	"github.com/plexusone/dashforge/ent"
-	"github.com/plexusone/dashforge/ent/membership"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/human"
+	"github.com/plexusone/dashforge/ent/principalmembership"
 )
 
 // Mode specifies the authorization backend.
@@ -31,13 +31,8 @@ const (
 	RoleViewer = "viewer"
 )
 
-// RoleHierarchy defines the role hierarchy for DashForge.
-var RoleHierarchy = authz.RoleHierarchy{
-	RoleOwner:  100,
-	RoleAdmin:  80,
-	RoleEditor: 60,
-	RoleViewer: 40,
-}
+// RoleHierarchy is defined in schema.go with Publisher and Org variants.
+// Use OrgRoleHierarchy or PublisherRoleHierarchy as appropriate.
 
 // Service provides authorization operations for DashForge.
 type Service struct {
@@ -104,7 +99,7 @@ func NewService(db *ent.Client, opts ...ServiceOption) *Service {
 
 	// Initialize simple provider (always available for fallback)
 	s.simpleProvider = simple.New(
-		simple.WithRoleHierarchy(RoleHierarchy),
+		simple.WithRoleHierarchy(OrgRoleHierarchy),
 		simple.WithRoleGetter(s.getRoleFromDB),
 		simple.WithPlatformAdminChecker(s.isPlatformAdminFromDB),
 		simple.WithOwnerFullAccess(true),
@@ -132,12 +127,13 @@ func (s *Service) provider() authz.Authorizer {
 	return s.simpleProvider
 }
 
-// getRoleFromDB retrieves a user's role in an organization from the database.
-func (s *Service) getRoleFromDB(ctx context.Context, userID, orgID uuid.UUID) (string, error) {
-	mem, err := s.db.Membership.Query().
+// getRoleFromDB retrieves a principal's role in an organization from the database.
+func (s *Service) getRoleFromDB(ctx context.Context, principalID, orgID uuid.UUID) (string, error) {
+	mem, err := s.db.PrincipalMembership.Query().
 		Where(
-			membership.UserID(userID),
-			membership.OrganizationID(orgID),
+			principalmembership.PrincipalID(principalID),
+			principalmembership.OrganizationID(orgID),
+			principalmembership.ActiveEQ(true),
 		).
 		Only(ctx)
 	if err != nil {
@@ -146,21 +142,22 @@ func (s *Service) getRoleFromDB(ctx context.Context, userID, orgID uuid.UUID) (s
 		}
 		return "", err
 	}
-	return mem.Role, nil
+	return string(mem.Role), nil
 }
 
-// isPlatformAdminFromDB checks if a user is a platform administrator.
-func (s *Service) isPlatformAdminFromDB(ctx context.Context, userID uuid.UUID) (bool, error) {
-	u, err := s.db.User.Query().
-		Where(user.ID(userID)).
+// isPlatformAdminFromDB checks if a principal is a platform administrator.
+func (s *Service) isPlatformAdminFromDB(ctx context.Context, principalID uuid.UUID) (bool, error) {
+	// Query the Human extension to check platform admin status
+	hum, err := s.db.Human.Query().
+		Where(human.PrincipalID(principalID)).
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return false, nil
+			return false, nil // Non-human principals are not platform admins
 		}
 		return false, err
 	}
-	return u.IsPlatformAdmin, nil
+	return hum.IsPlatformAdmin, nil
 }
 
 // Can checks if a user can perform an action on a resource.
@@ -183,40 +180,40 @@ func (s *Service) Filter(ctx context.Context, principal authz.Principal, action 
 	return s.provider().Filter(ctx, principal, action, resources)
 }
 
-// GetRole returns the user's role in an organization.
-func (s *Service) GetRole(ctx context.Context, userID, orgID uuid.UUID) (string, error) {
-	return s.getRoleFromDB(ctx, userID, orgID)
+// GetRole returns the principal's role in an organization.
+func (s *Service) GetRole(ctx context.Context, principalID, orgID uuid.UUID) (string, error) {
+	return s.getRoleFromDB(ctx, principalID, orgID)
 }
 
-// IsMember checks if a user is a member of an organization.
-func (s *Service) IsMember(ctx context.Context, userID, orgID uuid.UUID) (bool, error) {
-	role, err := s.getRoleFromDB(ctx, userID, orgID)
+// IsMember checks if a principal is a member of an organization.
+func (s *Service) IsMember(ctx context.Context, principalID, orgID uuid.UUID) (bool, error) {
+	role, err := s.getRoleFromDB(ctx, principalID, orgID)
 	if err != nil {
 		return false, err
 	}
 	return role != "", nil
 }
 
-// IsPlatformAdmin checks if a user has platform-wide admin access.
-func (s *Service) IsPlatformAdmin(ctx context.Context, userID uuid.UUID) (bool, error) {
-	return s.isPlatformAdminFromDB(ctx, userID)
+// IsPlatformAdmin checks if a principal has platform-wide admin access.
+func (s *Service) IsPlatformAdmin(ctx context.Context, principalID uuid.UUID) (bool, error) {
+	return s.isPlatformAdminFromDB(ctx, principalID)
 }
 
-// CheckMinRole checks if a user has at least the specified role level.
-func (s *Service) CheckMinRole(ctx context.Context, userID, orgID uuid.UUID, minRole string) (bool, error) {
-	role, err := s.GetRole(ctx, userID, orgID)
+// CheckMinRole checks if a principal has at least the specified role level.
+func (s *Service) CheckMinRole(ctx context.Context, principalID, orgID uuid.UUID, minRole string) (bool, error) {
+	role, err := s.GetRole(ctx, principalID, orgID)
 	if err != nil {
 		return false, err
 	}
 	if role == "" {
 		return false, nil
 	}
-	return role == minRole || RoleHierarchy.CanAccess(role, minRole), nil
+	return role == minRole || OrgRoleHierarchy.CanAccess(role, minRole), nil
 }
 
-// IsOwnerOrAdmin checks if a user is owner or admin of an organization.
-func (s *Service) IsOwnerOrAdmin(ctx context.Context, userID, orgID uuid.UUID) (bool, error) {
-	role, err := s.GetRole(ctx, userID, orgID)
+// IsOwnerOrAdmin checks if a principal is owner or admin of an organization.
+func (s *Service) IsOwnerOrAdmin(ctx context.Context, principalID, orgID uuid.UUID) (bool, error) {
+	role, err := s.GetRole(ctx, principalID, orgID)
 	if err != nil {
 		return false, err
 	}
