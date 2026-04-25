@@ -56,6 +56,11 @@ nav:
   - Server:
       - Configuration: server-config.md
       - Authentication: authentication.md
+      - Authorization: authorization.md
       - Multi-tenancy: multi-tenancy.md
+  - Marketplace:
+      - Overview: marketplace/overview.md
+      - Publishing Templates: marketplace/publishing.md
+      - Licensing: marketplace/licensing.md
   - API Reference: api-reference.md
   - Development: development.md
