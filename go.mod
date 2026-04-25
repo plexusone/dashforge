@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/grokify/coreforge v0.6.0
 	github.com/jackc/pgx/v5 v5.9.2
-	github.com/lib/pq v1.12.2
+	github.com/lib/pq v1.12.3
 	github.com/plexusone/omnillm-core v0.15.0
 	golang.org/x/oauth2 v0.36.0
 	gopkg.in/yaml.v3 v3.0.1
