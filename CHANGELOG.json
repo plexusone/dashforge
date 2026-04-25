@@ -1,0 +1,99 @@
+{
+  "irVersion": "1.0",
+  "project": "DashForge",
+  "repository": "https://github.com/plexusone/dashforge",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "maintainers": ["grokify"],
+  "releases": [
+    {
+      "version": "v0.2.0",
+      "date": "2026-04-25",
+      "status": "unreleased",
+      "highlights": [
+        { "description": "Principal-based identity model with CoreForge integration" },
+        { "description": "Dashboard template marketplace with licensing and subscriptions" },
+        { "description": "Multi-app deployment support via AppBackend adapter" }
+      ],
+      "added": [
+        { "description": "Principal entity as unified identity root for all actor types (human, application, agent, service)", "commit": "4dc4b62" },
+        { "description": "Human schema for human-specific identity attributes", "commit": "4dc4b62" },
+        { "description": "PrincipalMembership for organization memberships", "commit": "4dc4b62" },
+        { "description": "Publisher entity for organizations creating and selling templates", "commit": "32556d9" },
+        { "description": "Listing entity for marketplace entries", "commit": "32556d9" },
+        { "description": "License entity for purchased access to marketplace items", "commit": "32556d9" },
+        { "description": "Subscription entity for recurring license subscriptions", "commit": "32556d9" },
+        { "description": "SeatAssignment entity for per-seat license allocation", "commit": "32556d9" },
+        { "description": "DashboardTemplate entity for reusable dashboard templates", "commit": "32556d9" },
+        { "description": "Publisher and consumer role hierarchies for authorization", "commit": "e243e94" },
+        { "description": "Marketplace-specific permissions (publish, purchase, review)", "commit": "e243e94" },
+        { "description": "SpiceDB integration for fine-grained access control", "commit": "e243e94" },
+        { "description": "Multi-app backend adapter implementing cfmultiapp.AppBackend interface", "commit": "2a759bc" },
+        { "description": "Schema-isolated database connections for multi-app deployment", "commit": "2a759bc" }
+      ],
+      "changed": [
+        { "description": "Migrate JWT implementation to CoreForge session/jwt package", "commit": "f17f96a" },
+        { "description": "Migrate OAuth providers to CoreForge identity/oauthclient package", "commit": "f17f96a" },
+        { "description": "Replace custom ChartIR types with @grokify/echartify re-exports", "commit": "7184738" }
+      ],
+      "documentation": [
+        { "description": "Authorization user guide for role-based access control", "commit": "e8f532b" },
+        { "description": "Authorization technical design document", "commit": "e8f532b" },
+        { "description": "Marketplace feature overview", "commit": "e8f532b" },
+        { "description": "Template publishing guide for publishers", "commit": "e8f532b" },
+        { "description": "License types and seat management documentation", "commit": "e8f532b" },
+        { "description": "Update mkdocs navigation with marketplace and authorization sections", "commit": "199a3a7" },
+        { "description": "Update README with marketplace feature highlights", "commit": "199a3a7" }
+      ],
+      "dependencies": [
+        { "description": "Bump `entgo.io/ent` to v0.14.6", "commit": "580e5f2" },
+        { "description": "Add `github.com/go-chi/chi/v5` v5.2.5 for routing", "commit": "580e5f2" },
+        { "description": "Add `github.com/jackc/pgx/v5` v5.9.1 for PostgreSQL", "commit": "580e5f2" },
+        { "description": "Update `golang.org/x/oauth2` to v0.36.0", "commit": "580e5f2" },
+        { "description": "Replace `omnillm` with `omnillm-core`", "commit": "580e5f2" },
+        { "description": "Update `github.com/grokify/coreforge` to v0.6.0", "commit": "ea3b516" }
+      ],
+      "internal": [
+        { "description": "Add shared CI/CD pipelines via reusable workflows", "commit": "1d08649" },
+        { "description": "Remove local replace directives for coreforge and omniobserve", "commit": "ea3b516" }
+      ]
+    },
+    {
+      "version": "v0.1.0",
+      "date": "2026-03-01",
+      "highlights": [
+        { "description": "Full-stack dashboard builder with Go backend and TypeScript frontend" },
+        { "description": "Ent-based database schema with OAuth authentication" },
+        { "description": "Data source integrations and alert system" }
+      ],
+      "added": [
+        { "description": "Go server with Chi router and middleware stack", "commit": "600a8e8" },
+        { "description": "JWT authentication with access and refresh tokens", "commit": "600a8e8" },
+        { "description": "OAuth integration for GitHub and Google providers", "commit": "600a8e8" },
+        { "description": "User entity with email, password hash, and role fields", "commit": "8d72a70" },
+        { "description": "Organization entity for multi-tenant support", "commit": "8d72a70" },
+        { "description": "OAuthAccount entity for external provider credentials", "commit": "8d72a70" },
+        { "description": "RefreshToken entity for token management", "commit": "8d72a70" },
+        { "description": "Dashboard entity with JSON layout storage", "commit": "eafe1c6" },
+        { "description": "SavedQuery entity for reusable queries", "commit": "eafe1c6" },
+        { "description": "DashboardVersion entity for version history", "commit": "eafe1c6" },
+        { "description": "Alert and AlertChannel entities for alerting system", "commit": "eafe1c6" },
+        { "description": "AlertEvent entity for alert history tracking", "commit": "eafe1c6" },
+        { "description": "DataSource entity for external data connections", "commit": "6cfd92f" },
+        { "description": "Integration entity for third-party service connections", "commit": "6cfd92f" },
+        { "description": "TypeScript ChartIR types based on echartify specification", "commit": "93e28b2" },
+        { "description": "TypeScript dashboard and widget type definitions", "commit": "93e28b2" }
+      ],
+      "documentation": [
+        { "description": "Project documentation with architecture overview", "commit": "aad89a6" },
+        { "description": "API reference documentation", "commit": "aad89a6" },
+        { "description": "MkDocs configuration with Material theme", "commit": "aad89a6" },
+        { "description": "README with feature summary and installation instructions", "commit": "2e2a8be" }
+      ],
+      "internal": [
+        { "description": "Initial project setup with go.mod and directory structure", "commit": "04f6f87" },
+        { "description": "Add LICENSE and .gitignore files", "commit": "04f6f87" }
+      ]
+    }
+  ]
+}
