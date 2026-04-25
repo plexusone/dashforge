@@ -1,112 +1,62 @@
 /**
- * ChartIR Types - Based on echartify specification
- * Non-polymorphic, LLM-friendly JSON format for chart specifications.
+ * ChartIR Types - Powered by @grokify/echartify
+ *
+ * This module re-exports echartify types with DashForge-specific extensions
+ * for backward compatibility.
  */
 
-export type GeometryType =
-  | 'line'
-  | 'bar'
-  | 'pie'
-  | 'scatter'
-  | 'area'
-  | 'radar'
-  | 'funnel'
-  | 'gauge'
-  | 'heatmap'
-  | 'treemap'
-  | 'sankey'
+import {
+  type Geometry,
+  type Encode,
+  type Mark as EchartifyMark,
+  type Style,
+  type ChartIR as EchartifyChartIR,
+  type Dataset,
+  type Axis,
+  type Legend,
+  type Tooltip,
+  type Grid,
+  chartIRSchema,
+  markSchema,
+  encodeSchema,
+  geometrySchema,
+  styleSchema,
+  datasetSchema,
+  axisSchema,
+  legendSchema,
+  tooltipSchema,
+  gridSchema,
+  compile,
+} from '@grokify/echartify'
 
-export interface Encoding {
-  field: string
-  type?: 'quantitative' | 'nominal' | 'ordinal' | 'temporal'
-  aggregate?: 'sum' | 'avg' | 'min' | 'max' | 'count'
-  format?: string
-  title?: string
+// Re-export types with DashForge-friendly names
+export type GeometryType = Geometry
+export type Encodings = Encode
+export type Encoding = Encode
+export type Mark = EchartifyMark
+export type MarkStyle = Style
+export type ChartIR = EchartifyChartIR
+
+// Re-export for direct use
+export type { Dataset, Axis, Legend, Tooltip, Grid }
+
+// Re-export schemas and compiler
+export {
+  chartIRSchema,
+  markSchema,
+  encodeSchema,
+  geometrySchema,
+  styleSchema,
+  datasetSchema,
+  axisSchema,
+  legendSchema,
+  tooltipSchema,
+  gridSchema,
+  compile,
 }
 
-export interface Encodings {
-  // Cartesian encodings
-  x?: Encoding | string
-  y?: Encoding | string
-
-  // Common encodings
-  color?: Encoding | string
-  size?: Encoding | string
-  label?: Encoding | string
-  tooltip?: (Encoding | string)[]
-
-  // Pie/Funnel specific
-  value?: Encoding | string
-  category?: Encoding | string
-
-  // Radar specific
-  angle?: Encoding | string
-  radius?: Encoding | string
-
-  // Heatmap specific
-  heat?: Encoding | string
-}
-
-export interface Mark {
-  type: GeometryType
-  style?: MarkStyle
-}
-
-export interface MarkStyle {
-  // Line/Area specific
-  smooth?: boolean
-  areaOpacity?: number
-  lineWidth?: number
-  lineDash?: number[]
-
-  // Bar specific
-  barWidth?: number | string
-  barGap?: string
-  borderRadius?: number | number[]
-
-  // Point specific
-  symbol?: 'circle' | 'rect' | 'roundRect' | 'triangle' | 'diamond' | 'pin' | 'arrow'
-  symbolSize?: number
-
-  // General
-  opacity?: number
-}
-
-export interface Scale {
-  type?: 'linear' | 'log' | 'time' | 'band' | 'point'
-  domain?: [number, number] | string[]
-  range?: [number, number] | string[]
-  nice?: boolean
-  zero?: boolean
-}
-
-export interface Axis {
-  show?: boolean
-  title?: string
-  grid?: boolean
-  scale?: Scale
-  labelRotate?: number
-  labelFormat?: string
-}
-
-export interface Legend {
-  show?: boolean
-  position?: 'top' | 'bottom' | 'left' | 'right'
-  orient?: 'horizontal' | 'vertical'
-}
-
-export interface Tooltip {
-  show?: boolean
-  trigger?: 'item' | 'axis'
-  formatter?: string
-}
-
-export interface Animation {
-  enabled?: boolean
-  duration?: number
-  easing?: string
-}
-
+// ChartStyle is an alias for the top-level chart styling
+// (combines style properties that apply to the whole chart)
 export interface ChartStyle {
   // Colors
   colors?: string[]
@@ -118,13 +68,37 @@ export interface ChartStyle {
   padding?: number | [number, number, number, number]
 
   // Axes
-  xAxis?: Axis
-  yAxis?: Axis
+  xAxis?: {
+    show?: boolean
+    title?: string
+    grid?: boolean
+    labelRotate?: number
+    labelFormat?: string
+  }
+  yAxis?: {
+    show?: boolean
+    title?: string
+    grid?: boolean
+    labelRotate?: number
+    labelFormat?: string
+  }
 
   // Components
-  legend?: Legend
-  tooltip?: Tooltip
-  animation?: Animation
+  legend?: {
+    show?: boolean
+    position?: 'top' | 'bottom' | 'left' | 'right'
+    orient?: 'horizontal' | 'vertical'
+  }
+  tooltip?: {
+    show?: boolean
+    trigger?: 'item' | 'axis'
+    formatter?: string
+  }
+  animation?: {
+    enabled?: boolean
+    duration?: number
+    easing?: string
+  }
 
   // Series specific
   stack?: boolean | string
@@ -132,126 +106,81 @@ export interface ChartStyle {
 }
 
 /**
- * ChartIR - The main chart intermediate representation
- * This is the non-polymorphic format that LLMs can generate reliably.
+ * Validates a ChartIR object using Zod schema.
+ * Returns validation result with errors if invalid.
  */
-export interface ChartIR {
-  // Required
-  mark: Mark
-  encodings: Encodings
+export function validateChartIR(chart: unknown): { valid: boolean; errors: string[] } {
+  const result = chartIRSchema.safeParse(chart)
 
-  // Optional
-  data?: unknown[]
-  style?: ChartStyle
-  title?: string
-  subtitle?: string
+  if (result.success) {
+    return { valid: true, errors: [] }
+  }
 
-  // Metadata
-  $schema?: string
-  version?: string
+  const errors = result.error.errors.map(
+    (err: { path: (string | number)[]; message: string }) =>
+      `${err.path.join('.')}: ${err.message}`
+  )
+
+  return { valid: false, errors }
 }
 
 /**
- * Creates a default ChartIR for a given geometry type
+ * Creates a default ChartIR for a given geometry type.
+ * This is a convenience function for the builder UI.
  */
 export function createDefaultChartIR(geometry: GeometryType): ChartIR {
-  const defaults: Record<GeometryType, Partial<ChartIR>> = {
+  const defaultDataset: Dataset = {
+    id: 'default',
+    columns: [],
+    rows: [],
+  }
+
+  const createMark = (id: string, encode: Encode, smooth?: boolean): Mark => ({
+    id,
+    datasetId: 'default',
+    geometry,
+    encode,
+    ...(smooth !== undefined ? { smooth } : {}),
+  })
+
+  const defaults: Record<GeometryType, { marks: Mark[] }> = {
     line: {
-      mark: { type: 'line', style: { smooth: false } },
-      encodings: { x: '', y: '' },
-      style: { xAxis: { show: true }, yAxis: { show: true }, legend: { show: true } }
+      marks: [createMark('line-1', { x: '', y: '' })],
     },
     bar: {
-      mark: { type: 'bar' },
-      encodings: { x: '', y: '' },
-      style: { xAxis: { show: true }, yAxis: { show: true }, legend: { show: true } }
+      marks: [createMark('bar-1', { x: '', y: '' })],
     },
     pie: {
-      mark: { type: 'pie' },
-      encodings: { value: '', category: '' },
-      style: { legend: { show: true, position: 'right' } }
+      marks: [createMark('pie-1', { value: '', name: '' })],
     },
     scatter: {
-      mark: { type: 'scatter', style: { symbol: 'circle', symbolSize: 10 } },
-      encodings: { x: '', y: '' },
-      style: { xAxis: { show: true }, yAxis: { show: true } }
+      marks: [createMark('scatter-1', { x: '', y: '' })],
     },
     area: {
-      mark: { type: 'area', style: { areaOpacity: 0.3 } },
-      encodings: { x: '', y: '' },
-      style: { xAxis: { show: true }, yAxis: { show: true }, stack: true }
+      marks: [createMark('area-1', { x: '', y: '' }, true)],
     },
     radar: {
-      mark: { type: 'radar' },
-      encodings: { angle: '', radius: '' },
-      style: { legend: { show: true } }
+      marks: [createMark('radar-1', {})],
     },
     funnel: {
-      mark: { type: 'funnel' },
-      encodings: { value: '', category: '' },
-      style: { legend: { show: true } }
+      marks: [createMark('funnel-1', { value: '', name: '' })],
     },
     gauge: {
-      mark: { type: 'gauge' },
-      encodings: { value: '' },
-      style: {}
+      marks: [createMark('gauge-1', { value: '' })],
     },
     heatmap: {
-      mark: { type: 'heatmap' },
-      encodings: { x: '', y: '', heat: '' },
-      style: { xAxis: { show: true }, yAxis: { show: true } }
+      marks: [createMark('heatmap-1', { x: '', y: '', heat: '' })],
     },
     treemap: {
-      mark: { type: 'treemap' },
-      encodings: { value: '', category: '' },
-      style: {}
+      marks: [createMark('treemap-1', { value: '', name: '' })],
     },
     sankey: {
-      mark: { type: 'sankey' },
-      encodings: {},
-      style: {}
-    }
+      marks: [createMark('sankey-1', { source: '', target: '', value: '' })],
+    },
   }
 
   return {
-    mark: defaults[geometry]?.mark || { type: geometry },
-    encodings: defaults[geometry]?.encodings || {},
-    style: defaults[geometry]?.style || {},
-    data: []
-  }
-}
-
-/**
- * Validates a ChartIR object
- */
-export function validateChartIR(chart: ChartIR): { valid: boolean; errors: string[] } {
-  const errors: string[] = []
-
-  if (!chart.mark) {
-    errors.push('Missing required field: mark')
-  } else if (!chart.mark.type) {
-    errors.push('Missing required field: mark.type')
-  }
-
-  if (!chart.encodings) {
-    errors.push('Missing required field: encodings')
-  }
-
-  // Geometry-specific validation
-  if (chart.mark?.type) {
-    const type = chart.mark.type
-    if ((type === 'line' || type === 'bar' || type === 'scatter' || type === 'area') &&
-        !chart.encodings?.x && !chart.encodings?.y) {
-      errors.push(`${type} chart requires x and y encodings`)
-    }
-    if ((type === 'pie' || type === 'funnel') &&
-        !chart.encodings?.value && !chart.encodings?.category) {
-      errors.push(`${type} chart requires value and category encodings`)
-    }
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors
+    datasets: [defaultDataset],
+    marks: defaults[geometry]?.marks || [createMark(`${geometry}-1`, {})],
   }
 }
