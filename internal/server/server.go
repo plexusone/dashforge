@@ -95,20 +95,17 @@ type Server struct {
 }
 
 // New creates a new Dashforge server.
+// This is used for standalone deployments where the server manages its own database.
 func New(cfg Config, logger *slog.Logger) (*Server, error) {
-	s := &Server{
-		config: cfg,
-		logger: logger,
-		mux:    http.NewServeMux(),
-	}
+	var database db.Database
 
 	// Initialize database if URL provided
 	if cfg.DatabaseURL != "" {
-		database, err := db.Open(cfg.DatabaseURL)
+		var err error
+		database, err = db.Open(cfg.DatabaseURL)
 		if err != nil {
 			return nil, fmt.Errorf("opening database: %w", err)
 		}
-		s.db = database
 
 		// Verify connection
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -138,6 +135,27 @@ func New(cfg Config, logger *slog.Logger) (*Server, error) {
 		}
 	}
 
+	return newServerInternal(cfg, logger, database)
+}
+
+// NewServerWithDatabase creates a server using an existing database connection.
+// This is used for multi-app deployments where the database connection
+// is managed by the multiapp framework with schema isolation.
+// The caller is responsible for running migrations before calling this.
+func NewServerWithDatabase(cfg Config, logger *slog.Logger, database db.Database) (*Server, error) {
+	return newServerInternal(cfg, logger, database)
+}
+
+// newServerInternal contains the shared server initialization logic.
+// Both standalone and multi-app deployments use this function.
+func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*Server, error) {
+	s := &Server{
+		config: cfg,
+		logger: logger,
+		mux:    http.NewServeMux(),
+		db:     database,
+	}
+
 	// Initialize data source manager (always, even without primary DB)
 	s.dsManager = datasource.NewManager(datasource.ManagerConfig{
 		Logger: logger,
@@ -154,11 +172,11 @@ func New(cfg Config, logger *slog.Logger) (*Server, error) {
 
 	// Initialize JWT service if secret provided
 	if cfg.JWTSecret != "" {
-		jwtSvc, err := auth.NewJWTService(auth.JWTConfig{
-			Secret:          cfg.JWTSecret,
-			AccessTokenTTL:  15 * time.Minute,
-			RefreshTokenTTL: 7 * 24 * time.Hour,
-			Issuer:          "dashforge",
+		jwtSvc, err := auth.NewJWTService(&auth.JWTConfig{
+			Secret:             []byte(cfg.JWTSecret),
+			AccessTokenExpiry:  15 * time.Minute,
+			RefreshTokenExpiry: 7 * 24 * time.Hour,
+			Issuer:             "dashforge",
 		})
 		if err != nil {
 			return nil, fmt.Errorf("creating JWT service: %w", err)
@@ -373,4 +391,9 @@ func (s *Server) Shutdown(ctx context.Context) error {
 		}
 	}
 	return nil
+}
+
+// Router returns the HTTP handler for use by multi-app framework.
+func (s *Server) Router() http.Handler {
+	return s.mux
 }
