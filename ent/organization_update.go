@@ -16,10 +16,14 @@ import (
 	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/datasource"
 	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/license"
 	"github.com/plexusone/dashforge/ent/membership"
 	"github.com/plexusone/dashforge/ent/organization"
 	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/principalmembership"
 	"github.com/plexusone/dashforge/ent/savedquery"
+	"github.com/plexusone/dashforge/ent/subscription"
 )
 
 // OrganizationUpdate is the builder for updating Organization entities.
@@ -164,6 +168,36 @@ func (_u *OrganizationUpdate) AddMemberships(v ...*Membership) *OrganizationUpda
 	return _u.AddMembershipIDs(ids...)
 }
 
+// AddPrincipalIDs adds the "principals" edge to the Principal entity by IDs.
+func (_u *OrganizationUpdate) AddPrincipalIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.AddPrincipalIDs(ids...)
+	return _u
+}
+
+// AddPrincipals adds the "principals" edges to the Principal entity.
+func (_u *OrganizationUpdate) AddPrincipals(v ...*Principal) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPrincipalIDs(ids...)
+}
+
+// AddPrincipalMembershipIDs adds the "principal_memberships" edge to the PrincipalMembership entity by IDs.
+func (_u *OrganizationUpdate) AddPrincipalMembershipIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.AddPrincipalMembershipIDs(ids...)
+	return _u
+}
+
+// AddPrincipalMemberships adds the "principal_memberships" edges to the PrincipalMembership entity.
+func (_u *OrganizationUpdate) AddPrincipalMemberships(v ...*PrincipalMembership) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPrincipalMembershipIDs(ids...)
+}
+
 // AddDashboardIDs adds the "dashboards" edge to the Dashboard entity by IDs.
 func (_u *OrganizationUpdate) AddDashboardIDs(ids ...int) *OrganizationUpdate {
 	_u.mutation.AddDashboardIDs(ids...)
@@ -239,6 +273,40 @@ func (_u *OrganizationUpdate) AddAlerts(v ...*Alert) *OrganizationUpdate {
 	return _u.AddAlertIDs(ids...)
 }
 
+// AddLicenseIDs adds the "licenses" edge to the License entity by IDs.
+func (_u *OrganizationUpdate) AddLicenseIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.AddLicenseIDs(ids...)
+	return _u
+}
+
+// AddLicenses adds the "licenses" edges to the License entity.
+func (_u *OrganizationUpdate) AddLicenses(v ...*License) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddLicenseIDs(ids...)
+}
+
+// SetSubscriptionID sets the "subscription" edge to the Subscription entity by ID.
+func (_u *OrganizationUpdate) SetSubscriptionID(id uuid.UUID) *OrganizationUpdate {
+	_u.mutation.SetSubscriptionID(id)
+	return _u
+}
+
+// SetNillableSubscriptionID sets the "subscription" edge to the Subscription entity by ID if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableSubscriptionID(id *uuid.UUID) *OrganizationUpdate {
+	if id != nil {
+		_u = _u.SetSubscriptionID(*id)
+	}
+	return _u
+}
+
+// SetSubscription sets the "subscription" edge to the Subscription entity.
+func (_u *OrganizationUpdate) SetSubscription(v *Subscription) *OrganizationUpdate {
+	return _u.SetSubscriptionID(v.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (_u *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return _u.mutation
@@ -263,6 +331,48 @@ func (_u *OrganizationUpdate) RemoveMemberships(v ...*Membership) *OrganizationU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMembershipIDs(ids...)
+}
+
+// ClearPrincipals clears all "principals" edges to the Principal entity.
+func (_u *OrganizationUpdate) ClearPrincipals() *OrganizationUpdate {
+	_u.mutation.ClearPrincipals()
+	return _u
+}
+
+// RemovePrincipalIDs removes the "principals" edge to Principal entities by IDs.
+func (_u *OrganizationUpdate) RemovePrincipalIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.RemovePrincipalIDs(ids...)
+	return _u
+}
+
+// RemovePrincipals removes "principals" edges to Principal entities.
+func (_u *OrganizationUpdate) RemovePrincipals(v ...*Principal) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePrincipalIDs(ids...)
+}
+
+// ClearPrincipalMemberships clears all "principal_memberships" edges to the PrincipalMembership entity.
+func (_u *OrganizationUpdate) ClearPrincipalMemberships() *OrganizationUpdate {
+	_u.mutation.ClearPrincipalMemberships()
+	return _u
+}
+
+// RemovePrincipalMembershipIDs removes the "principal_memberships" edge to PrincipalMembership entities by IDs.
+func (_u *OrganizationUpdate) RemovePrincipalMembershipIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.RemovePrincipalMembershipIDs(ids...)
+	return _u
+}
+
+// RemovePrincipalMemberships removes "principal_memberships" edges to PrincipalMembership entities.
+func (_u *OrganizationUpdate) RemovePrincipalMemberships(v ...*PrincipalMembership) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePrincipalMembershipIDs(ids...)
 }
 
 // ClearDashboards clears all "dashboards" edges to the Dashboard entity.
@@ -368,6 +478,33 @@ func (_u *OrganizationUpdate) RemoveAlerts(v ...*Alert) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAlertIDs(ids...)
+}
+
+// ClearLicenses clears all "licenses" edges to the License entity.
+func (_u *OrganizationUpdate) ClearLicenses() *OrganizationUpdate {
+	_u.mutation.ClearLicenses()
+	return _u
+}
+
+// RemoveLicenseIDs removes the "licenses" edge to License entities by IDs.
+func (_u *OrganizationUpdate) RemoveLicenseIDs(ids ...uuid.UUID) *OrganizationUpdate {
+	_u.mutation.RemoveLicenseIDs(ids...)
+	return _u
+}
+
+// RemoveLicenses removes "licenses" edges to License entities.
+func (_u *OrganizationUpdate) RemoveLicenses(v ...*License) *OrganizationUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveLicenseIDs(ids...)
+}
+
+// ClearSubscription clears the "subscription" edge to the Subscription entity.
+func (_u *OrganizationUpdate) ClearSubscription() *OrganizationUpdate {
+	_u.mutation.ClearSubscription()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -509,6 +646,96 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membership.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PrincipalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPrincipalsIDs(); len(nodes) > 0 && !_u.mutation.PrincipalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PrincipalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PrincipalMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPrincipalMembershipsIDs(); len(nodes) > 0 && !_u.mutation.PrincipalMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PrincipalMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -741,6 +968,80 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.LicensesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedLicensesIDs(); len(nodes) > 0 && !_u.mutation.LicensesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LicensesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.SubscriptionTable,
+			Columns: []string{organization.SubscriptionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscription.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.SubscriptionTable,
+			Columns: []string{organization.SubscriptionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscription.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organization.Label}
@@ -890,6 +1191,36 @@ func (_u *OrganizationUpdateOne) AddMemberships(v ...*Membership) *OrganizationU
 	return _u.AddMembershipIDs(ids...)
 }
 
+// AddPrincipalIDs adds the "principals" edge to the Principal entity by IDs.
+func (_u *OrganizationUpdateOne) AddPrincipalIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.AddPrincipalIDs(ids...)
+	return _u
+}
+
+// AddPrincipals adds the "principals" edges to the Principal entity.
+func (_u *OrganizationUpdateOne) AddPrincipals(v ...*Principal) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPrincipalIDs(ids...)
+}
+
+// AddPrincipalMembershipIDs adds the "principal_memberships" edge to the PrincipalMembership entity by IDs.
+func (_u *OrganizationUpdateOne) AddPrincipalMembershipIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.AddPrincipalMembershipIDs(ids...)
+	return _u
+}
+
+// AddPrincipalMemberships adds the "principal_memberships" edges to the PrincipalMembership entity.
+func (_u *OrganizationUpdateOne) AddPrincipalMemberships(v ...*PrincipalMembership) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPrincipalMembershipIDs(ids...)
+}
+
 // AddDashboardIDs adds the "dashboards" edge to the Dashboard entity by IDs.
 func (_u *OrganizationUpdateOne) AddDashboardIDs(ids ...int) *OrganizationUpdateOne {
 	_u.mutation.AddDashboardIDs(ids...)
@@ -965,6 +1296,40 @@ func (_u *OrganizationUpdateOne) AddAlerts(v ...*Alert) *OrganizationUpdateOne {
 	return _u.AddAlertIDs(ids...)
 }
 
+// AddLicenseIDs adds the "licenses" edge to the License entity by IDs.
+func (_u *OrganizationUpdateOne) AddLicenseIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.AddLicenseIDs(ids...)
+	return _u
+}
+
+// AddLicenses adds the "licenses" edges to the License entity.
+func (_u *OrganizationUpdateOne) AddLicenses(v ...*License) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddLicenseIDs(ids...)
+}
+
+// SetSubscriptionID sets the "subscription" edge to the Subscription entity by ID.
+func (_u *OrganizationUpdateOne) SetSubscriptionID(id uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.SetSubscriptionID(id)
+	return _u
+}
+
+// SetNillableSubscriptionID sets the "subscription" edge to the Subscription entity by ID if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableSubscriptionID(id *uuid.UUID) *OrganizationUpdateOne {
+	if id != nil {
+		_u = _u.SetSubscriptionID(*id)
+	}
+	return _u
+}
+
+// SetSubscription sets the "subscription" edge to the Subscription entity.
+func (_u *OrganizationUpdateOne) SetSubscription(v *Subscription) *OrganizationUpdateOne {
+	return _u.SetSubscriptionID(v.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (_u *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return _u.mutation
@@ -989,6 +1354,48 @@ func (_u *OrganizationUpdateOne) RemoveMemberships(v ...*Membership) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMembershipIDs(ids...)
+}
+
+// ClearPrincipals clears all "principals" edges to the Principal entity.
+func (_u *OrganizationUpdateOne) ClearPrincipals() *OrganizationUpdateOne {
+	_u.mutation.ClearPrincipals()
+	return _u
+}
+
+// RemovePrincipalIDs removes the "principals" edge to Principal entities by IDs.
+func (_u *OrganizationUpdateOne) RemovePrincipalIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.RemovePrincipalIDs(ids...)
+	return _u
+}
+
+// RemovePrincipals removes "principals" edges to Principal entities.
+func (_u *OrganizationUpdateOne) RemovePrincipals(v ...*Principal) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePrincipalIDs(ids...)
+}
+
+// ClearPrincipalMemberships clears all "principal_memberships" edges to the PrincipalMembership entity.
+func (_u *OrganizationUpdateOne) ClearPrincipalMemberships() *OrganizationUpdateOne {
+	_u.mutation.ClearPrincipalMemberships()
+	return _u
+}
+
+// RemovePrincipalMembershipIDs removes the "principal_memberships" edge to PrincipalMembership entities by IDs.
+func (_u *OrganizationUpdateOne) RemovePrincipalMembershipIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.RemovePrincipalMembershipIDs(ids...)
+	return _u
+}
+
+// RemovePrincipalMemberships removes "principal_memberships" edges to PrincipalMembership entities.
+func (_u *OrganizationUpdateOne) RemovePrincipalMemberships(v ...*PrincipalMembership) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePrincipalMembershipIDs(ids...)
 }
 
 // ClearDashboards clears all "dashboards" edges to the Dashboard entity.
@@ -1094,6 +1501,33 @@ func (_u *OrganizationUpdateOne) RemoveAlerts(v ...*Alert) *OrganizationUpdateOn
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAlertIDs(ids...)
+}
+
+// ClearLicenses clears all "licenses" edges to the License entity.
+func (_u *OrganizationUpdateOne) ClearLicenses() *OrganizationUpdateOne {
+	_u.mutation.ClearLicenses()
+	return _u
+}
+
+// RemoveLicenseIDs removes the "licenses" edge to License entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveLicenseIDs(ids ...uuid.UUID) *OrganizationUpdateOne {
+	_u.mutation.RemoveLicenseIDs(ids...)
+	return _u
+}
+
+// RemoveLicenses removes "licenses" edges to License entities.
+func (_u *OrganizationUpdateOne) RemoveLicenses(v ...*License) *OrganizationUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveLicenseIDs(ids...)
+}
+
+// ClearSubscription clears the "subscription" edge to the Subscription entity.
+func (_u *OrganizationUpdateOne) ClearSubscription() *OrganizationUpdateOne {
+	_u.mutation.ClearSubscription()
+	return _u
 }
 
 // Where appends a list predicates to the OrganizationUpdate builder.
@@ -1272,6 +1706,96 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PrincipalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPrincipalsIDs(); len(nodes) > 0 && !_u.mutation.PrincipalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PrincipalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PrincipalMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPrincipalMembershipsIDs(); len(nodes) > 0 && !_u.mutation.PrincipalMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PrincipalMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.DashboardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1490,6 +2014,80 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(alert.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LicensesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedLicensesIDs(); len(nodes) > 0 && !_u.mutation.LicensesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LicensesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.SubscriptionTable,
+			Columns: []string{organization.SubscriptionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscription.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.SubscriptionTable,
+			Columns: []string{organization.SubscriptionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscription.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

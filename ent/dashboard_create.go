@@ -15,7 +15,7 @@ import (
 	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/dashboardversion"
 	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // DashboardCreate is the builder for creating a Dashboard entity.
@@ -138,13 +138,13 @@ func (_c *DashboardCreate) SetOrganization(v *Organization) *DashboardCreate {
 	return _c.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_c *DashboardCreate) SetOwnerID(id uuid.UUID) *DashboardCreate {
 	_c.mutation.SetOwnerID(id)
 	return _c
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_c *DashboardCreate) SetNillableOwnerID(id *uuid.UUID) *DashboardCreate {
 	if id != nil {
 		_c = _c.SetOwnerID(*id)
@@ -152,8 +152,8 @@ func (_c *DashboardCreate) SetNillableOwnerID(id *uuid.UUID) *DashboardCreate {
 	return _c
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_c *DashboardCreate) SetOwner(v *User) *DashboardCreate {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_c *DashboardCreate) SetOwner(v *Principal) *DashboardCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
@@ -375,13 +375,13 @@ func (_c *DashboardCreate) createSpec() (*Dashboard, *sqlgraph.CreateSpec) {
 			Columns: []string{dashboard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.user_dashboards = &nodes[0]
+		_node.principal_dashboards = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.VersionsIDs(); len(nodes) > 0 {

@@ -20,14 +20,23 @@ import (
 	"github.com/plexusone/dashforge/ent/alertchannel"
 	"github.com/plexusone/dashforge/ent/alertevent"
 	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/dashboardtemplate"
 	"github.com/plexusone/dashforge/ent/dashboardversion"
 	"github.com/plexusone/dashforge/ent/datasource"
+	"github.com/plexusone/dashforge/ent/human"
 	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/license"
+	"github.com/plexusone/dashforge/ent/listing"
 	"github.com/plexusone/dashforge/ent/membership"
 	"github.com/plexusone/dashforge/ent/oauthaccount"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/principalmembership"
+	"github.com/plexusone/dashforge/ent/publisher"
 	"github.com/plexusone/dashforge/ent/refreshtoken"
 	"github.com/plexusone/dashforge/ent/savedquery"
+	"github.com/plexusone/dashforge/ent/seatassignment"
+	"github.com/plexusone/dashforge/ent/subscription"
 	"github.com/plexusone/dashforge/ent/user"
 )
 
@@ -44,22 +53,40 @@ type Client struct {
 	AlertEvent *AlertEventClient
 	// Dashboard is the client for interacting with the Dashboard builders.
 	Dashboard *DashboardClient
+	// DashboardTemplate is the client for interacting with the DashboardTemplate builders.
+	DashboardTemplate *DashboardTemplateClient
 	// DashboardVersion is the client for interacting with the DashboardVersion builders.
 	DashboardVersion *DashboardVersionClient
 	// DataSource is the client for interacting with the DataSource builders.
 	DataSource *DataSourceClient
+	// Human is the client for interacting with the Human builders.
+	Human *HumanClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// License is the client for interacting with the License builders.
+	License *LicenseClient
+	// Listing is the client for interacting with the Listing builders.
+	Listing *ListingClient
 	// Membership is the client for interacting with the Membership builders.
 	Membership *MembershipClient
 	// OAuthAccount is the client for interacting with the OAuthAccount builders.
 	OAuthAccount *OAuthAccountClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// Principal is the client for interacting with the Principal builders.
+	Principal *PrincipalClient
+	// PrincipalMembership is the client for interacting with the PrincipalMembership builders.
+	PrincipalMembership *PrincipalMembershipClient
+	// Publisher is the client for interacting with the Publisher builders.
+	Publisher *PublisherClient
 	// RefreshToken is the client for interacting with the RefreshToken builders.
 	RefreshToken *RefreshTokenClient
 	// SavedQuery is the client for interacting with the SavedQuery builders.
 	SavedQuery *SavedQueryClient
+	// SeatAssignment is the client for interacting with the SeatAssignment builders.
+	SeatAssignment *SeatAssignmentClient
+	// Subscription is the client for interacting with the Subscription builders.
+	Subscription *SubscriptionClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -77,14 +104,23 @@ func (c *Client) init() {
 	c.AlertChannel = NewAlertChannelClient(c.config)
 	c.AlertEvent = NewAlertEventClient(c.config)
 	c.Dashboard = NewDashboardClient(c.config)
+	c.DashboardTemplate = NewDashboardTemplateClient(c.config)
 	c.DashboardVersion = NewDashboardVersionClient(c.config)
 	c.DataSource = NewDataSourceClient(c.config)
+	c.Human = NewHumanClient(c.config)
 	c.Integration = NewIntegrationClient(c.config)
+	c.License = NewLicenseClient(c.config)
+	c.Listing = NewListingClient(c.config)
 	c.Membership = NewMembershipClient(c.config)
 	c.OAuthAccount = NewOAuthAccountClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
+	c.Principal = NewPrincipalClient(c.config)
+	c.PrincipalMembership = NewPrincipalMembershipClient(c.config)
+	c.Publisher = NewPublisherClient(c.config)
 	c.RefreshToken = NewRefreshTokenClient(c.config)
 	c.SavedQuery = NewSavedQueryClient(c.config)
+	c.SeatAssignment = NewSeatAssignmentClient(c.config)
+	c.Subscription = NewSubscriptionClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -176,21 +212,30 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:              ctx,
-		config:           cfg,
-		Alert:            NewAlertClient(cfg),
-		AlertChannel:     NewAlertChannelClient(cfg),
-		AlertEvent:       NewAlertEventClient(cfg),
-		Dashboard:        NewDashboardClient(cfg),
-		DashboardVersion: NewDashboardVersionClient(cfg),
-		DataSource:       NewDataSourceClient(cfg),
-		Integration:      NewIntegrationClient(cfg),
-		Membership:       NewMembershipClient(cfg),
-		OAuthAccount:     NewOAuthAccountClient(cfg),
-		Organization:     NewOrganizationClient(cfg),
-		RefreshToken:     NewRefreshTokenClient(cfg),
-		SavedQuery:       NewSavedQueryClient(cfg),
-		User:             NewUserClient(cfg),
+		ctx:                 ctx,
+		config:              cfg,
+		Alert:               NewAlertClient(cfg),
+		AlertChannel:        NewAlertChannelClient(cfg),
+		AlertEvent:          NewAlertEventClient(cfg),
+		Dashboard:           NewDashboardClient(cfg),
+		DashboardTemplate:   NewDashboardTemplateClient(cfg),
+		DashboardVersion:    NewDashboardVersionClient(cfg),
+		DataSource:          NewDataSourceClient(cfg),
+		Human:               NewHumanClient(cfg),
+		Integration:         NewIntegrationClient(cfg),
+		License:             NewLicenseClient(cfg),
+		Listing:             NewListingClient(cfg),
+		Membership:          NewMembershipClient(cfg),
+		OAuthAccount:        NewOAuthAccountClient(cfg),
+		Organization:        NewOrganizationClient(cfg),
+		Principal:           NewPrincipalClient(cfg),
+		PrincipalMembership: NewPrincipalMembershipClient(cfg),
+		Publisher:           NewPublisherClient(cfg),
+		RefreshToken:        NewRefreshTokenClient(cfg),
+		SavedQuery:          NewSavedQueryClient(cfg),
+		SeatAssignment:      NewSeatAssignmentClient(cfg),
+		Subscription:        NewSubscriptionClient(cfg),
+		User:                NewUserClient(cfg),
 	}, nil
 }
 
@@ -208,21 +253,30 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:              ctx,
-		config:           cfg,
-		Alert:            NewAlertClient(cfg),
-		AlertChannel:     NewAlertChannelClient(cfg),
-		AlertEvent:       NewAlertEventClient(cfg),
-		Dashboard:        NewDashboardClient(cfg),
-		DashboardVersion: NewDashboardVersionClient(cfg),
-		DataSource:       NewDataSourceClient(cfg),
-		Integration:      NewIntegrationClient(cfg),
-		Membership:       NewMembershipClient(cfg),
-		OAuthAccount:     NewOAuthAccountClient(cfg),
-		Organization:     NewOrganizationClient(cfg),
-		RefreshToken:     NewRefreshTokenClient(cfg),
-		SavedQuery:       NewSavedQueryClient(cfg),
-		User:             NewUserClient(cfg),
+		ctx:                 ctx,
+		config:              cfg,
+		Alert:               NewAlertClient(cfg),
+		AlertChannel:        NewAlertChannelClient(cfg),
+		AlertEvent:          NewAlertEventClient(cfg),
+		Dashboard:           NewDashboardClient(cfg),
+		DashboardTemplate:   NewDashboardTemplateClient(cfg),
+		DashboardVersion:    NewDashboardVersionClient(cfg),
+		DataSource:          NewDataSourceClient(cfg),
+		Human:               NewHumanClient(cfg),
+		Integration:         NewIntegrationClient(cfg),
+		License:             NewLicenseClient(cfg),
+		Listing:             NewListingClient(cfg),
+		Membership:          NewMembershipClient(cfg),
+		OAuthAccount:        NewOAuthAccountClient(cfg),
+		Organization:        NewOrganizationClient(cfg),
+		Principal:           NewPrincipalClient(cfg),
+		PrincipalMembership: NewPrincipalMembershipClient(cfg),
+		Publisher:           NewPublisherClient(cfg),
+		RefreshToken:        NewRefreshTokenClient(cfg),
+		SavedQuery:          NewSavedQueryClient(cfg),
+		SeatAssignment:      NewSeatAssignmentClient(cfg),
+		Subscription:        NewSubscriptionClient(cfg),
+		User:                NewUserClient(cfg),
 	}, nil
 }
 
@@ -252,9 +306,11 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardVersion,
-		c.DataSource, c.Integration, c.Membership, c.OAuthAccount, c.Organization,
-		c.RefreshToken, c.SavedQuery, c.User,
+		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardTemplate,
+		c.DashboardVersion, c.DataSource, c.Human, c.Integration, c.License, c.Listing,
+		c.Membership, c.OAuthAccount, c.Organization, c.Principal,
+		c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
+		c.SeatAssignment, c.Subscription, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -264,9 +320,11 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardVersion,
-		c.DataSource, c.Integration, c.Membership, c.OAuthAccount, c.Organization,
-		c.RefreshToken, c.SavedQuery, c.User,
+		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardTemplate,
+		c.DashboardVersion, c.DataSource, c.Human, c.Integration, c.License, c.Listing,
+		c.Membership, c.OAuthAccount, c.Organization, c.Principal,
+		c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
+		c.SeatAssignment, c.Subscription, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -283,22 +341,40 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AlertEvent.mutate(ctx, m)
 	case *DashboardMutation:
 		return c.Dashboard.mutate(ctx, m)
+	case *DashboardTemplateMutation:
+		return c.DashboardTemplate.mutate(ctx, m)
 	case *DashboardVersionMutation:
 		return c.DashboardVersion.mutate(ctx, m)
 	case *DataSourceMutation:
 		return c.DataSource.mutate(ctx, m)
+	case *HumanMutation:
+		return c.Human.mutate(ctx, m)
 	case *IntegrationMutation:
 		return c.Integration.mutate(ctx, m)
+	case *LicenseMutation:
+		return c.License.mutate(ctx, m)
+	case *ListingMutation:
+		return c.Listing.mutate(ctx, m)
 	case *MembershipMutation:
 		return c.Membership.mutate(ctx, m)
 	case *OAuthAccountMutation:
 		return c.OAuthAccount.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
+	case *PrincipalMutation:
+		return c.Principal.mutate(ctx, m)
+	case *PrincipalMembershipMutation:
+		return c.PrincipalMembership.mutate(ctx, m)
+	case *PublisherMutation:
+		return c.Publisher.mutate(ctx, m)
 	case *RefreshTokenMutation:
 		return c.RefreshToken.mutate(ctx, m)
 	case *SavedQueryMutation:
 		return c.SavedQuery.mutate(ctx, m)
+	case *SeatAssignmentMutation:
+		return c.SeatAssignment.mutate(ctx, m)
+	case *SubscriptionMutation:
+		return c.Subscription.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
@@ -909,13 +985,13 @@ func (c *DashboardClient) QueryOrganization(_m *Dashboard) *OrganizationQuery {
 }
 
 // QueryOwner queries the owner edge of a Dashboard.
-func (c *DashboardClient) QueryOwner(_m *Dashboard) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+func (c *DashboardClient) QueryOwner(_m *Dashboard) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dashboard.Table, dashboard.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(principal.Table, principal.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, dashboard.OwnerTable, dashboard.OwnerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
@@ -978,6 +1054,171 @@ func (c *DashboardClient) mutate(ctx context.Context, m *DashboardMutation) (Val
 		return (&DashboardDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Dashboard mutation op: %q", m.Op())
+	}
+}
+
+// DashboardTemplateClient is a client for the DashboardTemplate schema.
+type DashboardTemplateClient struct {
+	config
+}
+
+// NewDashboardTemplateClient returns a client for the DashboardTemplate from the given config.
+func NewDashboardTemplateClient(c config) *DashboardTemplateClient {
+	return &DashboardTemplateClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dashboardtemplate.Hooks(f(g(h())))`.
+func (c *DashboardTemplateClient) Use(hooks ...Hook) {
+	c.hooks.DashboardTemplate = append(c.hooks.DashboardTemplate, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dashboardtemplate.Intercept(f(g(h())))`.
+func (c *DashboardTemplateClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DashboardTemplate = append(c.inters.DashboardTemplate, interceptors...)
+}
+
+// Create returns a builder for creating a DashboardTemplate entity.
+func (c *DashboardTemplateClient) Create() *DashboardTemplateCreate {
+	mutation := newDashboardTemplateMutation(c.config, OpCreate)
+	return &DashboardTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DashboardTemplate entities.
+func (c *DashboardTemplateClient) CreateBulk(builders ...*DashboardTemplateCreate) *DashboardTemplateCreateBulk {
+	return &DashboardTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DashboardTemplateClient) MapCreateBulk(slice any, setFunc func(*DashboardTemplateCreate, int)) *DashboardTemplateCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DashboardTemplateCreateBulk{err: fmt.Errorf("calling to DashboardTemplateClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DashboardTemplateCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DashboardTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DashboardTemplate.
+func (c *DashboardTemplateClient) Update() *DashboardTemplateUpdate {
+	mutation := newDashboardTemplateMutation(c.config, OpUpdate)
+	return &DashboardTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DashboardTemplateClient) UpdateOne(_m *DashboardTemplate) *DashboardTemplateUpdateOne {
+	mutation := newDashboardTemplateMutation(c.config, OpUpdateOne, withDashboardTemplate(_m))
+	return &DashboardTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DashboardTemplateClient) UpdateOneID(id uuid.UUID) *DashboardTemplateUpdateOne {
+	mutation := newDashboardTemplateMutation(c.config, OpUpdateOne, withDashboardTemplateID(id))
+	return &DashboardTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DashboardTemplate.
+func (c *DashboardTemplateClient) Delete() *DashboardTemplateDelete {
+	mutation := newDashboardTemplateMutation(c.config, OpDelete)
+	return &DashboardTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DashboardTemplateClient) DeleteOne(_m *DashboardTemplate) *DashboardTemplateDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DashboardTemplateClient) DeleteOneID(id uuid.UUID) *DashboardTemplateDeleteOne {
+	builder := c.Delete().Where(dashboardtemplate.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DashboardTemplateDeleteOne{builder}
+}
+
+// Query returns a query builder for DashboardTemplate.
+func (c *DashboardTemplateClient) Query() *DashboardTemplateQuery {
+	return &DashboardTemplateQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDashboardTemplate},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DashboardTemplate entity by its id.
+func (c *DashboardTemplateClient) Get(ctx context.Context, id uuid.UUID) (*DashboardTemplate, error) {
+	return c.Query().Where(dashboardtemplate.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DashboardTemplateClient) GetX(ctx context.Context, id uuid.UUID) *DashboardTemplate {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPublisher queries the publisher edge of a DashboardTemplate.
+func (c *DashboardTemplateClient) QueryPublisher(_m *DashboardTemplate) *PublisherQuery {
+	query := (&PublisherClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dashboardtemplate.Table, dashboardtemplate.FieldID, id),
+			sqlgraph.To(publisher.Table, publisher.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, dashboardtemplate.PublisherTable, dashboardtemplate.PublisherColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryListing queries the listing edge of a DashboardTemplate.
+func (c *DashboardTemplateClient) QueryListing(_m *DashboardTemplate) *ListingQuery {
+	query := (&ListingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dashboardtemplate.Table, dashboardtemplate.FieldID, id),
+			sqlgraph.To(listing.Table, listing.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, dashboardtemplate.ListingTable, dashboardtemplate.ListingColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DashboardTemplateClient) Hooks() []Hook {
+	return c.hooks.DashboardTemplate
+}
+
+// Interceptors returns the client interceptors.
+func (c *DashboardTemplateClient) Interceptors() []Interceptor {
+	return c.inters.DashboardTemplate
+}
+
+func (c *DashboardTemplateClient) mutate(ctx context.Context, m *DashboardTemplateMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DashboardTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DashboardTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DashboardTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DashboardTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown DashboardTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -1279,6 +1520,155 @@ func (c *DataSourceClient) mutate(ctx context.Context, m *DataSourceMutation) (V
 	}
 }
 
+// HumanClient is a client for the Human schema.
+type HumanClient struct {
+	config
+}
+
+// NewHumanClient returns a client for the Human from the given config.
+func NewHumanClient(c config) *HumanClient {
+	return &HumanClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `human.Hooks(f(g(h())))`.
+func (c *HumanClient) Use(hooks ...Hook) {
+	c.hooks.Human = append(c.hooks.Human, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `human.Intercept(f(g(h())))`.
+func (c *HumanClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Human = append(c.inters.Human, interceptors...)
+}
+
+// Create returns a builder for creating a Human entity.
+func (c *HumanClient) Create() *HumanCreate {
+	mutation := newHumanMutation(c.config, OpCreate)
+	return &HumanCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Human entities.
+func (c *HumanClient) CreateBulk(builders ...*HumanCreate) *HumanCreateBulk {
+	return &HumanCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *HumanClient) MapCreateBulk(slice any, setFunc func(*HumanCreate, int)) *HumanCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &HumanCreateBulk{err: fmt.Errorf("calling to HumanClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*HumanCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &HumanCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Human.
+func (c *HumanClient) Update() *HumanUpdate {
+	mutation := newHumanMutation(c.config, OpUpdate)
+	return &HumanUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *HumanClient) UpdateOne(_m *Human) *HumanUpdateOne {
+	mutation := newHumanMutation(c.config, OpUpdateOne, withHuman(_m))
+	return &HumanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *HumanClient) UpdateOneID(id uuid.UUID) *HumanUpdateOne {
+	mutation := newHumanMutation(c.config, OpUpdateOne, withHumanID(id))
+	return &HumanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Human.
+func (c *HumanClient) Delete() *HumanDelete {
+	mutation := newHumanMutation(c.config, OpDelete)
+	return &HumanDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *HumanClient) DeleteOne(_m *Human) *HumanDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *HumanClient) DeleteOneID(id uuid.UUID) *HumanDeleteOne {
+	builder := c.Delete().Where(human.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &HumanDeleteOne{builder}
+}
+
+// Query returns a query builder for Human.
+func (c *HumanClient) Query() *HumanQuery {
+	return &HumanQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeHuman},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Human entity by its id.
+func (c *HumanClient) Get(ctx context.Context, id uuid.UUID) (*Human, error) {
+	return c.Query().Where(human.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *HumanClient) GetX(ctx context.Context, id uuid.UUID) *Human {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPrincipal queries the principal edge of a Human.
+func (c *HumanClient) QueryPrincipal(_m *Human) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(human.Table, human.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, human.PrincipalTable, human.PrincipalColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *HumanClient) Hooks() []Hook {
+	return c.hooks.Human
+}
+
+// Interceptors returns the client interceptors.
+func (c *HumanClient) Interceptors() []Interceptor {
+	return c.inters.Human
+}
+
+func (c *HumanClient) mutate(ctx context.Context, m *HumanMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&HumanCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&HumanUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&HumanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&HumanDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Human mutation op: %q", m.Op())
+	}
+}
+
 // IntegrationClient is a client for the Integration schema.
 type IntegrationClient struct {
 	config
@@ -1457,6 +1847,400 @@ func (c *IntegrationClient) mutate(ctx context.Context, m *IntegrationMutation) 
 		return (&IntegrationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Integration mutation op: %q", m.Op())
+	}
+}
+
+// LicenseClient is a client for the License schema.
+type LicenseClient struct {
+	config
+}
+
+// NewLicenseClient returns a client for the License from the given config.
+func NewLicenseClient(c config) *LicenseClient {
+	return &LicenseClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `license.Hooks(f(g(h())))`.
+func (c *LicenseClient) Use(hooks ...Hook) {
+	c.hooks.License = append(c.hooks.License, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `license.Intercept(f(g(h())))`.
+func (c *LicenseClient) Intercept(interceptors ...Interceptor) {
+	c.inters.License = append(c.inters.License, interceptors...)
+}
+
+// Create returns a builder for creating a License entity.
+func (c *LicenseClient) Create() *LicenseCreate {
+	mutation := newLicenseMutation(c.config, OpCreate)
+	return &LicenseCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of License entities.
+func (c *LicenseClient) CreateBulk(builders ...*LicenseCreate) *LicenseCreateBulk {
+	return &LicenseCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LicenseClient) MapCreateBulk(slice any, setFunc func(*LicenseCreate, int)) *LicenseCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LicenseCreateBulk{err: fmt.Errorf("calling to LicenseClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LicenseCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LicenseCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for License.
+func (c *LicenseClient) Update() *LicenseUpdate {
+	mutation := newLicenseMutation(c.config, OpUpdate)
+	return &LicenseUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LicenseClient) UpdateOne(_m *License) *LicenseUpdateOne {
+	mutation := newLicenseMutation(c.config, OpUpdateOne, withLicense(_m))
+	return &LicenseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LicenseClient) UpdateOneID(id uuid.UUID) *LicenseUpdateOne {
+	mutation := newLicenseMutation(c.config, OpUpdateOne, withLicenseID(id))
+	return &LicenseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for License.
+func (c *LicenseClient) Delete() *LicenseDelete {
+	mutation := newLicenseMutation(c.config, OpDelete)
+	return &LicenseDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LicenseClient) DeleteOne(_m *License) *LicenseDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LicenseClient) DeleteOneID(id uuid.UUID) *LicenseDeleteOne {
+	builder := c.Delete().Where(license.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LicenseDeleteOne{builder}
+}
+
+// Query returns a query builder for License.
+func (c *LicenseClient) Query() *LicenseQuery {
+	return &LicenseQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLicense},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a License entity by its id.
+func (c *LicenseClient) Get(ctx context.Context, id uuid.UUID) (*License, error) {
+	return c.Query().Where(license.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LicenseClient) GetX(ctx context.Context, id uuid.UUID) *License {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryListing queries the listing edge of a License.
+func (c *LicenseClient) QueryListing(_m *License) *ListingQuery {
+	query := (&ListingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(listing.Table, listing.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, license.ListingTable, license.ListingColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a License.
+func (c *LicenseClient) QueryOrganization(_m *License) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, license.OrganizationTable, license.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPurchaser queries the purchaser edge of a License.
+func (c *LicenseClient) QueryPurchaser(_m *License) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, license.PurchaserTable, license.PurchaserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySeatAssignments queries the seat_assignments edge of a License.
+func (c *LicenseClient) QuerySeatAssignments(_m *License) *SeatAssignmentQuery {
+	query := (&SeatAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(seatassignment.Table, seatassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.SeatAssignmentsTable, license.SeatAssignmentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *LicenseClient) Hooks() []Hook {
+	return c.hooks.License
+}
+
+// Interceptors returns the client interceptors.
+func (c *LicenseClient) Interceptors() []Interceptor {
+	return c.inters.License
+}
+
+func (c *LicenseClient) mutate(ctx context.Context, m *LicenseMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LicenseCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LicenseUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LicenseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LicenseDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown License mutation op: %q", m.Op())
+	}
+}
+
+// ListingClient is a client for the Listing schema.
+type ListingClient struct {
+	config
+}
+
+// NewListingClient returns a client for the Listing from the given config.
+func NewListingClient(c config) *ListingClient {
+	return &ListingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `listing.Hooks(f(g(h())))`.
+func (c *ListingClient) Use(hooks ...Hook) {
+	c.hooks.Listing = append(c.hooks.Listing, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `listing.Intercept(f(g(h())))`.
+func (c *ListingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Listing = append(c.inters.Listing, interceptors...)
+}
+
+// Create returns a builder for creating a Listing entity.
+func (c *ListingClient) Create() *ListingCreate {
+	mutation := newListingMutation(c.config, OpCreate)
+	return &ListingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Listing entities.
+func (c *ListingClient) CreateBulk(builders ...*ListingCreate) *ListingCreateBulk {
+	return &ListingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ListingClient) MapCreateBulk(slice any, setFunc func(*ListingCreate, int)) *ListingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ListingCreateBulk{err: fmt.Errorf("calling to ListingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ListingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ListingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Listing.
+func (c *ListingClient) Update() *ListingUpdate {
+	mutation := newListingMutation(c.config, OpUpdate)
+	return &ListingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ListingClient) UpdateOne(_m *Listing) *ListingUpdateOne {
+	mutation := newListingMutation(c.config, OpUpdateOne, withListing(_m))
+	return &ListingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ListingClient) UpdateOneID(id uuid.UUID) *ListingUpdateOne {
+	mutation := newListingMutation(c.config, OpUpdateOne, withListingID(id))
+	return &ListingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Listing.
+func (c *ListingClient) Delete() *ListingDelete {
+	mutation := newListingMutation(c.config, OpDelete)
+	return &ListingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ListingClient) DeleteOne(_m *Listing) *ListingDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ListingClient) DeleteOneID(id uuid.UUID) *ListingDeleteOne {
+	builder := c.Delete().Where(listing.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ListingDeleteOne{builder}
+}
+
+// Query returns a query builder for Listing.
+func (c *ListingClient) Query() *ListingQuery {
+	return &ListingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeListing},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Listing entity by its id.
+func (c *ListingClient) Get(ctx context.Context, id uuid.UUID) (*Listing, error) {
+	return c.Query().Where(listing.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ListingClient) GetX(ctx context.Context, id uuid.UUID) *Listing {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPublisher queries the publisher edge of a Listing.
+func (c *ListingClient) QueryPublisher(_m *Listing) *PublisherQuery {
+	query := (&PublisherClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(listing.Table, listing.FieldID, id),
+			sqlgraph.To(publisher.Table, publisher.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, listing.PublisherTable, listing.PublisherColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOwner queries the owner edge of a Listing.
+func (c *ListingClient) QueryOwner(_m *Listing) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(listing.Table, listing.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, listing.OwnerTable, listing.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a Listing.
+func (c *ListingClient) QueryTemplate(_m *Listing) *DashboardTemplateQuery {
+	query := (&DashboardTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(listing.Table, listing.FieldID, id),
+			sqlgraph.To(dashboardtemplate.Table, dashboardtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, listing.TemplateTable, listing.TemplateColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLicenses queries the licenses edge of a Listing.
+func (c *ListingClient) QueryLicenses(_m *Listing) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(listing.Table, listing.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, listing.LicensesTable, listing.LicensesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ListingClient) Hooks() []Hook {
+	return c.hooks.Listing
+}
+
+// Interceptors returns the client interceptors.
+func (c *ListingClient) Interceptors() []Interceptor {
+	return c.inters.Listing
+}
+
+func (c *ListingClient) mutate(ctx context.Context, m *ListingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ListingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ListingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ListingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ListingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Listing mutation op: %q", m.Op())
 	}
 }
 
@@ -1733,15 +2517,15 @@ func (c *OAuthAccountClient) GetX(ctx context.Context, id uuid.UUID) *OAuthAccou
 	return obj
 }
 
-// QueryUser queries the user edge of a OAuthAccount.
-func (c *OAuthAccountClient) QueryUser(_m *OAuthAccount) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+// QueryPrincipal queries the principal edge of a OAuthAccount.
+func (c *OAuthAccountClient) QueryPrincipal(_m *OAuthAccount) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(oauthaccount.Table, oauthaccount.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, oauthaccount.UserTable, oauthaccount.UserColumn),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, oauthaccount.PrincipalTable, oauthaccount.PrincipalColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -1898,6 +2682,38 @@ func (c *OrganizationClient) QueryMemberships(_m *Organization) *MembershipQuery
 	return query
 }
 
+// QueryPrincipals queries the principals edge of a Organization.
+func (c *OrganizationClient) QueryPrincipals(_m *Organization) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PrincipalsTable, organization.PrincipalsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrincipalMemberships queries the principal_memberships edge of a Organization.
+func (c *OrganizationClient) QueryPrincipalMemberships(_m *Organization) *PrincipalMembershipQuery {
+	query := (&PrincipalMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(principalmembership.Table, principalmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PrincipalMembershipsTable, organization.PrincipalMembershipsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDashboards queries the dashboards edge of a Organization.
 func (c *OrganizationClient) QueryDashboards(_m *Organization) *DashboardQuery {
 	query := (&DashboardClient{config: c.config}).Query()
@@ -1978,6 +2794,38 @@ func (c *OrganizationClient) QueryAlerts(_m *Organization) *AlertQuery {
 	return query
 }
 
+// QueryLicenses queries the licenses edge of a Organization.
+func (c *OrganizationClient) QueryLicenses(_m *Organization) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.LicensesTable, organization.LicensesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscription queries the subscription edge of a Organization.
+func (c *OrganizationClient) QuerySubscription(_m *Organization) *SubscriptionQuery {
+	query := (&SubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(subscription.Table, subscription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, organization.SubscriptionTable, organization.SubscriptionColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrganizationClient) Hooks() []Hook {
 	return c.hooks.Organization
@@ -2000,6 +2848,645 @@ func (c *OrganizationClient) mutate(ctx context.Context, m *OrganizationMutation
 		return (&OrganizationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Organization mutation op: %q", m.Op())
+	}
+}
+
+// PrincipalClient is a client for the Principal schema.
+type PrincipalClient struct {
+	config
+}
+
+// NewPrincipalClient returns a client for the Principal from the given config.
+func NewPrincipalClient(c config) *PrincipalClient {
+	return &PrincipalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `principal.Hooks(f(g(h())))`.
+func (c *PrincipalClient) Use(hooks ...Hook) {
+	c.hooks.Principal = append(c.hooks.Principal, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `principal.Intercept(f(g(h())))`.
+func (c *PrincipalClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Principal = append(c.inters.Principal, interceptors...)
+}
+
+// Create returns a builder for creating a Principal entity.
+func (c *PrincipalClient) Create() *PrincipalCreate {
+	mutation := newPrincipalMutation(c.config, OpCreate)
+	return &PrincipalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Principal entities.
+func (c *PrincipalClient) CreateBulk(builders ...*PrincipalCreate) *PrincipalCreateBulk {
+	return &PrincipalCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PrincipalClient) MapCreateBulk(slice any, setFunc func(*PrincipalCreate, int)) *PrincipalCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PrincipalCreateBulk{err: fmt.Errorf("calling to PrincipalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PrincipalCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PrincipalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Principal.
+func (c *PrincipalClient) Update() *PrincipalUpdate {
+	mutation := newPrincipalMutation(c.config, OpUpdate)
+	return &PrincipalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PrincipalClient) UpdateOne(_m *Principal) *PrincipalUpdateOne {
+	mutation := newPrincipalMutation(c.config, OpUpdateOne, withPrincipal(_m))
+	return &PrincipalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PrincipalClient) UpdateOneID(id uuid.UUID) *PrincipalUpdateOne {
+	mutation := newPrincipalMutation(c.config, OpUpdateOne, withPrincipalID(id))
+	return &PrincipalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Principal.
+func (c *PrincipalClient) Delete() *PrincipalDelete {
+	mutation := newPrincipalMutation(c.config, OpDelete)
+	return &PrincipalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PrincipalClient) DeleteOne(_m *Principal) *PrincipalDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PrincipalClient) DeleteOneID(id uuid.UUID) *PrincipalDeleteOne {
+	builder := c.Delete().Where(principal.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PrincipalDeleteOne{builder}
+}
+
+// Query returns a query builder for Principal.
+func (c *PrincipalClient) Query() *PrincipalQuery {
+	return &PrincipalQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePrincipal},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Principal entity by its id.
+func (c *PrincipalClient) Get(ctx context.Context, id uuid.UUID) (*Principal, error) {
+	return c.Query().Where(principal.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PrincipalClient) GetX(ctx context.Context, id uuid.UUID) *Principal {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganization queries the organization edge of a Principal.
+func (c *PrincipalClient) QueryOrganization(_m *Principal) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, principal.OrganizationTable, principal.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHuman queries the human edge of a Principal.
+func (c *PrincipalClient) QueryHuman(_m *Principal) *HumanQuery {
+	query := (&HumanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(human.Table, human.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, principal.HumanTable, principal.HumanColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOauthAccounts queries the oauth_accounts edge of a Principal.
+func (c *PrincipalClient) QueryOauthAccounts(_m *Principal) *OAuthAccountQuery {
+	query := (&OAuthAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(oauthaccount.Table, oauthaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.OauthAccountsTable, principal.OauthAccountsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRefreshTokens queries the refresh_tokens edge of a Principal.
+func (c *PrincipalClient) QueryRefreshTokens(_m *Principal) *RefreshTokenQuery {
+	query := (&RefreshTokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(refreshtoken.Table, refreshtoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.RefreshTokensTable, principal.RefreshTokensColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrincipalMemberships queries the principal_memberships edge of a Principal.
+func (c *PrincipalClient) QueryPrincipalMemberships(_m *Principal) *PrincipalMembershipQuery {
+	query := (&PrincipalMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(principalmembership.Table, principalmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.PrincipalMembershipsTable, principal.PrincipalMembershipsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDashboards queries the dashboards edge of a Principal.
+func (c *PrincipalClient) QueryDashboards(_m *Principal) *DashboardQuery {
+	query := (&DashboardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(dashboard.Table, dashboard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.DashboardsTable, principal.DashboardsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryQueries queries the queries edge of a Principal.
+func (c *PrincipalClient) QueryQueries(_m *Principal) *SavedQueryQuery {
+	query := (&SavedQueryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(savedquery.Table, savedquery.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.QueriesTable, principal.QueriesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOwnedListings queries the owned_listings edge of a Principal.
+func (c *PrincipalClient) QueryOwnedListings(_m *Principal) *ListingQuery {
+	query := (&ListingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(listing.Table, listing.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.OwnedListingsTable, principal.OwnedListingsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPurchasedLicenses queries the purchased_licenses edge of a Principal.
+func (c *PrincipalClient) QueryPurchasedLicenses(_m *Principal) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.PurchasedLicensesTable, principal.PurchasedLicensesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySeatAssignments queries the seat_assignments edge of a Principal.
+func (c *PrincipalClient) QuerySeatAssignments(_m *Principal) *SeatAssignmentQuery {
+	query := (&SeatAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(seatassignment.Table, seatassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.SeatAssignmentsTable, principal.SeatAssignmentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedSeats queries the assigned_seats edge of a Principal.
+func (c *PrincipalClient) QueryAssignedSeats(_m *Principal) *SeatAssignmentQuery {
+	query := (&SeatAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principal.Table, principal.FieldID, id),
+			sqlgraph.To(seatassignment.Table, seatassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, principal.AssignedSeatsTable, principal.AssignedSeatsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PrincipalClient) Hooks() []Hook {
+	return c.hooks.Principal
+}
+
+// Interceptors returns the client interceptors.
+func (c *PrincipalClient) Interceptors() []Interceptor {
+	return c.inters.Principal
+}
+
+func (c *PrincipalClient) mutate(ctx context.Context, m *PrincipalMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PrincipalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PrincipalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PrincipalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PrincipalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Principal mutation op: %q", m.Op())
+	}
+}
+
+// PrincipalMembershipClient is a client for the PrincipalMembership schema.
+type PrincipalMembershipClient struct {
+	config
+}
+
+// NewPrincipalMembershipClient returns a client for the PrincipalMembership from the given config.
+func NewPrincipalMembershipClient(c config) *PrincipalMembershipClient {
+	return &PrincipalMembershipClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `principalmembership.Hooks(f(g(h())))`.
+func (c *PrincipalMembershipClient) Use(hooks ...Hook) {
+	c.hooks.PrincipalMembership = append(c.hooks.PrincipalMembership, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `principalmembership.Intercept(f(g(h())))`.
+func (c *PrincipalMembershipClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PrincipalMembership = append(c.inters.PrincipalMembership, interceptors...)
+}
+
+// Create returns a builder for creating a PrincipalMembership entity.
+func (c *PrincipalMembershipClient) Create() *PrincipalMembershipCreate {
+	mutation := newPrincipalMembershipMutation(c.config, OpCreate)
+	return &PrincipalMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PrincipalMembership entities.
+func (c *PrincipalMembershipClient) CreateBulk(builders ...*PrincipalMembershipCreate) *PrincipalMembershipCreateBulk {
+	return &PrincipalMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PrincipalMembershipClient) MapCreateBulk(slice any, setFunc func(*PrincipalMembershipCreate, int)) *PrincipalMembershipCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PrincipalMembershipCreateBulk{err: fmt.Errorf("calling to PrincipalMembershipClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PrincipalMembershipCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PrincipalMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PrincipalMembership.
+func (c *PrincipalMembershipClient) Update() *PrincipalMembershipUpdate {
+	mutation := newPrincipalMembershipMutation(c.config, OpUpdate)
+	return &PrincipalMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PrincipalMembershipClient) UpdateOne(_m *PrincipalMembership) *PrincipalMembershipUpdateOne {
+	mutation := newPrincipalMembershipMutation(c.config, OpUpdateOne, withPrincipalMembership(_m))
+	return &PrincipalMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PrincipalMembershipClient) UpdateOneID(id uuid.UUID) *PrincipalMembershipUpdateOne {
+	mutation := newPrincipalMembershipMutation(c.config, OpUpdateOne, withPrincipalMembershipID(id))
+	return &PrincipalMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PrincipalMembership.
+func (c *PrincipalMembershipClient) Delete() *PrincipalMembershipDelete {
+	mutation := newPrincipalMembershipMutation(c.config, OpDelete)
+	return &PrincipalMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PrincipalMembershipClient) DeleteOne(_m *PrincipalMembership) *PrincipalMembershipDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PrincipalMembershipClient) DeleteOneID(id uuid.UUID) *PrincipalMembershipDeleteOne {
+	builder := c.Delete().Where(principalmembership.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PrincipalMembershipDeleteOne{builder}
+}
+
+// Query returns a query builder for PrincipalMembership.
+func (c *PrincipalMembershipClient) Query() *PrincipalMembershipQuery {
+	return &PrincipalMembershipQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePrincipalMembership},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PrincipalMembership entity by its id.
+func (c *PrincipalMembershipClient) Get(ctx context.Context, id uuid.UUID) (*PrincipalMembership, error) {
+	return c.Query().Where(principalmembership.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PrincipalMembershipClient) GetX(ctx context.Context, id uuid.UUID) *PrincipalMembership {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPrincipal queries the principal edge of a PrincipalMembership.
+func (c *PrincipalMembershipClient) QueryPrincipal(_m *PrincipalMembership) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principalmembership.Table, principalmembership.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, principalmembership.PrincipalTable, principalmembership.PrincipalColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a PrincipalMembership.
+func (c *PrincipalMembershipClient) QueryOrganization(_m *PrincipalMembership) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(principalmembership.Table, principalmembership.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, principalmembership.OrganizationTable, principalmembership.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PrincipalMembershipClient) Hooks() []Hook {
+	return c.hooks.PrincipalMembership
+}
+
+// Interceptors returns the client interceptors.
+func (c *PrincipalMembershipClient) Interceptors() []Interceptor {
+	return c.inters.PrincipalMembership
+}
+
+func (c *PrincipalMembershipClient) mutate(ctx context.Context, m *PrincipalMembershipMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PrincipalMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PrincipalMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PrincipalMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PrincipalMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown PrincipalMembership mutation op: %q", m.Op())
+	}
+}
+
+// PublisherClient is a client for the Publisher schema.
+type PublisherClient struct {
+	config
+}
+
+// NewPublisherClient returns a client for the Publisher from the given config.
+func NewPublisherClient(c config) *PublisherClient {
+	return &PublisherClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `publisher.Hooks(f(g(h())))`.
+func (c *PublisherClient) Use(hooks ...Hook) {
+	c.hooks.Publisher = append(c.hooks.Publisher, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `publisher.Intercept(f(g(h())))`.
+func (c *PublisherClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Publisher = append(c.inters.Publisher, interceptors...)
+}
+
+// Create returns a builder for creating a Publisher entity.
+func (c *PublisherClient) Create() *PublisherCreate {
+	mutation := newPublisherMutation(c.config, OpCreate)
+	return &PublisherCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Publisher entities.
+func (c *PublisherClient) CreateBulk(builders ...*PublisherCreate) *PublisherCreateBulk {
+	return &PublisherCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PublisherClient) MapCreateBulk(slice any, setFunc func(*PublisherCreate, int)) *PublisherCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PublisherCreateBulk{err: fmt.Errorf("calling to PublisherClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PublisherCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PublisherCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Publisher.
+func (c *PublisherClient) Update() *PublisherUpdate {
+	mutation := newPublisherMutation(c.config, OpUpdate)
+	return &PublisherUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PublisherClient) UpdateOne(_m *Publisher) *PublisherUpdateOne {
+	mutation := newPublisherMutation(c.config, OpUpdateOne, withPublisher(_m))
+	return &PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PublisherClient) UpdateOneID(id uuid.UUID) *PublisherUpdateOne {
+	mutation := newPublisherMutation(c.config, OpUpdateOne, withPublisherID(id))
+	return &PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Publisher.
+func (c *PublisherClient) Delete() *PublisherDelete {
+	mutation := newPublisherMutation(c.config, OpDelete)
+	return &PublisherDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PublisherClient) DeleteOne(_m *Publisher) *PublisherDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PublisherClient) DeleteOneID(id uuid.UUID) *PublisherDeleteOne {
+	builder := c.Delete().Where(publisher.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PublisherDeleteOne{builder}
+}
+
+// Query returns a query builder for Publisher.
+func (c *PublisherClient) Query() *PublisherQuery {
+	return &PublisherQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePublisher},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Publisher entity by its id.
+func (c *PublisherClient) Get(ctx context.Context, id uuid.UUID) (*Publisher, error) {
+	return c.Query().Where(publisher.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PublisherClient) GetX(ctx context.Context, id uuid.UUID) *Publisher {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTemplates queries the templates edge of a Publisher.
+func (c *PublisherClient) QueryTemplates(_m *Publisher) *DashboardTemplateQuery {
+	query := (&DashboardTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publisher.Table, publisher.FieldID, id),
+			sqlgraph.To(dashboardtemplate.Table, dashboardtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, publisher.TemplatesTable, publisher.TemplatesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryListings queries the listings edge of a Publisher.
+func (c *PublisherClient) QueryListings(_m *Publisher) *ListingQuery {
+	query := (&ListingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publisher.Table, publisher.FieldID, id),
+			sqlgraph.To(listing.Table, listing.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, publisher.ListingsTable, publisher.ListingsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PublisherClient) Hooks() []Hook {
+	return c.hooks.Publisher
+}
+
+// Interceptors returns the client interceptors.
+func (c *PublisherClient) Interceptors() []Interceptor {
+	return c.inters.Publisher
+}
+
+func (c *PublisherClient) mutate(ctx context.Context, m *PublisherMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PublisherCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PublisherUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PublisherDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Publisher mutation op: %q", m.Op())
 	}
 }
 
@@ -2111,15 +3598,15 @@ func (c *RefreshTokenClient) GetX(ctx context.Context, id uuid.UUID) *RefreshTok
 	return obj
 }
 
-// QueryUser queries the user edge of a RefreshToken.
-func (c *RefreshTokenClient) QueryUser(_m *RefreshToken) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+// QueryPrincipal queries the principal edge of a RefreshToken.
+func (c *RefreshTokenClient) QueryPrincipal(_m *RefreshToken) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(refreshtoken.Table, refreshtoken.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, refreshtoken.UserTable, refreshtoken.UserColumn),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, refreshtoken.PrincipalTable, refreshtoken.PrincipalColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -2277,13 +3764,13 @@ func (c *SavedQueryClient) QueryOrganization(_m *SavedQuery) *OrganizationQuery 
 }
 
 // QueryOwner queries the owner edge of a SavedQuery.
-func (c *SavedQueryClient) QueryOwner(_m *SavedQuery) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+func (c *SavedQueryClient) QueryOwner(_m *SavedQuery) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(savedquery.Table, savedquery.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(principal.Table, principal.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, savedquery.OwnerTable, savedquery.OwnerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
@@ -2314,6 +3801,336 @@ func (c *SavedQueryClient) mutate(ctx context.Context, m *SavedQueryMutation) (V
 		return (&SavedQueryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown SavedQuery mutation op: %q", m.Op())
+	}
+}
+
+// SeatAssignmentClient is a client for the SeatAssignment schema.
+type SeatAssignmentClient struct {
+	config
+}
+
+// NewSeatAssignmentClient returns a client for the SeatAssignment from the given config.
+func NewSeatAssignmentClient(c config) *SeatAssignmentClient {
+	return &SeatAssignmentClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `seatassignment.Hooks(f(g(h())))`.
+func (c *SeatAssignmentClient) Use(hooks ...Hook) {
+	c.hooks.SeatAssignment = append(c.hooks.SeatAssignment, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `seatassignment.Intercept(f(g(h())))`.
+func (c *SeatAssignmentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SeatAssignment = append(c.inters.SeatAssignment, interceptors...)
+}
+
+// Create returns a builder for creating a SeatAssignment entity.
+func (c *SeatAssignmentClient) Create() *SeatAssignmentCreate {
+	mutation := newSeatAssignmentMutation(c.config, OpCreate)
+	return &SeatAssignmentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SeatAssignment entities.
+func (c *SeatAssignmentClient) CreateBulk(builders ...*SeatAssignmentCreate) *SeatAssignmentCreateBulk {
+	return &SeatAssignmentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SeatAssignmentClient) MapCreateBulk(slice any, setFunc func(*SeatAssignmentCreate, int)) *SeatAssignmentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SeatAssignmentCreateBulk{err: fmt.Errorf("calling to SeatAssignmentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SeatAssignmentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SeatAssignmentCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SeatAssignment.
+func (c *SeatAssignmentClient) Update() *SeatAssignmentUpdate {
+	mutation := newSeatAssignmentMutation(c.config, OpUpdate)
+	return &SeatAssignmentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SeatAssignmentClient) UpdateOne(_m *SeatAssignment) *SeatAssignmentUpdateOne {
+	mutation := newSeatAssignmentMutation(c.config, OpUpdateOne, withSeatAssignment(_m))
+	return &SeatAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SeatAssignmentClient) UpdateOneID(id uuid.UUID) *SeatAssignmentUpdateOne {
+	mutation := newSeatAssignmentMutation(c.config, OpUpdateOne, withSeatAssignmentID(id))
+	return &SeatAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SeatAssignment.
+func (c *SeatAssignmentClient) Delete() *SeatAssignmentDelete {
+	mutation := newSeatAssignmentMutation(c.config, OpDelete)
+	return &SeatAssignmentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SeatAssignmentClient) DeleteOne(_m *SeatAssignment) *SeatAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SeatAssignmentClient) DeleteOneID(id uuid.UUID) *SeatAssignmentDeleteOne {
+	builder := c.Delete().Where(seatassignment.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SeatAssignmentDeleteOne{builder}
+}
+
+// Query returns a query builder for SeatAssignment.
+func (c *SeatAssignmentClient) Query() *SeatAssignmentQuery {
+	return &SeatAssignmentQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSeatAssignment},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SeatAssignment entity by its id.
+func (c *SeatAssignmentClient) Get(ctx context.Context, id uuid.UUID) (*SeatAssignment, error) {
+	return c.Query().Where(seatassignment.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SeatAssignmentClient) GetX(ctx context.Context, id uuid.UUID) *SeatAssignment {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryLicense queries the license edge of a SeatAssignment.
+func (c *SeatAssignmentClient) QueryLicense(_m *SeatAssignment) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(seatassignment.Table, seatassignment.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, seatassignment.LicenseTable, seatassignment.LicenseColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrincipal queries the principal edge of a SeatAssignment.
+func (c *SeatAssignmentClient) QueryPrincipal(_m *SeatAssignment) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(seatassignment.Table, seatassignment.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, seatassignment.PrincipalTable, seatassignment.PrincipalColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssigner queries the assigner edge of a SeatAssignment.
+func (c *SeatAssignmentClient) QueryAssigner(_m *SeatAssignment) *PrincipalQuery {
+	query := (&PrincipalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(seatassignment.Table, seatassignment.FieldID, id),
+			sqlgraph.To(principal.Table, principal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, seatassignment.AssignerTable, seatassignment.AssignerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SeatAssignmentClient) Hooks() []Hook {
+	return c.hooks.SeatAssignment
+}
+
+// Interceptors returns the client interceptors.
+func (c *SeatAssignmentClient) Interceptors() []Interceptor {
+	return c.inters.SeatAssignment
+}
+
+func (c *SeatAssignmentClient) mutate(ctx context.Context, m *SeatAssignmentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SeatAssignmentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SeatAssignmentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SeatAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SeatAssignmentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SeatAssignment mutation op: %q", m.Op())
+	}
+}
+
+// SubscriptionClient is a client for the Subscription schema.
+type SubscriptionClient struct {
+	config
+}
+
+// NewSubscriptionClient returns a client for the Subscription from the given config.
+func NewSubscriptionClient(c config) *SubscriptionClient {
+	return &SubscriptionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `subscription.Hooks(f(g(h())))`.
+func (c *SubscriptionClient) Use(hooks ...Hook) {
+	c.hooks.Subscription = append(c.hooks.Subscription, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `subscription.Intercept(f(g(h())))`.
+func (c *SubscriptionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Subscription = append(c.inters.Subscription, interceptors...)
+}
+
+// Create returns a builder for creating a Subscription entity.
+func (c *SubscriptionClient) Create() *SubscriptionCreate {
+	mutation := newSubscriptionMutation(c.config, OpCreate)
+	return &SubscriptionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Subscription entities.
+func (c *SubscriptionClient) CreateBulk(builders ...*SubscriptionCreate) *SubscriptionCreateBulk {
+	return &SubscriptionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SubscriptionClient) MapCreateBulk(slice any, setFunc func(*SubscriptionCreate, int)) *SubscriptionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SubscriptionCreateBulk{err: fmt.Errorf("calling to SubscriptionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SubscriptionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SubscriptionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Subscription.
+func (c *SubscriptionClient) Update() *SubscriptionUpdate {
+	mutation := newSubscriptionMutation(c.config, OpUpdate)
+	return &SubscriptionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SubscriptionClient) UpdateOne(_m *Subscription) *SubscriptionUpdateOne {
+	mutation := newSubscriptionMutation(c.config, OpUpdateOne, withSubscription(_m))
+	return &SubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SubscriptionClient) UpdateOneID(id uuid.UUID) *SubscriptionUpdateOne {
+	mutation := newSubscriptionMutation(c.config, OpUpdateOne, withSubscriptionID(id))
+	return &SubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Subscription.
+func (c *SubscriptionClient) Delete() *SubscriptionDelete {
+	mutation := newSubscriptionMutation(c.config, OpDelete)
+	return &SubscriptionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SubscriptionClient) DeleteOne(_m *Subscription) *SubscriptionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SubscriptionClient) DeleteOneID(id uuid.UUID) *SubscriptionDeleteOne {
+	builder := c.Delete().Where(subscription.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SubscriptionDeleteOne{builder}
+}
+
+// Query returns a query builder for Subscription.
+func (c *SubscriptionClient) Query() *SubscriptionQuery {
+	return &SubscriptionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSubscription},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Subscription entity by its id.
+func (c *SubscriptionClient) Get(ctx context.Context, id uuid.UUID) (*Subscription, error) {
+	return c.Query().Where(subscription.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SubscriptionClient) GetX(ctx context.Context, id uuid.UUID) *Subscription {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganization queries the organization edge of a Subscription.
+func (c *SubscriptionClient) QueryOrganization(_m *Subscription) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscription.Table, subscription.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, subscription.OrganizationTable, subscription.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SubscriptionClient) Hooks() []Hook {
+	return c.hooks.Subscription
+}
+
+// Interceptors returns the client interceptors.
+func (c *SubscriptionClient) Interceptors() []Interceptor {
+	return c.inters.Subscription
+}
+
+func (c *SubscriptionClient) mutate(ctx context.Context, m *SubscriptionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SubscriptionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SubscriptionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SubscriptionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Subscription mutation op: %q", m.Op())
 	}
 }
 
@@ -2441,70 +4258,6 @@ func (c *UserClient) QueryMemberships(_m *User) *MembershipQuery {
 	return query
 }
 
-// QueryDashboards queries the dashboards edge of a User.
-func (c *UserClient) QueryDashboards(_m *User) *DashboardQuery {
-	query := (&DashboardClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(dashboard.Table, dashboard.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.DashboardsTable, user.DashboardsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryQueries queries the queries edge of a User.
-func (c *UserClient) QueryQueries(_m *User) *SavedQueryQuery {
-	query := (&SavedQueryClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(savedquery.Table, savedquery.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.QueriesTable, user.QueriesColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOauthAccounts queries the oauth_accounts edge of a User.
-func (c *UserClient) QueryOauthAccounts(_m *User) *OAuthAccountQuery {
-	query := (&OAuthAccountClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(oauthaccount.Table, oauthaccount.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.OauthAccountsTable, user.OauthAccountsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryRefreshTokens queries the refresh_tokens edge of a User.
-func (c *UserClient) QueryRefreshTokens(_m *User) *RefreshTokenQuery {
-	query := (&RefreshTokenClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(refreshtoken.Table, refreshtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.RefreshTokensTable, user.RefreshTokensColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
@@ -2533,13 +4286,15 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Alert, AlertChannel, AlertEvent, Dashboard, DashboardVersion, DataSource,
-		Integration, Membership, OAuthAccount, Organization, RefreshToken, SavedQuery,
-		User []ent.Hook
+		Alert, AlertChannel, AlertEvent, Dashboard, DashboardTemplate, DashboardVersion,
+		DataSource, Human, Integration, License, Listing, Membership, OAuthAccount,
+		Organization, Principal, PrincipalMembership, Publisher, RefreshToken,
+		SavedQuery, SeatAssignment, Subscription, User []ent.Hook
 	}
 	inters struct {
-		Alert, AlertChannel, AlertEvent, Dashboard, DashboardVersion, DataSource,
-		Integration, Membership, OAuthAccount, Organization, RefreshToken, SavedQuery,
-		User []ent.Interceptor
+		Alert, AlertChannel, AlertEvent, Dashboard, DashboardTemplate, DashboardVersion,
+		DataSource, Human, Integration, License, Listing, Membership, OAuthAccount,
+		Organization, Principal, PrincipalMembership, Publisher, RefreshToken,
+		SavedQuery, SeatAssignment, Subscription, User []ent.Interceptor
 	}
 )

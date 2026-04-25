@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/savedquery"
 	"github.com/plexusone/dashforge/ent/schema"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // SavedQueryCreate is the builder for creating a SavedQuery entity.
@@ -169,13 +169,13 @@ func (_c *SavedQueryCreate) SetOrganization(v *Organization) *SavedQueryCreate {
 	return _c.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_c *SavedQueryCreate) SetOwnerID(id uuid.UUID) *SavedQueryCreate {
 	_c.mutation.SetOwnerID(id)
 	return _c
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_c *SavedQueryCreate) SetNillableOwnerID(id *uuid.UUID) *SavedQueryCreate {
 	if id != nil {
 		_c = _c.SetOwnerID(*id)
@@ -183,8 +183,8 @@ func (_c *SavedQueryCreate) SetNillableOwnerID(id *uuid.UUID) *SavedQueryCreate 
 	return _c
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_c *SavedQueryCreate) SetOwner(v *User) *SavedQueryCreate {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_c *SavedQueryCreate) SetOwner(v *Principal) *SavedQueryCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
@@ -398,13 +398,13 @@ func (_c *SavedQueryCreate) createSpec() (*SavedQuery, *sqlgraph.CreateSpec) {
 			Columns: []string{savedquery.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.user_queries = &nodes[0]
+		_node.principal_queries = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

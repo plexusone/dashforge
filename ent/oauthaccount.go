@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -11,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/oauthaccount"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthAccount is the model entity for the OAuthAccount schema.
@@ -19,22 +20,26 @@ type OAuthAccount struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// UserID holds the value of the "user_id" field.
-	UserID uuid.UUID `json:"user_id,omitempty"`
-	// OAuth provider name
-	Provider oauthaccount.Provider `json:"provider,omitempty"`
-	// User ID from the OAuth provider
-	ProviderUserID string `json:"provider_user_id,omitempty"`
-	// AccessToken holds the value of the "access_token" field.
-	AccessToken string `json:"-"`
-	// RefreshToken holds the value of the "refresh_token" field.
-	RefreshToken string `json:"-"`
-	// TokenExpiresAt holds the value of the "token_expires_at" field.
-	TokenExpiresAt *time.Time `json:"token_expires_at,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// Parent Principal ID
+	PrincipalID uuid.UUID `json:"principal_id,omitempty"`
+	// OAuth provider name (google, github, etc.)
+	Provider string `json:"provider,omitempty"`
+	// Account ID from the provider
+	ProviderAccountID string `json:"provider_account_id,omitempty"`
+	// OAuth access token
+	AccessToken string `json:"-"`
+	// OAuth refresh token
+	RefreshToken string `json:"-"`
+	// Access token expiration time
+	TokenExpiresAt *time.Time `json:"token_expires_at,omitempty"`
+	// Granted OAuth scopes
+	Scopes []string `json:"scopes,omitempty"`
+	// Raw user data from provider
+	RawData map[string]interface{} `json:"raw_data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OAuthAccountQuery when eager-loading is set.
 	Edges        OAuthAccountEdges `json:"edges"`
@@ -43,22 +48,22 @@ type OAuthAccount struct {
 
 // OAuthAccountEdges holds the relations/edges for other nodes in the graph.
 type OAuthAccountEdges struct {
-	// User holds the value of the user edge.
-	User *User `json:"user,omitempty"`
+	// Principal holds the value of the principal edge.
+	Principal *Principal `json:"principal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// UserOrErr returns the User value or an error if the edge
+// PrincipalOrErr returns the Principal value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OAuthAccountEdges) UserOrErr() (*User, error) {
-	if e.User != nil {
-		return e.User, nil
+func (e OAuthAccountEdges) PrincipalOrErr() (*Principal, error) {
+	if e.Principal != nil {
+		return e.Principal, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: principal.Label}
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "principal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -66,11 +71,13 @@ func (*OAuthAccount) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case oauthaccount.FieldProvider, oauthaccount.FieldProviderUserID, oauthaccount.FieldAccessToken, oauthaccount.FieldRefreshToken:
+		case oauthaccount.FieldScopes, oauthaccount.FieldRawData:
+			values[i] = new([]byte)
+		case oauthaccount.FieldProvider, oauthaccount.FieldProviderAccountID, oauthaccount.FieldAccessToken, oauthaccount.FieldRefreshToken:
 			values[i] = new(sql.NullString)
-		case oauthaccount.FieldTokenExpiresAt, oauthaccount.FieldCreatedAt, oauthaccount.FieldUpdatedAt:
+		case oauthaccount.FieldCreatedAt, oauthaccount.FieldUpdatedAt, oauthaccount.FieldTokenExpiresAt:
 			values[i] = new(sql.NullTime)
-		case oauthaccount.FieldID, oauthaccount.FieldUserID:
+		case oauthaccount.FieldID, oauthaccount.FieldPrincipalID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -93,23 +100,35 @@ func (_m *OAuthAccount) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				_m.ID = *value
 			}
-		case oauthaccount.FieldUserID:
+		case oauthaccount.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				_m.CreatedAt = value.Time
+			}
+		case oauthaccount.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				_m.UpdatedAt = value.Time
+			}
+		case oauthaccount.FieldPrincipalID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field principal_id", values[i])
 			} else if value != nil {
-				_m.UserID = *value
+				_m.PrincipalID = *value
 			}
 		case oauthaccount.FieldProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provider", values[i])
 			} else if value.Valid {
-				_m.Provider = oauthaccount.Provider(value.String)
+				_m.Provider = value.String
 			}
-		case oauthaccount.FieldProviderUserID:
+		case oauthaccount.FieldProviderAccountID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field provider_user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field provider_account_id", values[i])
 			} else if value.Valid {
-				_m.ProviderUserID = value.String
+				_m.ProviderAccountID = value.String
 			}
 		case oauthaccount.FieldAccessToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -130,17 +149,21 @@ func (_m *OAuthAccount) assignValues(columns []string, values []any) error {
 				_m.TokenExpiresAt = new(time.Time)
 				*_m.TokenExpiresAt = value.Time
 			}
-		case oauthaccount.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				_m.CreatedAt = value.Time
+		case oauthaccount.FieldScopes:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field scopes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Scopes); err != nil {
+					return fmt.Errorf("unmarshal field scopes: %w", err)
+				}
 			}
-		case oauthaccount.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				_m.UpdatedAt = value.Time
+		case oauthaccount.FieldRawData:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field raw_data", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RawData); err != nil {
+					return fmt.Errorf("unmarshal field raw_data: %w", err)
+				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -155,9 +178,9 @@ func (_m *OAuthAccount) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the OAuthAccount entity.
-func (_m *OAuthAccount) QueryUser() *UserQuery {
-	return NewOAuthAccountClient(_m.config).QueryUser(_m)
+// QueryPrincipal queries the "principal" edge of the OAuthAccount entity.
+func (_m *OAuthAccount) QueryPrincipal() *PrincipalQuery {
+	return NewOAuthAccountClient(_m.config).QueryPrincipal(_m)
 }
 
 // Update returns a builder for updating this OAuthAccount.
@@ -183,14 +206,20 @@ func (_m *OAuthAccount) String() string {
 	var builder strings.Builder
 	builder.WriteString("OAuthAccount(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
+	builder.WriteString("created_at=")
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("principal_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PrincipalID))
 	builder.WriteString(", ")
 	builder.WriteString("provider=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Provider))
+	builder.WriteString(_m.Provider)
 	builder.WriteString(", ")
-	builder.WriteString("provider_user_id=")
-	builder.WriteString(_m.ProviderUserID)
+	builder.WriteString("provider_account_id=")
+	builder.WriteString(_m.ProviderAccountID)
 	builder.WriteString(", ")
 	builder.WriteString("access_token=<sensitive>")
 	builder.WriteString(", ")
@@ -201,11 +230,11 @@ func (_m *OAuthAccount) String() string {
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString("scopes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Scopes))
 	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString("raw_data=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RawData))
 	builder.WriteByte(')')
 	return builder.String()
 }

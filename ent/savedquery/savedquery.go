@@ -56,11 +56,11 @@ const (
 	OrganizationColumn = "organization_queries"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "saved_queries"
-	// OwnerInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	OwnerInverseTable = "users"
+	// OwnerInverseTable is the table name for the Principal entity.
+	// It exists in this package in order to avoid circular dependency with the "principal" package.
+	OwnerInverseTable = "principals"
 	// OwnerColumn is the table column denoting the owner relation/edge.
-	OwnerColumn = "user_queries"
+	OwnerColumn = "principal_queries"
 )
 
 // Columns holds all SQL columns for savedquery fields.
@@ -85,7 +85,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"organization_queries",
-	"user_queries",
+	"principal_queries",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

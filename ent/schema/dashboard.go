@@ -51,7 +51,8 @@ func (Dashboard) Edges() []ent.Edge {
 			Ref("dashboards").
 			Unique().
 			Required(),
-		edge.From("owner", User.Type).
+		// Migrated from User to Principal
+		edge.From("owner", Principal.Type).
 			Ref("dashboards").
 			Unique(),
 		edge.To("versions", DashboardVersion.Type).

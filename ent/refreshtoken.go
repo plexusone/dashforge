@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/refreshtoken"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // RefreshToken is the model entity for the RefreshToken schema.
@@ -19,15 +19,15 @@ type RefreshToken struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// UserID holds the value of the "user_id" field.
-	UserID uuid.UUID `json:"user_id,omitempty"`
-	// Token holds the value of the "token" field.
+	// Principal this refresh token belongs to
+	PrincipalID uuid.UUID `json:"principal_id,omitempty"`
+	// The refresh token value
 	Token string `json:"-"`
 	// Token family for rotation tracking
 	Family string `json:"family,omitempty"`
 	// When the refresh token expires
 	ExpiresAt time.Time `json:"expires_at,omitempty"`
-	// Revoked holds the value of the "revoked" field.
+	// Whether the token has been revoked
 	Revoked bool `json:"revoked,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
@@ -39,22 +39,22 @@ type RefreshToken struct {
 
 // RefreshTokenEdges holds the relations/edges for other nodes in the graph.
 type RefreshTokenEdges struct {
-	// User holds the value of the user edge.
-	User *User `json:"user,omitempty"`
+	// Principal holds the value of the principal edge.
+	Principal *Principal `json:"principal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// UserOrErr returns the User value or an error if the edge
+// PrincipalOrErr returns the Principal value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e RefreshTokenEdges) UserOrErr() (*User, error) {
-	if e.User != nil {
-		return e.User, nil
+func (e RefreshTokenEdges) PrincipalOrErr() (*Principal, error) {
+	if e.Principal != nil {
+		return e.Principal, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: principal.Label}
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "principal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,7 +68,7 @@ func (*RefreshToken) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case refreshtoken.FieldExpiresAt, refreshtoken.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
-		case refreshtoken.FieldID, refreshtoken.FieldUserID:
+		case refreshtoken.FieldID, refreshtoken.FieldPrincipalID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -91,11 +91,11 @@ func (_m *RefreshToken) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				_m.ID = *value
 			}
-		case refreshtoken.FieldUserID:
+		case refreshtoken.FieldPrincipalID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field principal_id", values[i])
 			} else if value != nil {
-				_m.UserID = *value
+				_m.PrincipalID = *value
 			}
 		case refreshtoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -140,9 +140,9 @@ func (_m *RefreshToken) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the RefreshToken entity.
-func (_m *RefreshToken) QueryUser() *UserQuery {
-	return NewRefreshTokenClient(_m.config).QueryUser(_m)
+// QueryPrincipal queries the "principal" edge of the RefreshToken entity.
+func (_m *RefreshToken) QueryPrincipal() *PrincipalQuery {
+	return NewRefreshTokenClient(_m.config).QueryPrincipal(_m)
 }
 
 // Update returns a builder for updating this RefreshToken.
@@ -168,8 +168,8 @@ func (_m *RefreshToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("RefreshToken(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
+	builder.WriteString("principal_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PrincipalID))
 	builder.WriteString(", ")
 	builder.WriteString("token=<sensitive>")
 	builder.WriteString(", ")

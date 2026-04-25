@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // Dashboard is the model entity for the Dashboard schema.
@@ -43,7 +43,7 @@ type Dashboard struct {
 	// The values are being populated by the DashboardQuery when eager-loading is set.
 	Edges                   DashboardEdges `json:"edges"`
 	organization_dashboards *uuid.UUID
-	user_dashboards         *uuid.UUID
+	principal_dashboards    *uuid.UUID
 	selectValues            sql.SelectValues
 }
 
@@ -52,7 +52,7 @@ type DashboardEdges struct {
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
 	// Owner holds the value of the owner edge.
-	Owner *User `json:"owner,omitempty"`
+	Owner *Principal `json:"owner,omitempty"`
 	// Versions holds the value of the versions edge.
 	Versions []*DashboardVersion `json:"versions,omitempty"`
 	// Alerts holds the value of the alerts edge.
@@ -75,11 +75,11 @@ func (e DashboardEdges) OrganizationOrErr() (*Organization, error) {
 
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DashboardEdges) OwnerOrErr() (*User, error) {
+func (e DashboardEdges) OwnerOrErr() (*Principal, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: principal.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
 }
@@ -119,7 +119,7 @@ func (*Dashboard) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case dashboard.ForeignKeys[0]: // organization_dashboards
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case dashboard.ForeignKeys[1]: // user_dashboards
+		case dashboard.ForeignKeys[1]: // principal_dashboards
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -207,10 +207,10 @@ func (_m *Dashboard) assignValues(columns []string, values []any) error {
 			}
 		case dashboard.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field user_dashboards", values[i])
+				return fmt.Errorf("unexpected type %T for field principal_dashboards", values[i])
 			} else if value.Valid {
-				_m.user_dashboards = new(uuid.UUID)
-				*_m.user_dashboards = *value.S.(*uuid.UUID)
+				_m.principal_dashboards = new(uuid.UUID)
+				*_m.principal_dashboards = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -231,7 +231,7 @@ func (_m *Dashboard) QueryOrganization() *OrganizationQuery {
 }
 
 // QueryOwner queries the "owner" edge of the Dashboard entity.
-func (_m *Dashboard) QueryOwner() *UserQuery {
+func (_m *Dashboard) QueryOwner() *PrincipalQuery {
 	return NewDashboardClient(_m.config).QueryOwner(_m)
 }
 

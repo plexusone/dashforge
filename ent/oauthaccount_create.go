@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/oauthaccount"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthAccountCreate is the builder for creating a OAuthAccount entity.
@@ -22,21 +22,49 @@ type OAuthAccountCreate struct {
 	hooks    []Hook
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *OAuthAccountCreate) SetUserID(v uuid.UUID) *OAuthAccountCreate {
-	_c.mutation.SetUserID(v)
+// SetCreatedAt sets the "created_at" field.
+func (_c *OAuthAccountCreate) SetCreatedAt(v time.Time) *OAuthAccountCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (_c *OAuthAccountCreate) SetNillableCreatedAt(v *time.Time) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
+	}
+	return _c
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (_c *OAuthAccountCreate) SetUpdatedAt(v time.Time) *OAuthAccountCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (_c *OAuthAccountCreate) SetNillableUpdatedAt(v *time.Time) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
+	}
+	return _c
+}
+
+// SetPrincipalID sets the "principal_id" field.
+func (_c *OAuthAccountCreate) SetPrincipalID(v uuid.UUID) *OAuthAccountCreate {
+	_c.mutation.SetPrincipalID(v)
 	return _c
 }
 
 // SetProvider sets the "provider" field.
-func (_c *OAuthAccountCreate) SetProvider(v oauthaccount.Provider) *OAuthAccountCreate {
+func (_c *OAuthAccountCreate) SetProvider(v string) *OAuthAccountCreate {
 	_c.mutation.SetProvider(v)
 	return _c
 }
 
-// SetProviderUserID sets the "provider_user_id" field.
-func (_c *OAuthAccountCreate) SetProviderUserID(v string) *OAuthAccountCreate {
-	_c.mutation.SetProviderUserID(v)
+// SetProviderAccountID sets the "provider_account_id" field.
+func (_c *OAuthAccountCreate) SetProviderAccountID(v string) *OAuthAccountCreate {
+	_c.mutation.SetProviderAccountID(v)
 	return _c
 }
 
@@ -82,31 +110,15 @@ func (_c *OAuthAccountCreate) SetNillableTokenExpiresAt(v *time.Time) *OAuthAcco
 	return _c
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (_c *OAuthAccountCreate) SetCreatedAt(v time.Time) *OAuthAccountCreate {
-	_c.mutation.SetCreatedAt(v)
+// SetScopes sets the "scopes" field.
+func (_c *OAuthAccountCreate) SetScopes(v []string) *OAuthAccountCreate {
+	_c.mutation.SetScopes(v)
 	return _c
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (_c *OAuthAccountCreate) SetNillableCreatedAt(v *time.Time) *OAuthAccountCreate {
-	if v != nil {
-		_c.SetCreatedAt(*v)
-	}
-	return _c
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_c *OAuthAccountCreate) SetUpdatedAt(v time.Time) *OAuthAccountCreate {
-	_c.mutation.SetUpdatedAt(v)
-	return _c
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (_c *OAuthAccountCreate) SetNillableUpdatedAt(v *time.Time) *OAuthAccountCreate {
-	if v != nil {
-		_c.SetUpdatedAt(*v)
-	}
+// SetRawData sets the "raw_data" field.
+func (_c *OAuthAccountCreate) SetRawData(v map[string]interface{}) *OAuthAccountCreate {
+	_c.mutation.SetRawData(v)
 	return _c
 }
 
@@ -124,9 +136,9 @@ func (_c *OAuthAccountCreate) SetNillableID(v *uuid.UUID) *OAuthAccountCreate {
 	return _c
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (_c *OAuthAccountCreate) SetUser(v *User) *OAuthAccountCreate {
-	return _c.SetUserID(v.ID)
+// SetPrincipal sets the "principal" edge to the Principal entity.
+func (_c *OAuthAccountCreate) SetPrincipal(v *Principal) *OAuthAccountCreate {
+	return _c.SetPrincipalID(v.ID)
 }
 
 // Mutation returns the OAuthAccountMutation object of the builder.
@@ -180,8 +192,14 @@ func (_c *OAuthAccountCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *OAuthAccountCreate) check() error {
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "OAuthAccount.user_id"`)}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OAuthAccount.created_at"`)}
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OAuthAccount.updated_at"`)}
+	}
+	if _, ok := _c.mutation.PrincipalID(); !ok {
+		return &ValidationError{Name: "principal_id", err: errors.New(`ent: missing required field "OAuthAccount.principal_id"`)}
 	}
 	if _, ok := _c.mutation.Provider(); !ok {
 		return &ValidationError{Name: "provider", err: errors.New(`ent: missing required field "OAuthAccount.provider"`)}
@@ -191,22 +209,16 @@ func (_c *OAuthAccountCreate) check() error {
 			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.ProviderUserID(); !ok {
-		return &ValidationError{Name: "provider_user_id", err: errors.New(`ent: missing required field "OAuthAccount.provider_user_id"`)}
+	if _, ok := _c.mutation.ProviderAccountID(); !ok {
+		return &ValidationError{Name: "provider_account_id", err: errors.New(`ent: missing required field "OAuthAccount.provider_account_id"`)}
 	}
-	if v, ok := _c.mutation.ProviderUserID(); ok {
-		if err := oauthaccount.ProviderUserIDValidator(v); err != nil {
-			return &ValidationError{Name: "provider_user_id", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider_user_id": %w`, err)}
+	if v, ok := _c.mutation.ProviderAccountID(); ok {
+		if err := oauthaccount.ProviderAccountIDValidator(v); err != nil {
+			return &ValidationError{Name: "provider_account_id", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider_account_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OAuthAccount.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OAuthAccount.updated_at"`)}
-	}
-	if len(_c.mutation.UserIDs()) == 0 {
-		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "OAuthAccount.user"`)}
+	if len(_c.mutation.PrincipalIDs()) == 0 {
+		return &ValidationError{Name: "principal", err: errors.New(`ent: missing required edge "OAuthAccount.principal"`)}
 	}
 	return nil
 }
@@ -243,13 +255,21 @@ func (_c *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec)
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
+	if value, ok := _c.mutation.CreatedAt(); ok {
+		_spec.SetField(oauthaccount.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := _c.mutation.UpdatedAt(); ok {
+		_spec.SetField(oauthaccount.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := _c.mutation.Provider(); ok {
-		_spec.SetField(oauthaccount.FieldProvider, field.TypeEnum, value)
+		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
 		_node.Provider = value
 	}
-	if value, ok := _c.mutation.ProviderUserID(); ok {
-		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)
-		_node.ProviderUserID = value
+	if value, ok := _c.mutation.ProviderAccountID(); ok {
+		_spec.SetField(oauthaccount.FieldProviderAccountID, field.TypeString, value)
+		_node.ProviderAccountID = value
 	}
 	if value, ok := _c.mutation.AccessToken(); ok {
 		_spec.SetField(oauthaccount.FieldAccessToken, field.TypeString, value)
@@ -263,29 +283,29 @@ func (_c *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec)
 		_spec.SetField(oauthaccount.FieldTokenExpiresAt, field.TypeTime, value)
 		_node.TokenExpiresAt = &value
 	}
-	if value, ok := _c.mutation.CreatedAt(); ok {
-		_spec.SetField(oauthaccount.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
+	if value, ok := _c.mutation.Scopes(); ok {
+		_spec.SetField(oauthaccount.FieldScopes, field.TypeJSON, value)
+		_node.Scopes = value
 	}
-	if value, ok := _c.mutation.UpdatedAt(); ok {
-		_spec.SetField(oauthaccount.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
+	if value, ok := _c.mutation.RawData(); ok {
+		_spec.SetField(oauthaccount.FieldRawData, field.TypeJSON, value)
+		_node.RawData = value
 	}
-	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PrincipalIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   oauthaccount.UserTable,
-			Columns: []string{oauthaccount.UserColumn},
+			Table:   oauthaccount.PrincipalTable,
+			Columns: []string{oauthaccount.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UserID = nodes[0]
+		_node.PrincipalID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -57,6 +57,18 @@ func (f DashboardFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DashboardMutation", m)
 }
 
+// The DashboardTemplateFunc type is an adapter to allow the use of ordinary
+// function as DashboardTemplate mutator.
+type DashboardTemplateFunc func(context.Context, *ent.DashboardTemplateMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DashboardTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DashboardTemplateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DashboardTemplateMutation", m)
+}
+
 // The DashboardVersionFunc type is an adapter to allow the use of ordinary
 // function as DashboardVersion mutator.
 type DashboardVersionFunc func(context.Context, *ent.DashboardVersionMutation) (ent.Value, error)
@@ -81,6 +93,18 @@ func (f DataSourceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DataSourceMutation", m)
 }
 
+// The HumanFunc type is an adapter to allow the use of ordinary
+// function as Human mutator.
+type HumanFunc func(context.Context, *ent.HumanMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f HumanFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.HumanMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HumanMutation", m)
+}
+
 // The IntegrationFunc type is an adapter to allow the use of ordinary
 // function as Integration mutator.
 type IntegrationFunc func(context.Context, *ent.IntegrationMutation) (ent.Value, error)
@@ -91,6 +115,30 @@ func (f IntegrationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.IntegrationMutation", m)
+}
+
+// The LicenseFunc type is an adapter to allow the use of ordinary
+// function as License mutator.
+type LicenseFunc func(context.Context, *ent.LicenseMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LicenseFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LicenseMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LicenseMutation", m)
+}
+
+// The ListingFunc type is an adapter to allow the use of ordinary
+// function as Listing mutator.
+type ListingFunc func(context.Context, *ent.ListingMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ListingFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ListingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ListingMutation", m)
 }
 
 // The MembershipFunc type is an adapter to allow the use of ordinary
@@ -129,6 +177,42 @@ func (f OrganizationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrganizationMutation", m)
 }
 
+// The PrincipalFunc type is an adapter to allow the use of ordinary
+// function as Principal mutator.
+type PrincipalFunc func(context.Context, *ent.PrincipalMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PrincipalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PrincipalMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PrincipalMutation", m)
+}
+
+// The PrincipalMembershipFunc type is an adapter to allow the use of ordinary
+// function as PrincipalMembership mutator.
+type PrincipalMembershipFunc func(context.Context, *ent.PrincipalMembershipMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PrincipalMembershipFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PrincipalMembershipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PrincipalMembershipMutation", m)
+}
+
+// The PublisherFunc type is an adapter to allow the use of ordinary
+// function as Publisher mutator.
+type PublisherFunc func(context.Context, *ent.PublisherMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PublisherFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PublisherMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PublisherMutation", m)
+}
+
 // The RefreshTokenFunc type is an adapter to allow the use of ordinary
 // function as RefreshToken mutator.
 type RefreshTokenFunc func(context.Context, *ent.RefreshTokenMutation) (ent.Value, error)
@@ -151,6 +235,30 @@ func (f SavedQueryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SavedQueryMutation", m)
+}
+
+// The SeatAssignmentFunc type is an adapter to allow the use of ordinary
+// function as SeatAssignment mutator.
+type SeatAssignmentFunc func(context.Context, *ent.SeatAssignmentMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SeatAssignmentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SeatAssignmentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SeatAssignmentMutation", m)
+}
+
+// The SubscriptionFunc type is an adapter to allow the use of ordinary
+// function as Subscription mutator.
+type SubscriptionFunc func(context.Context, *ent.SubscriptionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SubscriptionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SubscriptionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SubscriptionMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary

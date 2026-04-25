@@ -16,14 +16,23 @@ import (
 	"github.com/plexusone/dashforge/ent/alertchannel"
 	"github.com/plexusone/dashforge/ent/alertevent"
 	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/dashboardtemplate"
 	"github.com/plexusone/dashforge/ent/dashboardversion"
 	"github.com/plexusone/dashforge/ent/datasource"
+	"github.com/plexusone/dashforge/ent/human"
 	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/license"
+	"github.com/plexusone/dashforge/ent/listing"
 	"github.com/plexusone/dashforge/ent/membership"
 	"github.com/plexusone/dashforge/ent/oauthaccount"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/principalmembership"
+	"github.com/plexusone/dashforge/ent/publisher"
 	"github.com/plexusone/dashforge/ent/refreshtoken"
 	"github.com/plexusone/dashforge/ent/savedquery"
+	"github.com/plexusone/dashforge/ent/seatassignment"
+	"github.com/plexusone/dashforge/ent/subscription"
 	"github.com/plexusone/dashforge/ent/user"
 )
 
@@ -85,19 +94,28 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			alert.Table:            alert.ValidColumn,
-			alertchannel.Table:     alertchannel.ValidColumn,
-			alertevent.Table:       alertevent.ValidColumn,
-			dashboard.Table:        dashboard.ValidColumn,
-			dashboardversion.Table: dashboardversion.ValidColumn,
-			datasource.Table:       datasource.ValidColumn,
-			integration.Table:      integration.ValidColumn,
-			membership.Table:       membership.ValidColumn,
-			oauthaccount.Table:     oauthaccount.ValidColumn,
-			organization.Table:     organization.ValidColumn,
-			refreshtoken.Table:     refreshtoken.ValidColumn,
-			savedquery.Table:       savedquery.ValidColumn,
-			user.Table:             user.ValidColumn,
+			alert.Table:               alert.ValidColumn,
+			alertchannel.Table:        alertchannel.ValidColumn,
+			alertevent.Table:          alertevent.ValidColumn,
+			dashboard.Table:           dashboard.ValidColumn,
+			dashboardtemplate.Table:   dashboardtemplate.ValidColumn,
+			dashboardversion.Table:    dashboardversion.ValidColumn,
+			datasource.Table:          datasource.ValidColumn,
+			human.Table:               human.ValidColumn,
+			integration.Table:         integration.ValidColumn,
+			license.Table:             license.ValidColumn,
+			listing.Table:             listing.ValidColumn,
+			membership.Table:          membership.ValidColumn,
+			oauthaccount.Table:        oauthaccount.ValidColumn,
+			organization.Table:        organization.ValidColumn,
+			principal.Table:           principal.ValidColumn,
+			principalmembership.Table: principalmembership.ValidColumn,
+			publisher.Table:           publisher.ValidColumn,
+			refreshtoken.Table:        refreshtoken.ValidColumn,
+			savedquery.Table:          savedquery.ValidColumn,
+			seatassignment.Table:      seatassignment.ValidColumn,
+			subscription.Table:        subscription.ValidColumn,
+			user.Table:                user.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

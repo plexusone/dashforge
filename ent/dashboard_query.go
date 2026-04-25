@@ -18,7 +18,7 @@ import (
 	"github.com/plexusone/dashforge/ent/dashboardversion"
 	"github.com/plexusone/dashforge/ent/organization"
 	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // DashboardQuery is the builder for querying Dashboard entities.
@@ -29,7 +29,7 @@ type DashboardQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.Dashboard
 	withOrganization *OrganizationQuery
-	withOwner        *UserQuery
+	withOwner        *PrincipalQuery
 	withVersions     *DashboardVersionQuery
 	withAlerts       *AlertQuery
 	withFKs          bool
@@ -92,8 +92,8 @@ func (_q *DashboardQuery) QueryOrganization() *OrganizationQuery {
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (_q *DashboardQuery) QueryOwner() *UserQuery {
-	query := (&UserClient{config: _q.config}).Query()
+func (_q *DashboardQuery) QueryOwner() *PrincipalQuery {
+	query := (&PrincipalClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -104,7 +104,7 @@ func (_q *DashboardQuery) QueryOwner() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dashboard.Table, dashboard.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(principal.Table, principal.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, dashboard.OwnerTable, dashboard.OwnerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
@@ -372,8 +372,8 @@ func (_q *DashboardQuery) WithOrganization(opts ...func(*OrganizationQuery)) *Da
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *DashboardQuery) WithOwner(opts ...func(*UserQuery)) *DashboardQuery {
-	query := (&UserClient{config: _q.config}).Query()
+func (_q *DashboardQuery) WithOwner(opts ...func(*PrincipalQuery)) *DashboardQuery {
+	query := (&PrincipalClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -521,7 +521,7 @@ func (_q *DashboardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Da
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
-			func(n *Dashboard, e *User) { n.Edges.Owner = e }); err != nil {
+			func(n *Dashboard, e *Principal) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -574,14 +574,14 @@ func (_q *DashboardQuery) loadOrganization(ctx context.Context, query *Organizat
 	}
 	return nil
 }
-func (_q *DashboardQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Dashboard, init func(*Dashboard), assign func(*Dashboard, *User)) error {
+func (_q *DashboardQuery) loadOwner(ctx context.Context, query *PrincipalQuery, nodes []*Dashboard, init func(*Dashboard), assign func(*Dashboard, *Principal)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*Dashboard)
 	for i := range nodes {
-		if nodes[i].user_dashboards == nil {
+		if nodes[i].principal_dashboards == nil {
 			continue
 		}
-		fk := *nodes[i].user_dashboards
+		fk := *nodes[i].principal_dashboards
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -590,7 +590,7 @@ func (_q *DashboardQuery) loadOwner(ctx context.Context, query *UserQuery, nodes
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(principal.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -598,7 +598,7 @@ func (_q *DashboardQuery) loadOwner(ctx context.Context, query *UserQuery, nodes
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_dashboards" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "principal_dashboards" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

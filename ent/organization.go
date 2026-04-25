@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/subscription"
 )
 
 // Organization is the model entity for the Organization schema.
@@ -47,6 +48,10 @@ type Organization struct {
 type OrganizationEdges struct {
 	// Memberships holds the value of the memberships edge.
 	Memberships []*Membership `json:"memberships,omitempty"`
+	// Principals scoped to this organization
+	Principals []*Principal `json:"principals,omitempty"`
+	// Principal memberships
+	PrincipalMemberships []*PrincipalMembership `json:"principal_memberships,omitempty"`
 	// Dashboards holds the value of the dashboards edge.
 	Dashboards []*Dashboard `json:"dashboards,omitempty"`
 	// Datasources holds the value of the datasources edge.
@@ -57,9 +62,13 @@ type OrganizationEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Alerts holds the value of the alerts edge.
 	Alerts []*Alert `json:"alerts,omitempty"`
+	// Licenses held by this organization
+	Licenses []*License `json:"licenses,omitempty"`
+	// Platform subscription for this organization
+	Subscription *Subscription `json:"subscription,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [10]bool
 }
 
 // MembershipsOrErr returns the Memberships value or an error if the edge
@@ -71,10 +80,28 @@ func (e OrganizationEdges) MembershipsOrErr() ([]*Membership, error) {
 	return nil, &NotLoadedError{edge: "memberships"}
 }
 
+// PrincipalsOrErr returns the Principals value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) PrincipalsOrErr() ([]*Principal, error) {
+	if e.loadedTypes[1] {
+		return e.Principals, nil
+	}
+	return nil, &NotLoadedError{edge: "principals"}
+}
+
+// PrincipalMembershipsOrErr returns the PrincipalMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) PrincipalMembershipsOrErr() ([]*PrincipalMembership, error) {
+	if e.loadedTypes[2] {
+		return e.PrincipalMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "principal_memberships"}
+}
+
 // DashboardsOrErr returns the Dashboards value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DashboardsOrErr() ([]*Dashboard, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Dashboards, nil
 	}
 	return nil, &NotLoadedError{edge: "dashboards"}
@@ -83,7 +110,7 @@ func (e OrganizationEdges) DashboardsOrErr() ([]*Dashboard, error) {
 // DatasourcesOrErr returns the Datasources value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DatasourcesOrErr() ([]*DataSource, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Datasources, nil
 	}
 	return nil, &NotLoadedError{edge: "datasources"}
@@ -92,7 +119,7 @@ func (e OrganizationEdges) DatasourcesOrErr() ([]*DataSource, error) {
 // QueriesOrErr returns the Queries value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) QueriesOrErr() ([]*SavedQuery, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Queries, nil
 	}
 	return nil, &NotLoadedError{edge: "queries"}
@@ -101,7 +128,7 @@ func (e OrganizationEdges) QueriesOrErr() ([]*SavedQuery, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -110,10 +137,30 @@ func (e OrganizationEdges) IntegrationsOrErr() ([]*Integration, error) {
 // AlertsOrErr returns the Alerts value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) AlertsOrErr() ([]*Alert, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Alerts, nil
 	}
 	return nil, &NotLoadedError{edge: "alerts"}
+}
+
+// LicensesOrErr returns the Licenses value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) LicensesOrErr() ([]*License, error) {
+	if e.loadedTypes[8] {
+		return e.Licenses, nil
+	}
+	return nil, &NotLoadedError{edge: "licenses"}
+}
+
+// SubscriptionOrErr returns the Subscription value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrganizationEdges) SubscriptionOrErr() (*Subscription, error) {
+	if e.Subscription != nil {
+		return e.Subscription, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: subscription.Label}
+	}
+	return nil, &NotLoadedError{edge: "subscription"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -226,6 +273,16 @@ func (_m *Organization) QueryMemberships() *MembershipQuery {
 	return NewOrganizationClient(_m.config).QueryMemberships(_m)
 }
 
+// QueryPrincipals queries the "principals" edge of the Organization entity.
+func (_m *Organization) QueryPrincipals() *PrincipalQuery {
+	return NewOrganizationClient(_m.config).QueryPrincipals(_m)
+}
+
+// QueryPrincipalMemberships queries the "principal_memberships" edge of the Organization entity.
+func (_m *Organization) QueryPrincipalMemberships() *PrincipalMembershipQuery {
+	return NewOrganizationClient(_m.config).QueryPrincipalMemberships(_m)
+}
+
 // QueryDashboards queries the "dashboards" edge of the Organization entity.
 func (_m *Organization) QueryDashboards() *DashboardQuery {
 	return NewOrganizationClient(_m.config).QueryDashboards(_m)
@@ -249,6 +306,16 @@ func (_m *Organization) QueryIntegrations() *IntegrationQuery {
 // QueryAlerts queries the "alerts" edge of the Organization entity.
 func (_m *Organization) QueryAlerts() *AlertQuery {
 	return NewOrganizationClient(_m.config).QueryAlerts(_m)
+}
+
+// QueryLicenses queries the "licenses" edge of the Organization entity.
+func (_m *Organization) QueryLicenses() *LicenseQuery {
+	return NewOrganizationClient(_m.config).QueryLicenses(_m)
+}
+
+// QuerySubscription queries the "subscription" edge of the Organization entity.
+func (_m *Organization) QuerySubscription() *SubscriptionQuery {
+	return NewOrganizationClient(_m.config).QuerySubscription(_m)
 }
 
 // Update returns a builder for updating this Organization.

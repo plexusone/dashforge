@@ -11,6 +11,7 @@ import (
 )
 
 // User holds the schema definition for the User entity.
+// Deprecated: Use Principal + Human instead. This schema is kept for migration purposes.
 type User struct {
 	ent.Schema
 }
@@ -54,13 +55,11 @@ func (User) Fields() []ent.Field {
 }
 
 // Edges of the User.
+// Deprecated: Edges have been migrated to Principal. Only legacy Membership edge remains.
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
+		// Legacy edge - use PrincipalMembership instead
 		edge.To("memberships", Membership.Type),
-		edge.To("dashboards", Dashboard.Type),
-		edge.To("queries", SavedQuery.Type),
-		edge.To("oauth_accounts", OAuthAccount.Type),
-		edge.To("refresh_tokens", RefreshToken.Type),
 	}
 }
 

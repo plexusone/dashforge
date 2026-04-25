@@ -13,8 +13,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/refreshtoken"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // RefreshTokenUpdate is the builder for updating RefreshToken entities.
@@ -30,16 +30,16 @@ func (_u *RefreshTokenUpdate) Where(ps ...predicate.RefreshToken) *RefreshTokenU
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *RefreshTokenUpdate) SetUserID(v uuid.UUID) *RefreshTokenUpdate {
-	_u.mutation.SetUserID(v)
+// SetPrincipalID sets the "principal_id" field.
+func (_u *RefreshTokenUpdate) SetPrincipalID(v uuid.UUID) *RefreshTokenUpdate {
+	_u.mutation.SetPrincipalID(v)
 	return _u
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *RefreshTokenUpdate) SetNillableUserID(v *uuid.UUID) *RefreshTokenUpdate {
+// SetNillablePrincipalID sets the "principal_id" field if the given value is not nil.
+func (_u *RefreshTokenUpdate) SetNillablePrincipalID(v *uuid.UUID) *RefreshTokenUpdate {
 	if v != nil {
-		_u.SetUserID(*v)
+		_u.SetPrincipalID(*v)
 	}
 	return _u
 }
@@ -106,9 +106,9 @@ func (_u *RefreshTokenUpdate) SetNillableRevoked(v *bool) *RefreshTokenUpdate {
 	return _u
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (_u *RefreshTokenUpdate) SetUser(v *User) *RefreshTokenUpdate {
-	return _u.SetUserID(v.ID)
+// SetPrincipal sets the "principal" edge to the Principal entity.
+func (_u *RefreshTokenUpdate) SetPrincipal(v *Principal) *RefreshTokenUpdate {
+	return _u.SetPrincipalID(v.ID)
 }
 
 // Mutation returns the RefreshTokenMutation object of the builder.
@@ -116,9 +116,9 @@ func (_u *RefreshTokenUpdate) Mutation() *RefreshTokenMutation {
 	return _u.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (_u *RefreshTokenUpdate) ClearUser() *RefreshTokenUpdate {
-	_u.mutation.ClearUser()
+// ClearPrincipal clears the "principal" edge to the Principal entity.
+func (_u *RefreshTokenUpdate) ClearPrincipal() *RefreshTokenUpdate {
+	_u.mutation.ClearPrincipal()
 	return _u
 }
 
@@ -156,8 +156,8 @@ func (_u *RefreshTokenUpdate) check() error {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`ent: validator failed for field "RefreshToken.token": %w`, err)}
 		}
 	}
-	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
-		return errors.New(`ent: clearing a required unique edge "RefreshToken.user"`)
+	if _u.mutation.PrincipalCleared() && len(_u.mutation.PrincipalIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "RefreshToken.principal"`)
 	}
 	return nil
 }
@@ -189,28 +189,28 @@ func (_u *RefreshTokenUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if value, ok := _u.mutation.Revoked(); ok {
 		_spec.SetField(refreshtoken.FieldRevoked, field.TypeBool, value)
 	}
-	if _u.mutation.UserCleared() {
+	if _u.mutation.PrincipalCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   refreshtoken.UserTable,
-			Columns: []string{refreshtoken.UserColumn},
+			Table:   refreshtoken.PrincipalTable,
+			Columns: []string{refreshtoken.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PrincipalIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   refreshtoken.UserTable,
-			Columns: []string{refreshtoken.UserColumn},
+			Table:   refreshtoken.PrincipalTable,
+			Columns: []string{refreshtoken.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -238,16 +238,16 @@ type RefreshTokenUpdateOne struct {
 	mutation *RefreshTokenMutation
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *RefreshTokenUpdateOne) SetUserID(v uuid.UUID) *RefreshTokenUpdateOne {
-	_u.mutation.SetUserID(v)
+// SetPrincipalID sets the "principal_id" field.
+func (_u *RefreshTokenUpdateOne) SetPrincipalID(v uuid.UUID) *RefreshTokenUpdateOne {
+	_u.mutation.SetPrincipalID(v)
 	return _u
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *RefreshTokenUpdateOne) SetNillableUserID(v *uuid.UUID) *RefreshTokenUpdateOne {
+// SetNillablePrincipalID sets the "principal_id" field if the given value is not nil.
+func (_u *RefreshTokenUpdateOne) SetNillablePrincipalID(v *uuid.UUID) *RefreshTokenUpdateOne {
 	if v != nil {
-		_u.SetUserID(*v)
+		_u.SetPrincipalID(*v)
 	}
 	return _u
 }
@@ -314,9 +314,9 @@ func (_u *RefreshTokenUpdateOne) SetNillableRevoked(v *bool) *RefreshTokenUpdate
 	return _u
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (_u *RefreshTokenUpdateOne) SetUser(v *User) *RefreshTokenUpdateOne {
-	return _u.SetUserID(v.ID)
+// SetPrincipal sets the "principal" edge to the Principal entity.
+func (_u *RefreshTokenUpdateOne) SetPrincipal(v *Principal) *RefreshTokenUpdateOne {
+	return _u.SetPrincipalID(v.ID)
 }
 
 // Mutation returns the RefreshTokenMutation object of the builder.
@@ -324,9 +324,9 @@ func (_u *RefreshTokenUpdateOne) Mutation() *RefreshTokenMutation {
 	return _u.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (_u *RefreshTokenUpdateOne) ClearUser() *RefreshTokenUpdateOne {
-	_u.mutation.ClearUser()
+// ClearPrincipal clears the "principal" edge to the Principal entity.
+func (_u *RefreshTokenUpdateOne) ClearPrincipal() *RefreshTokenUpdateOne {
+	_u.mutation.ClearPrincipal()
 	return _u
 }
 
@@ -377,8 +377,8 @@ func (_u *RefreshTokenUpdateOne) check() error {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`ent: validator failed for field "RefreshToken.token": %w`, err)}
 		}
 	}
-	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
-		return errors.New(`ent: clearing a required unique edge "RefreshToken.user"`)
+	if _u.mutation.PrincipalCleared() && len(_u.mutation.PrincipalIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "RefreshToken.principal"`)
 	}
 	return nil
 }
@@ -427,28 +427,28 @@ func (_u *RefreshTokenUpdateOne) sqlSave(ctx context.Context) (_node *RefreshTok
 	if value, ok := _u.mutation.Revoked(); ok {
 		_spec.SetField(refreshtoken.FieldRevoked, field.TypeBool, value)
 	}
-	if _u.mutation.UserCleared() {
+	if _u.mutation.PrincipalCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   refreshtoken.UserTable,
-			Columns: []string{refreshtoken.UserColumn},
+			Table:   refreshtoken.PrincipalTable,
+			Columns: []string{refreshtoken.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PrincipalIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   refreshtoken.UserTable,
-			Columns: []string{refreshtoken.UserColumn},
+			Table:   refreshtoken.PrincipalTable,
+			Columns: []string{refreshtoken.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

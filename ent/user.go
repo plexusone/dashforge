@@ -48,17 +48,9 @@ type User struct {
 type UserEdges struct {
 	// Memberships holds the value of the memberships edge.
 	Memberships []*Membership `json:"memberships,omitempty"`
-	// Dashboards holds the value of the dashboards edge.
-	Dashboards []*Dashboard `json:"dashboards,omitempty"`
-	// Queries holds the value of the queries edge.
-	Queries []*SavedQuery `json:"queries,omitempty"`
-	// OauthAccounts holds the value of the oauth_accounts edge.
-	OauthAccounts []*OAuthAccount `json:"oauth_accounts,omitempty"`
-	// RefreshTokens holds the value of the refresh_tokens edge.
-	RefreshTokens []*RefreshToken `json:"refresh_tokens,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [1]bool
 }
 
 // MembershipsOrErr returns the Memberships value or an error if the edge
@@ -68,42 +60,6 @@ func (e UserEdges) MembershipsOrErr() ([]*Membership, error) {
 		return e.Memberships, nil
 	}
 	return nil, &NotLoadedError{edge: "memberships"}
-}
-
-// DashboardsOrErr returns the Dashboards value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) DashboardsOrErr() ([]*Dashboard, error) {
-	if e.loadedTypes[1] {
-		return e.Dashboards, nil
-	}
-	return nil, &NotLoadedError{edge: "dashboards"}
-}
-
-// QueriesOrErr returns the Queries value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) QueriesOrErr() ([]*SavedQuery, error) {
-	if e.loadedTypes[2] {
-		return e.Queries, nil
-	}
-	return nil, &NotLoadedError{edge: "queries"}
-}
-
-// OauthAccountsOrErr returns the OauthAccounts value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) OauthAccountsOrErr() ([]*OAuthAccount, error) {
-	if e.loadedTypes[3] {
-		return e.OauthAccounts, nil
-	}
-	return nil, &NotLoadedError{edge: "oauth_accounts"}
-}
-
-// RefreshTokensOrErr returns the RefreshTokens value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) RefreshTokensOrErr() ([]*RefreshToken, error) {
-	if e.loadedTypes[4] {
-		return e.RefreshTokens, nil
-	}
-	return nil, &NotLoadedError{edge: "refresh_tokens"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -220,26 +176,6 @@ func (_m *User) Value(name string) (ent.Value, error) {
 // QueryMemberships queries the "memberships" edge of the User entity.
 func (_m *User) QueryMemberships() *MembershipQuery {
 	return NewUserClient(_m.config).QueryMemberships(_m)
-}
-
-// QueryDashboards queries the "dashboards" edge of the User entity.
-func (_m *User) QueryDashboards() *DashboardQuery {
-	return NewUserClient(_m.config).QueryDashboards(_m)
-}
-
-// QueryQueries queries the "queries" edge of the User entity.
-func (_m *User) QueryQueries() *SavedQueryQuery {
-	return NewUserClient(_m.config).QueryQueries(_m)
-}
-
-// QueryOauthAccounts queries the "oauth_accounts" edge of the User entity.
-func (_m *User) QueryOauthAccounts() *OAuthAccountQuery {
-	return NewUserClient(_m.config).QueryOauthAccounts(_m)
-}
-
-// QueryRefreshTokens queries the "refresh_tokens" edge of the User entity.
-func (_m *User) QueryRefreshTokens() *RefreshTokenQuery {
-	return NewUserClient(_m.config).QueryRefreshTokens(_m)
 }
 
 // Update returns a builder for updating this User.
