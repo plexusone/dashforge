@@ -434,6 +434,8 @@ github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
 github.com/googleapis/gax-go/v2 v2.21.0 h1:h45NjjzEO3faG9Lg/cFrBh2PgegVVgzqKzuZl/wMbiI=
 github.com/googleapis/gax-go/v2 v2.21.0/go.mod h1:But/NJU6TnZsrLai/xBAQLLz+Hc7fHZJt/hsCz3Fih4=
+github.com/grokify/coreforge v0.6.0 h1:cbJn7itqboTgpmP1aGrYlH0jzs8O1NbSVgGs/BEYaWA=
+github.com/grokify/coreforge v0.6.0/go.mod h1:W9TnuhQH1Ni6QjgjcdfDPNPlujiBg6veUlMGSOYeCRA=
 github.com/grokify/mogo v0.74.1 h1:oODNqQFBWD4lNEdr5gq0eDMVUUyP26bOEboK9UZycnw=
 github.com/grokify/mogo v0.74.1/go.mod h1:RC7/sy7MsyZSwJesNohN2EkGvgSFeSLvzOw4c/dGdSo=
 github.com/grokify/sogo v0.14.0 h1:BjhTRzur/V9DzPslKy5TLqxLna3O6EXe4b1WLyOIbLM=
@@ -593,6 +595,8 @@ github.com/planetscale/vtprotobuf v0.6.1-0.20240917153116-6f2963f01587 h1:xzZOeC
 github.com/planetscale/vtprotobuf v0.6.1-0.20240917153116-6f2963f01587/go.mod h1:t/avpk3KcrXxUnYOhZhMXJlSEyie6gQbtLq5NM3loB8=
 github.com/plexusone/omnillm-core v0.15.0 h1:yyWCHMiFZh3Dhi3Y5t/esjmfBE7/3UaPQhTyVnqUk20=
 github.com/plexusone/omnillm-core v0.15.0/go.mod h1:k/RC3lp5N7HP2UcwGxJpYu3xE+F7mrBEqJ76fxur/HA=
+github.com/plexusone/omniobserve v0.8.0 h1:L+nXU8TZrRwKh4KWzAtHVP/tEqopfEMBn9dIZDlqse4=
+github.com/plexusone/omniobserve v0.8.0/go.mod h1:52TqB66Ns4Zgh4t7/ilMmCBdXcUHqjqRIbSGVBGCmK0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
