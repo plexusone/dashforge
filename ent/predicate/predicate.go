@@ -18,14 +18,26 @@ type AlertEvent func(*sql.Selector)
 // Dashboard is the predicate function for dashboard builders.
 type Dashboard func(*sql.Selector)
 
+// DashboardTemplate is the predicate function for dashboardtemplate builders.
+type DashboardTemplate func(*sql.Selector)
+
 // DashboardVersion is the predicate function for dashboardversion builders.
 type DashboardVersion func(*sql.Selector)
 
 // DataSource is the predicate function for datasource builders.
 type DataSource func(*sql.Selector)
 
+// Human is the predicate function for human builders.
+type Human func(*sql.Selector)
+
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)
+
+// License is the predicate function for license builders.
+type License func(*sql.Selector)
+
+// Listing is the predicate function for listing builders.
+type Listing func(*sql.Selector)
 
 // Membership is the predicate function for membership builders.
 type Membership func(*sql.Selector)
@@ -36,11 +48,26 @@ type OAuthAccount func(*sql.Selector)
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
+// Principal is the predicate function for principal builders.
+type Principal func(*sql.Selector)
+
+// PrincipalMembership is the predicate function for principalmembership builders.
+type PrincipalMembership func(*sql.Selector)
+
+// Publisher is the predicate function for publisher builders.
+type Publisher func(*sql.Selector)
+
 // RefreshToken is the predicate function for refreshtoken builders.
 type RefreshToken func(*sql.Selector)
 
 // SavedQuery is the predicate function for savedquery builders.
 type SavedQuery func(*sql.Selector)
+
+// SeatAssignment is the predicate function for seatassignment builders.
+type SeatAssignment func(*sql.Selector)
+
+// Subscription is the predicate function for subscription builders.
+type Subscription func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

@@ -53,8 +53,17 @@ func (Organization) Fields() []ent.Field {
 // Edges of the Organization.
 func (Organization) Edges() []ent.Edge {
 	return []ent.Edge{
+		// Legacy membership edge (deprecated, use principal_memberships)
 		edge.To("memberships", Membership.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
+
+		// Principal-based edges
+		edge.To("principals", Principal.Type).
+			Comment("Principals scoped to this organization"),
+		edge.To("principal_memberships", PrincipalMembership.Type).
+			Comment("Principal memberships"),
+
+		// Core DashForge edges
 		edge.To("dashboards", Dashboard.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("datasources", DataSource.Type).
@@ -65,6 +74,13 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("alerts", Alert.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
+
+		// Marketplace edges
+		edge.To("licenses", License.Type).
+			Comment("Licenses held by this organization"),
+		edge.To("subscription", Subscription.Type).
+			Unique().
+			Comment("Platform subscription for this organization"),
 	}
 }
 

@@ -13,27 +13,19 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/membership"
-	"github.com/plexusone/dashforge/ent/oauthaccount"
 	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/refreshtoken"
-	"github.com/plexusone/dashforge/ent/savedquery"
 	"github.com/plexusone/dashforge/ent/user"
 )
 
 // UserQuery is the builder for querying User entities.
 type UserQuery struct {
 	config
-	ctx               *QueryContext
-	order             []user.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.User
-	withMemberships   *MembershipQuery
-	withDashboards    *DashboardQuery
-	withQueries       *SavedQueryQuery
-	withOauthAccounts *OAuthAccountQuery
-	withRefreshTokens *RefreshTokenQuery
+	ctx             *QueryContext
+	order           []user.OrderOption
+	inters          []Interceptor
+	predicates      []predicate.User
+	withMemberships *MembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -85,94 +77,6 @@ func (_q *UserQuery) QueryMemberships() *MembershipQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(membership.Table, membership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.MembershipsTable, user.MembershipsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryDashboards chains the current query on the "dashboards" edge.
-func (_q *UserQuery) QueryDashboards() *DashboardQuery {
-	query := (&DashboardClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(dashboard.Table, dashboard.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.DashboardsTable, user.DashboardsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryQueries chains the current query on the "queries" edge.
-func (_q *UserQuery) QueryQueries() *SavedQueryQuery {
-	query := (&SavedQueryClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(savedquery.Table, savedquery.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.QueriesTable, user.QueriesColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryOauthAccounts chains the current query on the "oauth_accounts" edge.
-func (_q *UserQuery) QueryOauthAccounts() *OAuthAccountQuery {
-	query := (&OAuthAccountClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(oauthaccount.Table, oauthaccount.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.OauthAccountsTable, user.OauthAccountsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryRefreshTokens chains the current query on the "refresh_tokens" edge.
-func (_q *UserQuery) QueryRefreshTokens() *RefreshTokenQuery {
-	query := (&RefreshTokenClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(refreshtoken.Table, refreshtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.RefreshTokensTable, user.RefreshTokensColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -367,16 +271,12 @@ func (_q *UserQuery) Clone() *UserQuery {
 		return nil
 	}
 	return &UserQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]user.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.User{}, _q.predicates...),
-		withMemberships:   _q.withMemberships.Clone(),
-		withDashboards:    _q.withDashboards.Clone(),
-		withQueries:       _q.withQueries.Clone(),
-		withOauthAccounts: _q.withOauthAccounts.Clone(),
-		withRefreshTokens: _q.withRefreshTokens.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]user.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.User{}, _q.predicates...),
+		withMemberships: _q.withMemberships.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
@@ -391,50 +291,6 @@ func (_q *UserQuery) WithMemberships(opts ...func(*MembershipQuery)) *UserQuery 
 		opt(query)
 	}
 	_q.withMemberships = query
-	return _q
-}
-
-// WithDashboards tells the query-builder to eager-load the nodes that are connected to
-// the "dashboards" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithDashboards(opts ...func(*DashboardQuery)) *UserQuery {
-	query := (&DashboardClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDashboards = query
-	return _q
-}
-
-// WithQueries tells the query-builder to eager-load the nodes that are connected to
-// the "queries" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithQueries(opts ...func(*SavedQueryQuery)) *UserQuery {
-	query := (&SavedQueryClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withQueries = query
-	return _q
-}
-
-// WithOauthAccounts tells the query-builder to eager-load the nodes that are connected to
-// the "oauth_accounts" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithOauthAccounts(opts ...func(*OAuthAccountQuery)) *UserQuery {
-	query := (&OAuthAccountClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withOauthAccounts = query
-	return _q
-}
-
-// WithRefreshTokens tells the query-builder to eager-load the nodes that are connected to
-// the "refresh_tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithRefreshTokens(opts ...func(*RefreshTokenQuery)) *UserQuery {
-	query := (&RefreshTokenClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withRefreshTokens = query
 	return _q
 }
 
@@ -516,12 +372,8 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [1]bool{
 			_q.withMemberships != nil,
-			_q.withDashboards != nil,
-			_q.withQueries != nil,
-			_q.withOauthAccounts != nil,
-			_q.withRefreshTokens != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -549,34 +401,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := _q.withDashboards; query != nil {
-		if err := _q.loadDashboards(ctx, query, nodes,
-			func(n *User) { n.Edges.Dashboards = []*Dashboard{} },
-			func(n *User, e *Dashboard) { n.Edges.Dashboards = append(n.Edges.Dashboards, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withQueries; query != nil {
-		if err := _q.loadQueries(ctx, query, nodes,
-			func(n *User) { n.Edges.Queries = []*SavedQuery{} },
-			func(n *User, e *SavedQuery) { n.Edges.Queries = append(n.Edges.Queries, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withOauthAccounts; query != nil {
-		if err := _q.loadOauthAccounts(ctx, query, nodes,
-			func(n *User) { n.Edges.OauthAccounts = []*OAuthAccount{} },
-			func(n *User, e *OAuthAccount) { n.Edges.OauthAccounts = append(n.Edges.OauthAccounts, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withRefreshTokens; query != nil {
-		if err := _q.loadRefreshTokens(ctx, query, nodes,
-			func(n *User) { n.Edges.RefreshTokens = []*RefreshToken{} },
-			func(n *User, e *RefreshToken) { n.Edges.RefreshTokens = append(n.Edges.RefreshTokens, e) }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
 }
 
@@ -595,128 +419,6 @@ func (_q *UserQuery) loadMemberships(ctx context.Context, query *MembershipQuery
 	}
 	query.Where(predicate.Membership(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.MembershipsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.UserID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadDashboards(ctx context.Context, query *DashboardQuery, nodes []*User, init func(*User), assign func(*User, *Dashboard)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Dashboard(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.DashboardsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.user_dashboards
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "user_dashboards" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_dashboards" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadQueries(ctx context.Context, query *SavedQueryQuery, nodes []*User, init func(*User), assign func(*User, *SavedQuery)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.SavedQuery(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.QueriesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.user_queries
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "user_queries" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_queries" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadOauthAccounts(ctx context.Context, query *OAuthAccountQuery, nodes []*User, init func(*User), assign func(*User, *OAuthAccount)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(oauthaccount.FieldUserID)
-	}
-	query.Where(predicate.OAuthAccount(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.OauthAccountsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.UserID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadRefreshTokens(ctx context.Context, query *RefreshTokenQuery, nodes []*User, init func(*User), assign func(*User, *RefreshToken)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(refreshtoken.FieldUserID)
-	}
-	query.Where(predicate.RefreshToken(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.RefreshTokensColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

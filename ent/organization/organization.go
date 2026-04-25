@@ -36,6 +36,10 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// EdgeMemberships holds the string denoting the memberships edge name in mutations.
 	EdgeMemberships = "memberships"
+	// EdgePrincipals holds the string denoting the principals edge name in mutations.
+	EdgePrincipals = "principals"
+	// EdgePrincipalMemberships holds the string denoting the principal_memberships edge name in mutations.
+	EdgePrincipalMemberships = "principal_memberships"
 	// EdgeDashboards holds the string denoting the dashboards edge name in mutations.
 	EdgeDashboards = "dashboards"
 	// EdgeDatasources holds the string denoting the datasources edge name in mutations.
@@ -46,6 +50,10 @@ const (
 	EdgeIntegrations = "integrations"
 	// EdgeAlerts holds the string denoting the alerts edge name in mutations.
 	EdgeAlerts = "alerts"
+	// EdgeLicenses holds the string denoting the licenses edge name in mutations.
+	EdgeLicenses = "licenses"
+	// EdgeSubscription holds the string denoting the subscription edge name in mutations.
+	EdgeSubscription = "subscription"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
 	// MembershipsTable is the table that holds the memberships relation/edge.
@@ -55,6 +63,20 @@ const (
 	MembershipsInverseTable = "memberships"
 	// MembershipsColumn is the table column denoting the memberships relation/edge.
 	MembershipsColumn = "organization_id"
+	// PrincipalsTable is the table that holds the principals relation/edge.
+	PrincipalsTable = "principals"
+	// PrincipalsInverseTable is the table name for the Principal entity.
+	// It exists in this package in order to avoid circular dependency with the "principal" package.
+	PrincipalsInverseTable = "principals"
+	// PrincipalsColumn is the table column denoting the principals relation/edge.
+	PrincipalsColumn = "organization_id"
+	// PrincipalMembershipsTable is the table that holds the principal_memberships relation/edge.
+	PrincipalMembershipsTable = "principal_memberships"
+	// PrincipalMembershipsInverseTable is the table name for the PrincipalMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "principalmembership" package.
+	PrincipalMembershipsInverseTable = "principal_memberships"
+	// PrincipalMembershipsColumn is the table column denoting the principal_memberships relation/edge.
+	PrincipalMembershipsColumn = "organization_id"
 	// DashboardsTable is the table that holds the dashboards relation/edge.
 	DashboardsTable = "dashboards"
 	// DashboardsInverseTable is the table name for the Dashboard entity.
@@ -90,6 +112,20 @@ const (
 	AlertsInverseTable = "alerts"
 	// AlertsColumn is the table column denoting the alerts relation/edge.
 	AlertsColumn = "organization_alerts"
+	// LicensesTable is the table that holds the licenses relation/edge.
+	LicensesTable = "licenses"
+	// LicensesInverseTable is the table name for the License entity.
+	// It exists in this package in order to avoid circular dependency with the "license" package.
+	LicensesInverseTable = "licenses"
+	// LicensesColumn is the table column denoting the licenses relation/edge.
+	LicensesColumn = "organization_id"
+	// SubscriptionTable is the table that holds the subscription relation/edge.
+	SubscriptionTable = "subscriptions"
+	// SubscriptionInverseTable is the table name for the Subscription entity.
+	// It exists in this package in order to avoid circular dependency with the "subscription" package.
+	SubscriptionInverseTable = "subscriptions"
+	// SubscriptionColumn is the table column denoting the subscription relation/edge.
+	SubscriptionColumn = "organization_id"
 )
 
 // Columns holds all SQL columns for organization fields.
@@ -223,6 +259,34 @@ func ByMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPrincipalsCount orders the results by principals count.
+func ByPrincipalsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPrincipalsStep(), opts...)
+	}
+}
+
+// ByPrincipals orders the results by principals terms.
+func ByPrincipals(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPrincipalsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPrincipalMembershipsCount orders the results by principal_memberships count.
+func ByPrincipalMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPrincipalMembershipsStep(), opts...)
+	}
+}
+
+// ByPrincipalMemberships orders the results by principal_memberships terms.
+func ByPrincipalMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPrincipalMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByDashboardsCount orders the results by dashboards count.
 func ByDashboardsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -292,11 +356,46 @@ func ByAlerts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newAlertsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByLicensesCount orders the results by licenses count.
+func ByLicensesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newLicensesStep(), opts...)
+	}
+}
+
+// ByLicenses orders the results by licenses terms.
+func ByLicenses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLicensesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubscriptionField orders the results by subscription field.
+func BySubscriptionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubscriptionStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newMembershipsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MembershipsTable, MembershipsColumn),
+	)
+}
+func newPrincipalsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PrincipalsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PrincipalsTable, PrincipalsColumn),
+	)
+}
+func newPrincipalMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PrincipalMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PrincipalMembershipsTable, PrincipalMembershipsColumn),
 	)
 }
 func newDashboardsStep() *sqlgraph.Step {
@@ -332,5 +431,19 @@ func newAlertsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AlertsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AlertsTable, AlertsColumn),
+	)
+}
+func newLicensesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LicensesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, LicensesTable, LicensesColumn),
+	)
+}
+func newSubscriptionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubscriptionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SubscriptionTable, SubscriptionColumn),
 	)
 }

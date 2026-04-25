@@ -56,9 +56,9 @@ func IDLTE(id uuid.UUID) predicate.RefreshToken {
 	return predicate.RefreshToken(sql.FieldLTE(FieldID, id))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v uuid.UUID) predicate.RefreshToken {
-	return predicate.RefreshToken(sql.FieldEQ(FieldUserID, v))
+// PrincipalID applies equality check predicate on the "principal_id" field. It's identical to PrincipalIDEQ.
+func PrincipalID(v uuid.UUID) predicate.RefreshToken {
+	return predicate.RefreshToken(sql.FieldEQ(FieldPrincipalID, v))
 }
 
 // Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
@@ -86,24 +86,24 @@ func CreatedAt(v time.Time) predicate.RefreshToken {
 	return predicate.RefreshToken(sql.FieldEQ(FieldCreatedAt, v))
 }
 
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v uuid.UUID) predicate.RefreshToken {
-	return predicate.RefreshToken(sql.FieldEQ(FieldUserID, v))
+// PrincipalIDEQ applies the EQ predicate on the "principal_id" field.
+func PrincipalIDEQ(v uuid.UUID) predicate.RefreshToken {
+	return predicate.RefreshToken(sql.FieldEQ(FieldPrincipalID, v))
 }
 
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v uuid.UUID) predicate.RefreshToken {
-	return predicate.RefreshToken(sql.FieldNEQ(FieldUserID, v))
+// PrincipalIDNEQ applies the NEQ predicate on the "principal_id" field.
+func PrincipalIDNEQ(v uuid.UUID) predicate.RefreshToken {
+	return predicate.RefreshToken(sql.FieldNEQ(FieldPrincipalID, v))
 }
 
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...uuid.UUID) predicate.RefreshToken {
-	return predicate.RefreshToken(sql.FieldIn(FieldUserID, vs...))
+// PrincipalIDIn applies the In predicate on the "principal_id" field.
+func PrincipalIDIn(vs ...uuid.UUID) predicate.RefreshToken {
+	return predicate.RefreshToken(sql.FieldIn(FieldPrincipalID, vs...))
 }
 
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...uuid.UUID) predicate.RefreshToken {
-	return predicate.RefreshToken(sql.FieldNotIn(FieldUserID, vs...))
+// PrincipalIDNotIn applies the NotIn predicate on the "principal_id" field.
+func PrincipalIDNotIn(vs ...uuid.UUID) predicate.RefreshToken {
+	return predicate.RefreshToken(sql.FieldNotIn(FieldPrincipalID, vs...))
 }
 
 // TokenEQ applies the EQ predicate on the "token" field.
@@ -336,21 +336,21 @@ func CreatedAtLTE(v time.Time) predicate.RefreshToken {
 	return predicate.RefreshToken(sql.FieldLTE(FieldCreatedAt, v))
 }
 
-// HasUser applies the HasEdge predicate on the "user" edge.
-func HasUser() predicate.RefreshToken {
+// HasPrincipal applies the HasEdge predicate on the "principal" edge.
+func HasPrincipal() predicate.RefreshToken {
 	return predicate.RefreshToken(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, PrincipalTable, PrincipalColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
-func HasUserWith(preds ...predicate.User) predicate.RefreshToken {
+// HasPrincipalWith applies the HasEdge predicate on the "principal" edge with a given conditions (other predicates).
+func HasPrincipalWith(preds ...predicate.Principal) predicate.RefreshToken {
 	return predicate.RefreshToken(func(s *sql.Selector) {
-		step := newUserStep()
+		step := newPrincipalStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

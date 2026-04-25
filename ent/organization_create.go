@@ -15,9 +15,13 @@ import (
 	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/datasource"
 	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/license"
 	"github.com/plexusone/dashforge/ent/membership"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/principalmembership"
 	"github.com/plexusone/dashforge/ent/savedquery"
+	"github.com/plexusone/dashforge/ent/subscription"
 )
 
 // OrganizationCreate is the builder for creating a Organization entity.
@@ -158,6 +162,36 @@ func (_c *OrganizationCreate) AddMemberships(v ...*Membership) *OrganizationCrea
 	return _c.AddMembershipIDs(ids...)
 }
 
+// AddPrincipalIDs adds the "principals" edge to the Principal entity by IDs.
+func (_c *OrganizationCreate) AddPrincipalIDs(ids ...uuid.UUID) *OrganizationCreate {
+	_c.mutation.AddPrincipalIDs(ids...)
+	return _c
+}
+
+// AddPrincipals adds the "principals" edges to the Principal entity.
+func (_c *OrganizationCreate) AddPrincipals(v ...*Principal) *OrganizationCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPrincipalIDs(ids...)
+}
+
+// AddPrincipalMembershipIDs adds the "principal_memberships" edge to the PrincipalMembership entity by IDs.
+func (_c *OrganizationCreate) AddPrincipalMembershipIDs(ids ...uuid.UUID) *OrganizationCreate {
+	_c.mutation.AddPrincipalMembershipIDs(ids...)
+	return _c
+}
+
+// AddPrincipalMemberships adds the "principal_memberships" edges to the PrincipalMembership entity.
+func (_c *OrganizationCreate) AddPrincipalMemberships(v ...*PrincipalMembership) *OrganizationCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPrincipalMembershipIDs(ids...)
+}
+
 // AddDashboardIDs adds the "dashboards" edge to the Dashboard entity by IDs.
 func (_c *OrganizationCreate) AddDashboardIDs(ids ...int) *OrganizationCreate {
 	_c.mutation.AddDashboardIDs(ids...)
@@ -231,6 +265,40 @@ func (_c *OrganizationCreate) AddAlerts(v ...*Alert) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddAlertIDs(ids...)
+}
+
+// AddLicenseIDs adds the "licenses" edge to the License entity by IDs.
+func (_c *OrganizationCreate) AddLicenseIDs(ids ...uuid.UUID) *OrganizationCreate {
+	_c.mutation.AddLicenseIDs(ids...)
+	return _c
+}
+
+// AddLicenses adds the "licenses" edges to the License entity.
+func (_c *OrganizationCreate) AddLicenses(v ...*License) *OrganizationCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddLicenseIDs(ids...)
+}
+
+// SetSubscriptionID sets the "subscription" edge to the Subscription entity by ID.
+func (_c *OrganizationCreate) SetSubscriptionID(id uuid.UUID) *OrganizationCreate {
+	_c.mutation.SetSubscriptionID(id)
+	return _c
+}
+
+// SetNillableSubscriptionID sets the "subscription" edge to the Subscription entity by ID if the given value is not nil.
+func (_c *OrganizationCreate) SetNillableSubscriptionID(id *uuid.UUID) *OrganizationCreate {
+	if id != nil {
+		_c = _c.SetSubscriptionID(*id)
+	}
+	return _c
+}
+
+// SetSubscription sets the "subscription" edge to the Subscription entity.
+func (_c *OrganizationCreate) SetSubscription(v *Subscription) *OrganizationCreate {
+	return _c.SetSubscriptionID(v.ID)
 }
 
 // Mutation returns the OrganizationMutation object of the builder.
@@ -412,6 +480,38 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.PrincipalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalsTable,
+			Columns: []string{organization.PrincipalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PrincipalMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PrincipalMembershipsTable,
+			Columns: []string{organization.PrincipalMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(principalmembership.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.DashboardsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -485,6 +585,38 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(alert.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.LicensesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.LicensesTable,
+			Columns: []string{organization.LicensesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.SubscriptionTable,
+			Columns: []string{organization.SubscriptionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscription.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

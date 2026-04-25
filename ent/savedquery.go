@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/savedquery"
 	"github.com/plexusone/dashforge/ent/schema"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // SavedQuery is the model entity for the SavedQuery schema.
@@ -52,7 +52,7 @@ type SavedQuery struct {
 	// The values are being populated by the SavedQueryQuery when eager-loading is set.
 	Edges                SavedQueryEdges `json:"edges"`
 	organization_queries *uuid.UUID
-	user_queries         *uuid.UUID
+	principal_queries    *uuid.UUID
 	selectValues         sql.SelectValues
 }
 
@@ -61,7 +61,7 @@ type SavedQueryEdges struct {
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
 	// Owner holds the value of the owner edge.
-	Owner *User `json:"owner,omitempty"`
+	Owner *Principal `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
@@ -80,11 +80,11 @@ func (e SavedQueryEdges) OrganizationOrErr() (*Organization, error) {
 
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e SavedQueryEdges) OwnerOrErr() (*User, error) {
+func (e SavedQueryEdges) OwnerOrErr() (*Principal, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: principal.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
 }
@@ -104,7 +104,7 @@ func (*SavedQuery) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case savedquery.ForeignKeys[0]: // organization_queries
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case savedquery.ForeignKeys[1]: // user_queries
+		case savedquery.ForeignKeys[1]: // principal_queries
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -220,10 +220,10 @@ func (_m *SavedQuery) assignValues(columns []string, values []any) error {
 			}
 		case savedquery.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field user_queries", values[i])
+				return fmt.Errorf("unexpected type %T for field principal_queries", values[i])
 			} else if value.Valid {
-				_m.user_queries = new(uuid.UUID)
-				*_m.user_queries = *value.S.(*uuid.UUID)
+				_m.principal_queries = new(uuid.UUID)
+				*_m.principal_queries = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -244,7 +244,7 @@ func (_m *SavedQuery) QueryOrganization() *OrganizationQuery {
 }
 
 // QueryOwner queries the "owner" edge of the SavedQuery entity.
-func (_m *SavedQuery) QueryOwner() *UserQuery {
+func (_m *SavedQuery) QueryOwner() *PrincipalQuery {
 	return NewSavedQueryClient(_m.config).QueryOwner(_m)
 }
 

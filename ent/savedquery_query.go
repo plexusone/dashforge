@@ -14,8 +14,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/organization"
 	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/savedquery"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // SavedQueryQuery is the builder for querying SavedQuery entities.
@@ -26,7 +26,7 @@ type SavedQueryQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.SavedQuery
 	withOrganization *OrganizationQuery
-	withOwner        *UserQuery
+	withOwner        *PrincipalQuery
 	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -87,8 +87,8 @@ func (_q *SavedQueryQuery) QueryOrganization() *OrganizationQuery {
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (_q *SavedQueryQuery) QueryOwner() *UserQuery {
-	query := (&UserClient{config: _q.config}).Query()
+func (_q *SavedQueryQuery) QueryOwner() *PrincipalQuery {
+	query := (&PrincipalClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -99,7 +99,7 @@ func (_q *SavedQueryQuery) QueryOwner() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(savedquery.Table, savedquery.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(principal.Table, principal.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, savedquery.OwnerTable, savedquery.OwnerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
@@ -321,8 +321,8 @@ func (_q *SavedQueryQuery) WithOrganization(opts ...func(*OrganizationQuery)) *S
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SavedQueryQuery) WithOwner(opts ...func(*UserQuery)) *SavedQueryQuery {
-	query := (&UserClient{config: _q.config}).Query()
+func (_q *SavedQueryQuery) WithOwner(opts ...func(*PrincipalQuery)) *SavedQueryQuery {
+	query := (&PrincipalClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -446,7 +446,7 @@ func (_q *SavedQueryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
-			func(n *SavedQuery, e *User) { n.Edges.Owner = e }); err != nil {
+			func(n *SavedQuery, e *Principal) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -485,14 +485,14 @@ func (_q *SavedQueryQuery) loadOrganization(ctx context.Context, query *Organiza
 	}
 	return nil
 }
-func (_q *SavedQueryQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*SavedQuery, init func(*SavedQuery), assign func(*SavedQuery, *User)) error {
+func (_q *SavedQueryQuery) loadOwner(ctx context.Context, query *PrincipalQuery, nodes []*SavedQuery, init func(*SavedQuery), assign func(*SavedQuery, *Principal)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*SavedQuery)
 	for i := range nodes {
-		if nodes[i].user_queries == nil {
+		if nodes[i].principal_queries == nil {
 			continue
 		}
-		fk := *nodes[i].user_queries
+		fk := *nodes[i].principal_queries
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -501,7 +501,7 @@ func (_q *SavedQueryQuery) loadOwner(ctx context.Context, query *UserQuery, node
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(principal.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -509,7 +509,7 @@ func (_q *SavedQueryQuery) loadOwner(ctx context.Context, query *UserQuery, node
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_queries" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "principal_queries" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

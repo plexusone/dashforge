@@ -514,6 +514,52 @@ func HasMembershipsWith(preds ...predicate.Membership) predicate.Organization {
 	})
 }
 
+// HasPrincipals applies the HasEdge predicate on the "principals" edge.
+func HasPrincipals() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PrincipalsTable, PrincipalsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPrincipalsWith applies the HasEdge predicate on the "principals" edge with a given conditions (other predicates).
+func HasPrincipalsWith(preds ...predicate.Principal) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPrincipalsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPrincipalMemberships applies the HasEdge predicate on the "principal_memberships" edge.
+func HasPrincipalMemberships() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PrincipalMembershipsTable, PrincipalMembershipsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPrincipalMembershipsWith applies the HasEdge predicate on the "principal_memberships" edge with a given conditions (other predicates).
+func HasPrincipalMembershipsWith(preds ...predicate.PrincipalMembership) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPrincipalMembershipsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasDashboards applies the HasEdge predicate on the "dashboards" edge.
 func HasDashboards() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -621,6 +667,52 @@ func HasAlerts() predicate.Organization {
 func HasAlertsWith(preds ...predicate.Alert) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newAlertsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLicenses applies the HasEdge predicate on the "licenses" edge.
+func HasLicenses() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, LicensesTable, LicensesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLicensesWith applies the HasEdge predicate on the "licenses" edge with a given conditions (other predicates).
+func HasLicensesWith(preds ...predicate.License) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newLicensesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubscription applies the HasEdge predicate on the "subscription" edge.
+func HasSubscription() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, SubscriptionTable, SubscriptionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubscriptionWith applies the HasEdge predicate on the "subscription" edge with a given conditions (other predicates).
+func HasSubscriptionWith(preds ...predicate.Subscription) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSubscriptionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

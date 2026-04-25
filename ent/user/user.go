@@ -37,14 +37,6 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// EdgeMemberships holds the string denoting the memberships edge name in mutations.
 	EdgeMemberships = "memberships"
-	// EdgeDashboards holds the string denoting the dashboards edge name in mutations.
-	EdgeDashboards = "dashboards"
-	// EdgeQueries holds the string denoting the queries edge name in mutations.
-	EdgeQueries = "queries"
-	// EdgeOauthAccounts holds the string denoting the oauth_accounts edge name in mutations.
-	EdgeOauthAccounts = "oauth_accounts"
-	// EdgeRefreshTokens holds the string denoting the refresh_tokens edge name in mutations.
-	EdgeRefreshTokens = "refresh_tokens"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// MembershipsTable is the table that holds the memberships relation/edge.
@@ -54,34 +46,6 @@ const (
 	MembershipsInverseTable = "memberships"
 	// MembershipsColumn is the table column denoting the memberships relation/edge.
 	MembershipsColumn = "user_id"
-	// DashboardsTable is the table that holds the dashboards relation/edge.
-	DashboardsTable = "dashboards"
-	// DashboardsInverseTable is the table name for the Dashboard entity.
-	// It exists in this package in order to avoid circular dependency with the "dashboard" package.
-	DashboardsInverseTable = "dashboards"
-	// DashboardsColumn is the table column denoting the dashboards relation/edge.
-	DashboardsColumn = "user_dashboards"
-	// QueriesTable is the table that holds the queries relation/edge.
-	QueriesTable = "saved_queries"
-	// QueriesInverseTable is the table name for the SavedQuery entity.
-	// It exists in this package in order to avoid circular dependency with the "savedquery" package.
-	QueriesInverseTable = "saved_queries"
-	// QueriesColumn is the table column denoting the queries relation/edge.
-	QueriesColumn = "user_queries"
-	// OauthAccountsTable is the table that holds the oauth_accounts relation/edge.
-	OauthAccountsTable = "oauth_accounts"
-	// OauthAccountsInverseTable is the table name for the OAuthAccount entity.
-	// It exists in this package in order to avoid circular dependency with the "oauthaccount" package.
-	OauthAccountsInverseTable = "oauth_accounts"
-	// OauthAccountsColumn is the table column denoting the oauth_accounts relation/edge.
-	OauthAccountsColumn = "user_id"
-	// RefreshTokensTable is the table that holds the refresh_tokens relation/edge.
-	RefreshTokensTable = "refresh_tokens"
-	// RefreshTokensInverseTable is the table name for the RefreshToken entity.
-	// It exists in this package in order to avoid circular dependency with the "refreshtoken" package.
-	RefreshTokensInverseTable = "refresh_tokens"
-	// RefreshTokensColumn is the table column denoting the refresh_tokens relation/edge.
-	RefreshTokensColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -197,94 +161,10 @@ func ByMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByDashboardsCount orders the results by dashboards count.
-func ByDashboardsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDashboardsStep(), opts...)
-	}
-}
-
-// ByDashboards orders the results by dashboards terms.
-func ByDashboards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDashboardsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByQueriesCount orders the results by queries count.
-func ByQueriesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newQueriesStep(), opts...)
-	}
-}
-
-// ByQueries orders the results by queries terms.
-func ByQueries(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newQueriesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByOauthAccountsCount orders the results by oauth_accounts count.
-func ByOauthAccountsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOauthAccountsStep(), opts...)
-	}
-}
-
-// ByOauthAccounts orders the results by oauth_accounts terms.
-func ByOauthAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOauthAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByRefreshTokensCount orders the results by refresh_tokens count.
-func ByRefreshTokensCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newRefreshTokensStep(), opts...)
-	}
-}
-
-// ByRefreshTokens orders the results by refresh_tokens terms.
-func ByRefreshTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newRefreshTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
 func newMembershipsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MembershipsTable, MembershipsColumn),
-	)
-}
-func newDashboardsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DashboardsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DashboardsTable, DashboardsColumn),
-	)
-}
-func newQueriesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(QueriesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, QueriesTable, QueriesColumn),
-	)
-}
-func newOauthAccountsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OauthAccountsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, OauthAccountsTable, OauthAccountsColumn),
-	)
-}
-func newRefreshTokensStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(RefreshTokensInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RefreshTokensTable, RefreshTokensColumn),
 	)
 }

@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/refreshtoken"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // RefreshTokenCreate is the builder for creating a RefreshToken entity.
@@ -22,9 +22,9 @@ type RefreshTokenCreate struct {
 	hooks    []Hook
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *RefreshTokenCreate) SetUserID(v uuid.UUID) *RefreshTokenCreate {
-	_c.mutation.SetUserID(v)
+// SetPrincipalID sets the "principal_id" field.
+func (_c *RefreshTokenCreate) SetPrincipalID(v uuid.UUID) *RefreshTokenCreate {
+	_c.mutation.SetPrincipalID(v)
 	return _c
 }
 
@@ -96,9 +96,9 @@ func (_c *RefreshTokenCreate) SetNillableID(v *uuid.UUID) *RefreshTokenCreate {
 	return _c
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (_c *RefreshTokenCreate) SetUser(v *User) *RefreshTokenCreate {
-	return _c.SetUserID(v.ID)
+// SetPrincipal sets the "principal" edge to the Principal entity.
+func (_c *RefreshTokenCreate) SetPrincipal(v *Principal) *RefreshTokenCreate {
+	return _c.SetPrincipalID(v.ID)
 }
 
 // Mutation returns the RefreshTokenMutation object of the builder.
@@ -152,8 +152,8 @@ func (_c *RefreshTokenCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *RefreshTokenCreate) check() error {
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "RefreshToken.user_id"`)}
+	if _, ok := _c.mutation.PrincipalID(); !ok {
+		return &ValidationError{Name: "principal_id", err: errors.New(`ent: missing required field "RefreshToken.principal_id"`)}
 	}
 	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`ent: missing required field "RefreshToken.token"`)}
@@ -172,8 +172,8 @@ func (_c *RefreshTokenCreate) check() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "RefreshToken.created_at"`)}
 	}
-	if len(_c.mutation.UserIDs()) == 0 {
-		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "RefreshToken.user"`)}
+	if len(_c.mutation.PrincipalIDs()) == 0 {
+		return &ValidationError{Name: "principal", err: errors.New(`ent: missing required edge "RefreshToken.principal"`)}
 	}
 	return nil
 }
@@ -230,21 +230,21 @@ func (_c *RefreshTokenCreate) createSpec() (*RefreshToken, *sqlgraph.CreateSpec)
 		_spec.SetField(refreshtoken.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PrincipalIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   refreshtoken.UserTable,
-			Columns: []string{refreshtoken.UserColumn},
+			Table:   refreshtoken.PrincipalTable,
+			Columns: []string{refreshtoken.PrincipalColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UserID = nodes[0]
+		_node.PrincipalID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

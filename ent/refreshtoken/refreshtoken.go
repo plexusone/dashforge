@@ -15,8 +15,8 @@ const (
 	Label = "refresh_token"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
+	// FieldPrincipalID holds the string denoting the principal_id field in the database.
+	FieldPrincipalID = "principal_id"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
 	// FieldFamily holds the string denoting the family field in the database.
@@ -27,23 +27,23 @@ const (
 	FieldRevoked = "revoked"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
+	// EdgePrincipal holds the string denoting the principal edge name in mutations.
+	EdgePrincipal = "principal"
 	// Table holds the table name of the refreshtoken in the database.
 	Table = "refresh_tokens"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "refresh_tokens"
-	// UserInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "user_id"
+	// PrincipalTable is the table that holds the principal relation/edge.
+	PrincipalTable = "refresh_tokens"
+	// PrincipalInverseTable is the table name for the Principal entity.
+	// It exists in this package in order to avoid circular dependency with the "principal" package.
+	PrincipalInverseTable = "principals"
+	// PrincipalColumn is the table column denoting the principal relation/edge.
+	PrincipalColumn = "principal_id"
 )
 
 // Columns holds all SQL columns for refreshtoken fields.
 var Columns = []string{
 	FieldID,
-	FieldUserID,
+	FieldPrincipalID,
 	FieldToken,
 	FieldFamily,
 	FieldExpiresAt,
@@ -80,9 +80,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+// ByPrincipalID orders the results by the principal_id field.
+func ByPrincipalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrincipalID, opts...).ToFunc()
 }
 
 // ByToken orders the results by the token field.
@@ -110,16 +110,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
 }
 
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByPrincipalField orders the results by principal field.
+func ByPrincipalField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newPrincipalStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newUserStep() *sqlgraph.Step {
+func newPrincipalStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		sqlgraph.To(PrincipalInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PrincipalTable, PrincipalColumn),
 	)
 }

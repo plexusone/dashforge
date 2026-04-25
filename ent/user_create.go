@@ -11,11 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/dashboard"
 	"github.com/plexusone/dashforge/ent/membership"
-	"github.com/plexusone/dashforge/ent/oauthaccount"
-	"github.com/plexusone/dashforge/ent/refreshtoken"
-	"github.com/plexusone/dashforge/ent/savedquery"
 	"github.com/plexusone/dashforge/ent/user"
 )
 
@@ -187,66 +183,6 @@ func (_c *UserCreate) AddMemberships(v ...*Membership) *UserCreate {
 	return _c.AddMembershipIDs(ids...)
 }
 
-// AddDashboardIDs adds the "dashboards" edge to the Dashboard entity by IDs.
-func (_c *UserCreate) AddDashboardIDs(ids ...int) *UserCreate {
-	_c.mutation.AddDashboardIDs(ids...)
-	return _c
-}
-
-// AddDashboards adds the "dashboards" edges to the Dashboard entity.
-func (_c *UserCreate) AddDashboards(v ...*Dashboard) *UserCreate {
-	ids := make([]int, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDashboardIDs(ids...)
-}
-
-// AddQueryIDs adds the "queries" edge to the SavedQuery entity by IDs.
-func (_c *UserCreate) AddQueryIDs(ids ...int) *UserCreate {
-	_c.mutation.AddQueryIDs(ids...)
-	return _c
-}
-
-// AddQueries adds the "queries" edges to the SavedQuery entity.
-func (_c *UserCreate) AddQueries(v ...*SavedQuery) *UserCreate {
-	ids := make([]int, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddQueryIDs(ids...)
-}
-
-// AddOauthAccountIDs adds the "oauth_accounts" edge to the OAuthAccount entity by IDs.
-func (_c *UserCreate) AddOauthAccountIDs(ids ...uuid.UUID) *UserCreate {
-	_c.mutation.AddOauthAccountIDs(ids...)
-	return _c
-}
-
-// AddOauthAccounts adds the "oauth_accounts" edges to the OAuthAccount entity.
-func (_c *UserCreate) AddOauthAccounts(v ...*OAuthAccount) *UserCreate {
-	ids := make([]uuid.UUID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddOauthAccountIDs(ids...)
-}
-
-// AddRefreshTokenIDs adds the "refresh_tokens" edge to the RefreshToken entity by IDs.
-func (_c *UserCreate) AddRefreshTokenIDs(ids ...uuid.UUID) *UserCreate {
-	_c.mutation.AddRefreshTokenIDs(ids...)
-	return _c
-}
-
-// AddRefreshTokens adds the "refresh_tokens" edges to the RefreshToken entity.
-func (_c *UserCreate) AddRefreshTokens(v ...*RefreshToken) *UserCreate {
-	ids := make([]uuid.UUID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddRefreshTokenIDs(ids...)
-}
-
 // Mutation returns the UserMutation object of the builder.
 func (_c *UserCreate) Mutation() *UserMutation {
 	return _c.mutation
@@ -410,70 +346,6 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membership.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DashboardsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.DashboardsTable,
-			Columns: []string{user.DashboardsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dashboard.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.QueriesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.QueriesTable,
-			Columns: []string{user.QueriesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(savedquery.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.OauthAccountsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.OauthAccountsTable,
-			Columns: []string{user.OauthAccountsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.RefreshTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.RefreshTokensTable,
-			Columns: []string{user.RefreshTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(refreshtoken.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

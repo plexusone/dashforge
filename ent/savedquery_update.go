@@ -15,9 +15,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/plexusone/dashforge/ent/organization"
 	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
 	"github.com/plexusone/dashforge/ent/savedquery"
 	"github.com/plexusone/dashforge/ent/schema"
-	"github.com/plexusone/dashforge/ent/user"
 )
 
 // SavedQueryUpdate is the builder for updating SavedQuery entities.
@@ -244,13 +244,13 @@ func (_u *SavedQueryUpdate) SetOrganization(v *Organization) *SavedQueryUpdate {
 	return _u.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_u *SavedQueryUpdate) SetOwnerID(id uuid.UUID) *SavedQueryUpdate {
 	_u.mutation.SetOwnerID(id)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_u *SavedQueryUpdate) SetNillableOwnerID(id *uuid.UUID) *SavedQueryUpdate {
 	if id != nil {
 		_u = _u.SetOwnerID(*id)
@@ -258,8 +258,8 @@ func (_u *SavedQueryUpdate) SetNillableOwnerID(id *uuid.UUID) *SavedQueryUpdate 
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_u *SavedQueryUpdate) SetOwner(v *User) *SavedQueryUpdate {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_u *SavedQueryUpdate) SetOwner(v *Principal) *SavedQueryUpdate {
 	return _u.SetOwnerID(v.ID)
 }
 
@@ -274,7 +274,7 @@ func (_u *SavedQueryUpdate) ClearOrganization() *SavedQueryUpdate {
 	return _u
 }
 
-// ClearOwner clears the "owner" edge to the User entity.
+// ClearOwner clears the "owner" edge to the Principal entity.
 func (_u *SavedQueryUpdate) ClearOwner() *SavedQueryUpdate {
 	_u.mutation.ClearOwner()
 	return _u
@@ -465,7 +465,7 @@ func (_u *SavedQueryUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{savedquery.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -478,7 +478,7 @@ func (_u *SavedQueryUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{savedquery.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -717,13 +717,13 @@ func (_u *SavedQueryUpdateOne) SetOrganization(v *Organization) *SavedQueryUpdat
 	return _u.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_u *SavedQueryUpdateOne) SetOwnerID(id uuid.UUID) *SavedQueryUpdateOne {
 	_u.mutation.SetOwnerID(id)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_u *SavedQueryUpdateOne) SetNillableOwnerID(id *uuid.UUID) *SavedQueryUpdateOne {
 	if id != nil {
 		_u = _u.SetOwnerID(*id)
@@ -731,8 +731,8 @@ func (_u *SavedQueryUpdateOne) SetNillableOwnerID(id *uuid.UUID) *SavedQueryUpda
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_u *SavedQueryUpdateOne) SetOwner(v *User) *SavedQueryUpdateOne {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_u *SavedQueryUpdateOne) SetOwner(v *Principal) *SavedQueryUpdateOne {
 	return _u.SetOwnerID(v.ID)
 }
 
@@ -747,7 +747,7 @@ func (_u *SavedQueryUpdateOne) ClearOrganization() *SavedQueryUpdateOne {
 	return _u
 }
 
-// ClearOwner clears the "owner" edge to the User entity.
+// ClearOwner clears the "owner" edge to the Principal entity.
 func (_u *SavedQueryUpdateOne) ClearOwner() *SavedQueryUpdateOne {
 	_u.mutation.ClearOwner()
 	return _u
@@ -968,7 +968,7 @@ func (_u *SavedQueryUpdateOne) sqlSave(ctx context.Context) (_node *SavedQuery, 
 			Columns: []string{savedquery.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -981,7 +981,7 @@ func (_u *SavedQueryUpdateOne) sqlSave(ctx context.Context) (_node *SavedQuery, 
 			Columns: []string{savedquery.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

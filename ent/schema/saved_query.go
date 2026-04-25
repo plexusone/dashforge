@@ -80,7 +80,8 @@ func (SavedQuery) Edges() []ent.Edge {
 			Ref("queries").
 			Unique().
 			Required(),
-		edge.From("owner", User.Type).
+		// Migrated from User to Principal
+		edge.From("owner", Principal.Type).
 			Ref("queries").
 			Unique(),
 	}

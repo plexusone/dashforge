@@ -161,7 +161,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "organization_dashboards", Type: field.TypeUUID},
-		{Name: "user_dashboards", Type: field.TypeUUID, Nullable: true},
+		{Name: "principal_dashboards", Type: field.TypeUUID, Nullable: true},
 	}
 	// DashboardsTable holds the schema information for the "dashboards" table.
 	DashboardsTable = &schema.Table{
@@ -176,9 +176,9 @@ var (
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "dashboards_users_dashboards",
+				Symbol:     "dashboards_principals_dashboards",
 				Columns:    []*schema.Column{DashboardsColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -197,6 +197,60 @@ var (
 				Name:    "dashboard_archived",
 				Unique:  false,
 				Columns: []*schema.Column{DashboardsColumns[6]},
+			},
+		},
+	}
+	// DashboardTemplatesColumns holds the columns for the "dashboard_templates" table.
+	DashboardTemplatesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "slug", Type: field.TypeString, Unique: true},
+		{Name: "title", Type: field.TypeString, Size: 200},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "definition", Type: field.TypeJSON},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "required_datasources", Type: field.TypeJSON, Nullable: true},
+		{Name: "thumbnail_url", Type: field.TypeString, Nullable: true},
+		{Name: "screenshot_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"draft", "published", "archived"}, Default: "draft"},
+		{Name: "version", Type: field.TypeString, Default: "1.0.0"},
+		{Name: "publisher_id", Type: field.TypeUUID},
+	}
+	// DashboardTemplatesTable holds the schema information for the "dashboard_templates" table.
+	DashboardTemplatesTable = &schema.Table{
+		Name:       "dashboard_templates",
+		Columns:    DashboardTemplatesColumns,
+		PrimaryKey: []*schema.Column{DashboardTemplatesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "dashboard_templates_publishers_templates",
+				Columns:    []*schema.Column{DashboardTemplatesColumns[14]},
+				RefColumns: []*schema.Column{PublishersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "dashboardtemplate_slug",
+				Unique:  true,
+				Columns: []*schema.Column{DashboardTemplatesColumns[3]},
+			},
+			{
+				Name:    "dashboardtemplate_publisher_id",
+				Unique:  false,
+				Columns: []*schema.Column{DashboardTemplatesColumns[14]},
+			},
+			{
+				Name:    "dashboardtemplate_status",
+				Unique:  false,
+				Columns: []*schema.Column{DashboardTemplatesColumns[12]},
+			},
+			{
+				Name:    "dashboardtemplate_category",
+				Unique:  false,
+				Columns: []*schema.Column{DashboardTemplatesColumns[8]},
 			},
 		},
 	}
@@ -279,6 +333,51 @@ var (
 			},
 		},
 	}
+	// HumenColumns holds the columns for the "humen" table.
+	HumenColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
+		{Name: "password_hash", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_url", Type: field.TypeString, Nullable: true},
+		{Name: "is_platform_admin", Type: field.TypeBool, Default: false},
+		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_verified_at", Type: field.TypeTime, Nullable: true},
+		{Name: "principal_id", Type: field.TypeUUID, Unique: true},
+	}
+	// HumenTable holds the schema information for the "humen" table.
+	HumenTable = &schema.Table{
+		Name:       "humen",
+		Columns:    HumenColumns,
+		PrimaryKey: []*schema.Column{HumenColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "humen_principals_human",
+				Columns:    []*schema.Column{HumenColumns[10]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "human_email",
+				Unique:  true,
+				Columns: []*schema.Column{HumenColumns[3]},
+			},
+			{
+				Name:    "human_principal_id",
+				Unique:  true,
+				Columns: []*schema.Column{HumenColumns[10]},
+			},
+			{
+				Name:    "human_is_platform_admin",
+				Unique:  false,
+				Columns: []*schema.Column{HumenColumns[7]},
+			},
+		},
+	}
 	// IntegrationsColumns holds the columns for the "integrations" table.
 	IntegrationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -332,6 +431,147 @@ var (
 			},
 		},
 	}
+	// LicensesColumns holds the columns for the "licenses" table.
+	LicensesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "license_type", Type: field.TypeEnum, Enums: []string{"seat_based", "team", "unlimited"}, Default: "unlimited"},
+		{Name: "seats", Type: field.TypeInt, Nullable: true},
+		{Name: "used_seats", Type: field.TypeInt, Default: 0},
+		{Name: "valid_from", Type: field.TypeTime},
+		{Name: "valid_until", Type: field.TypeTime, Nullable: true},
+		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "auto_update", Type: field.TypeBool, Default: true},
+		{Name: "max_dashboards", Type: field.TypeInt, Nullable: true},
+		{Name: "current_dashboards", Type: field.TypeInt, Default: 0},
+		{Name: "listing_id", Type: field.TypeUUID},
+		{Name: "organization_id", Type: field.TypeUUID},
+		{Name: "purchased_by", Type: field.TypeUUID},
+	}
+	// LicensesTable holds the schema information for the "licenses" table.
+	LicensesTable = &schema.Table{
+		Name:       "licenses",
+		Columns:    LicensesColumns,
+		PrimaryKey: []*schema.Column{LicensesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "licenses_listings_licenses",
+				Columns:    []*schema.Column{LicensesColumns[12]},
+				RefColumns: []*schema.Column{ListingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "licenses_organizations_licenses",
+				Columns:    []*schema.Column{LicensesColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "licenses_principals_purchased_licenses",
+				Columns:    []*schema.Column{LicensesColumns[14]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "license_listing_id_organization_id",
+				Unique:  true,
+				Columns: []*schema.Column{LicensesColumns[12], LicensesColumns[13]},
+			},
+			{
+				Name:    "license_organization_id",
+				Unique:  false,
+				Columns: []*schema.Column{LicensesColumns[13]},
+			},
+			{
+				Name:    "license_purchased_by",
+				Unique:  false,
+				Columns: []*schema.Column{LicensesColumns[14]},
+			},
+			{
+				Name:    "license_valid_until",
+				Unique:  false,
+				Columns: []*schema.Column{LicensesColumns[5]},
+			},
+		},
+	}
+	// ListingsColumns holds the columns for the "listings" table.
+	ListingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "product_type", Type: field.TypeString},
+		{Name: "title", Type: field.TypeString, Size: 200},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "pricing_model", Type: field.TypeEnum, Enums: []string{"free", "one_time", "subscription", "per_seat"}, Default: "free"},
+		{Name: "price_cents", Type: field.TypeInt64, Default: 0},
+		{Name: "currency", Type: field.TypeString, Size: 3, Default: "USD"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"draft", "pending_review", "published", "archived"}, Default: "draft"},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "published_at", Type: field.TypeTime, Nullable: true},
+		{Name: "preview_enabled", Type: field.TypeBool, Default: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "install_count", Type: field.TypeInt, Default: 0},
+		{Name: "product_id", Type: field.TypeUUID, Unique: true, Nullable: true},
+		{Name: "owner_id", Type: field.TypeUUID},
+		{Name: "creator_org_id", Type: field.TypeUUID},
+	}
+	// ListingsTable holds the schema information for the "listings" table.
+	ListingsTable = &schema.Table{
+		Name:       "listings",
+		Columns:    ListingsColumns,
+		PrimaryKey: []*schema.Column{ListingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "listings_dashboard_templates_listing",
+				Columns:    []*schema.Column{ListingsColumns[16]},
+				RefColumns: []*schema.Column{DashboardTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "listings_principals_owned_listings",
+				Columns:    []*schema.Column{ListingsColumns[17]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "listings_publishers_listings",
+				Columns:    []*schema.Column{ListingsColumns[18]},
+				RefColumns: []*schema.Column{PublishersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "listing_creator_org_id_status",
+				Unique:  false,
+				Columns: []*schema.Column{ListingsColumns[18], ListingsColumns[7]},
+			},
+			{
+				Name:    "listing_product_type_product_id",
+				Unique:  true,
+				Columns: []*schema.Column{ListingsColumns[1], ListingsColumns[16]},
+			},
+			{
+				Name:    "listing_status",
+				Unique:  false,
+				Columns: []*schema.Column{ListingsColumns[7]},
+			},
+			{
+				Name:    "listing_pricing_model",
+				Unique:  false,
+				Columns: []*schema.Column{ListingsColumns[4]},
+			},
+			{
+				Name:    "listing_category",
+				Unique:  false,
+				Columns: []*schema.Column{ListingsColumns[14]},
+			},
+		},
+	}
 	// MembershipsColumns holds the columns for the "memberships" table.
 	MembershipsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -382,14 +622,16 @@ var (
 	// OauthAccountsColumns holds the columns for the "oauth_accounts" table.
 	OauthAccountsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "provider", Type: field.TypeEnum, Enums: []string{"github", "google", "corecontrol"}},
-		{Name: "provider_user_id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "provider", Type: field.TypeString},
+		{Name: "provider_account_id", Type: field.TypeString},
 		{Name: "access_token", Type: field.TypeString, Nullable: true},
 		{Name: "refresh_token", Type: field.TypeString, Nullable: true},
 		{Name: "token_expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_data", Type: field.TypeJSON, Nullable: true},
+		{Name: "principal_id", Type: field.TypeUUID},
 	}
 	// OauthAccountsTable holds the schema information for the "oauth_accounts" table.
 	OauthAccountsTable = &schema.Table{
@@ -398,22 +640,22 @@ var (
 		PrimaryKey: []*schema.Column{OauthAccountsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "oauth_accounts_users_oauth_accounts",
-				Columns:    []*schema.Column{OauthAccountsColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				Symbol:     "oauth_accounts_principals_oauth_accounts",
+				Columns:    []*schema.Column{OauthAccountsColumns[10]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "oauthaccount_provider_provider_user_id",
+				Name:    "oauthaccount_provider_provider_account_id",
 				Unique:  true,
-				Columns: []*schema.Column{OauthAccountsColumns[1], OauthAccountsColumns[2]},
+				Columns: []*schema.Column{OauthAccountsColumns[3], OauthAccountsColumns[4]},
 			},
 			{
-				Name:    "oauthaccount_user_id",
+				Name:    "oauthaccount_principal_id",
 				Unique:  false,
-				Columns: []*schema.Column{OauthAccountsColumns[8]},
+				Columns: []*schema.Column{OauthAccountsColumns[10]},
 			},
 		},
 	}
@@ -453,6 +695,172 @@ var (
 			},
 		},
 	}
+	// PrincipalsColumns holds the columns for the "principals" table.
+	PrincipalsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"human", "application", "agent", "service"}},
+		{Name: "identifier", Type: field.TypeString},
+		{Name: "display_name", Type: field.TypeString},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "capabilities", Type: field.TypeJSON, Nullable: true},
+		{Name: "allowed_scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "core_control_principal_id", Type: field.TypeUUID, Unique: true, Nullable: true},
+		{Name: "organization_id", Type: field.TypeUUID, Nullable: true},
+	}
+	// PrincipalsTable holds the schema information for the "principals" table.
+	PrincipalsTable = &schema.Table{
+		Name:       "principals",
+		Columns:    PrincipalsColumns,
+		PrimaryKey: []*schema.Column{PrincipalsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "principals_organizations_principals",
+				Columns:    []*schema.Column{PrincipalsColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "principal_type_identifier",
+				Unique:  true,
+				Columns: []*schema.Column{PrincipalsColumns[3], PrincipalsColumns[4]},
+			},
+			{
+				Name:    "principal_organization_id",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalsColumns[11]},
+			},
+			{
+				Name:    "principal_core_control_principal_id",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalsColumns[10]},
+			},
+			{
+				Name:    "principal_active",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalsColumns[6]},
+			},
+			{
+				Name:    "principal_type_active",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalsColumns[3], PrincipalsColumns[6]},
+			},
+			{
+				Name:    "principal_organization_id_type",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalsColumns[11], PrincipalsColumns[3]},
+			},
+		},
+	}
+	// PrincipalMembershipsColumns holds the columns for the "principal_memberships" table.
+	PrincipalMembershipsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"owner", "admin", "editor", "viewer"}, Default: "viewer"},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "permissions", Type: field.TypeJSON, Nullable: true},
+		{Name: "joined_at", Type: field.TypeTime},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "organization_id", Type: field.TypeUUID},
+		{Name: "principal_id", Type: field.TypeUUID},
+	}
+	// PrincipalMembershipsTable holds the schema information for the "principal_memberships" table.
+	PrincipalMembershipsTable = &schema.Table{
+		Name:       "principal_memberships",
+		Columns:    PrincipalMembershipsColumns,
+		PrimaryKey: []*schema.Column{PrincipalMembershipsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "principal_memberships_organizations_principal_memberships",
+				Columns:    []*schema.Column{PrincipalMembershipsColumns[8]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "principal_memberships_principals_principal_memberships",
+				Columns:    []*schema.Column{PrincipalMembershipsColumns[9]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "principalmembership_principal_id_organization_id",
+				Unique:  true,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[9], PrincipalMembershipsColumns[8]},
+			},
+			{
+				Name:    "principalmembership_organization_id",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[8]},
+			},
+			{
+				Name:    "principalmembership_active",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[4]},
+			},
+			{
+				Name:    "principalmembership_principal_id",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[9]},
+			},
+			{
+				Name:    "principalmembership_organization_id_role",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[8], PrincipalMembershipsColumns[3]},
+			},
+			{
+				Name:    "principalmembership_role",
+				Unique:  false,
+				Columns: []*schema.Column{PrincipalMembershipsColumns[3]},
+			},
+		},
+	}
+	// PublishersColumns holds the columns for the "publishers" table.
+	PublishersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString},
+		{Name: "slug", Type: field.TypeString, Unique: true},
+		{Name: "logo_url", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "website_url", Type: field.TypeString, Nullable: true},
+		{Name: "settings", Type: field.TypeJSON, Nullable: true},
+		{Name: "verified", Type: field.TypeBool, Default: false},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "stripe_connect_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_onboarding_complete", Type: field.TypeBool, Default: false},
+		{Name: "revenue_share_percent", Type: field.TypeInt, Nullable: true},
+	}
+	// PublishersTable holds the schema information for the "publishers" table.
+	PublishersTable = &schema.Table{
+		Name:       "publishers",
+		Columns:    PublishersColumns,
+		PrimaryKey: []*schema.Column{PublishersColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "publisher_slug",
+				Unique:  true,
+				Columns: []*schema.Column{PublishersColumns[4]},
+			},
+			{
+				Name:    "publisher_active",
+				Unique:  false,
+				Columns: []*schema.Column{PublishersColumns[10]},
+			},
+			{
+				Name:    "publisher_verified",
+				Unique:  false,
+				Columns: []*schema.Column{PublishersColumns[9]},
+			},
+		},
+	}
 	// RefreshTokensColumns holds the columns for the "refresh_tokens" table.
 	RefreshTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -461,7 +869,7 @@ var (
 		{Name: "expires_at", Type: field.TypeTime},
 		{Name: "revoked", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
-		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "principal_id", Type: field.TypeUUID},
 	}
 	// RefreshTokensTable holds the schema information for the "refresh_tokens" table.
 	RefreshTokensTable = &schema.Table{
@@ -470,9 +878,9 @@ var (
 		PrimaryKey: []*schema.Column{RefreshTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "refresh_tokens_users_refresh_tokens",
+				Symbol:     "refresh_tokens_principals_refresh_tokens",
 				Columns:    []*schema.Column{RefreshTokensColumns[6]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -483,7 +891,7 @@ var (
 				Columns: []*schema.Column{RefreshTokensColumns[1]},
 			},
 			{
-				Name:    "refreshtoken_user_id",
+				Name:    "refreshtoken_principal_id",
 				Unique:  false,
 				Columns: []*schema.Column{RefreshTokensColumns[6]},
 			},
@@ -516,7 +924,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "organization_queries", Type: field.TypeUUID},
-		{Name: "user_queries", Type: field.TypeUUID, Nullable: true},
+		{Name: "principal_queries", Type: field.TypeUUID, Nullable: true},
 	}
 	// SavedQueriesTable holds the schema information for the "saved_queries" table.
 	SavedQueriesTable = &schema.Table{
@@ -531,9 +939,9 @@ var (
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "saved_queries_users_queries",
+				Symbol:     "saved_queries_principals_queries",
 				Columns:    []*schema.Column{SavedQueriesColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -552,6 +960,107 @@ var (
 				Name:    "savedquery_visibility",
 				Unique:  false,
 				Columns: []*schema.Column{SavedQueriesColumns[8]},
+			},
+		},
+	}
+	// SeatAssignmentsColumns holds the columns for the "seat_assignments" table.
+	SeatAssignmentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "assigned_at", Type: field.TypeTime},
+		{Name: "license_id", Type: field.TypeUUID},
+		{Name: "principal_id", Type: field.TypeUUID},
+		{Name: "assigned_by", Type: field.TypeUUID},
+	}
+	// SeatAssignmentsTable holds the schema information for the "seat_assignments" table.
+	SeatAssignmentsTable = &schema.Table{
+		Name:       "seat_assignments",
+		Columns:    SeatAssignmentsColumns,
+		PrimaryKey: []*schema.Column{SeatAssignmentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "seat_assignments_licenses_seat_assignments",
+				Columns:    []*schema.Column{SeatAssignmentsColumns[2]},
+				RefColumns: []*schema.Column{LicensesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "seat_assignments_principals_seat_assignments",
+				Columns:    []*schema.Column{SeatAssignmentsColumns[3]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "seat_assignments_principals_assigned_seats",
+				Columns:    []*schema.Column{SeatAssignmentsColumns[4]},
+				RefColumns: []*schema.Column{PrincipalsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "seatassignment_license_id_principal_id",
+				Unique:  true,
+				Columns: []*schema.Column{SeatAssignmentsColumns[2], SeatAssignmentsColumns[3]},
+			},
+			{
+				Name:    "seatassignment_principal_id",
+				Unique:  false,
+				Columns: []*schema.Column{SeatAssignmentsColumns[3]},
+			},
+		},
+	}
+	// SubscriptionsColumns holds the columns for the "subscriptions" table.
+	SubscriptionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "plan_tier", Type: field.TypeString, Default: "free"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"active", "trialing", "past_due", "canceled", "unpaid"}, Default: "active"},
+		{Name: "current_period_start", Type: field.TypeTime},
+		{Name: "current_period_end", Type: field.TypeTime},
+		{Name: "stripe_subscription_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
+		{Name: "cancel_at_period_end", Type: field.TypeBool, Default: false},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "max_dashboards", Type: field.TypeInt, Nullable: true},
+		{Name: "max_datasources", Type: field.TypeInt, Nullable: true},
+		{Name: "max_queries", Type: field.TypeInt, Nullable: true},
+		{Name: "max_alerts", Type: field.TypeInt, Nullable: true},
+		{Name: "max_team_members", Type: field.TypeInt, Nullable: true},
+		{Name: "custom_domain_enabled", Type: field.TypeBool, Default: false},
+		{Name: "white_label_enabled", Type: field.TypeBool, Default: false},
+		{Name: "api_access_enabled", Type: field.TypeBool, Default: false},
+		{Name: "realtime_enabled", Type: field.TypeBool, Default: false},
+		{Name: "data_retention_days", Type: field.TypeInt, Nullable: true},
+		{Name: "organization_id", Type: field.TypeUUID, Unique: true},
+	}
+	// SubscriptionsTable holds the schema information for the "subscriptions" table.
+	SubscriptionsTable = &schema.Table{
+		Name:       "subscriptions",
+		Columns:    SubscriptionsColumns,
+		PrimaryKey: []*schema.Column{SubscriptionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subscriptions_organizations_subscription",
+				Columns:    []*schema.Column{SubscriptionsColumns[20]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subscription_status",
+				Unique:  false,
+				Columns: []*schema.Column{SubscriptionsColumns[2]},
+			},
+			{
+				Name:    "subscription_plan_tier",
+				Unique:  false,
+				Columns: []*schema.Column{SubscriptionsColumns[1]},
+			},
+			{
+				Name:    "subscription_current_period_end",
+				Unique:  false,
+				Columns: []*schema.Column{SubscriptionsColumns[4]},
 			},
 		},
 	}
@@ -598,14 +1107,23 @@ var (
 		AlertChannelsTable,
 		AlertEventsTable,
 		DashboardsTable,
+		DashboardTemplatesTable,
 		DashboardVersionsTable,
 		DataSourcesTable,
+		HumenTable,
 		IntegrationsTable,
+		LicensesTable,
+		ListingsTable,
 		MembershipsTable,
 		OauthAccountsTable,
 		OrganizationsTable,
+		PrincipalsTable,
+		PrincipalMembershipsTable,
+		PublishersTable,
 		RefreshTokensTable,
 		SavedQueriesTable,
+		SeatAssignmentsTable,
+		SubscriptionsTable,
 		UsersTable,
 	}
 )
@@ -617,14 +1135,29 @@ func init() {
 	AlertChannelsTable.ForeignKeys[1].RefTable = IntegrationsTable
 	AlertEventsTable.ForeignKeys[0].RefTable = AlertsTable
 	DashboardsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	DashboardsTable.ForeignKeys[1].RefTable = UsersTable
+	DashboardsTable.ForeignKeys[1].RefTable = PrincipalsTable
+	DashboardTemplatesTable.ForeignKeys[0].RefTable = PublishersTable
 	DashboardVersionsTable.ForeignKeys[0].RefTable = DashboardsTable
 	DataSourcesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	HumenTable.ForeignKeys[0].RefTable = PrincipalsTable
 	IntegrationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	LicensesTable.ForeignKeys[0].RefTable = ListingsTable
+	LicensesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	LicensesTable.ForeignKeys[2].RefTable = PrincipalsTable
+	ListingsTable.ForeignKeys[0].RefTable = DashboardTemplatesTable
+	ListingsTable.ForeignKeys[1].RefTable = PrincipalsTable
+	ListingsTable.ForeignKeys[2].RefTable = PublishersTable
 	MembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	MembershipsTable.ForeignKeys[1].RefTable = UsersTable
-	OauthAccountsTable.ForeignKeys[0].RefTable = UsersTable
-	RefreshTokensTable.ForeignKeys[0].RefTable = UsersTable
+	OauthAccountsTable.ForeignKeys[0].RefTable = PrincipalsTable
+	PrincipalsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	PrincipalMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	PrincipalMembershipsTable.ForeignKeys[1].RefTable = PrincipalsTable
+	RefreshTokensTable.ForeignKeys[0].RefTable = PrincipalsTable
 	SavedQueriesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	SavedQueriesTable.ForeignKeys[1].RefTable = UsersTable
+	SavedQueriesTable.ForeignKeys[1].RefTable = PrincipalsTable
+	SeatAssignmentsTable.ForeignKeys[0].RefTable = LicensesTable
+	SeatAssignmentsTable.ForeignKeys[1].RefTable = PrincipalsTable
+	SeatAssignmentsTable.ForeignKeys[2].RefTable = PrincipalsTable
+	SubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 }

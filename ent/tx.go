@@ -20,22 +20,40 @@ type Tx struct {
 	AlertEvent *AlertEventClient
 	// Dashboard is the client for interacting with the Dashboard builders.
 	Dashboard *DashboardClient
+	// DashboardTemplate is the client for interacting with the DashboardTemplate builders.
+	DashboardTemplate *DashboardTemplateClient
 	// DashboardVersion is the client for interacting with the DashboardVersion builders.
 	DashboardVersion *DashboardVersionClient
 	// DataSource is the client for interacting with the DataSource builders.
 	DataSource *DataSourceClient
+	// Human is the client for interacting with the Human builders.
+	Human *HumanClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// License is the client for interacting with the License builders.
+	License *LicenseClient
+	// Listing is the client for interacting with the Listing builders.
+	Listing *ListingClient
 	// Membership is the client for interacting with the Membership builders.
 	Membership *MembershipClient
 	// OAuthAccount is the client for interacting with the OAuthAccount builders.
 	OAuthAccount *OAuthAccountClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// Principal is the client for interacting with the Principal builders.
+	Principal *PrincipalClient
+	// PrincipalMembership is the client for interacting with the PrincipalMembership builders.
+	PrincipalMembership *PrincipalMembershipClient
+	// Publisher is the client for interacting with the Publisher builders.
+	Publisher *PublisherClient
 	// RefreshToken is the client for interacting with the RefreshToken builders.
 	RefreshToken *RefreshTokenClient
 	// SavedQuery is the client for interacting with the SavedQuery builders.
 	SavedQuery *SavedQueryClient
+	// SeatAssignment is the client for interacting with the SeatAssignment builders.
+	SeatAssignment *SeatAssignmentClient
+	// Subscription is the client for interacting with the Subscription builders.
+	Subscription *SubscriptionClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -173,14 +191,23 @@ func (tx *Tx) init() {
 	tx.AlertChannel = NewAlertChannelClient(tx.config)
 	tx.AlertEvent = NewAlertEventClient(tx.config)
 	tx.Dashboard = NewDashboardClient(tx.config)
+	tx.DashboardTemplate = NewDashboardTemplateClient(tx.config)
 	tx.DashboardVersion = NewDashboardVersionClient(tx.config)
 	tx.DataSource = NewDataSourceClient(tx.config)
+	tx.Human = NewHumanClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
+	tx.License = NewLicenseClient(tx.config)
+	tx.Listing = NewListingClient(tx.config)
 	tx.Membership = NewMembershipClient(tx.config)
 	tx.OAuthAccount = NewOAuthAccountClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
+	tx.Principal = NewPrincipalClient(tx.config)
+	tx.PrincipalMembership = NewPrincipalMembershipClient(tx.config)
+	tx.Publisher = NewPublisherClient(tx.config)
 	tx.RefreshToken = NewRefreshTokenClient(tx.config)
 	tx.SavedQuery = NewSavedQueryClient(tx.config)
+	tx.SeatAssignment = NewSeatAssignmentClient(tx.config)
+	tx.Subscription = NewSubscriptionClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

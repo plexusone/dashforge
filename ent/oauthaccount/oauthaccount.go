@@ -3,7 +3,6 @@
 package oauthaccount
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -16,46 +15,52 @@ const (
 	Label = "oauth_account"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldPrincipalID holds the string denoting the principal_id field in the database.
+	FieldPrincipalID = "principal_id"
 	// FieldProvider holds the string denoting the provider field in the database.
 	FieldProvider = "provider"
-	// FieldProviderUserID holds the string denoting the provider_user_id field in the database.
-	FieldProviderUserID = "provider_user_id"
+	// FieldProviderAccountID holds the string denoting the provider_account_id field in the database.
+	FieldProviderAccountID = "provider_account_id"
 	// FieldAccessToken holds the string denoting the access_token field in the database.
 	FieldAccessToken = "access_token"
 	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
 	FieldRefreshToken = "refresh_token"
 	// FieldTokenExpiresAt holds the string denoting the token_expires_at field in the database.
 	FieldTokenExpiresAt = "token_expires_at"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
+	// FieldScopes holds the string denoting the scopes field in the database.
+	FieldScopes = "scopes"
+	// FieldRawData holds the string denoting the raw_data field in the database.
+	FieldRawData = "raw_data"
+	// EdgePrincipal holds the string denoting the principal edge name in mutations.
+	EdgePrincipal = "principal"
 	// Table holds the table name of the oauthaccount in the database.
 	Table = "oauth_accounts"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "oauth_accounts"
-	// UserInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "user_id"
+	// PrincipalTable is the table that holds the principal relation/edge.
+	PrincipalTable = "oauth_accounts"
+	// PrincipalInverseTable is the table name for the Principal entity.
+	// It exists in this package in order to avoid circular dependency with the "principal" package.
+	PrincipalInverseTable = "principals"
+	// PrincipalColumn is the table column denoting the principal relation/edge.
+	PrincipalColumn = "principal_id"
 )
 
 // Columns holds all SQL columns for oauthaccount fields.
 var Columns = []string{
 	FieldID,
-	FieldUserID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldPrincipalID,
 	FieldProvider,
-	FieldProviderUserID,
+	FieldProviderAccountID,
 	FieldAccessToken,
 	FieldRefreshToken,
 	FieldTokenExpiresAt,
-	FieldCreatedAt,
-	FieldUpdatedAt,
+	FieldScopes,
+	FieldRawData,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -69,41 +74,19 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// ProviderUserIDValidator is a validator for the "provider_user_id" field. It is called by the builders before save.
-	ProviderUserIDValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
+	ProviderValidator func(string) error
+	// ProviderAccountIDValidator is a validator for the "provider_account_id" field. It is called by the builders before save.
+	ProviderAccountIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
-
-// Provider defines the type for the "provider" enum field.
-type Provider string
-
-// Provider values.
-const (
-	ProviderGithub      Provider = "github"
-	ProviderGoogle      Provider = "google"
-	ProviderCorecontrol Provider = "corecontrol"
-)
-
-func (pr Provider) String() string {
-	return string(pr)
-}
-
-// ProviderValidator is a validator for the "provider" field enum values. It is called by the builders before save.
-func ProviderValidator(pr Provider) error {
-	switch pr {
-	case ProviderGithub, ProviderGoogle, ProviderCorecontrol:
-		return nil
-	default:
-		return fmt.Errorf("oauthaccount: invalid enum value for provider field: %q", pr)
-	}
-}
 
 // OrderOption defines the ordering options for the OAuthAccount queries.
 type OrderOption func(*sql.Selector)
@@ -113,9 +96,19 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByPrincipalID orders the results by the principal_id field.
+func ByPrincipalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrincipalID, opts...).ToFunc()
 }
 
 // ByProvider orders the results by the provider field.
@@ -123,9 +116,9 @@ func ByProvider(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProvider, opts...).ToFunc()
 }
 
-// ByProviderUserID orders the results by the provider_user_id field.
-func ByProviderUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProviderUserID, opts...).ToFunc()
+// ByProviderAccountID orders the results by the provider_account_id field.
+func ByProviderAccountID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProviderAccountID, opts...).ToFunc()
 }
 
 // ByAccessToken orders the results by the access_token field.
@@ -143,26 +136,16 @@ func ByTokenExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTokenExpiresAt, opts...).ToFunc()
 }
 
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByPrincipalField orders the results by principal field.
+func ByPrincipalField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newPrincipalStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newUserStep() *sqlgraph.Step {
+func newPrincipalStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		sqlgraph.To(PrincipalInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PrincipalTable, PrincipalColumn),
 	)
 }

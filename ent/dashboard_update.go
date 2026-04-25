@@ -17,7 +17,7 @@ import (
 	"github.com/plexusone/dashforge/ent/dashboardversion"
 	"github.com/plexusone/dashforge/ent/organization"
 	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // DashboardUpdate is the builder for updating Dashboard entities.
@@ -153,13 +153,13 @@ func (_u *DashboardUpdate) SetOrganization(v *Organization) *DashboardUpdate {
 	return _u.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_u *DashboardUpdate) SetOwnerID(id uuid.UUID) *DashboardUpdate {
 	_u.mutation.SetOwnerID(id)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_u *DashboardUpdate) SetNillableOwnerID(id *uuid.UUID) *DashboardUpdate {
 	if id != nil {
 		_u = _u.SetOwnerID(*id)
@@ -167,8 +167,8 @@ func (_u *DashboardUpdate) SetNillableOwnerID(id *uuid.UUID) *DashboardUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_u *DashboardUpdate) SetOwner(v *User) *DashboardUpdate {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_u *DashboardUpdate) SetOwner(v *Principal) *DashboardUpdate {
 	return _u.SetOwnerID(v.ID)
 }
 
@@ -213,7 +213,7 @@ func (_u *DashboardUpdate) ClearOrganization() *DashboardUpdate {
 	return _u
 }
 
-// ClearOwner clears the "owner" edge to the User entity.
+// ClearOwner clears the "owner" edge to the Principal entity.
 func (_u *DashboardUpdate) ClearOwner() *DashboardUpdate {
 	_u.mutation.ClearOwner()
 	return _u
@@ -399,7 +399,7 @@ func (_u *DashboardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{dashboard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -412,7 +412,7 @@ func (_u *DashboardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{dashboard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -650,13 +650,13 @@ func (_u *DashboardUpdateOne) SetOrganization(v *Organization) *DashboardUpdateO
 	return _u.SetOrganizationID(v.ID)
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
+// SetOwnerID sets the "owner" edge to the Principal entity by ID.
 func (_u *DashboardUpdateOne) SetOwnerID(id uuid.UUID) *DashboardUpdateOne {
 	_u.mutation.SetOwnerID(id)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableOwnerID sets the "owner" edge to the Principal entity by ID if the given value is not nil.
 func (_u *DashboardUpdateOne) SetNillableOwnerID(id *uuid.UUID) *DashboardUpdateOne {
 	if id != nil {
 		_u = _u.SetOwnerID(*id)
@@ -664,8 +664,8 @@ func (_u *DashboardUpdateOne) SetNillableOwnerID(id *uuid.UUID) *DashboardUpdate
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (_u *DashboardUpdateOne) SetOwner(v *User) *DashboardUpdateOne {
+// SetOwner sets the "owner" edge to the Principal entity.
+func (_u *DashboardUpdateOne) SetOwner(v *Principal) *DashboardUpdateOne {
 	return _u.SetOwnerID(v.ID)
 }
 
@@ -710,7 +710,7 @@ func (_u *DashboardUpdateOne) ClearOrganization() *DashboardUpdateOne {
 	return _u
 }
 
-// ClearOwner clears the "owner" edge to the User entity.
+// ClearOwner clears the "owner" edge to the Principal entity.
 func (_u *DashboardUpdateOne) ClearOwner() *DashboardUpdateOne {
 	_u.mutation.ClearOwner()
 	return _u
@@ -926,7 +926,7 @@ func (_u *DashboardUpdateOne) sqlSave(ctx context.Context) (_node *Dashboard, er
 			Columns: []string{dashboard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -939,7 +939,7 @@ func (_u *DashboardUpdateOne) sqlSave(ctx context.Context) (_node *Dashboard, er
 			Columns: []string{dashboard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(principal.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
