@@ -8,8 +8,7 @@
   "releases": [
     {
       "version": "v0.2.0",
-      "date": "2026-04-25",
-      "status": "unreleased",
+      "date": "2026-04-26",
       "highlights": [
         { "description": "Principal-based identity model with CoreForge integration" },
         { "description": "Dashboard template marketplace with licensing and subscriptions" },
@@ -36,6 +35,9 @@
         { "description": "Migrate OAuth providers to CoreForge identity/oauthclient package", "commit": "f17f96a" },
         { "description": "Replace custom ChartIR types with @grokify/echartify re-exports", "commit": "7184738" }
       ],
+      "fixed": [
+        { "description": "Resolve golangci-lint issues including gofmt formatting", "commit": "9330b6d" }
+      ],
       "documentation": [
         { "description": "Authorization user guide for role-based access control", "commit": "e8f532b" },
         { "description": "Authorization technical design document", "commit": "e8f532b" },
@@ -43,7 +45,10 @@
         { "description": "Template publishing guide for publishers", "commit": "e8f532b" },
         { "description": "License types and seat management documentation", "commit": "e8f532b" },
         { "description": "Update mkdocs navigation with marketplace and authorization sections", "commit": "199a3a7" },
-        { "description": "Update README with marketplace feature highlights", "commit": "199a3a7" }
+        { "description": "Update README with marketplace feature highlights", "commit": "199a3a7" },
+        { "description": "Update MkDocs to PlexusOne unified theme with dark mode default", "commit": "16477d6" },
+        { "description": "Update documentation URLs to plexusone organization", "commit": "d2705ce" },
+        { "description": "Add UTF-8 icons to README Features section", "commit": "55d441d" }
       ],
       "dependencies": [
         { "description": "Bump `entgo.io/ent` to v0.14.6", "commit": "580e5f2" },
@@ -51,11 +56,15 @@
         { "description": "Add `github.com/jackc/pgx/v5` v5.9.1 for PostgreSQL", "commit": "580e5f2" },
         { "description": "Update `golang.org/x/oauth2` to v0.36.0", "commit": "580e5f2" },
         { "description": "Replace `omnillm` with `omnillm-core`", "commit": "580e5f2" },
-        { "description": "Update `github.com/grokify/coreforge` to v0.6.0", "commit": "ea3b516" }
+        { "description": "Update `github.com/grokify/coreforge` to v0.6.0", "commit": "ea3b516" },
+        { "description": "Bump `github.com/lib/pq` from 1.12.2 to 1.12.3", "commit": "16924e6" },
+        { "description": "Bump `github.com/jackc/pgx/v5` from 5.9.1 to 5.9.2", "commit": "3b5358e" }
       ],
       "internal": [
         { "description": "Add shared CI/CD pipelines via reusable workflows", "commit": "1d08649" },
-        { "description": "Remove local replace directives for coreforge and omniobserve", "commit": "ea3b516" }
+        { "description": "Remove local replace directives for coreforge and omniobserve", "commit": "ea3b516" },
+        { "description": "Commit builder/dist for go:embed (enables `go install` without Node.js)", "commit": "d4ec8e5" },
+        { "description": "Add builder/dist to CI paths filter for all workflows", "commit": "888ca86" }
       ]
     },
     {
