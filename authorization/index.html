@@ -1,0 +1,1839 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A JSON-first dashboard framework with AI-powered visual builder">
+      
+      
+      
+        <link rel="canonical" href="https://plexusone.github.io/dashforge/authorization/">
+      
+      
+        <link rel="prev" href="../authentication/">
+      
+      
+        <link rel="next" href="../multi-tenancy/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Authorization - Dashforge</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#authorization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Dashforge" class="md-header__button md-logo" aria-label="Dashforge" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dashforge
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Authorization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/plexusone/dashforge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    plexusone/dashforge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Dashforge" class="md-nav__button md-logo" aria-label="Dashforge" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Dashforge
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/plexusone/dashforge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    plexusone/dashforge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Dashboard Builder
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Dashboard Builder
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cube-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cube.js Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AI Features
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard-ir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dashboard IR
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Widgets
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Sources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transforms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Server
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Server
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../server-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authentication
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Authorization
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authorization
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#role-hierarchies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Role Hierarchies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Role Hierarchies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#publisher-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Publisher Roles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consumer-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consumer Roles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization Modes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authorization Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-mode-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Mode (Default)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spicedb-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      SpiceDB Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource Permissions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-source-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Source Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-permissions-publishers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Permissions (Publishers)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spicedb-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      SpiceDB Schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking Permissions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-http-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      In HTTP Handlers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering Resources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bulk-permission-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bulk Permission Check
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship Sync
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Platform Admin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-tenancy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-tenancy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Marketplace
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Marketplace
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketplace/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketplace/publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Publishing Templates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketplace/licensing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Licensing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Releases
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Releases
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    v0.2.0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v0.1.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    v0.1.0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#role-hierarchies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Role Hierarchies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Role Hierarchies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#publisher-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Publisher Roles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consumer-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consumer Roles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization Modes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authorization Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-mode-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Mode (Default)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spicedb-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      SpiceDB Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource Permissions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-source-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Source Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-permissions-publishers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Permissions (Publishers)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spicedb-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      SpiceDB Schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking Permissions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-http-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      In HTTP Handlers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering Resources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bulk-permission-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bulk Permission Check
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship Sync
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Platform Admin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h1>
+<p>Dashforge provides flexible authorization with two modes: simple role hierarchy and SpiceDB for fine-grained control.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Dashforge has two distinct organization types with separate role hierarchies:</p>
+<ul>
+<li><strong>Publishers</strong> - Organizations that create and sell dashboard templates</li>
+<li><strong>Consumers</strong> - Organizations that use Dashforge for their own dashboards</li>
+</ul>
+<h2 id="role-hierarchies">Role Hierarchies<a class="headerlink" href="#role-hierarchies" title="Permanent link">&para;</a></h2>
+<h3 id="publisher-roles">Publisher Roles<a class="headerlink" href="#publisher-roles" title="Permanent link">&para;</a></h3>
+<p>For organizations creating and selling templates:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Level</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Owner</strong></td>
+<td>100</td>
+<td>Full control, billing, delete organization</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>80</td>
+<td>Manage members, publish templates, view analytics</td>
+</tr>
+<tr>
+<td><strong>Creator</strong></td>
+<td>60</td>
+<td>Create templates and data connectors</td>
+</tr>
+<tr>
+<td><strong>Reviewer</strong></td>
+<td>40</td>
+<td>Review templates before publishing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="consumer-roles">Consumer Roles<a class="headerlink" href="#consumer-roles" title="Permanent link">&para;</a></h3>
+<p>For organizations using Dashforge:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Level</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Owner</strong></td>
+<td>100</td>
+<td>Full control, billing, delete organization</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>80</td>
+<td>Manage members, data sources, integrations</td>
+</tr>
+<tr>
+<td><strong>Editor</strong></td>
+<td>60</td>
+<td>Create/edit dashboards, queries, alerts</td>
+</tr>
+<tr>
+<td><strong>Viewer</strong></td>
+<td>40</td>
+<td>View dashboards and data</td>
+</tr>
+</tbody>
+</table>
+<h2 id="authorization-modes">Authorization Modes<a class="headerlink" href="#authorization-modes" title="Permanent link">&para;</a></h2>
+<h3 id="simple-mode-default">Simple Mode (Default)<a class="headerlink" href="#simple-mode-default" title="Permanent link">&para;</a></h3>
+<p>Role-based hierarchy with numeric levels:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Check if user can perform action</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">if</span><span class="w"> </span><span class="nx">authz</span><span class="p">.</span><span class="nx">CheckMinRole</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;editor&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="c1">// User has editor role or higher</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// Check specific permission</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">if</span><span class="w"> </span><span class="nx">authz</span><span class="p">.</span><span class="nx">Can</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dashboard:edit&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">dashboardID</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// User can edit this dashboard</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="spicedb-mode">SpiceDB Mode<a class="headerlink" href="#spicedb-mode" title="Permanent link">&para;</a></h3>
+<p>Fine-grained relationship-based authorization:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Enable SpiceDB in config</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">authorization</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spicedb</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">spicedb</span><span class="p">:</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost:50051&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">preshared_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;your-key&quot;</span>
+</code></pre></div>
+<h2 id="resource-permissions">Resource Permissions<a class="headerlink" href="#resource-permissions" title="Permanent link">&para;</a></h2>
+<h3 id="dashboard-permissions">Dashboard Permissions<a class="headerlink" href="#dashboard-permissions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Description</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>view</code></td>
+<td>View dashboard</td>
+<td>Viewer+</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>Edit dashboard</td>
+<td>Editor+</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>Delete dashboard</td>
+<td>Admin+</td>
+</tr>
+<tr>
+<td><code>share</code></td>
+<td>Share with others</td>
+<td>Editor+</td>
+</tr>
+<tr>
+<td><code>export</code></td>
+<td>Export dashboard</td>
+<td>Viewer+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-source-permissions">Data Source Permissions<a class="headerlink" href="#data-source-permissions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Description</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>view</code></td>
+<td>View connection</td>
+<td>Viewer+</td>
+</tr>
+<tr>
+<td><code>use</code></td>
+<td>Query data</td>
+<td>Editor+</td>
+</tr>
+<tr>
+<td><code>manage</code></td>
+<td>Create/edit/delete</td>
+<td>Admin+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="template-permissions-publishers">Template Permissions (Publishers)<a class="headerlink" href="#template-permissions-publishers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Description</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create</code></td>
+<td>Create templates</td>
+<td>Creator+</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>Edit templates</td>
+<td>Creator+</td>
+</tr>
+<tr>
+<td><code>publish</code></td>
+<td>Publish to marketplace</td>
+<td>Admin+</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>Delete templates</td>
+<td>Admin+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="spicedb-schema">SpiceDB Schema<a class="headerlink" href="#spicedb-schema" title="Permanent link">&para;</a></h2>
+<p>The full authorization schema defines relationships between resources:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>definition platform {
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    relation admin: principal
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    relation marketplace_moderator: principal
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    permission manage = admin
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    permission moderate_marketplace = marketplace_moderator + admin
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>}
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>definition publisher {
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    relation platform: platform
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    relation owner: principal
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    relation admin: principal
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    relation creator: principal
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    relation reviewer: principal
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    permission manage = owner
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    permission publish = admin + owner
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    permission create_template = creator + admin + owner
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    permission review = reviewer + creator + admin + owner
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>}
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>definition organization {
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    relation platform: platform
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    relation owner: principal
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    relation admin: principal
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    relation editor: principal
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    relation viewer: principal
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    permission manage = owner
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    permission admin_access = admin + owner
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    permission edit = editor + admin + owner
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    permission view = viewer + editor + admin + owner
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>}
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>definition dashboard {
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    relation organization: organization
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>    relation owner: principal
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    relation editor: principal
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>    relation viewer: principal
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>    permission manage = owner + organization-&gt;manage
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>    permission edit = editor + owner + organization-&gt;edit
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    permission view = viewer + editor + owner + organization-&gt;view
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>    permission share = editor + owner + organization-&gt;admin_access
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>    permission export = view
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>}
+</code></pre></div>
+<h2 id="checking-permissions">Checking Permissions<a class="headerlink" href="#checking-permissions" title="Permanent link">&para;</a></h2>
+<h3 id="in-http-handlers">In HTTP Handlers<a class="headerlink" href="#in-http-handlers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">Handler</span><span class="p">)</span><span class="w"> </span><span class="nx">UpdateDashboard</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Context</span><span class="p">()</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">dashboardID</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">chi</span><span class="p">.</span><span class="nx">URLParam</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1">// Check permission</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">h</span><span class="p">.</span><span class="nx">authz</span><span class="p">.</span><span class="nx">Can</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dashboard&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">dashboardID</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;edit&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Forbidden&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusForbidden</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="k">return</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="c1">// ... update logic</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="filtering-resources">Filtering Resources<a class="headerlink" href="#filtering-resources" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// Get only dashboards user can view</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nx">dashboards</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">h</span><span class="p">.</span><span class="nx">authz</span><span class="p">.</span><span class="nx">Filter</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dashboard&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;view&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">allDashboardIDs</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="bulk-permission-check">Bulk Permission Check<a class="headerlink" href="#bulk-permission-check" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Check multiple permissions at once</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">results</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">h</span><span class="p">.</span><span class="nx">authz</span><span class="p">.</span><span class="nx">CanAll</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nx">authz</span><span class="p">.</span><span class="nx">Check</span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="p">{</span><span class="nx">Resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dashboard&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="nx">id1</span><span class="p">,</span><span class="w"> </span><span class="nx">Permission</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;edit&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p">{</span><span class="nx">Resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dashboard&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="nx">id2</span><span class="p">,</span><span class="w"> </span><span class="nx">Permission</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;edit&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">})</span>
+</code></pre></div>
+<h2 id="relationship-sync">Relationship Sync<a class="headerlink" href="#relationship-sync" title="Permanent link">&para;</a></h2>
+<p>When identity changes occur, relationships are synced to SpiceDB:</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User joins org</td>
+<td>Add <code>organization#viewer@user</code></td>
+</tr>
+<tr>
+<td>User role changes</td>
+<td>Update relation</td>
+</tr>
+<tr>
+<td>User leaves org</td>
+<td>Remove all org relations</td>
+</tr>
+<tr>
+<td>Dashboard created</td>
+<td>Add <code>dashboard#owner@user</code></td>
+</tr>
+<tr>
+<td>Dashboard shared</td>
+<td>Add viewer/editor relation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="platform-admin">Platform Admin<a class="headerlink" href="#platform-admin" title="Permanent link">&para;</a></h2>
+<p>Platform admins have cross-organization access:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">if</span><span class="w"> </span><span class="nx">authz</span><span class="p">.</span><span class="nx">IsPlatformAdmin</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="c1">// Full access to all resources</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Principle of Least Privilege</strong> - Start with Viewer, elevate as needed</li>
+<li><strong>Use Groups</strong> - Manage permissions through organization roles</li>
+<li><strong>Audit Access</strong> - Log permission checks for compliance</li>
+<li><strong>Test Thoroughly</strong> - Verify permission boundaries in tests</li>
+<li><strong>Migrate Carefully</strong> - When switching to SpiceDB, run in audit mode first</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
