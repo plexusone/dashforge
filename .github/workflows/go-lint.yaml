@@ -9,6 +9,7 @@ on:
       - '**.go'
       - 'go.mod'
       - 'go.sum'
+      - 'builder/dist/**'
       - '.golangci.yml'
       - '.github/workflows/go-lint.yaml'
   pull_request:
@@ -18,6 +19,7 @@ on:
       - '**.go'
       - 'go.mod'
       - 'go.sum'
+      - 'builder/dist/**'
       - '.golangci.yml'
       - '.github/workflows/go-lint.yaml'
   workflow_dispatch:
