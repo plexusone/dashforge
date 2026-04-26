@@ -44,3 +44,6 @@ tmp/
 # Build artifacts
 # Note: builder/dist/ is committed for go:embed (not ignored)
 bin/
+
+# MkDocs build output
+site/
