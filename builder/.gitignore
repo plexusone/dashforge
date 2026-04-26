@@ -1,9 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build output (keep placeholder index.html)
-dist/*
-!dist/index.html
+# Build output - committed for go:embed (run `npm run build` to regenerate)
+# dist/
 
 # Local env files
 .env

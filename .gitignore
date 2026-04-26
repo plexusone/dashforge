@@ -42,5 +42,5 @@ tmp/
 *.log
 
 # Build artifacts
-dist/
+# Note: builder/dist/ is committed for go:embed (not ignored)
 bin/
