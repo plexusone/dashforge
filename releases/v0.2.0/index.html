@@ -1104,6 +1104,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#contributors" class="md-nav__link">
     <span class="md-ellipsis">
       Contributors
@@ -1289,6 +1298,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#contributors" class="md-nav__link">
     <span class="md-ellipsis">
       Contributors
@@ -1326,7 +1344,7 @@
 
 
 <h1 id="v020-release-notes">v0.2.0 Release Notes<a class="headerlink" href="#v020-release-notes" title="Permanent link">&para;</a></h1>
-<p><strong>Release Date:</strong> 2026-04-25</p>
+<p><strong>Release Date:</strong> 2026-04-26</p>
 <p>This release introduces a principal-based identity model, a full dashboard template marketplace, and multi-app deployment support.</p>
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1438,8 +1456,13 @@
 </tr>
 <tr>
 <td><code>github.com/jackc/pgx/v5</code></td>
-<td>v5.9.1</td>
+<td>v5.9.2</td>
 <td>Added</td>
+</tr>
+<tr>
+<td><code>github.com/lib/pq</code></td>
+<td>v1.12.3</td>
+<td>Updated</td>
 </tr>
 <tr>
 <td><code>golang.org/x/oauth2</code></td>
@@ -1448,6 +1471,12 @@
 </tr>
 </tbody>
 </table>
+<h2 id="internal">Internal<a class="headerlink" href="#internal" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Committed <code>builder/dist</code> for <code>go:embed</code> (enables <code>go install</code> without Node.js)</li>
+<li>Added <code>builder/dist/**</code> to CI paths filter for all workflows</li>
+<li>Updated MkDocs to PlexusOne unified theme with dark mode default</li>
+</ul>
 <h2 id="contributors">Contributors<a class="headerlink" href="#contributors" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/grokify">@grokify</a></li>
