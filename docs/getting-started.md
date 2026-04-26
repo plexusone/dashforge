@@ -8,7 +8,7 @@ This guide walks you through installing Dashforge and creating your first dashbo
 
 ```bash
 # Clone the repository
-git clone https://github.com/grokify/dashforge.git
+git clone https://github.com/plexusone/dashforge.git
 cd dashforge
 
 # Build the binaries
@@ -22,8 +22,8 @@ cd builder && npm install && npm run build && cd ..
 ### Go Install
 
 ```bash
-go install github.com/grokify/dashforge/cmd/dashforge@latest
-go install github.com/grokify/dashforge/cmd/dashforge-server@latest
+go install github.com/plexusone/dashforge/cmd/dashforge@latest
+go install github.com/plexusone/dashforge/cmd/dashforge-server@latest
 ```
 
 ## Visual Builder Quick Start
