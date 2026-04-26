@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -115,50 +116,9 @@ func (h *OAuthHandler) handleGitHubLogin(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *OAuthHandler) handleGitHubCallback(w http.ResponseWriter, r *http.Request) {
-	if h.config.GitHub == nil {
-		http.Error(w, "GitHub OAuth not configured", http.StatusNotImplemented)
-		return
-	}
-
-	// Verify state
-	stateCookie, err := r.Cookie("oauth_state")
-	if err != nil || stateCookie.Value != r.URL.Query().Get("state") {
-		http.Error(w, "Invalid state", http.StatusBadRequest)
-		return
-	}
-
-	// Clear state cookie
-	http.SetCookie(w, &http.Cookie{
-		Name:   "oauth_state",
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1,
+	h.handleOAuthCallback(w, r, "GitHub", h.config.GitHub, func(ctx context.Context, cfg *oauth2.Config, code string) (*OAuthUser, error) {
+		return FetchGitHubUser(ctx, cfg, code)
 	})
-
-	// Check for error from provider
-	if errParam := r.URL.Query().Get("error"); errParam != "" {
-		h.logger.Warn("OAuth error from GitHub",
-			"error", errParam,
-			"description", r.URL.Query().Get("error_description"))
-		http.Error(w, "Authentication failed: "+errParam, http.StatusUnauthorized)
-		return
-	}
-
-	code := r.URL.Query().Get("code")
-	if code == "" {
-		http.Error(w, "Missing authorization code", http.StatusBadRequest)
-		return
-	}
-
-	// Fetch user info from GitHub
-	oauthUser, err := FetchGitHubUser(r.Context(), h.config.GitHub, code)
-	if err != nil {
-		h.logger.Error("failed to fetch GitHub user", "error", err)
-		http.Error(w, "Failed to authenticate with GitHub", http.StatusInternalServerError)
-		return
-	}
-
-	h.completeOAuthLogin(w, r, oauthUser, "github")
 }
 
 // Google OAuth handlers
@@ -192,8 +152,18 @@ func (h *OAuthHandler) handleGoogleLogin(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *OAuthHandler) handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
-	if h.config.Google == nil {
-		http.Error(w, "Google OAuth not configured", http.StatusNotImplemented)
+	h.handleOAuthCallback(w, r, "Google", h.config.Google, func(ctx context.Context, cfg *oauth2.Config, code string) (*OAuthUser, error) {
+		return FetchGoogleUser(ctx, cfg, code)
+	})
+}
+
+// oauthUserFetcher fetches user info from an OAuth provider.
+type oauthUserFetcher func(ctx context.Context, cfg *oauth2.Config, code string) (*OAuthUser, error)
+
+// handleOAuthCallback is a generic OAuth callback handler.
+func (h *OAuthHandler) handleOAuthCallback(w http.ResponseWriter, r *http.Request, providerName string, config *oauth2.Config, fetchUser oauthUserFetcher) {
+	if config == nil {
+		http.Error(w, providerName+" OAuth not configured", http.StatusNotImplemented)
 		return
 	}
 
@@ -212,9 +182,9 @@ func (h *OAuthHandler) handleGoogleCallback(w http.ResponseWriter, r *http.Reque
 		MaxAge: -1,
 	})
 
-	// Check for error
+	// Check for error from provider
 	if errParam := r.URL.Query().Get("error"); errParam != "" {
-		h.logger.Warn("OAuth error from Google",
+		h.logger.Warn("OAuth error from "+providerName,
 			"error", errParam,
 			"description", r.URL.Query().Get("error_description"))
 		http.Error(w, "Authentication failed: "+errParam, http.StatusUnauthorized)
@@ -227,15 +197,15 @@ func (h *OAuthHandler) handleGoogleCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Fetch user info from Google
-	oauthUser, err := FetchGoogleUser(r.Context(), h.config.Google, code)
+	// Fetch user info from provider
+	oauthUser, err := fetchUser(r.Context(), config, code)
 	if err != nil {
-		h.logger.Error("failed to fetch Google user", "error", err)
-		http.Error(w, "Failed to authenticate with Google", http.StatusInternalServerError)
+		h.logger.Error("failed to fetch "+providerName+" user", "error", err)
+		http.Error(w, "Failed to authenticate with "+providerName, http.StatusInternalServerError)
 		return
 	}
 
-	h.completeOAuthLogin(w, r, oauthUser, "google")
+	h.completeOAuthLogin(w, r, oauthUser, strings.ToLower(providerName))
 }
 
 // CoreControl OAuth handlers
@@ -363,7 +333,7 @@ func (h *OAuthHandler) fetchCoreControlUserInfo(ctx context.Context, accessToken
 	return &userInfo, nil
 }
 
-func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.Request, userInfo *CoreControlUserInfo, accessToken string) {
+func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.Request, userInfo *CoreControlUserInfo, _ string) {
 	ctx := r.Context()
 
 	if userInfo.Email == "" {
@@ -404,7 +374,7 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 
 	// Return JSON response
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(tokens); err != nil {
+	if err := json.NewEncoder(w).Encode(tokens); err != nil { //nolint:gosec // G117: OAuth token response per RFC 6749
 		h.logger.Error("failed to encode response", "error", err)
 	}
 }
@@ -572,7 +542,7 @@ func (h *OAuthHandler) completeOAuthLogin(w http.ResponseWriter, r *http.Request
 
 	// Return JSON response
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(tokens); err != nil {
+	if err := json.NewEncoder(w).Encode(tokens); err != nil { //nolint:gosec // G117: OAuth token response per RFC 6749
 		h.logger.Error("failed to encode response", "error", err)
 	}
 }

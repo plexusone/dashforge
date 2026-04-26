@@ -29,10 +29,7 @@ func (p *Provider) Name() string {
 
 // Connect establishes a PostgreSQL connection.
 func (p *Provider) Connect(ctx context.Context, config datasource.ConnectionConfig) (datasource.Connection, error) {
-	connStr, err := buildConnectionString(config)
-	if err != nil {
-		return nil, err
-	}
+	connStr := buildConnectionString(config)
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -108,17 +105,17 @@ func (p *Provider) Capabilities() datasource.Capabilities {
 }
 
 // buildConnectionString builds a PostgreSQL connection string from config.
-func buildConnectionString(config datasource.ConnectionConfig) (string, error) {
+func buildConnectionString(config datasource.ConnectionConfig) string {
 	// Check for connection URL from environment variable
 	if config.ConnectionURLEnv != "" {
 		if envURL := os.Getenv(config.ConnectionURLEnv); envURL != "" {
-			return envURL, nil
+			return envURL
 		}
 	}
 
 	// Use connection URL if provided directly
 	if config.ConnectionURL != "" {
-		return config.ConnectionURL, nil
+		return config.ConnectionURL
 	}
 
 	// Build from individual fields
@@ -167,7 +164,7 @@ func buildConnectionString(config datasource.ConnectionConfig) (string, error) {
 
 	u.RawQuery = q.Encode()
 
-	return u.String(), nil
+	return u.String()
 }
 
 // isWriteQuery checks if a query is a write operation.

@@ -88,9 +88,7 @@ func (c *Channel) Send(ctx context.Context, config channel.Config, message chann
 	}
 
 	// Add authentication
-	if err := addAuth(req, config); err != nil {
-		return err
-	}
+	addAuth(req, config)
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
@@ -145,9 +143,7 @@ func (c *Channel) TestConnection(ctx context.Context, config channel.Config) err
 	}
 
 	// Add authentication
-	if err := addAuth(req, config); err != nil {
-		return err
-	}
+	addAuth(req, config)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)
@@ -209,7 +205,7 @@ func buildWebhookPayload(message channel.Message) WebhookPayload {
 }
 
 // addAuth adds authentication to the request based on config.
-func addAuth(req *http.Request, config channel.Config) error {
+func addAuth(req *http.Request, config channel.Config) {
 	switch config.WebhookAuth {
 	case "basic":
 		// Secret should be "username:password"
@@ -218,5 +214,4 @@ func addAuth(req *http.Request, config channel.Config) error {
 	case "bearer":
 		req.Header.Set("Authorization", "Bearer "+config.WebhookSecret)
 	}
-	return nil
 }

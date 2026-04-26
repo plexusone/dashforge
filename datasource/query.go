@@ -299,6 +299,11 @@ func (e *QueryExecutor) getPostgresColumns(ctx context.Context, conn Connection,
 		WHERE table_schema = $1 AND table_name = $2
 		ORDER BY ordinal_position
 	`
+	return e.getColumnsWithQuery(ctx, conn, query, schema, table)
+}
+
+// getColumnsWithQuery executes a column info query and parses the results.
+func (e *QueryExecutor) getColumnsWithQuery(ctx context.Context, conn Connection, query, schema, table string) ([]ColumnInfo, error) {
 	params := map[string]any{"schema": schema, "table": table}
 
 	result, err := conn.Query(ctx, query, params)
@@ -399,33 +404,5 @@ func (e *QueryExecutor) getMySQLColumns(ctx context.Context, conn Connection, sc
 		WHERE table_schema = ? AND table_name = ?
 		ORDER BY ordinal_position
 	`
-	params := map[string]any{"schema": schema, "table": table}
-
-	result, err := conn.Query(ctx, query, params)
-	if err != nil {
-		return nil, fmt.Errorf("querying columns: %w", err)
-	}
-
-	columns := make([]ColumnInfo, 0, len(result.Rows))
-	for _, row := range result.Rows {
-		col := ColumnInfo{
-			Name:     fmt.Sprintf("%v", row["column_name"]),
-			Type:     fmt.Sprintf("%v", row["data_type"]),
-			Nullable: row["is_nullable"] == "YES",
-		}
-
-		if length, ok := row["character_maximum_length"].(int64); ok {
-			col.Length = length
-		}
-		if precision, ok := row["numeric_precision"].(int64); ok {
-			col.Precision = precision
-		}
-		if scale, ok := row["numeric_scale"].(int64); ok {
-			col.Scale = scale
-		}
-
-		columns = append(columns, col)
-	}
-
-	return columns, nil
+	return e.getColumnsWithQuery(ctx, conn, query, schema, table)
 }

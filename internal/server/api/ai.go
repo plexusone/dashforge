@@ -239,7 +239,7 @@ type UsageInfo struct {
 
 func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	if h.client == nil {
-		writeJSON(w, http.StatusServiceUnavailable, GenerateResponse{
+		h.writeJSON(w, http.StatusServiceUnavailable, GenerateResponse{
 			Success: false,
 			Error:   "AI service not configured. Set ANTHROPIC_API_KEY, OPENAI_API_KEY, or another provider's API key.",
 		})
@@ -248,7 +248,7 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 
 	var req GenerateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeJSON(w, http.StatusBadRequest, GenerateResponse{
+		h.writeJSON(w, http.StatusBadRequest, GenerateResponse{
 			Success: false,
 			Error:   "Invalid request body: " + err.Error(),
 		})
@@ -256,7 +256,7 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Prompt == "" {
-		writeJSON(w, http.StatusBadRequest, GenerateResponse{
+		h.writeJSON(w, http.StatusBadRequest, GenerateResponse{
 			Success: false,
 			Error:   "Prompt is required",
 		})
@@ -306,7 +306,7 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.client.CreateChatCompletion(ctx, completionReq)
 	if err != nil {
 		h.logger.Error("AI generation failed", "error", err)
-		writeJSON(w, http.StatusInternalServerError, GenerateResponse{
+		h.writeJSON(w, http.StatusInternalServerError, GenerateResponse{
 			Success: false,
 			Error:   "AI generation failed: " + err.Error(),
 		})
@@ -314,7 +314,7 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(resp.Choices) == 0 {
-		writeJSON(w, http.StatusInternalServerError, GenerateResponse{
+		h.writeJSON(w, http.StatusInternalServerError, GenerateResponse{
 			Success: false,
 			Error:   "No response from AI",
 		})
@@ -346,12 +346,12 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 		TotalTokens:      resp.Usage.TotalTokens,
 	}
 
-	writeJSON(w, http.StatusOK, response)
+	h.writeJSON(w, http.StatusOK, response)
 }
 
 func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 	if h.client == nil {
-		writeJSON(w, http.StatusServiceUnavailable, GenerateResponse{
+		h.writeJSON(w, http.StatusServiceUnavailable, GenerateResponse{
 			Success: false,
 			Error:   "AI service not configured",
 		})
@@ -360,7 +360,7 @@ func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 
 	var req GenerateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeJSON(w, http.StatusBadRequest, GenerateResponse{
+		h.writeJSON(w, http.StatusBadRequest, GenerateResponse{
 			Success: false,
 			Error:   "Invalid request body: " + err.Error(),
 		})
@@ -368,7 +368,7 @@ func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Prompt == "" {
-		writeJSON(w, http.StatusBadRequest, GenerateResponse{
+		h.writeJSON(w, http.StatusBadRequest, GenerateResponse{
 			Success: false,
 			Error:   "Prompt is required",
 		})
@@ -452,7 +452,7 @@ func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *AIHandler) handleListModels(w http.ResponseWriter, r *http.Request) {
+func (h *AIHandler) handleListModels(w http.ResponseWriter, _ *http.Request) {
 	// Return available models grouped by provider
 	modelList := map[string][]string{
 		"anthropic": {
@@ -482,13 +482,13 @@ func (h *AIHandler) handleListModels(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
+	h.writeJSON(w, http.StatusOK, map[string]any{
 		"models":  modelList,
 		"default": models.Claude3_7Sonnet,
 	})
 }
 
-func (h *AIHandler) handleStatus(w http.ResponseWriter, r *http.Request) {
+func (h *AIHandler) handleStatus(w http.ResponseWriter, _ *http.Request) {
 	status := map[string]any{
 		"enabled": h.client != nil,
 	}
@@ -497,7 +497,7 @@ func (h *AIHandler) handleStatus(w http.ResponseWriter, r *http.Request) {
 		status["providers"] = []string{} // Would need to expose this from omnillm
 	}
 
-	writeJSON(w, http.StatusOK, status)
+	h.writeJSON(w, http.StatusOK, status)
 }
 
 func (h *AIHandler) buildSystemPrompt(reqType string, ctx *GenerateContext) string {
@@ -673,8 +673,10 @@ func extractJSON(content string) json.RawMessage {
 	return nil
 }
 
-func writeJSON(w http.ResponseWriter, status int, data any) {
+func (h *AIHandler) writeJSON(w http.ResponseWriter, status int, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		h.logger.Error("failed to encode JSON response", "error", err)
+	}
 }

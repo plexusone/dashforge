@@ -471,6 +471,7 @@ func (h *IntegrationHandler) buildChannelConfig(integration *ent.Integration) ch
 	return config
 }
 
+//nolint:unparam // includeSecrets is for future use when admin endpoints need to expose credentials
 func (h *IntegrationHandler) integrationToResponse(i *ent.Integration, includeSecrets bool) map[string]any {
 	resp := map[string]any{
 		"id":          i.ID,
