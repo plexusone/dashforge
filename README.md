@@ -5,8 +5,28 @@
 [![Go SAST][go-sast-svg]][go-sast-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
+[![Docs][docs-mkdoc-svg]][docs-mkdoc-url]
 [![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
+
+ [go-ci-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
+ [go-ci-url]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml
+ [go-lint-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
+ [go-lint-url]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml
+ [go-sast-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
+ [go-sast-url]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/dashforge
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/dashforge
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/dashforge
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/dashforge
+ [docs-mkdoc-svg]: https://img.shields.io/badge/Go-dev%20guide-blue.svg
+ [docs-mkdoc-url]: https://plexusone.dev/dashforge
+ [viz-svg]: https://img.shields.io/badge/Go-visualizaton-blue.svg
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fdashforge
+ [loc-svg]: https://tokei.rs/b1/github/plexusone/dashforge
+ [repo-url]: https://github.com/plexusone/dashforge
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
+ [license-url]: https://github.com/plexusone/dashforge/blob/main/LICENSE
 
 A JSON-first dashboard framework that starts simple with static hosting (GitHub Pages) and grows into a full Metabase-like analytics platform with an AI-powered visual builder.
 
@@ -209,11 +229,11 @@ cd cube && npm install && npm run dev
 
 ## Integration with PipelineConductor
 
-Visualize compliance reports from [pipelineconductor](https://github.com/grokify/pipelineconductor):
+Visualize compliance reports from [pipelineconductor](https://github.com/plexusone/pipelineconductor):
 
 ```bash
 # Generate compliance data
-pipelineconductor check --users grokify --languages Go -o data/compliance.json
+pipelineconductor check --users plexusone --languages Go -o data/compliance.json
 
 # View in dashboard
 open viewer/index.html?dashboard=examples/compliance-dashboard.json
@@ -225,20 +245,3 @@ open http://localhost:8080/builder/
 ## License
 
 MIT
-
- [go-ci-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
- [go-ci-url]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml
- [go-lint-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
- [go-lint-url]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml
- [go-sast-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
- [go-sast-url]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/dashforge
- [goreport-url]: https://goreportcard.com/report/github.com/plexusone/dashforge
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/dashforge
- [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/dashforge
- [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fdashforge
- [loc-svg]: https://tokei.rs/b1/github/plexusone/dashforge
- [repo-url]: https://github.com/plexusone/dashforge
- [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/plexusone/dashforge/blob/master/LICENSE
