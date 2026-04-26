@@ -14,29 +14,29 @@ A JSON-first dashboard framework that starts simple with static hosting (GitHub 
 
 ### Core Platform
 
-- **Visual Dashboard Builder** - Drag-and-drop dashboard editor optimized for LLM agents
-- **JSON Dashboard IR** - Non-polymorphic, AI-friendly dashboard definitions
-- **Cube.js Semantic Layer** - Business-friendly queries with pre-built relationships
-- **Static or Dynamic** - Start with static file hosting, graduate to PostgreSQL
-- **Multi-Database Support** - Connect to PostgreSQL, MySQL, and more via plugin providers
-- **Multi-tenant** - Row Level Security (RLS) for tenant isolation
-- **SSO Authentication** - GitHub and Google OAuth support
-- **ChartIR Integration** - Uses [echartify](https://github.com/grokify/echartify) for charts
+- 🎨 **Visual Dashboard Builder** - Drag-and-drop dashboard editor optimized for LLM agents
+- 📄 **JSON Dashboard IR** - Non-polymorphic, AI-friendly dashboard definitions
+- 🔗 **Cube.js Semantic Layer** - Business-friendly queries with pre-built relationships
+- ⚡ **Static or Dynamic** - Start with static file hosting, graduate to PostgreSQL
+- 🗄️ **Multi-Database Support** - Connect to PostgreSQL, MySQL, and more via plugin providers
+- 🏢 **Multi-tenant** - Row Level Security (RLS) for tenant isolation
+- 🔐 **SSO Authentication** - GitHub and Google OAuth support
+- 📊 **ChartIR Integration** - Uses [echartify](https://github.com/grokify/echartify) for charts
 
 ### Template Marketplace
 
-- **Dashboard Templates** - Publish and sell reusable dashboard templates
-- **Publisher System** - Organizations can become publishers with creator roles
-- **Template Licensing** - Seat-based licensing for purchased templates
-- **Version Control** - Template versioning with auto-update options
-- **Preview & Screenshots** - Gallery views for template discovery
+- 📦 **Dashboard Templates** - Publish and sell reusable dashboard templates
+- 🏪 **Publisher System** - Organizations can become publishers with creator roles
+- ✅ **Template Licensing** - Seat-based licensing for purchased templates
+- 🔄 **Version Control** - Template versioning with auto-update options
+- 🖼️ **Preview & Screenshots** - Gallery views for template discovery
 
 ### Authorization
 
-- **Dual-Mode Auth** - Simple role hierarchy or SpiceDB for fine-grained control
-- **Publisher Roles** - Owner, Admin, Creator, Reviewer hierarchies
-- **Consumer Roles** - Owner, Admin, Editor, Viewer hierarchies
-- **Resource Permissions** - Granular control over dashboards, queries, alerts, integrations
+- 🔀 **Dual-Mode Auth** - Simple role hierarchy or SpiceDB for fine-grained control
+- 👤 **Publisher Roles** - Owner, Admin, Creator, Reviewer hierarchies
+- 👥 **Consumer Roles** - Owner, Admin, Editor, Viewer hierarchies
+- 🎯 **Resource Permissions** - Granular control over dashboards, queries, alerts, integrations
 
 ## Quick Start
 
