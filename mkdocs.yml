@@ -1,33 +1,35 @@
 site_name: Dashforge
 site_description: A JSON-first dashboard framework with AI-powered visual builder
-site_url: https://plexusone.github.io/dashforge/
+site_url: https://plexusone.github.io/dashforge
 repo_url: https://github.com/plexusone/dashforge
 repo_name: plexusone/dashforge
 
 theme:
   name: material
+  custom_dir: docs/overrides
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: indigo
+    # Dark mode first (PlexusOne default)
+    - scheme: slate
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   features:
-    - navigation.instant
-    - navigation.tracking
     - navigation.sections
     - navigation.expand
-    - toc.follow
+    - navigation.top
+    - search.highlight
     - content.code.copy
+
+extra_css:
+  - https://plexusone.dev/css/plexusone-mkdocs.css
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -62,9 +64,14 @@ nav:
       - Overview: marketplace/overview.md
       - Publishing Templates: marketplace/publishing.md
       - Licensing: marketplace/licensing.md
-  - API Reference: api-reference.md
+  - API Reference: https://pkg.go.dev/github.com/plexusone/dashforge
   - Development: development.md
   - Releases:
       - Changelog: changelog.md
       - v0.2.0: releases/v0.2.0.md
       - v0.1.0: releases/v0.1.0.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/plexusone/dashforge
