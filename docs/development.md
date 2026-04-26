@@ -14,7 +14,7 @@ This guide covers setting up a development environment and contributing to Dashf
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/grokify/dashforge.git
+git clone https://github.com/plexusone/dashforge.git
 cd dashforge
 ```
 
@@ -257,7 +257,7 @@ import (
     "database/sql"
 
     _ "github.com/ClickHouse/clickhouse-go/v2"
-    "github.com/grokify/dashforge/datasource"
+    "github.com/plexusone/dashforge/datasource"
 )
 
 func init() {
@@ -460,5 +460,5 @@ docker logs dashforge-db
 
 ## Getting Help
 
-- [GitHub Issues](https://github.com/grokify/dashforge/issues)
-- [Discussions](https://github.com/grokify/dashforge/discussions)
+- [GitHub Issues](https://github.com/plexusone/dashforge/issues)
+- [Discussions](https://github.com/plexusone/dashforge/discussions)
