@@ -8,11 +8,11 @@ import (
 
 // User represents an authenticated user.
 type User struct {
-	ID       string   `json:"id"`
-	Email    string   `json:"email"`
-	Name     string   `json:"name"`
-	Role     Role     `json:"role"`
-	Groups   []string `json:"groups,omitempty"`
+	ID       string         `json:"id"`
+	Email    string         `json:"email"`
+	Name     string         `json:"name"`
+	Role     Role           `json:"role"`
+	Groups   []string       `json:"groups,omitempty"`
 	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
@@ -36,9 +36,9 @@ type Provider interface {
 
 // Middleware wraps an http.Handler with authentication.
 type Middleware struct {
-	provider    Provider
-	skipPaths   map[string]bool
-	disabled    bool
+	provider  Provider
+	skipPaths map[string]bool
+	disabled  bool
 }
 
 // NewMiddleware creates authentication middleware.
