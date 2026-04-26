@@ -76,7 +76,7 @@ func (c *Channel) Send(ctx context.Context, config channel.Config, message chann
 }
 
 // sendViaSMTP sends email using SMTP.
-func (c *Channel) sendViaSMTP(ctx context.Context, config channel.Config, message channel.Message) error {
+func (c *Channel) sendViaSMTP(_ context.Context, config channel.Config, message channel.Message) error {
 	addr := fmt.Sprintf("%s:%d", config.SMTPHost, config.SMTPPort)
 
 	// Build email headers and body

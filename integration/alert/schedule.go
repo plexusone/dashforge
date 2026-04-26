@@ -132,7 +132,7 @@ func (e *ScheduleEvaluator) matchesCron(cron string, t time.Time) (bool, error) 
 }
 
 // matchField checks if a value matches a cron field pattern.
-func (e *ScheduleEvaluator) matchField(pattern string, value, min, max int) bool {
+func (e *ScheduleEvaluator) matchField(pattern string, value, _, _ int) bool {
 	if pattern == "*" {
 		return true
 	}
@@ -140,7 +140,7 @@ func (e *ScheduleEvaluator) matchField(pattern string, value, min, max int) bool
 	// Handle lists (1,3,5)
 	if strings.Contains(pattern, ",") {
 		for _, part := range strings.Split(pattern, ",") {
-			if e.matchField(part, value, min, max) {
+			if e.matchField(part, value, 0, 0) {
 				return true
 			}
 		}

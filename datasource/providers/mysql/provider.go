@@ -28,10 +28,7 @@ func (p *Provider) Name() string {
 
 // Connect establishes a MySQL connection.
 func (p *Provider) Connect(ctx context.Context, config datasource.ConnectionConfig) (datasource.Connection, error) {
-	dsn, err := buildDSN(config)
-	if err != nil {
-		return nil, err
-	}
+	dsn := buildDSN(config)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
@@ -108,17 +105,17 @@ func (p *Provider) Capabilities() datasource.Capabilities {
 
 // buildDSN builds a MySQL DSN from config.
 // Format: [username[:password]@][protocol[(address)]]/dbname[?param=value]
-func buildDSN(config datasource.ConnectionConfig) (string, error) {
+func buildDSN(config datasource.ConnectionConfig) string {
 	// Check for connection URL from environment variable
 	if config.ConnectionURLEnv != "" {
 		if envURL := os.Getenv(config.ConnectionURLEnv); envURL != "" {
-			return convertURLToDSN(envURL), nil
+			return convertURLToDSN(envURL)
 		}
 	}
 
 	// Use connection URL if provided directly
 	if config.ConnectionURL != "" {
-		return convertURLToDSN(config.ConnectionURL), nil
+		return convertURLToDSN(config.ConnectionURL)
 	}
 
 	// Build from individual fields
@@ -181,7 +178,7 @@ func buildDSN(config datasource.ConnectionConfig) (string, error) {
 		dsn.WriteString(strings.Join(params, "&"))
 	}
 
-	return dsn.String(), nil
+	return dsn.String()
 }
 
 // convertURLToDSN converts a mysql:// URL to a DSN string.

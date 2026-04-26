@@ -561,6 +561,7 @@ func (h *DataSourceHandler) entToConfig(ds *ent.DataSource) datasource.DataSourc
 	}
 }
 
+//nolint:unparam // includeSecrets is for future use when admin endpoints need to expose secrets
 func (h *DataSourceHandler) dataSourceToResponse(ds *ent.DataSource, includeSecrets bool) map[string]any {
 	resp := map[string]any{
 		"id":                  ds.ID,

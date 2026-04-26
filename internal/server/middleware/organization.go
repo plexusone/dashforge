@@ -60,12 +60,7 @@ func (m *OrganizationMiddleware) Wrap(next http.Handler) http.Handler {
 		}
 
 		// Extract organization ID from various sources
-		orgID, orgSlug, err := m.extractOrganization(r)
-		if err != nil {
-			m.logger.Warn("failed to extract organization", "error", err, "path", r.URL.Path)
-			http.Error(w, "Organization identification required", http.StatusUnauthorized)
-			return
-		}
+		orgID, orgSlug := m.extractOrganization(r)
 
 		// Set RLS context in database
 		if m.db != nil && orgID != uuid.Nil {
@@ -105,7 +100,7 @@ func (m *OrganizationMiddleware) shouldSkip(path string) bool {
 	return false
 }
 
-func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID, string, error) {
+func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID, string) {
 	// Priority order:
 	// 1. X-Organization-ID header (for API clients)
 	// 2. JWT claim (from auth middleware)
@@ -116,15 +111,15 @@ func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID
 	if orgHeader := r.Header.Get("X-Organization-ID"); orgHeader != "" {
 		id, err := uuid.Parse(orgHeader)
 		if err == nil {
-			return id, "", nil
+			return id, ""
 		}
 		// If not UUID, treat as slug
-		return uuid.Nil, orgHeader, nil
+		return uuid.Nil, orgHeader
 	}
 
 	// 2. From auth context (set by auth middleware)
 	if orgID, ok := r.Context().Value(OrganizationIDKey).(uuid.UUID); ok && orgID != uuid.Nil {
-		return orgID, "", nil
+		return orgID, ""
 	}
 
 	// 3. Subdomain extraction (org.dashforge.io)
@@ -137,7 +132,7 @@ func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID
 		// Assume format: org.domain.tld
 		slug := parts[0]
 		if slug != "www" && slug != "api" {
-			return uuid.Nil, slug, nil
+			return uuid.Nil, slug
 		}
 	}
 
@@ -145,12 +140,12 @@ func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID
 	if orgParam := r.URL.Query().Get("_org"); orgParam != "" {
 		id, err := uuid.Parse(orgParam)
 		if err == nil {
-			return id, "", nil
+			return id, ""
 		}
-		return uuid.Nil, orgParam, nil
+		return uuid.Nil, orgParam
 	}
 
-	return uuid.Nil, "", nil
+	return uuid.Nil, ""
 }
 
 // OrganizationIDFromContext retrieves the organization ID from context.
