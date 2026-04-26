@@ -12,9 +12,11 @@ import (
 	"github.com/grokify/coreforge/authz/spicedb"
 	"github.com/plexusone/dashforge/builder"
 	"github.com/plexusone/dashforge/datasource"
+
 	// Import providers for registration via init()
 	_ "github.com/plexusone/dashforge/datasource/providers/mysql"
 	_ "github.com/plexusone/dashforge/datasource/providers/postgres"
+
 	// Import channel adapters for registration via init()
 	_ "github.com/plexusone/dashforge/integration/channel/email"
 	_ "github.com/plexusone/dashforge/integration/channel/slack"
@@ -70,10 +72,10 @@ type Config struct {
 	CoreControlScopes       []string
 
 	// Authorization settings
-	AuthZMode         string // "simple" or "spicedb"
-	SpiceDBEndpoint   string
-	SpiceDBToken      string
-	SpiceDBInsecure   bool
+	AuthZMode       string // "simple" or "spicedb"
+	SpiceDBEndpoint string
+	SpiceDBToken    string
+	SpiceDBInsecure bool
 }
 
 // Server is the Dashforge HTTP server.

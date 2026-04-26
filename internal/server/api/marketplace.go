@@ -51,16 +51,16 @@ func (h *MarketplaceHandler) client() *ent.Client {
 
 // IntegrationDefinition represents a marketplace integration definition.
 type IntegrationDefinition struct {
-	Slug        string              `json:"slug"`
-	Name        string              `json:"name"`
-	Description string              `json:"description"`
-	ChannelType string              `json:"channelType"`
-	Category    string              `json:"category"`
-	Icon        string              `json:"icon"`
-	Version     string              `json:"version"`
-	Author      string              `json:"author"`
-	Source      string              `json:"source"`
-	ConfigSchema map[string]any     `json:"configSchema"`
+	Slug         string               `json:"slug"`
+	Name         string               `json:"name"`
+	Description  string               `json:"description"`
+	ChannelType  string               `json:"channelType"`
+	Category     string               `json:"category"`
+	Icon         string               `json:"icon"`
+	Version      string               `json:"version"`
+	Author       string               `json:"author"`
+	Source       string               `json:"source"`
+	ConfigSchema map[string]any       `json:"configSchema"`
 	Capabilities channel.Capabilities `json:"capabilities"`
 }
 

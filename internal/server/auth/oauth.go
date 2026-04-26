@@ -27,9 +27,9 @@ type OAuthConfig struct {
 
 // CoreControlConfig holds CoreControl (CoreAuth) OAuth configuration.
 type CoreControlConfig struct {
-	OAuth2   *oauth2.Config
-	URL      string   // Base URL of CoreControl server
-	Scopes   []string // OAuth scopes to request
+	OAuth2 *oauth2.Config
+	URL    string   // Base URL of CoreControl server
+	Scopes []string // OAuth scopes to request
 }
 
 // OAuthHandler handles OAuth login flows.
@@ -326,7 +326,7 @@ func (h *OAuthHandler) handleCoreControlCallback(w http.ResponseWriter, r *http.
 
 // CoreControlUserInfo represents user info from CoreControl's userinfo endpoint.
 type CoreControlUserInfo struct {
-	Sub               string `json:"sub"`               // Principal ID (UUID)
+	Sub               string `json:"sub"` // Principal ID (UUID)
 	Email             string `json:"email"`
 	EmailVerified     bool   `json:"email_verified"`
 	Name              string `json:"name"`

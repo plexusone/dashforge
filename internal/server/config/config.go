@@ -32,11 +32,11 @@ type AuthZConfig struct {
 	Mode string `yaml:"mode"`
 
 	// SpiceDB endpoint (e.g., "localhost:50051")
-	SpiceDBEndpoint string `yaml:"spicedb_endpoint"`
+	SpiceDBEndpoint    string `yaml:"spicedb_endpoint"`
 	SpiceDBEndpointEnv string `yaml:"spicedb_endpoint_env"`
 
 	// SpiceDB preshared key
-	SpiceDBToken string `yaml:"spicedb_token"`
+	SpiceDBToken    string `yaml:"spicedb_token"`
 	SpiceDBTokenEnv string `yaml:"spicedb_token_env"`
 
 	// Insecure connection (for development)
@@ -65,11 +65,11 @@ type DatabaseConfig struct {
 
 // AuthConfig holds authentication settings.
 type AuthConfig struct {
-	Enabled  bool          `yaml:"enabled"`
-	Provider string        `yaml:"provider"` // local, github, google, oidc
-	Local    LocalAuth     `yaml:"local,omitempty"`
-	OAuth    OAuthConfig   `yaml:"oauth,omitempty"`
-	JWT      JWTConfig     `yaml:"jwt"`
+	Enabled  bool        `yaml:"enabled"`
+	Provider string      `yaml:"provider"` // local, github, google, oidc
+	Local    LocalAuth   `yaml:"local,omitempty"`
+	OAuth    OAuthConfig `yaml:"oauth,omitempty"`
+	JWT      JWTConfig   `yaml:"jwt"`
 }
 
 // LocalAuth holds local authentication settings.
@@ -80,21 +80,21 @@ type LocalAuth struct {
 
 // OAuthConfig holds OAuth provider settings.
 type OAuthConfig struct {
-	ClientID     string `yaml:"clientId"`
-	ClientIDEnv  string `yaml:"clientIdEnv"`
-	ClientSecret string `yaml:"clientSecret"`
-	ClientSecretEnv string `yaml:"clientSecretEnv"`
-	AuthURL      string `yaml:"authUrl"`
-	TokenURL     string `yaml:"tokenUrl"`
-	Scopes       []string `yaml:"scopes"`
+	ClientID        string   `yaml:"clientId"`
+	ClientIDEnv     string   `yaml:"clientIdEnv"`
+	ClientSecret    string   `yaml:"clientSecret"`
+	ClientSecretEnv string   `yaml:"clientSecretEnv"`
+	AuthURL         string   `yaml:"authUrl"`
+	TokenURL        string   `yaml:"tokenUrl"`
+	Scopes          []string `yaml:"scopes"`
 }
 
 // JWTConfig holds JWT settings.
 type JWTConfig struct {
-	Secret       string `yaml:"secret"`
-	SecretEnv    string `yaml:"secretEnv"`
-	ExpiresIn    string `yaml:"expiresIn"`
-	RefreshIn    string `yaml:"refreshIn"`
+	Secret    string `yaml:"secret"`
+	SecretEnv string `yaml:"secretEnv"`
+	ExpiresIn string `yaml:"expiresIn"`
+	RefreshIn string `yaml:"refreshIn"`
 }
 
 // StorageConfig holds dashboard storage settings.

@@ -387,20 +387,20 @@ func mapSeverity(s string) channel.Severity {
 
 // Evaluator handles the evaluation of different trigger types.
 type Evaluator struct {
-	client    *ent.Client
-	logger    *slog.Logger
-	threshold *ThresholdEvaluator
-	schedule  *ScheduleEvaluator
+	client     *ent.Client
+	logger     *slog.Logger
+	threshold  *ThresholdEvaluator
+	schedule   *ScheduleEvaluator
 	dataChange *DataChangeEvaluator
 }
 
 // NewEvaluator creates a new evaluator.
 func NewEvaluator(client *ent.Client, logger *slog.Logger) *Evaluator {
 	return &Evaluator{
-		client:    client,
-		logger:    logger,
-		threshold: NewThresholdEvaluator(client, logger),
-		schedule:  NewScheduleEvaluator(logger),
+		client:     client,
+		logger:     logger,
+		threshold:  NewThresholdEvaluator(client, logger),
+		schedule:   NewScheduleEvaluator(logger),
 		dataChange: NewDataChangeEvaluator(client, logger),
 	}
 }

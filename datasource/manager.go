@@ -241,11 +241,11 @@ func (m *Manager) Stats() map[int]ConnectionStats {
 
 // ConnectionInfo returns info about a managed connection.
 type ConnectionInfo struct {
-	ID        int               `json:"id"`
-	Provider  string            `json:"provider"`
-	CreatedAt time.Time         `json:"createdAt"`
-	LastUsed  time.Time         `json:"lastUsed"`
-	Stats     ConnectionStats   `json:"stats"`
+	ID        int             `json:"id"`
+	Provider  string          `json:"provider"`
+	CreatedAt time.Time       `json:"createdAt"`
+	LastUsed  time.Time       `json:"lastUsed"`
+	Stats     ConnectionStats `json:"stats"`
 }
 
 // Info returns information about all managed connections.
