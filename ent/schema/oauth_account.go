@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 
-	cfmixin "github.com/grokify/coreforge/identity/ent/mixin"
+	cfmixin "github.com/grokify/systemforge/identity/ent/mixin"
 )
 
 // OAuthAccount holds the schema definition for external OAuth provider links.

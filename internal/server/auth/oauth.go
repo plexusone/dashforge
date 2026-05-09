@@ -83,7 +83,7 @@ func (h *OAuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.mux.ServeHTTP(w, r)
 }
 
-// generateState is provided by CoreForge oauth package via providers.go
+// generateState is provided by SystemForge oauth package via providers.go
 
 // GitHub OAuth handlers
 

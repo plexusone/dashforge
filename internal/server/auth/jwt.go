@@ -1,5 +1,5 @@
 // Package auth provides authentication for DashForge.
-// JWT functionality is provided by CoreForge's session/jwt package.
+// JWT functionality is provided by SystemForge's session/jwt package.
 package auth
 
 import (
@@ -7,22 +7,22 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	cfjwt "github.com/grokify/coreforge/session/jwt"
-	cfmw "github.com/grokify/coreforge/session/middleware"
+	cfjwt "github.com/grokify/systemforge/session/jwt"
+	cfmw "github.com/grokify/systemforge/session/middleware"
 )
 
-// Re-export CoreForge JWT types for convenience.
+// Re-export SystemForge JWT types for convenience.
 type (
-	// JWTService is CoreForge's JWT service.
+	// JWTService is SystemForge's JWT service.
 	JWTService = cfjwt.Service
 
-	// Claims is CoreForge's JWT claims.
+	// Claims is SystemForge's JWT claims.
 	Claims = cfjwt.Claims
 
-	// JWTConfig is CoreForge's JWT config.
+	// JWTConfig is SystemForge's JWT config.
 	JWTConfig = cfjwt.Config
 
-	// TokenPair is CoreForge's token pair.
+	// TokenPair is SystemForge's token pair.
 	TokenPair = cfjwt.TokenPair
 )
 

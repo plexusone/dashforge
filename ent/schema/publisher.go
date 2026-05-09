@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/index"
-	cfmixin "github.com/grokify/coreforge/identity/ent/mixin"
+	cfmixin "github.com/grokify/systemforge/identity/ent/mixin"
 )
 
 // Publisher holds the schema definition for dashboard template publishers.

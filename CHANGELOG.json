@@ -10,7 +10,7 @@
       "version": "v0.2.0",
       "date": "2026-04-26",
       "highlights": [
-        { "description": "Principal-based identity model with CoreForge integration" },
+        { "description": "Principal-based identity model with SystemForge integration" },
         { "description": "Dashboard template marketplace with licensing and subscriptions" },
         { "description": "Multi-app deployment support via AppBackend adapter" }
       ],
@@ -31,8 +31,8 @@
         { "description": "Schema-isolated database connections for multi-app deployment", "commit": "2a759bc" }
       ],
       "changed": [
-        { "description": "Migrate JWT implementation to CoreForge session/jwt package", "commit": "f17f96a" },
-        { "description": "Migrate OAuth providers to CoreForge identity/oauthclient package", "commit": "f17f96a" },
+        { "description": "Migrate JWT implementation to SystemForge session/jwt package", "commit": "f17f96a" },
+        { "description": "Migrate OAuth providers to SystemForge identity/oauthclient package", "commit": "f17f96a" },
         { "description": "Replace custom ChartIR types with @grokify/echartify re-exports", "commit": "7184738" }
       ],
       "fixed": [
@@ -56,13 +56,13 @@
         { "description": "Add `github.com/jackc/pgx/v5` v5.9.1 for PostgreSQL", "commit": "580e5f2" },
         { "description": "Update `golang.org/x/oauth2` to v0.36.0", "commit": "580e5f2" },
         { "description": "Replace `omnillm` with `omnillm-core`", "commit": "580e5f2" },
-        { "description": "Update `github.com/grokify/coreforge` to v0.6.0", "commit": "ea3b516" },
+        { "description": "Update `github.com/grokify/systemforge` to v0.6.0", "commit": "ea3b516" },
         { "description": "Bump `github.com/lib/pq` from 1.12.2 to 1.12.3", "commit": "16924e6" },
         { "description": "Bump `github.com/jackc/pgx/v5` from 5.9.1 to 5.9.2", "commit": "3b5358e" }
       ],
       "internal": [
         { "description": "Add shared CI/CD pipelines via reusable workflows", "commit": "1d08649" },
-        { "description": "Remove local replace directives for coreforge and omniobserve", "commit": "ea3b516" },
+        { "description": "Remove local replace directives for systemforge and omniobserve", "commit": "ea3b516" },
         { "description": "Commit builder/dist for go:embed (enables `go install` without Node.js)", "commit": "d4ec8e5" },
         { "description": "Add builder/dist to CI paths filter for all workflows", "commit": "888ca86" }
       ]

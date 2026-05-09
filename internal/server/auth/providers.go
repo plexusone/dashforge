@@ -1,5 +1,5 @@
 // Package auth provides authentication for DashForge.
-// OAuth provider functionality is provided by CoreForge's identity/oauth package.
+// OAuth provider functionality is provided by SystemForge's identity/oauth package.
 package auth
 
 import (
@@ -7,11 +7,11 @@ import (
 
 	"golang.org/x/oauth2"
 
-	cfoauth "github.com/grokify/coreforge/identity/oauthclient"
+	cfoauth "github.com/grokify/systemforge/identity/oauthclient"
 )
 
 // OAuthUser represents normalized user info from any OAuth provider.
-// This is an alias for CoreForge's oauth.User type.
+// This is an alias for SystemForge's oauth.User type.
 type OAuthUser = cfoauth.User
 
 // FetchGitHubUser exchanges the authorization code and fetches user info from GitHub.
@@ -24,7 +24,7 @@ func FetchGoogleUser(ctx context.Context, config *oauth2.Config, code string) (*
 	return cfoauth.FetchGoogleUser(ctx, config, code)
 }
 
-// Re-export CoreForge OAuth helpers.
+// Re-export SystemForge OAuth helpers.
 var (
 	// GenerateState generates a cryptographically secure random state string.
 	GenerateState = cfoauth.GenerateState
@@ -36,7 +36,7 @@ var (
 	GitHubConfig = cfoauth.GitHubConfig
 )
 
-// Re-export CoreForge OAuth types.
+// Re-export SystemForge OAuth types.
 type (
 	// ProviderConfig holds OAuth configuration for a provider.
 	ProviderConfig = cfoauth.ProviderConfig

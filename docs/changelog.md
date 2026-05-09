@@ -14,7 +14,7 @@ Principal-based identity model, dashboard marketplace, and multi-app deployment 
 
 ### Highlights
 
-- Principal-based identity model with CoreForge integration
+- Principal-based identity model with SystemForge integration
 - Dashboard template marketplace with licensing and subscriptions
 - Multi-app deployment support via AppBackend adapter
 
@@ -24,11 +24,11 @@ Principal-based identity model, dashboard marketplace, and multi-app deployment 
 - Marketplace entities: Publisher, Listing, License, Subscription, SeatAssignment
 - DashboardTemplate entity for reusable templates
 - SpiceDB integration for fine-grained access control
-- Multi-app backend adapter for CoreForge deployment
+- Multi-app backend adapter for SystemForge deployment
 
 ### Changed
 
-- Migrated JWT and OAuth to CoreForge identity packages
+- Migrated JWT and OAuth to SystemForge identity packages
 - Replaced custom ChartIR types with @grokify/echartify
 
 ---
