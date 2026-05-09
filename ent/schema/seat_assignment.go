@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/index"
-	cfmixin "github.com/grokify/coreforge/identity/ent/mixin"
+	cfmixin "github.com/grokify/systemforge/identity/ent/mixin"
 )
 
 // SeatAssignment holds the schema definition for license seat assignments.

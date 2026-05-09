@@ -5,7 +5,7 @@
 //
 //	go run ./cmd/dashforge-server serve
 //
-// Multi-app mode (via coreforge multi-app server):
+// Multi-app mode (via systemforge multi-app server):
 //
 //	import "github.com/plexusone/dashforge/multiapp"
 //	server.RegisterApp(multiapp.NewBackend(nil))
@@ -22,7 +22,7 @@ import (
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/go-chi/chi/v5"
-	cfmultiapp "github.com/grokify/coreforge/multiapp"
+	cfmultiapp "github.com/grokify/systemforge/multiapp"
 	"github.com/jackc/pgx/v5/stdlib"
 	dashent "github.com/plexusone/dashforge/ent"
 	"github.com/plexusone/dashforge/internal/server"

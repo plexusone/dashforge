@@ -5,9 +5,9 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"github.com/grokify/coreforge/authz"
-	"github.com/grokify/coreforge/authz/simple"
-	"github.com/grokify/coreforge/authz/spicedb"
+	"github.com/grokify/systemforge/authz"
+	"github.com/grokify/systemforge/authz/simple"
+	"github.com/grokify/systemforge/authz/spicedb"
 	"github.com/plexusone/dashforge/ent"
 	"github.com/plexusone/dashforge/ent/human"
 	"github.com/plexusone/dashforge/ent/principalmembership"

@@ -1,7 +1,7 @@
 // Package authz provides SpiceDB authorization for DashForge.
 package authz
 
-import "github.com/grokify/coreforge/authz"
+import "github.com/grokify/systemforge/authz"
 
 // DashForgeSchema defines the SpiceDB schema for DashForge resources.
 // Supports a two-sided marketplace: publishers (template creators) and

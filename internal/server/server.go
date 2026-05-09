@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/grokify/coreforge/authz"
-	"github.com/grokify/coreforge/authz/spicedb"
+	"github.com/grokify/systemforge/authz"
+	"github.com/grokify/systemforge/authz/spicedb"
 	"github.com/plexusone/dashforge/builder"
 	"github.com/plexusone/dashforge/datasource"
 

@@ -10,7 +10,7 @@ DashForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RL
 
 - Fine-grained dashboard/resource permissions
 - Cross-organization sharing capabilities
-- Consistent authorization across CoreForge ecosystem
+- Consistent authorization across SystemForge ecosystem
 
 ## Current Architecture
 
@@ -26,8 +26,8 @@ DashForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RL
 ### Phase 1: Add SpiceDB Package
 
 - [x] Create `internal/authz/` package
-- [x] Add `github.com/grokify/coreforge/authz/spicedb` import
-- [x] Update go.mod with SpiceDB dependencies (CoreForge v0.2.0)
+- [x] Add `github.com/grokify/systemforge/authz/spicedb` import
+- [x] Update go.mod with SpiceDB dependencies (SystemForge v0.2.0)
 - [x] Run `go mod tidy`
 
 ### Phase 2: Define SpiceDB Schema
@@ -81,7 +81,7 @@ DashForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RL
   - Permission check methods
   - Role lookup from database
 - [x] Service supports both simple and SpiceDB modes
-- [ ] Create `internal/authz/syncer.go` (optional - using CoreForge syncer)
+- [ ] Create `internal/authz/syncer.go` (optional - using SystemForge syncer)
 
 ### Phase 4: Replace Role Hierarchy
 
@@ -158,4 +158,4 @@ go test ./...
 
 ## Dependencies
 
-- CoreForge v0.2.x with SpiceDB support
+- SystemForge v0.2.x with SpiceDB support
