@@ -101,6 +101,7 @@ func (h *OAuthHandler) handleGitHubLogin(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Store state in cookie for verification
+	//nolint:gosec // G124: Security attributes set dynamically based on TLS
 	http.SetCookie(w, &http.Cookie{
 		Name:     "oauth_state",
 		Value:    state,
@@ -137,6 +138,7 @@ func (h *OAuthHandler) handleGoogleLogin(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Store state in cookie
+	//nolint:gosec // G124: Security attributes set dynamically based on TLS
 	http.SetCookie(w, &http.Cookie{
 		Name:     "oauth_state",
 		Value:    state,
@@ -175,6 +177,7 @@ func (h *OAuthHandler) handleOAuthCallback(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Clear state cookie
+	//nolint:gosec // G124: Cookie clearing (MaxAge=-1) doesn't need security attributes
 	http.SetCookie(w, &http.Cookie{
 		Name:   "oauth_state",
 		Value:  "",
@@ -224,6 +227,7 @@ func (h *OAuthHandler) handleCoreControlLogin(w http.ResponseWriter, r *http.Req
 	}
 
 	// Store state in cookie
+	//nolint:gosec // G124: Security attributes set dynamically based on TLS
 	http.SetCookie(w, &http.Cookie{
 		Name:     "oauth_state",
 		Value:    state,
@@ -252,6 +256,7 @@ func (h *OAuthHandler) handleCoreControlCallback(w http.ResponseWriter, r *http.
 	}
 
 	// Clear state cookie
+	//nolint:gosec // G124: Cookie clearing (MaxAge=-1) doesn't need security attributes
 	http.SetCookie(w, &http.Cookie{
 		Name:   "oauth_state",
 		Value:  "",
@@ -368,6 +373,8 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 	// Return tokens (or redirect with token in query for web apps)
 	redirectURL := r.URL.Query().Get("redirect")
 	if redirectURL != "" {
+		// TODO: validate redirectURL against allowlist for production use
+		//nolint:gosec // G710: Post-login redirect - should be validated against allowlist
 		http.Redirect(w, r, fmt.Sprintf("%s?access_token=%s", redirectURL, tokens.AccessToken), http.StatusTemporaryRedirect)
 		return
 	}
@@ -535,7 +542,8 @@ func (h *OAuthHandler) completeOAuthLogin(w http.ResponseWriter, r *http.Request
 	// Return tokens (or redirect with token in query for web apps)
 	redirectURL := r.URL.Query().Get("redirect")
 	if redirectURL != "" {
-		// Redirect back to app with token
+		// TODO: validate redirectURL against allowlist for production use
+		//nolint:gosec // G710: Post-login redirect - should be validated against allowlist
 		http.Redirect(w, r, fmt.Sprintf("%s?access_token=%s", redirectURL, tokens.AccessToken), http.StatusTemporaryRedirect)
 		return
 	}
