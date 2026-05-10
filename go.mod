@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/google/uuid v1.6.0
-	github.com/grokify/systemforge v0.6.0
+	github.com/grokify/systemforge v0.7.0
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/lib/pq v1.12.3
 	github.com/plexusone/omnillm-core v0.15.0
@@ -15,9 +15,6 @@ require (
 	golang.org/x/oauth2 v0.36.0
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-// Use local systemforge until published
-replace github.com/grokify/systemforge => /Users/johnwang/go/src/github.com/grokify/systemforge
 
 // Pin otel versions to be compatible with spicedb v1.49.2
 replace go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0
