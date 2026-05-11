@@ -7,6 +7,26 @@
   "maintainers": ["grokify"],
   "releases": [
     {
+      "version": "v0.3.0",
+      "date": "2026-05-11",
+      "highlights": [
+        { "description": "Migrate from CoreForge to SystemForge (upstream project rename)" },
+        { "description": "Update to SystemForge v0.7.0 with ProductGraph, session invalidation, and account lockout" }
+      ],
+      "breaking": [
+        { "description": "Dependency renamed from `github.com/grokify/coreforge` to `github.com/grokify/systemforge` - users of `multiapp` package must update imports", "commit": "6247295" }
+      ],
+      "fixed": [
+        { "description": "Resolve gosec G124 (insecure cookie attributes) warnings in OAuth handler", "commit": "1884671" },
+        { "description": "Resolve gosec G710 (open redirect) warnings in OAuth handler", "commit": "1884671" }
+      ],
+      "dependencies": [
+        { "description": "Rename dependency from `github.com/grokify/coreforge` to `github.com/grokify/systemforge`", "commit": "6247295" },
+        { "description": "Update `github.com/grokify/systemforge` to v0.7.0", "commit": "271e229" },
+        { "description": "Bump `github.com/go-sql-driver/mysql` from 1.9.3 to 1.10.0", "commit": "33ae8b2" }
+      ]
+    },
+    {
       "version": "v0.2.0",
       "date": "2026-04-26",
       "highlights": [

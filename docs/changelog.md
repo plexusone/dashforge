@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html),
 and commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
+## [v0.3.0] - 2026-05-11
+
+Migrate from CoreForge to SystemForge with security lint fixes.
+
+[:octicons-tag-24: Release Notes](releases/v0.3.0.md){ .md-button }
+
+### Highlights
+
+- Migrate from CoreForge to SystemForge (upstream project rename)
+- Update to SystemForge v0.7.0
+
+### Breaking
+
+- Dependency renamed from `coreforge` to `systemforge` - users of `multiapp` package must update imports
+
+### Fixed
+
+- Resolved gosec G124 and G710 warnings in OAuth handler
+
+---
+
 ## [v0.2.0] - 2026-04-26
 
 Principal-based identity model, dashboard marketplace, and multi-app deployment support.
@@ -54,5 +75,6 @@ Initial release with full-stack dashboard builder.
 
 ---
 
+[v0.3.0]: https://github.com/plexusone/dashforge/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/plexusone/dashforge/compare/v0.1.0...v0.2.0
 [v0.1.0]: https://github.com/plexusone/dashforge/releases/tag/v0.1.0
