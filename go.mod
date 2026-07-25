@@ -4,7 +4,7 @@ go 1.26.4
 
 require (
 	entgo.io/ent v0.14.6
-	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-chi/chi/v5 v5.3.1
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/grokify/systemforge v0.8.0
