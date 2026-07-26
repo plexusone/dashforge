@@ -24,7 +24,7 @@ Multi-tenancy allows multiple organizations to share a single Dashforge instance
 ## Enabling Multi-Tenancy
 
 ```bash
-./dashforge-server serve \
+./uiforge-server serve \
   --database-url "$DATABASE_URL" \
   --auto-migrate \
   --enable-rls
@@ -62,7 +62,7 @@ The server sets tenant context from:
 
 1. **JWT token** (primary) - `tid` claim
 2. **X-Tenant-ID header** - For service-to-service calls
-3. **Subdomain** - `tenant-a.dashforge.example.com`
+3. **Subdomain** - `tenant-a.uiforge.example.com`
 4. **Query parameter** - `?tenant=tenant-a` (development only)
 
 Priority: JWT > Header > Subdomain > Query param
@@ -152,7 +152,7 @@ CREATE POLICY admin_bypass ON users
 ### Via API
 
 ```bash
-curl -X POST https://dashforge.example.com/api/v1/admin/tenants \
+curl -X POST https://uiforge.example.com/api/v1/admin/tenants \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -214,7 +214,7 @@ func (s *Server) listAllTenants(ctx context.Context) ([]*ent.Tenant, error) {
 Admins can switch tenant context:
 
 ```bash
-curl https://dashforge.example.com/api/v1/dashboards \
+curl https://uiforge.example.com/api/v1/dashboards \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Tenant-ID: 2"
 ```
@@ -224,8 +224,8 @@ curl https://dashforge.example.com/api/v1/dashboards \
 Configure DNS and routing for tenant subdomains:
 
 ```
-acme.dashforge.example.com    → Tenant: acme
-globex.dashforge.example.com  → Tenant: globex
+acme.uiforge.example.com    → Tenant: acme
+globex.uiforge.example.com  → Tenant: globex
 ```
 
 ### Nginx Configuration
@@ -233,10 +233,10 @@ globex.dashforge.example.com  → Tenant: globex
 ```nginx
 server {
     listen 443 ssl;
-    server_name ~^(?<tenant>.+)\.dashforge\.example\.com$;
+    server_name ~^(?<tenant>.+)\.uiforge\.example\.com$;
 
     location / {
-        proxy_pass http://dashforge;
+        proxy_pass http://uiforge;
         proxy_set_header Host $host;
         proxy_set_header X-Tenant-Slug $tenant;
     }
@@ -295,7 +295,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 To run single-tenant:
 
 ```bash
-./dashforge-server serve --database-url "$DATABASE_URL"
+./uiforge-server serve --database-url "$DATABASE_URL"
 # Don't use --enable-rls
 ```
 

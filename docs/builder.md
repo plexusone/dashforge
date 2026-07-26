@@ -26,7 +26,7 @@ npm run dev
 The dev server proxies API requests to `http://localhost:8080`, so start the Dashforge server in another terminal:
 
 ```bash
-go run ./cmd/dashforge-server serve --port 8080
+go run ./cmd/uiforge-server serve --port 8080
 ```
 
 ### Running in Production
@@ -35,7 +35,7 @@ Build and embed in the Dashforge server:
 
 ```bash
 cd builder && npm run build && cd ..
-go run ./cmd/dashforge-server serve --port 8080
+go run ./cmd/uiforge-server serve --port 8080
 # Builder available at http://localhost:8080/builder/
 ```
 

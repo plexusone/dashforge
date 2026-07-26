@@ -8,12 +8,12 @@ This guide walks you through installing Dashforge and creating your first dashbo
 
 ```bash
 # Clone the repository
-git clone https://github.com/plexusone/dashforge.git
-cd dashforge
+git clone https://github.com/plexusone/uiforge.git
+cd uiforge
 
 # Build the binaries
-go build -o dashforge ./cmd/dashforge
-go build -o dashforge-server ./cmd/dashforge-server
+go build -o uiforge ./cmd/uiforge
+go build -o uiforge-server ./cmd/uiforge-server
 
 # Build the dashboard builder (optional)
 cd builder && npm install && npm run build && cd ..
@@ -22,8 +22,8 @@ cd builder && npm install && npm run build && cd ..
 ### Go Install
 
 ```bash
-go install github.com/plexusone/dashforge/cmd/dashforge@latest
-go install github.com/plexusone/dashforge/cmd/dashforge-server@latest
+go install github.com/plexusone/uiforge/cmd/uiforge@latest
+go install github.com/plexusone/uiforge/cmd/uiforge-server@latest
 ```
 
 ## Visual Builder Quick Start
@@ -42,7 +42,7 @@ cd ..
 ### 2. Start the Server
 
 ```bash
-go run ./cmd/dashforge-server serve --port 8080
+go run ./cmd/uiforge-server serve --port 8080
 ```
 
 ### 3. Open the Builder
@@ -119,7 +119,7 @@ Create `my-dashboard.json`:
 
 ```bash
 # Using Python's built-in server
-cd dashforge
+cd uiforge
 python3 -m http.server 8080
 
 # Open in browser
@@ -134,17 +134,17 @@ For dynamic data sources, authentication, and multi-tenancy.
 
 ```bash
 # Create database
-createdb dashforge
+createdb uiforge
 
 # Set environment variables
-export DATABASE_URL="postgres://localhost:5432/dashforge?sslmode=disable"
+export DATABASE_URL="postgres://localhost:5432/uiforge?sslmode=disable"
 export JWT_SECRET="your-secure-secret-key-at-least-32-chars"
 ```
 
 ### 2. Start the Server
 
 ```bash
-./dashforge-server serve \
+./uiforge-server serve \
   --port 8080 \
   --database-url "$DATABASE_URL" \
   --jwt-secret "$JWT_SECRET" \
@@ -203,7 +203,7 @@ export GOOGLE_CLIENT_ID="your-google-client-id"
 export GOOGLE_CLIENT_SECRET="your-google-client-secret"
 export BASE_URL="http://localhost:8080"
 
-./dashforge-server serve \
+./uiforge-server serve \
   --port 8080 \
   --database-url "$DATABASE_URL" \
   --jwt-secret "$JWT_SECRET" \

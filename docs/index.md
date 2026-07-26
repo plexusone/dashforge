@@ -26,7 +26,7 @@ Visual drag-and-drop dashboard creation:
 
 ```bash
 cd builder && npm install && npm run build && cd ..
-./dashforge-server serve --port 8080
+./uiforge-server serve --port 8080
 open http://localhost:8080/builder/
 ```
 
@@ -55,7 +55,7 @@ Full-featured analytics platform with:
 - Saved queries
 
 ```bash
-./dashforge-server serve --database-url postgres://... --auto-migrate
+./uiforge-server serve --database-url postgres://... --auto-migrate
 ```
 
 ## Quick Links
@@ -76,7 +76,7 @@ Full-featured analytics platform with:
 ├─────────────────────────────────────────────────────────────────┤
 │  Builder Mode            │  Static Mode     │  Server Mode      │
 │  ────────────            │  ───────────     │  ───────────      │
-│  /builder/               │  viewer/         │  dashforge-server │
+│  /builder/               │  viewer/         │  uiforge-server │
 │  React + TypeScript      │  index.html      │  PostgreSQL + Ent │
 │  Cube.js queries         │  JSON files      │  OAuth            │
 │  AI generation           │  GitHub Pages    │  Multi-tenant RLS │

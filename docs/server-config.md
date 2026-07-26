@@ -5,7 +5,7 @@ The Dashforge server provides a full-featured backend for dashboard hosting, dat
 ## Starting the Server
 
 ```bash
-./dashforge-server serve [flags]
+./uiforge-server serve [flags]
 ```
 
 ## Configuration Methods
@@ -19,9 +19,9 @@ Configuration can be provided via:
 ### Command-Line Flags
 
 ```bash
-./dashforge-server serve \
+./uiforge-server serve \
   --port 8080 \
-  --database-url "postgres://user:pass@localhost:5432/dashforge" \
+  --database-url "postgres://user:pass@localhost:5432/uiforge" \
   --jwt-secret "your-secret-key" \
   --auto-migrate \
   --enable-rls
@@ -43,9 +43,9 @@ Configuration can be provided via:
 
 ```bash
 export PORT=8080
-export DATABASE_URL="postgres://user:pass@localhost:5432/dashforge?sslmode=require"
+export DATABASE_URL="postgres://user:pass@localhost:5432/uiforge?sslmode=require"
 export JWT_SECRET="your-secret-key-at-least-32-characters"
-export BASE_URL="https://dashforge.example.com"
+export BASE_URL="https://uiforge.example.com"
 
 # OAuth providers
 export GITHUB_CLIENT_ID="your-github-client-id"
@@ -54,7 +54,7 @@ export GOOGLE_CLIENT_ID="your-google-client-id"
 export GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 # Run server
-./dashforge-server serve --auto-migrate
+./uiforge-server serve --auto-migrate
 ```
 
 ### Configuration File
@@ -63,9 +63,9 @@ Create `config.yaml`:
 
 ```yaml
 port: 8080
-database_url: postgres://user:pass@localhost:5432/dashforge
+database_url: postgres://user:pass@localhost:5432/uiforge
 jwt_secret: your-secret-key
-base_url: https://dashforge.example.com
+base_url: https://uiforge.example.com
 auto_migrate: true
 enable_rls: true
 
@@ -81,7 +81,7 @@ oauth:
 Run with config file:
 
 ```bash
-./dashforge-server serve --config config.yaml
+./uiforge-server serve --config config.yaml
 ```
 
 ## Database Configuration
@@ -120,7 +120,7 @@ For production, consider running migrations separately:
 
 ```bash
 # Run migrations only
-./dashforge-server migrate --database-url "$DATABASE_URL"
+./uiforge-server migrate --database-url "$DATABASE_URL"
 ```
 
 ## JWT Configuration
@@ -154,14 +154,14 @@ Default token lifetimes:
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
 COPY . .
-RUN go build -o dashforge-server ./cmd/dashforge-server
+RUN go build -o uiforge-server ./cmd/uiforge-server
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /app
-COPY --from=builder /app/dashforge-server .
+COPY --from=builder /app/uiforge-server .
 EXPOSE 8080
-CMD ["./dashforge-server", "serve"]
+CMD ["./uiforge-server", "serve"]
 ```
 
 ### Docker Compose
@@ -169,12 +169,12 @@ CMD ["./dashforge-server", "serve"]
 ```yaml
 version: '3.8'
 services:
-  dashforge:
+  uiforge:
     build: .
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=postgres://dashforge:password@db:5432/dashforge?sslmode=disable
+      - DATABASE_URL=postgres://uiforge:password@db:5432/uiforge?sslmode=disable
       - JWT_SECRET=${JWT_SECRET}
       - AUTO_MIGRATE=true
     depends_on:
@@ -183,9 +183,9 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=dashforge
+      - POSTGRES_USER=uiforge
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=dashforge
+      - POSTGRES_DB=uiforge
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -207,19 +207,19 @@ Use this for load balancer health checks and container orchestration.
 ### Reverse Proxy (nginx)
 
 ```nginx
-upstream dashforge {
+upstream uiforge {
     server 127.0.0.1:8080;
 }
 
 server {
     listen 443 ssl http2;
-    server_name dashforge.example.com;
+    server_name uiforge.example.com;
 
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
 
     location / {
-        proxy_pass http://dashforge;
+        proxy_pass http://uiforge;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
