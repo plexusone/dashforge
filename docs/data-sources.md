@@ -449,7 +449,7 @@ When using named parameters (`:name` or `@name`), Dashforge automatically conver
 Developers can register custom providers programmatically:
 
 ```go
-import "github.com/plexusone/dashforge/datasource"
+import "github.com/plexusone/uiforge/datasource"
 
 // Implement the Provider interface
 type MyProvider struct{}

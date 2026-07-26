@@ -14,8 +14,8 @@ This guide covers setting up a development environment and contributing to Dashf
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/plexusone/dashforge.git
-cd dashforge
+git clone https://github.com/plexusone/uiforge.git
+cd uiforge
 ```
 
 ### Build
@@ -25,8 +25,8 @@ cd dashforge
 go build ./...
 
 # Build specific binary
-go build -o dashforge ./cmd/dashforge
-go build -o dashforge-server ./cmd/dashforge-server
+go build -o uiforge ./cmd/uiforge
+go build -o uiforge-server ./cmd/uiforge-server
 
 # Build the dashboard builder
 cd builder && npm install && npm run build && cd ..
@@ -59,10 +59,10 @@ cd builder && npm run lint && cd ..
 ## Project Structure
 
 ```
-dashforge/
+uiforge/
 ├── cmd/
-│   ├── dashforge/           # Static CLI
-│   └── dashforge-server/    # Full server
+│   ├── uiforge/           # Static CLI
+│   └── uiforge-server/    # Full server
 ├── builder/                 # Dashboard builder (React)
 │   ├── src/
 │   │   ├── components/      # React components
@@ -115,7 +115,7 @@ The dev server proxies `/api` requests to `http://localhost:8080`, so start the 
 
 ```bash
 # In another terminal
-go run ./cmd/dashforge-server serve --port 8080
+go run ./cmd/uiforge-server serve --port 8080
 ```
 
 ### Building for Production
@@ -229,7 +229,7 @@ When modifying Ent schemas:
 go generate ./ent
 
 # Run migrations (dev database)
-./dashforge-server serve --database-url "$DEV_DATABASE_URL" --auto-migrate
+./uiforge-server serve --database-url "$DEV_DATABASE_URL" --auto-migrate
 ```
 
 ### Adding a New API Endpoint
@@ -257,7 +257,7 @@ import (
     "database/sql"
 
     _ "github.com/ClickHouse/clickhouse-go/v2"
-    "github.com/plexusone/dashforge/datasource"
+    "github.com/plexusone/uiforge/datasource"
 )
 
 func init() {
@@ -284,15 +284,15 @@ func (p *Provider) Connect(ctx context.Context, cfg datasource.ConnectionConfig)
 ```bash
 # Start PostgreSQL with Docker
 docker run -d \
-  --name dashforge-db \
-  -e POSTGRES_USER=dashforge \
+  --name uiforge-db \
+  -e POSTGRES_USER=uiforge \
   -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=dashforge \
+  -e POSTGRES_DB=uiforge \
   -p 5432:5432 \
   postgres:16-alpine
 
 # Connection string
-export DATABASE_URL="postgres://dashforge:password@localhost:5432/dashforge?sslmode=disable"
+export DATABASE_URL="postgres://uiforge:password@localhost:5432/uiforge?sslmode=disable"
 ```
 
 ### Full Stack
@@ -300,8 +300,8 @@ export DATABASE_URL="postgres://dashforge:password@localhost:5432/dashforge?sslm
 ```bash
 # Terminal 1: Dashforge server
 export JWT_SECRET="dev-secret-key-at-least-32-chars"
-export DATABASE_URL="postgres://dashforge:password@localhost:5432/dashforge?sslmode=disable"
-go run ./cmd/dashforge-server serve --auto-migrate
+export DATABASE_URL="postgres://uiforge:password@localhost:5432/uiforge?sslmode=disable"
+go run ./cmd/uiforge-server serve --auto-migrate
 
 # Terminal 2: Builder dev server (optional, for hot reload)
 cd builder && npm run dev
@@ -413,7 +413,7 @@ git push origin main --tags
 
 ```bash
 export LOG_LEVEL=debug
-./dashforge-server serve
+./uiforge-server serve
 ```
 
 ### Builder DevTools
@@ -455,10 +455,10 @@ go generate ./ent
 
 ```bash
 psql "$DATABASE_URL" -c "SELECT 1"
-docker logs dashforge-db
+docker logs uiforge-db
 ```
 
 ## Getting Help
 
-- [GitHub Issues](https://github.com/plexusone/dashforge/issues)
-- [Discussions](https://github.com/plexusone/dashforge/discussions)
+- [GitHub Issues](https://github.com/plexusone/uiforge/issues)
+- [Discussions](https://github.com/plexusone/uiforge/discussions)

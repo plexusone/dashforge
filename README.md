@@ -9,24 +9,24 @@
 [![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
 
- [go-ci-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
- [go-ci-url]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml
- [go-lint-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
- [go-lint-url]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml
- [go-sast-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
- [go-sast-url]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/dashforge
- [goreport-url]: https://goreportcard.com/report/github.com/plexusone/dashforge
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/dashforge
- [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/dashforge
+ [go-ci-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
+ [go-ci-url]: https://github.com/plexusone/uiforge/actions/workflows/go-ci.yaml
+ [go-lint-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
+ [go-lint-url]: https://github.com/plexusone/uiforge/actions/workflows/go-lint.yaml
+ [go-sast-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
+ [go-sast-url]: https://github.com/plexusone/uiforge/actions/workflows/go-sast-codeql.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/uiforge
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/uiforge
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/uiforge
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/uiforge
  [docs-mkdoc-svg]: https://img.shields.io/badge/Go-dev%20guide-blue.svg
- [docs-mkdoc-url]: https://plexusone.dev/dashforge
+ [docs-mkdoc-url]: https://plexusone.dev/uiforge
  [viz-svg]: https://img.shields.io/badge/Go-visualizaton-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fdashforge
- [loc-svg]: https://tokei.rs/b1/github/plexusone/dashforge
- [repo-url]: https://github.com/plexusone/dashforge
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fuiforge
+ [loc-svg]: https://tokei.rs/b1/github/plexusone/uiforge
+ [repo-url]: https://github.com/plexusone/uiforge
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/plexusone/dashforge/blob/main/LICENSE
+ [license-url]: https://github.com/plexusone/uiforge/blob/main/LICENSE
 
 A JSON-first dashboard framework that starts simple with static hosting (GitHub Pages) and grows into a full Metabase-like analytics platform with an AI-powered visual builder.
 
@@ -69,7 +69,7 @@ The fastest way to create dashboards:
 cd builder && npm install && npm run build && cd ..
 
 # Start the server
-go run ./cmd/dashforge-server serve --port 8080
+go run ./cmd/uiforge-server serve --port 8080
 
 # Open the builder
 open http://localhost:8080/builder/
@@ -80,7 +80,7 @@ open http://localhost:8080/builder/
 Open `viewer/index.html` in a browser with a dashboard URL:
 
 ```bash
-cd dashforge
+cd uiforge
 python3 -m http.server 8080
 # Open http://localhost:8080/viewer/?dashboard=../examples/compliance-dashboard.json
 ```
@@ -89,13 +89,13 @@ python3 -m http.server 8080
 
 ```bash
 # Build the server
-go build -o dashforge-server ./cmd/dashforge-server
+go build -o uiforge-server ./cmd/uiforge-server
 
 # Run with PostgreSQL
-export DATABASE_URL="postgres://user:pass@localhost:5432/dashforge?sslmode=disable"
+export DATABASE_URL="postgres://user:pass@localhost:5432/uiforge?sslmode=disable"
 export JWT_SECRET="your-secret-key"
 
-./dashforge-server serve --port 8080 --auto-migrate
+./uiforge-server serve --port 8080 --auto-migrate
 ```
 
 ## Documentation
@@ -127,8 +127,8 @@ Full documentation is available at [docs/](docs/):
 │  cube/                  Cube.js semantic layer                  │
 │    └── model/cubes/     Data models (YAML)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  cmd/dashforge/         Static CLI (validate, convert)          │
-│  cmd/dashforge-server/  Full server with API                    │
+│  cmd/uiforge/         Static CLI (validate, convert)          │
+│  cmd/uiforge-server/  Full server with API                    │
 ├─────────────────────────────────────────────────────────────────┤
 │  dashboardir/           Dashboard JSON schema & types           │
 │  viewer/                Embedded static HTML/JS viewer          │

@@ -143,7 +143,7 @@ Access tokens contain:
 
 ```json
 {
-  "iss": "dashforge",
+  "iss": "uiforge",
   "sub": "1",
   "exp": 1705312200,
   "iat": 1705311300,
@@ -156,7 +156,7 @@ Access tokens contain:
 
 | Claim | Description |
 |-------|-------------|
-| iss | Issuer (always "dashforge") |
+| iss | Issuer (always "uiforge") |
 | sub | Subject (user ID as string) |
 | exp | Expiration timestamp |
 | iat | Issued at timestamp |
@@ -171,7 +171,7 @@ Include the access token in the Authorization header:
 
 ```bash
 curl -H "Authorization: Bearer eyJhbGc..." \
-  https://dashforge.example.com/api/v1/dashboards
+  https://uiforge.example.com/api/v1/dashboards
 ```
 
 ### Token Expiration
@@ -232,7 +232,7 @@ openssl rand -base64 32
 Always use HTTPS in production:
 
 ```bash
-export BASE_URL="https://dashforge.example.com"
+export BASE_URL="https://uiforge.example.com"
 ```
 
 ### Cookie Security
@@ -268,7 +268,7 @@ cors:
 For development only:
 
 ```bash
-./dashforge-server serve --disable-auth
+./uiforge-server serve --disable-auth
 ```
 
 !!! danger "Warning"

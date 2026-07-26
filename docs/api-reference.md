@@ -14,7 +14,7 @@ Most endpoints require authentication via JWT Bearer token:
 
 ```bash
 curl -H "Authorization: Bearer <access_token>" \
-  https://dashforge.example.com/api/v1/dashboards
+  https://uiforge.example.com/api/v1/dashboards
 ```
 
 ## Response Format
