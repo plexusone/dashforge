@@ -1,0 +1,387 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/plexusone/uiforge/schema/page.schema.json",
+  "$ref": "#/$defs/PageSpec",
+  "$defs": {
+    "Binding": {
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "transform": {
+          "type": "string"
+        },
+        "default": true
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "BreakpointConfig": {
+      "properties": {
+        "minWidth": {
+          "type": "integer"
+        },
+        "columns": {
+          "type": "integer"
+        },
+        "gap": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ComponentInstance": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "properties": {
+          "type": "object"
+        },
+        "data": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Binding"
+          },
+          "type": "object"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/$defs/ComponentInstance"
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilityRule"
+        },
+        "slot": {
+          "type": "string"
+        },
+        "style": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "rawConfig": true
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Interaction": {
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/InteractionTrigger"
+        },
+        "then": {
+          "items": {
+            "$ref": "#/$defs/InteractionAction"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "InteractionAction": {
+      "properties": {
+        "target": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "value": true,
+        "condition": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "InteractionTrigger": {
+      "properties": {
+        "component": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "LayoutConfig": {
+      "properties": {
+        "columns": {
+          "type": "integer"
+        },
+        "rows": {
+          "type": "integer"
+        },
+        "gap": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string"
+        },
+        "breakpoints": {
+          "additionalProperties": {
+            "$ref": "#/$defs/BreakpointConfig"
+          },
+          "type": "object"
+        },
+        "sizes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resizable": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "LayoutRegion": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/$defs/LayoutSpec"
+        },
+        "minWidth": {
+          "type": "string"
+        },
+        "maxWidth": {
+          "type": "string"
+        },
+        "default": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "LayoutSpec": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/$defs/LayoutConfig"
+        },
+        "regions": {
+          "items": {
+            "$ref": "#/$defs/LayoutRegion"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "NavItem": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/$defs/NavItem"
+          },
+          "type": "array"
+        },
+        "badge": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "NavigationSpec": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/NavItem"
+          },
+          "type": "array"
+        },
+        "breadcrumb": {
+          "items": {
+            "$ref": "#/$defs/NavItem"
+          },
+          "type": "array"
+        },
+        "position": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "PageSpec": {
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/PageMetadata"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "context": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "layout": {
+          "$ref": "#/$defs/LayoutSpec"
+        },
+        "components": {
+          "items": {
+            "$ref": "#/$defs/ComponentInstance"
+          },
+          "type": "array"
+        },
+        "interactions": {
+          "items": {
+            "$ref": "#/$defs/Interaction"
+          },
+          "type": "array"
+        },
+        "navigation": {
+          "$ref": "#/$defs/NavigationSpec"
+        },
+        "theme": {
+          "$ref": "#/$defs/ThemeRef"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Position": {
+      "properties": {
+        "row": {
+          "type": "integer"
+        },
+        "col": {
+          "type": "integer"
+        },
+        "rowSpan": {
+          "type": "integer"
+        },
+        "colSpan": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "region": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ThemeRef": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        },
+        "tokens": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "VisibilityRule": {
+      "properties": {
+        "condition": {
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "capability": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "title": "PageSpec",
+  "description": "UIForge page specification — the canonical JSON IR for declarative UI composition"
+}

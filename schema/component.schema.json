@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/plexusone/uiforge/schema/component.schema.json",
+  "$ref": "#/$defs/ComponentSpec",
+  "$defs": {
+    "ComponentSpec": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "entrypoint": {
+          "type": "string"
+        },
+        "propertiesSchema": true,
+        "dataInputs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DataInput"
+          },
+          "type": "object"
+        },
+        "events": {
+          "additionalProperties": {
+            "$ref": "#/$defs/EventDef"
+          },
+          "type": "object"
+        },
+        "actions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "layoutConstraints": {
+          "$ref": "#/$defs/LayoutConstraints"
+        },
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "designSystem": {
+          "$ref": "#/$defs/DesignSystemRef"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "DataInput": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "DesignSystemRef": {
+      "properties": {
+        "tokens": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "variants": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "EventDef": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "schema": true
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "LayoutConstraints": {
+      "properties": {
+        "minWidth": {
+          "type": "string"
+        },
+        "minHeight": {
+          "type": "string"
+        },
+        "maxWidth": {
+          "type": "string"
+        },
+        "maxHeight": {
+          "type": "string"
+        },
+        "allowedIn": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "title": "ComponentSpec",
+  "description": "UIForge component manifest — describes a registered component's interface"
+}
