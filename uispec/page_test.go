@@ -10,9 +10,9 @@ func TestPageSpecRoundTrip(t *testing.T) {
 		APIVersion: APIVersion,
 		Kind:       KindPage,
 		Metadata: PageMetadata{
-			ID:   "test-dashboard",
-			Name: "test-dashboard",
-			Title: "Test Dashboard",
+			ID:     "test-dashboard",
+			Name:   "test-dashboard",
+			Title:  "Test Dashboard",
 			Labels: map[string]string{"env": "dev"},
 		},
 		Profile: ProfileDashboard,

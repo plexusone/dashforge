@@ -388,7 +388,7 @@ func TestValidateLayout_NestedRegions(t *testing.T) {
 				{
 					Name: "main",
 					Layout: &uispec.LayoutSpec{
-						Type: uispec.LayoutResponsiveGrid,
+						Type:   uispec.LayoutResponsiveGrid,
 						Config: &uispec.LayoutConfig{Columns: 12},
 					},
 				},

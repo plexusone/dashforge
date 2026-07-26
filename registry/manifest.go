@@ -7,19 +7,19 @@ import "encoding/json"
 
 // ComponentSpec is the manifest for a registered component.
 type ComponentSpec struct {
-	ID                string                  `json:"id"`
-	Version           string                  `json:"version"`
-	Category          string                  `json:"category"`
-	Namespace         string                  `json:"namespace"`
-	Runtime           string                  `json:"runtime"`
-	Entrypoint        string                  `json:"entrypoint"`
-	PropertiesSchema  json.RawMessage         `json:"propertiesSchema,omitempty"`
-	DataInputs        map[string]DataInput    `json:"dataInputs,omitempty"`
-	Events            map[string]EventDef     `json:"events,omitempty"`
-	Actions           []string                `json:"actions,omitempty"`
-	LayoutConstraints *LayoutConstraints      `json:"layoutConstraints,omitempty"`
-	Capabilities      []string                `json:"capabilities,omitempty"`
-	DesignSystem      *DesignSystemRef        `json:"designSystem,omitempty"`
+	ID                string               `json:"id"`
+	Version           string               `json:"version"`
+	Category          string               `json:"category"`
+	Namespace         string               `json:"namespace"`
+	Runtime           string               `json:"runtime"`
+	Entrypoint        string               `json:"entrypoint"`
+	PropertiesSchema  json.RawMessage      `json:"propertiesSchema,omitempty"`
+	DataInputs        map[string]DataInput `json:"dataInputs,omitempty"`
+	Events            map[string]EventDef  `json:"events,omitempty"`
+	Actions           []string             `json:"actions,omitempty"`
+	LayoutConstraints *LayoutConstraints   `json:"layoutConstraints,omitempty"`
+	Capabilities      []string             `json:"capabilities,omitempty"`
+	DesignSystem      *DesignSystemRef     `json:"designSystem,omitempty"`
 }
 
 // DataInput describes one named data slot a component can bind to.
