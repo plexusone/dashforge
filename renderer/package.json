@@ -1,0 +1,28 @@
+{
+  "name": "@uiforge/renderer",
+  "version": "0.1.0",
+  "description": "UISpec React renderer — renders PageSpec JSON as a React component tree",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "jsdom": "^26.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.0",
+    "vitest": "^3.2.4"
+  }
+}
