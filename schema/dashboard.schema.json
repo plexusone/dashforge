@@ -1,23 +1,160 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/grokify/dashforge/schema/dashboard.schema.json",
-  "properties": {
-    "$schema": {
-      "type": "string"
+  "$id": "https://github.com/plexusone/uiforge/schema/dashboard.schema.json",
+  "$ref": "#/$defs/Dashboard",
+  "$defs": {
+    "CacheConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "ttlSeconds": {
+          "type": "integer"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
-    "id": {
-      "type": "string"
+    "ConnectionConfig": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "database": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "passwordEnv": {
+          "type": "string"
+        },
+        "sslMode": {
+          "type": "string"
+        },
+        "connectionString": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
-    "title": {
-      "type": "string"
+    "Dashboard": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/$defs/Layout"
+        },
+        "dataSources": {
+          "items": {
+            "$ref": "#/$defs/DataSource"
+          },
+          "type": "array"
+        },
+        "widgets": {
+          "items": {
+            "$ref": "#/$defs/Widget"
+          },
+          "type": "array"
+        },
+        "theme": {
+          "$ref": "#/$defs/Theme"
+        },
+        "variables": {
+          "items": {
+            "$ref": "#/$defs/Variable"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
-    "description": {
-      "type": "string"
+    "DataSource": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "data": true,
+        "connection": {
+          "$ref": "#/$defs/ConnectionConfig"
+        },
+        "query": {
+          "type": "string"
+        },
+        "derivedFrom": {
+          "type": "string"
+        },
+        "transform": {
+          "items": {
+            "$ref": "#/$defs/Transform"
+          },
+          "type": "array"
+        },
+        "refresh": {
+          "$ref": "#/$defs/RefreshConfig"
+        },
+        "cache": {
+          "$ref": "#/$defs/CacheConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
-    "version": {
-      "type": "string"
+    "DrillDown": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
-    "layout": {
+    "Layout": {
       "properties": {
         "type": {
           "type": "string"
@@ -38,209 +175,46 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "dataSources": {
-      "items": {
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "format": {
-            "type": "string"
-          },
-          "data": true,
-          "connection": {
-            "properties": {
-              "type": {
-                "type": "string"
-              },
-              "host": {
-                "type": "string"
-              },
-              "port": {
-                "type": "integer"
-              },
-              "database": {
-                "type": "string"
-              },
-              "username": {
-                "type": "string"
-              },
-              "passwordEnv": {
-                "type": "string"
-              },
-              "sslMode": {
-                "type": "string"
-              },
-              "connectionString": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "query": {
-            "type": "string"
-          },
-          "derivedFrom": {
-            "type": "string"
-          },
-          "transform": {
-            "items": {
-              "properties": {
-                "type": {
-                  "type": "string"
-                },
-                "config": true
-              },
-              "additionalProperties": false,
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "refresh": {
-            "properties": {
-              "enabled": {
-                "type": "boolean"
-              },
-              "intervalSeconds": {
-                "type": "integer"
-              },
-              "onFocus": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "cache": {
-            "properties": {
-              "enabled": {
-                "type": "boolean"
-              },
-              "ttlSeconds": {
-                "type": "integer"
-              },
-              "key": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
+    "Position": {
+      "properties": {
+        "x": {
+          "type": "integer"
         },
-        "additionalProperties": false,
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "widgets": {
-      "items": {
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "position": {
-            "properties": {
-              "x": {
-                "type": "integer"
-              },
-              "y": {
-                "type": "integer"
-              },
-              "w": {
-                "type": "integer"
-              },
-              "h": {
-                "type": "integer"
-              },
-              "minW": {
-                "type": "integer"
-              },
-              "minH": {
-                "type": "integer"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "dataSourceId": {
-            "type": "string"
-          },
-          "transform": {
-            "items": {
-              "properties": {
-                "type": {
-                  "type": "string"
-                },
-                "config": true
-              },
-              "additionalProperties": false,
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "config": true,
-          "visible": {
-            "type": "boolean"
-          },
-          "refreshOverride": {
-            "properties": {
-              "enabled": {
-                "type": "boolean"
-              },
-              "intervalSeconds": {
-                "type": "integer"
-              },
-              "onFocus": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "drillDown": {
-            "properties": {
-              "type": {
-                "type": "string"
-              },
-              "target": {
-                "type": "string"
-              },
-              "params": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
+        "y": {
+          "type": "integer"
         },
-        "additionalProperties": false,
-        "type": "object"
+        "w": {
+          "type": "integer"
+        },
+        "h": {
+          "type": "integer"
+        },
+        "minW": {
+          "type": "integer"
+        },
+        "minH": {
+          "type": "integer"
+        }
       },
-      "type": "array"
+      "additionalProperties": false,
+      "type": "object"
     },
-    "theme": {
+    "RefreshConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "intervalSeconds": {
+          "type": "integer"
+        },
+        "onFocus": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Theme": {
       "properties": {
         "mode": {
           "type": "string"
@@ -258,54 +232,102 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "variables": {
-      "items": {
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "default": {
-            "type": "string"
-          },
-          "options": {
-            "items": {
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "dataSourceId": {
-            "type": "string"
-          },
-          "labelField": {
-            "type": "string"
-          },
-          "valueField": {
-            "type": "string"
-          }
+    "Transform": {
+      "properties": {
+        "type": {
+          "type": "string"
         },
-        "additionalProperties": false,
-        "type": "object"
+        "config": true
       },
-      "type": "array"
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Variable": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "default": {
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/VariableOption"
+          },
+          "type": "array"
+        },
+        "dataSourceId": {
+          "type": "string"
+        },
+        "labelField": {
+          "type": "string"
+        },
+        "valueField": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "VariableOption": {
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Widget": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "dataSourceId": {
+          "type": "string"
+        },
+        "transform": {
+          "items": {
+            "$ref": "#/$defs/Transform"
+          },
+          "type": "array"
+        },
+        "config": true,
+        "visible": {
+          "type": "boolean"
+        },
+        "refreshOverride": {
+          "$ref": "#/$defs/RefreshConfig"
+        },
+        "drillDown": {
+          "$ref": "#/$defs/DrillDown"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     }
   },
-  "additionalProperties": false,
-  "type": "object",
   "title": "Dashboard",
-  "description": "Dashforge dashboard definition"
+  "description": "UIForge dashboard definition (DashboardIR)"
 }

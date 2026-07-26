@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/principalmembership"
+	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/principalmembership"
 )
 
 // PrincipalMembershipQuery is the builder for querying PrincipalMembership entities.

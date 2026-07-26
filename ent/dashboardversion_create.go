@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/dashboard"
-	"github.com/plexusone/dashforge/ent/dashboardversion"
+	"github.com/plexusone/uiforge/ent/dashboard"
+	"github.com/plexusone/uiforge/ent/dashboardversion"
 )
 
 // DashboardVersionCreate is the builder for creating a DashboardVersion entity.

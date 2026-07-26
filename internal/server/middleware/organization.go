@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/internal/server/db"
+	"github.com/plexusone/uiforge/internal/server/db"
 )
 
 type contextKey string
@@ -122,7 +122,7 @@ func (m *OrganizationMiddleware) extractOrganization(r *http.Request) (uuid.UUID
 		return orgID, ""
 	}
 
-	// 3. Subdomain extraction (org.dashforge.io)
+	// 3. Subdomain extraction (org.uiforge.io)
 	host := r.Host
 	if idx := strings.Index(host, ":"); idx > 0 {
 		host = host[:idx] // Remove port

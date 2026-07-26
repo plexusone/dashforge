@@ -3,11 +3,11 @@
 //
 // Standalone mode (existing behavior):
 //
-//	go run ./cmd/dashforge-server serve
+//	go run ./cmd/uiforge-server serve
 //
 // Multi-app mode (via systemforge multi-app server):
 //
-//	import "github.com/plexusone/dashforge/multiapp"
+//	import "github.com/plexusone/uiforge/multiapp"
 //	server.RegisterApp(multiapp.NewBackend(nil))
 package multiapp
 
@@ -24,9 +24,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	cfmultiapp "github.com/grokify/systemforge/multiapp"
 	"github.com/jackc/pgx/v5/stdlib"
-	dashent "github.com/plexusone/dashforge/ent"
-	"github.com/plexusone/dashforge/internal/server"
-	"github.com/plexusone/dashforge/internal/server/db"
+	dashent "github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/uiforge/internal/server"
+	"github.com/plexusone/uiforge/internal/server/db"
 )
 
 // Backend implements multiapp.AppBackend for DashForge.
@@ -48,7 +48,7 @@ func NewBackend(cfg *server.Config) *Backend {
 
 // Slug returns the app identifier.
 func (b *Backend) Slug() string {
-	return "dashforge"
+	return "uiforge"
 }
 
 // Name returns the display name.

@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/plexusone/dashforge/ent/alertchannel"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/alertchannel"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // AlertChannelDelete is the builder for deleting a AlertChannel entity.

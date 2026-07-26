@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/dashboardtemplate"
-	"github.com/plexusone/dashforge/ent/listing"
-	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/publisher"
+	"github.com/plexusone/uiforge/ent/dashboardtemplate"
+	"github.com/plexusone/uiforge/ent/listing"
+	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/publisher"
 )
 
 // PublisherUpdate is the builder for updating Publisher entities.

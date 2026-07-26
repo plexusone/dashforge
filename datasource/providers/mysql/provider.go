@@ -11,7 +11,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 
-	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/uiforge/datasource"
 )
 
 func init() {

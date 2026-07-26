@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/plexusone/dashforge/ent"
+	"github.com/plexusone/uiforge/ent"
 	// required by schema hooks.
-	_ "github.com/plexusone/dashforge/ent/runtime"
+	_ "github.com/plexusone/uiforge/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/plexusone/dashforge/ent/migrate"
+	"github.com/plexusone/uiforge/ent/migrate"
 )
 
 type (

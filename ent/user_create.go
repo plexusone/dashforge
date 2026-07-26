@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/membership"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/uiforge/ent/membership"
+	"github.com/plexusone/uiforge/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.

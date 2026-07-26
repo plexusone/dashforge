@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/dashboardtemplate"
-	"github.com/plexusone/dashforge/ent/license"
-	"github.com/plexusone/dashforge/ent/listing"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/publisher"
+	"github.com/plexusone/uiforge/ent/dashboardtemplate"
+	"github.com/plexusone/uiforge/ent/license"
+	"github.com/plexusone/uiforge/ent/listing"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/publisher"
 )
 
 // ListingCreate is the builder for creating a Listing entity.

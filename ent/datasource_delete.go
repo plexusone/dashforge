@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/datasource"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/datasource"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // DataSourceDelete is the builder for deleting a DataSource entity.

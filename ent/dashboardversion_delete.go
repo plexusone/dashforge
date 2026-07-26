@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/dashboardversion"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/dashboardversion"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // DashboardVersionDelete is the builder for deleting a DashboardVersion entity.

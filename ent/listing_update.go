@@ -13,12 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/dashboardtemplate"
-	"github.com/plexusone/dashforge/ent/license"
-	"github.com/plexusone/dashforge/ent/listing"
-	"github.com/plexusone/dashforge/ent/predicate"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/publisher"
+	"github.com/plexusone/uiforge/ent/dashboardtemplate"
+	"github.com/plexusone/uiforge/ent/license"
+	"github.com/plexusone/uiforge/ent/listing"
+	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/publisher"
 )
 
 // ListingUpdate is the builder for updating Listing entities.

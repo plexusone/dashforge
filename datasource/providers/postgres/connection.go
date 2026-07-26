@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/uiforge/datasource"
 )
 
 // Connection implements datasource.Connection for PostgreSQL.

@@ -10,23 +10,23 @@ import (
 
 	"github.com/grokify/systemforge/authz"
 	"github.com/grokify/systemforge/authz/spicedb"
-	"github.com/plexusone/dashforge/builder"
-	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/uiforge/builder"
+	"github.com/plexusone/uiforge/datasource"
 
 	// Import providers for registration via init()
-	_ "github.com/plexusone/dashforge/datasource/providers/mysql"
-	_ "github.com/plexusone/dashforge/datasource/providers/postgres"
+	_ "github.com/plexusone/uiforge/datasource/providers/mysql"
+	_ "github.com/plexusone/uiforge/datasource/providers/postgres"
 
 	// Import channel adapters for registration via init()
-	_ "github.com/plexusone/dashforge/integration/channel/email"
-	_ "github.com/plexusone/dashforge/integration/channel/slack"
-	_ "github.com/plexusone/dashforge/integration/channel/webhook"
-	_ "github.com/plexusone/dashforge/integration/channel/whatsapp"
-	localAuthz "github.com/plexusone/dashforge/internal/authz"
-	"github.com/plexusone/dashforge/internal/server/api"
-	"github.com/plexusone/dashforge/internal/server/auth"
-	"github.com/plexusone/dashforge/internal/server/db"
-	"github.com/plexusone/dashforge/viewer"
+	_ "github.com/plexusone/uiforge/integration/channel/email"
+	_ "github.com/plexusone/uiforge/integration/channel/slack"
+	_ "github.com/plexusone/uiforge/integration/channel/webhook"
+	_ "github.com/plexusone/uiforge/integration/channel/whatsapp"
+	localAuthz "github.com/plexusone/uiforge/internal/authz"
+	"github.com/plexusone/uiforge/internal/server/api"
+	"github.com/plexusone/uiforge/internal/server/auth"
+	"github.com/plexusone/uiforge/internal/server/db"
+	"github.com/plexusone/uiforge/viewer"
 )
 
 // Config holds server configuration.
@@ -178,7 +178,7 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 			Secret:             []byte(cfg.JWTSecret),
 			AccessTokenExpiry:  15 * time.Minute,
 			RefreshTokenExpiry: 7 * 24 * time.Hour,
-			Issuer:             "dashforge",
+			Issuer:             "uiforge",
 		})
 		if err != nil {
 			return nil, fmt.Errorf("creating JWT service: %w", err)

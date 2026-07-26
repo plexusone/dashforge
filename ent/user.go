@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/user"
+	"github.com/plexusone/uiforge/ent/user"
 )
 
 // User is the model entity for the User schema.
