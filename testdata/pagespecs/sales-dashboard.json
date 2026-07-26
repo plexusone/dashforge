@@ -1,0 +1,87 @@
+{
+  "apiVersion": "ui.plexusone.dev/v1",
+  "kind": "Page",
+  "metadata": {
+    "id": "sales-analytics",
+    "name": "sales-analytics",
+    "title": "Sales Analytics Dashboard",
+    "description": "Track revenue, orders, and customer metrics across regions",
+    "version": "1.0.0"
+  },
+  "profile": "dashboard",
+  "context": {
+    "region": "all",
+    "period": "month"
+  },
+  "layout": {
+    "type": "responsive-grid",
+    "config": {
+      "columns": 12,
+      "gap": "8px"
+    }
+  },
+  "components": [
+    {
+      "id": "revenue-metric",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 0, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Total Revenue", "format": "currency", "prefix": "$", "trend": true},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "orders-metric",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 3, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Orders", "format": "number", "trend": true},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "customers-metric",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 6, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Customers", "format": "number", "trend": true},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "avg-order-metric",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 9, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Avg Order Value", "format": "currency", "prefix": "$"},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "revenue-trend",
+      "type": "analytics.line-chart",
+      "position": {"row": 1, "col": 0, "colSpan": 8, "rowSpan": 3},
+      "properties": {"title": "Revenue Trend", "xAxis": "month", "yAxis": "revenue", "showLegend": true},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "region-breakdown",
+      "type": "analytics.bar-chart",
+      "position": {"row": 1, "col": 8, "colSpan": 4, "rowSpan": 3},
+      "properties": {"title": "Revenue by Region", "orientation": "horizontal"},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    },
+    {
+      "id": "orders-table",
+      "type": "analytics.table",
+      "position": {"row": 4, "col": 0, "colSpan": 12, "rowSpan": 4},
+      "properties": {"title": "Recent Orders", "sortable": true, "filterable": true, "pageSize": 10},
+      "data": {"primary": {"source": "sales-data", "operation": "query"}}
+    }
+  ],
+  "interactions": [
+    {
+      "when": {"component": "region-breakdown", "event": "click"},
+      "then": [{"target": "orders-table", "action": "filter", "params": {"region": "${event.region}"}}]
+    }
+  ],
+  "theme": {
+    "id": "default",
+    "variant": "light",
+    "tokens": {
+      "color-primary": "#0ea5e9"
+    }
+  }
+}

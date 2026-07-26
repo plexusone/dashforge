@@ -1,0 +1,107 @@
+{
+  "apiVersion": "ui.plexusone.dev/v1",
+  "kind": "Page",
+  "metadata": {
+    "id": "compliance-overview",
+    "name": "compliance-overview",
+    "title": "Workflow Compliance Dashboard",
+    "description": "Overview of GitHub Actions workflow compliance across repositories",
+    "version": "1.0.0"
+  },
+  "profile": "dashboard",
+  "context": {
+    "language": "",
+    "complianceLevel": "",
+    "repoSearch": ""
+  },
+  "layout": {
+    "type": "responsive-grid",
+    "config": {
+      "columns": 12,
+      "gap": "16px"
+    }
+  },
+  "components": [
+    {
+      "id": "total-repos",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 0, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Total Repositories", "format": "number"},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "full-compliance",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 3, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Full Compliance", "format": "percent", "suffix": "%"},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "partial-compliance",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 6, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Partial Compliance", "format": "percent", "suffix": "%"},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "no-compliance",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 9, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "No Compliance", "format": "percent", "suffix": "%"},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "language-filter",
+      "type": "analytics.filter",
+      "position": {"row": 1, "col": 0, "colSpan": 4, "rowSpan": 1},
+      "properties": {"label": "Language", "field": "language", "filterType": "select"}
+    },
+    {
+      "id": "compliance-filter",
+      "type": "analytics.filter",
+      "position": {"row": 1, "col": 4, "colSpan": 4, "rowSpan": 1},
+      "properties": {"label": "Compliance Level", "field": "complianceLevel", "filterType": "select"}
+    },
+    {
+      "id": "search-filter",
+      "type": "analytics.filter",
+      "position": {"row": 1, "col": 8, "colSpan": 4, "rowSpan": 1},
+      "properties": {"label": "Repository", "field": "repoSearch", "filterType": "search", "placeholder": "Search repos..."}
+    },
+    {
+      "id": "compliance-by-language",
+      "type": "analytics.bar-chart",
+      "position": {"row": 2, "col": 0, "colSpan": 6, "rowSpan": 3},
+      "properties": {"title": "Compliance by Language", "stacked": true, "showLegend": true},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "compliance-trend",
+      "type": "analytics.line-chart",
+      "position": {"row": 2, "col": 6, "colSpan": 6, "rowSpan": 3},
+      "properties": {"title": "Compliance Trend", "xAxis": "date", "yAxis": "score", "showLegend": true},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    },
+    {
+      "id": "repos-table",
+      "type": "analytics.table",
+      "position": {"row": 5, "col": 0, "colSpan": 12, "rowSpan": 5},
+      "properties": {"title": "Repository Details", "sortable": true, "filterable": true, "pageSize": 25},
+      "data": {"primary": {"source": "compliance-results", "operation": "query"}}
+    }
+  ],
+  "interactions": [
+    {
+      "when": {"component": "language-filter", "event": "change"},
+      "then": [{"target": "repos-table", "action": "filter", "params": {"language": "${event.value}"}}]
+    },
+    {
+      "when": {"component": "compliance-filter", "event": "change"},
+      "then": [{"target": "repos-table", "action": "filter", "params": {"complianceLevel": "${event.value}"}}]
+    },
+    {
+      "when": {"component": "compliance-by-language", "event": "click"},
+      "then": [{"target": "repos-table", "action": "filter", "params": {"language": "${event.language}"}}]
+    }
+  ]
+}
