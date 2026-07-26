@@ -1,35 +1,35 @@
 package uispec
 
 const (
-	LayoutResponsiveGrid  = "responsive-grid"
-	LayoutStack           = "stack"
-	LayoutSplitPane       = "split-pane"
-	LayoutTabs            = "tabs"
+	LayoutResponsiveGrid   = "responsive-grid"
+	LayoutStack            = "stack"
+	LayoutSplitPane        = "split-pane"
+	LayoutTabs             = "tabs"
 	LayoutApplicationShell = "application-shell"
 )
 
 // LayoutSpec defines how components are arranged on a page.
 type LayoutSpec struct {
-	Type    string           `json:"type"`
-	Config  *LayoutConfig    `json:"config,omitempty"`
-	Regions []LayoutRegion   `json:"regions,omitempty"`
+	Type    string         `json:"type"`
+	Config  *LayoutConfig  `json:"config,omitempty"`
+	Regions []LayoutRegion `json:"regions,omitempty"`
 }
 
 // LayoutConfig holds type-specific layout parameters.
 type LayoutConfig struct {
-	Columns     int               `json:"columns,omitempty"`
-	Rows        int               `json:"rows,omitempty"`
-	Gap         string            `json:"gap,omitempty"`
-	Direction   string            `json:"direction,omitempty"`
+	Columns     int                         `json:"columns,omitempty"`
+	Rows        int                         `json:"rows,omitempty"`
+	Gap         string                      `json:"gap,omitempty"`
+	Direction   string                      `json:"direction,omitempty"`
 	Breakpoints map[string]BreakpointConfig `json:"breakpoints,omitempty"`
-	Sizes       []string          `json:"sizes,omitempty"`
-	Resizable   bool              `json:"resizable,omitempty"`
+	Sizes       []string                    `json:"sizes,omitempty"`
+	Resizable   bool                        `json:"resizable,omitempty"`
 }
 
 // BreakpointConfig adjusts layout at different viewport widths.
 type BreakpointConfig struct {
-	MinWidth int `json:"minWidth"`
-	Columns  int `json:"columns,omitempty"`
+	MinWidth int    `json:"minWidth"`
+	Columns  int    `json:"columns,omitempty"`
 	Gap      string `json:"gap,omitempty"`
 }
 
