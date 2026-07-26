@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/integration"
-	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/integration"
+	"github.com/plexusone/uiforge/ent/organization"
 )
 
 // Integration is the model entity for the Integration schema.

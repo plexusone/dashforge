@@ -1,4 +1,4 @@
-module github.com/plexusone/dashforge
+module github.com/plexusone/uiforge
 
 go 1.26.4
 
@@ -11,12 +11,10 @@ require (
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/lib/pq v1.12.3
 	github.com/plexusone/omnillm-core v0.17.0
+	github.com/spf13/cobra v1.10.2
 	golang.org/x/oauth2 v0.36.0
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-// Pin otel versions to be compatible with spicedb v1.49.2
-replace go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0
 
 require (
 	ariga.io/atlas v1.2.2 // indirect
@@ -163,7 +161,6 @@ require (
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spf13/viper v1.21.0 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.8.1 // indirect
@@ -208,7 +205,10 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20260618152121-87f3d3e198d3 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260618152121-87f3d3e198d3 // indirect
 	google.golang.org/grpc v1.81.1 // indirect
-	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	k8s.io/utils v0.0.0-20260617174310-a95e086a2553 // indirect
 	resenje.org/singleflight v0.4.3 // indirect
 )
+
+// Pin otel versions to be compatible with spicedb v1.49.2
+replace go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0

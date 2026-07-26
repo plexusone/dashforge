@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/integration"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/integration"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // IntegrationDelete is the builder for deleting a Integration entity.

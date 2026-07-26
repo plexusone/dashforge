@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/alert"
-	"github.com/plexusone/dashforge/ent/alertevent"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/alert"
+	"github.com/plexusone/uiforge/ent/alertevent"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // AlertEventQuery is the builder for querying AlertEvent entities.

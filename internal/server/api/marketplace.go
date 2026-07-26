@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/plexusone/dashforge/ent"
-	entintegration "github.com/plexusone/dashforge/ent/integration"
-	"github.com/plexusone/dashforge/integration/channel"
-	"github.com/plexusone/dashforge/internal/server/db"
+	"github.com/plexusone/uiforge/ent"
+	entintegration "github.com/plexusone/uiforge/ent/integration"
+	"github.com/plexusone/uiforge/integration/channel"
+	"github.com/plexusone/uiforge/internal/server/db"
 )
 
 // MarketplaceHandler handles marketplace API requests.

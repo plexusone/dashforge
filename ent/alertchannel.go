@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/plexusone/dashforge/ent/alert"
-	"github.com/plexusone/dashforge/ent/alertchannel"
-	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/uiforge/ent/alert"
+	"github.com/plexusone/uiforge/ent/alertchannel"
+	"github.com/plexusone/uiforge/ent/integration"
 )
 
 // AlertChannel is the model entity for the AlertChannel schema.

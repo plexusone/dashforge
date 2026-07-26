@@ -11,46 +11,72 @@ import (
 
 	"github.com/invopop/jsonschema"
 
-	"github.com/plexusone/dashforge/dashboardir"
+	"github.com/plexusone/uiforge/dashboardir"
+	"github.com/plexusone/uiforge/registry"
+	"github.com/plexusone/uiforge/uispec"
 )
 
+type schemaTarget struct {
+	Type        any
+	ID          string
+	Title       string
+	Description string
+	OutputFile  string
+}
+
 func main() {
+	targets := []schemaTarget{
+		{
+			Type:        &dashboardir.Dashboard{},
+			ID:          "https://github.com/plexusone/uiforge/schema/dashboard.schema.json",
+			Title:       "Dashboard",
+			Description: "UIForge dashboard definition (DashboardIR)",
+			OutputFile:  "schema/dashboard.schema.json",
+		},
+		{
+			Type:        &uispec.PageSpec{},
+			ID:          "https://github.com/plexusone/uiforge/schema/page.schema.json",
+			Title:       "PageSpec",
+			Description: "UIForge page specification — the canonical JSON IR for declarative UI composition",
+			OutputFile:  "schema/page.schema.json",
+		},
+		{
+			Type:        &registry.ComponentSpec{},
+			ID:          "https://github.com/plexusone/uiforge/schema/component.schema.json",
+			Title:       "ComponentSpec",
+			Description: "UIForge component manifest — describes a registered component's interface",
+			OutputFile:  "schema/component.schema.json",
+		},
+	}
+
 	r := &jsonschema.Reflector{
-		DoNotReference:             true,
 		RequiredFromJSONSchemaTags: true,
-		ExpandedStruct:             true,
 	}
 
-	schema := r.Reflect(&dashboardir.Dashboard{})
-	schema.Version = "https://json-schema.org/draft/2020-12/schema"
-	schema.ID = "https://github.com/plexusone/dashforge/schema/dashboard.schema.json"
-	schema.Title = "Dashboard"
-	schema.Description = "Dashforge dashboard definition"
+	for _, t := range targets {
+		schema := r.Reflect(t.Type)
+		schema.Version = "https://json-schema.org/draft/2020-12/schema"
+		schema.ID = jsonschema.ID(t.ID)
+		schema.Title = t.Title
+		schema.Description = t.Description
 
-	data, err := json.MarshalIndent(schema, "", "  ")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error marshaling schema: %v\n", err)
-		os.Exit(1)
+		data, err := json.MarshalIndent(schema, "", "  ")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error marshaling %s: %v\n", t.Title, err)
+			os.Exit(1)
+		}
+
+		dir := filepath.Dir(t.OutputFile)
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			fmt.Fprintf(os.Stderr, "Error creating directory %s: %v\n", dir, err)
+			os.Exit(1)
+		}
+
+		if err := os.WriteFile(t.OutputFile, data, 0644); err != nil {
+			fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", t.OutputFile, err)
+			os.Exit(1)
+		}
+
+		fmt.Printf("Schema written to %s\n", t.OutputFile)
 	}
-
-	// Determine output path
-	outputPath := "schema/dashboard.schema.json"
-	if len(os.Args) > 1 {
-		outputPath = os.Args[1]
-	}
-
-	// Create directory if needed
-	dir := filepath.Dir(outputPath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating directory: %v\n", err)
-		os.Exit(1)
-	}
-
-	// Write schema file
-	if err := os.WriteFile(outputPath, data, 0644); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing schema: %v\n", err)
-		os.Exit(1)
-	}
-
-	fmt.Printf("Schema written to %s\n", outputPath)
 }

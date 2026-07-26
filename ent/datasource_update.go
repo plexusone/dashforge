@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/datasource"
-	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/datasource"
+	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // DataSourceUpdate is the builder for updating DataSource entities.

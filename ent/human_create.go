@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/human"
-	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/human"
+	"github.com/plexusone/uiforge/ent/principal"
 )
 
 // HumanCreate is the builder for creating a Human entity.

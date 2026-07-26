@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/license"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/seatassignment"
+	"github.com/plexusone/uiforge/ent/license"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/seatassignment"
 )
 
 // SeatAssignmentCreate is the builder for creating a SeatAssignment entity.

@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/dashforge/ent/human"
-	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/uiforge/ent/human"
+	"github.com/plexusone/uiforge/ent/predicate"
 )
 
 // HumanDelete is the builder for deleting a Human entity.

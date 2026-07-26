@@ -12,7 +12,7 @@ import (
 
 	_ "github.com/lib/pq" // PostgreSQL driver
 
-	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/uiforge/datasource"
 )
 
 func init() {

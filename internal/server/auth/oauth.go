@@ -14,9 +14,9 @@ import (
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
 
-	"github.com/plexusone/dashforge/ent"
-	"github.com/plexusone/dashforge/ent/human"
-	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/uiforge/ent/human"
+	"github.com/plexusone/uiforge/ent/principal"
 )
 
 // OAuthConfig holds OAuth provider configurations.

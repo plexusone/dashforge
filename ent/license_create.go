@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/license"
-	"github.com/plexusone/dashforge/ent/listing"
-	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/seatassignment"
+	"github.com/plexusone/uiforge/ent/license"
+	"github.com/plexusone/uiforge/ent/listing"
+	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/seatassignment"
 )
 
 // LicenseCreate is the builder for creating a License entity.

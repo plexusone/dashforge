@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/principal"
-	"github.com/plexusone/dashforge/ent/savedquery"
-	"github.com/plexusone/dashforge/ent/schema"
+	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/savedquery"
+	"github.com/plexusone/uiforge/ent/schema"
 )
 
 // SavedQuery is the model entity for the SavedQuery schema.

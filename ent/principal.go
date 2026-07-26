@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/dashforge/ent/human"
-	"github.com/plexusone/dashforge/ent/organization"
-	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/uiforge/ent/human"
+	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/uiforge/ent/principal"
 )
 
 // Principal is the model entity for the Principal schema.
