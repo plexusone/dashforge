@@ -1,11 +1,56 @@
 {
   "irVersion": "1.0",
-  "project": "DashForge",
+  "project": "UIForge",
   "repository": "https://github.com/plexusone/uiforge",
   "versioning": "semver",
   "commitConvention": "conventional",
   "maintainers": ["grokify"],
   "releases": [
+    {
+      "version": "v0.4.0",
+      "date": "2026-07-25",
+      "highlights": [
+        { "description": "UISpec type system: core Go types for the specification-driven UI composition model (page, component, layout, binding, interaction, navigation, theme, capability, and experience profiles)" },
+        { "description": "Component registry with manifest validation, experience profiles, and builtin core/analytics/assistant namespaces" },
+        { "description": "React PageRenderer for TypeScript: layout engine, component registry, expression evaluator, interaction handler, datasource connector, and reactive state store" },
+        { "description": "Dashboard builder: AI-powered PageSpec generator, drag-and-drop ComponentPalette, and ComponentPropertyEditor" },
+        { "description": "New `uiforge` and `uiforge-server` Cobra CLIs" },
+        { "description": "Generated component and page JSON schemas via invopop/jsonschema" },
+        { "description": "Renamed project and Go module from DashForge/dashforge to UIForge/uiforge across code, docs, and imports" }
+      ],
+      "added": [
+        { "description": "UISpec type system: page, component, layout, binding, interaction, navigation, theme, capability, and experience profile types", "commit": "e8ae9aa" },
+        { "description": "Component registry with manifest validation, experience profiles, and builtin definitions for core, analytics, and assistant namespaces", "commit": "5f92a3b" },
+        { "description": "Domain packages for PageSpec diffing, expression evaluation, interaction engine (drilldown/navigation), reactive state store, dashboard bridge adapter, and typed datasource connector", "commit": "fbe6f23" },
+        { "description": "`uiforge` and `uiforge-server` Cobra CLIs: `uiforge` for validate/serve, `uiforge-server` for full server with database, auth, and multi-tenancy", "commit": "43bf0ef" },
+        { "description": "Component and page JSON schemas generated from Go types via invopop/jsonschema", "commit": "5a06e51" },
+        { "description": "React PageRenderer with UISpec rendering: PageRenderer component, layout engine, component registry, expression evaluator, interaction handler, datasource connector, reactive state store, and assistant-ui components", "commit": "feaadba" },
+        { "description": "Builder: AI-powered PageSpec generator, ComponentPalette for drag-and-drop composition, ComponentPropertyEditor for visual property editing, and pagespec Zustand store", "commit": "5350c3e" }
+      ],
+      "changed": [
+        { "description": "Rename Go module from `github.com/plexusone/dashforge` to `github.com/plexusone/uiforge`, updating import paths across ent generated code, datasource providers, integration channels, internal server, multiapp, and schema packages", "commit": "454e093" }
+      ],
+      "documentation": [
+        { "description": "Rename DashForge display name to UIForge across README, mkdocs.yml, docs pages, specs, design docs, and release notes", "commit": "86125df" },
+        { "description": "Rename dashforge to uiforge across all documentation, mkdocs.yml, README, CHANGELOG, and release notes (URLs, binary names, import paths)", "commit": "c29b479" },
+        { "description": "Add CLAUDE.md with project conventions and session protocol for PRISM Control integration", "commit": "6ff597a" },
+        { "description": "Update README shields", "commit": "0015e8e" }
+      ],
+      "dependencies": [
+        { "description": "Bump `github.com/grokify/systemforge` from 0.7.0 to 0.8.0", "commit": "8ff4a01" },
+        { "description": "Bump `github.com/go-chi/chi/v5` from 5.2.5 to 5.3.1", "commit": "e450293" },
+        { "description": "Bump `github.com/jackc/pgx/v5` from 5.9.2 to 5.10.0", "commit": "983f40f" },
+        { "description": "Bump `github.com/plexusone/omnillm-core` from 0.15.0 to 0.18.0", "commit": "14f3191" }
+      ],
+      "tests": [
+        { "description": "Add PageSpec golden test data and example dashboard specs for metrics overview, sales dashboard, compliance, and agent workspace", "commit": "e9bb840" }
+      ],
+      "internal": [
+        { "description": "Fix `gofmt` issues flagged by golangci-lint", "commit": "2155b97" },
+        { "description": "Update .gitignore for uiforge rename and add node_modules ignore", "commit": "d2c1cd2" },
+        { "description": "Add task tracking and ideation notes", "commit": "8b5943a" }
+      ]
+    },
     {
       "version": "v0.3.0",
       "date": "2026-05-11",
