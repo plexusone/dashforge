@@ -71,20 +71,20 @@ Full-featured analytics platform with:
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        UIForge                                 │
-├─────────────────────────────────────────────────────────────────┤
-│  Builder Mode            │  Static Mode     │  Server Mode      │
-│  ────────────            │  ───────────     │  ───────────      │
-│  /builder/               │  viewer/         │  uiforge-server │
-│  React + TypeScript      │  index.html      │  PostgreSQL + Ent │
-│  Cube.js queries         │  JSON files      │  OAuth            │
-│  AI generation           │  GitHub Pages    │  Multi-tenant RLS │
-├─────────────────────────────────────────────────────────────────┤
+┌──────────────────────────────────────────────────────────────────┐
+│                        UIForge                                   │
+├──────────────────────────────────────────────────────────────────┤
+│  Builder Mode            │  Static Mode     │  Server Mode       │
+│  ────────────            │  ───────────     │  ───────────       │
+│  /builder/               │  viewer/         │  uiforge-server    │
+│  React + TypeScript      │  index.html      │  PostgreSQL + Ent  │
+│  Cube.js queries         │  JSON files      │  OAuth             │
+│  AI generation           │  GitHub Pages    │  Multi-tenant RLS  │
+├──────────────────────────────────────────────────────────────────┤
 │                    Dashboard IR (JSON)                           │
 │                    ChartIR (echartify)                           │
 │                    Cube.js Semantic Layer                        │
-└─────────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ## AI-First Design
