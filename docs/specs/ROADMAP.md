@@ -38,7 +38,7 @@ RMI IDs use the repo slug where the work lands. Cross-repo items are attributed 
 | RMI-UIFORGE-009 | Register analytics components (line-chart, bar-chart, metric, table, filter, gauge) | uiforge | capability | yes |
 | RMI-UIFORGE-010 | Implement UISpec React renderer | uiforge | capability | yes |
 | RMI-UIFORGE-011 | Dashboard profile enforcement and validation | uiforge | quality | yes |
-| RMI-UIFORGE-012 | Convert DashForge example dashboards to UISpec PageSpecs | uiforge | quality | no |
+| RMI-UIFORGE-012 | Convert UIForge example dashboards to UISpec PageSpecs | uiforge | quality | no |
 | RMI-UIFORGE-013 | Golden-file tests for PageSpec → component tree | uiforge | quality | yes |
 
 ### Dependencies

@@ -1,8 +1,8 @@
-# Dashforge
+# UIForge
 
 A JSON-first dashboard framework that starts simple with static hosting and grows into a full Metabase-like analytics platform with an AI-powered visual builder.
 
-## Why Dashforge?
+## Why UIForge?
 
 - **Visual Dashboard Builder** - Drag-and-drop editor optimized for both humans and LLM agents
 - **JSON IR First** - Dashboards are defined in a non-polymorphic, AI-friendly JSON format that's easy to generate, validate, and version control
@@ -72,7 +72,7 @@ Full-featured analytics platform with:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Dashforge                                 │
+│                        UIForge                                 │
 ├─────────────────────────────────────────────────────────────────┤
 │  Builder Mode            │  Static Mode     │  Server Mode      │
 │  ────────────            │  ───────────     │  ───────────      │
@@ -89,7 +89,7 @@ Full-featured analytics platform with:
 
 ## AI-First Design
 
-Dashforge is designed from the ground up to work seamlessly with LLM agents:
+UIForge is designed from the ground up to work seamlessly with LLM agents:
 
 - **Non-polymorphic JSON** - Dashboard IR uses flat structures without `oneOf`/`anyOf`, making it easy for AI to generate valid configurations
 - **Semantic context** - Cube.js provides business-friendly names like "revenue" and "customer_count" instead of raw column names

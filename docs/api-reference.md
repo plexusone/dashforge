@@ -1,6 +1,6 @@
 # API Reference
 
-The Dashforge REST API provides programmatic access to dashboards, data sources, and queries.
+The UIForge REST API provides programmatic access to dashboards, data sources, and queries.
 
 ## Base URL
 

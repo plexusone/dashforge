@@ -1,11 +1,11 @@
-# DashForge Authorization Architecture
+# UIForge Authorization Architecture
 
 ## Overview
 
-DashForge operates as a **two-sided marketplace** for data dashboards:
+UIForge operates as a **two-sided marketplace** for data dashboards:
 
 1. **Dashboard Publishers** - Create and sell dashboard templates
-2. **Dashboard Consumers** - Subscribe to DashForge, build reports, and purchase templates
+2. **Dashboard Consumers** - Subscribe to UIForge, build reports, and purchase templates
 
 This document defines the authorization model supporting this marketplace.
 
@@ -13,7 +13,7 @@ This document defines the authorization model supporting this marketplace.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           DashForge Platform                                 │
+│                           UIForge Platform                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────────────────┐     ┌─────────────────────────────────┐    │
@@ -73,12 +73,12 @@ This document defines the authorization model supporting this marketplace.
 
 ### Organizations
 
-DashForge supports two organization types:
+UIForge supports two organization types:
 
 | Type | Description | Capabilities |
 |------|-------------|--------------|
 | **Publisher** | Creates and sells dashboard templates | Publish to marketplace, manage listings, view analytics |
-| **Consumer** | Subscribes to DashForge for internal use | Create dashboards, connect data, purchase templates |
+| **Consumer** | Subscribes to UIForge for internal use | Create dashboards, connect data, purchase templates |
 | **Hybrid** | Both publisher and consumer | Full capabilities |
 
 ### Resources
@@ -147,7 +147,7 @@ definition publisher {
     permission publish_connector = manage
 }
 
-// Consumer organization - subscribes to DashForge, builds dashboards
+// Consumer organization - subscribes to UIForge, builds dashboards
 definition organization {
     relation owner: principal
     relation admin: principal

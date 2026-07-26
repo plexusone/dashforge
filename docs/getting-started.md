@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide walks you through installing Dashforge and creating your first dashboard.
+This guide walks you through installing UIForge and creating your first dashboard.
 
 ## Installation
 
@@ -151,7 +151,7 @@ export JWT_SECRET="your-secure-secret-key-at-least-32-chars"
   --auto-migrate
 ```
 
-### 3. Access Dashforge
+### 3. Access UIForge
 
 - **Builder**: `http://localhost:8080/builder/` - Visual dashboard editor
 - **Viewer**: `http://localhost:8080/viewer/` - Dashboard viewer

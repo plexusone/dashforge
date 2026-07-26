@@ -1,6 +1,6 @@
 # AI Features
 
-Dashforge is designed from the ground up to work with LLM agents. The non-polymorphic JSON format, semantic data layer, and validation system make it easy for AI to generate valid dashboard configurations.
+UIForge is designed from the ground up to work with LLM agents. The non-polymorphic JSON format, semantic data layer, and validation system make it easy for AI to generate valid dashboard configurations.
 
 ## Why AI-First?
 
@@ -16,7 +16,7 @@ Traditional dashboard formats use polymorphic schemas:
 }
 ```
 
-Dashforge uses flat, explicit structures:
+UIForge uses flat, explicit structures:
 
 ```json
 // Non-polymorphic (easy for AI)

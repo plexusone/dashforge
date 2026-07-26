@@ -1,4 +1,4 @@
-# Dashforge
+# UIForge
 
 [![Go CI][go-ci-svg]][go-ci-url]
 [![Go Lint][go-lint-svg]][go-lint-url]
@@ -114,12 +114,12 @@ Full documentation is available at [docs/](docs/):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Dashforge                                │
+│                        UIForge                                │
 ├─────────────────────────────────────────────────────────────────┤
 │  builder/               Visual dashboard builder (React)        │
 │    ├── src/components/  Canvas, widgets, chart builder          │
 │    ├── src/ai/          AI generation schemas & prompts         │
-│    └── src/api/         Dashforge & Cube.js clients             │
+│    └── src/api/         UIForge & Cube.js clients             │
 ├─────────────────────────────────────────────────────────────────┤
 │  cube/                  Cube.js semantic layer                  │
 │    └── model/cubes/     Data models (YAML)                      │

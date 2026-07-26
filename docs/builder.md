@@ -1,6 +1,6 @@
 # Dashboard Builder
 
-The Dashforge Dashboard Builder is a visual drag-and-drop editor for creating dashboards. It's built with React and TypeScript, and is optimized for both human users and LLM agents.
+The UIForge Dashboard Builder is a visual drag-and-drop editor for creating dashboards. It's built with React and TypeScript, and is optimized for both human users and LLM agents.
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ npm run dev
 # Opens http://localhost:5173
 ```
 
-The dev server proxies API requests to `http://localhost:8080`, so start the Dashforge server in another terminal:
+The dev server proxies API requests to `http://localhost:8080`, so start the UIForge server in another terminal:
 
 ```bash
 go run ./cmd/uiforge-server serve --port 8080
@@ -31,7 +31,7 @@ go run ./cmd/uiforge-server serve --port 8080
 
 ### Running in Production
 
-Build and embed in the Dashforge server:
+Build and embed in the UIForge server:
 
 ```bash
 cd builder && npm run build && cd ..
@@ -221,7 +221,7 @@ Click the settings menu and select "Export JSON" to download the dashboard as a 
 
 ### Save to Server
 
-If connected to a Dashforge server, click "Save" to persist the dashboard to the database.
+If connected to a UIForge server, click "Save" to persist the dashboard to the database.
 
 ### Import from JSON
 

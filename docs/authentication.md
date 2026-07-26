@@ -1,12 +1,12 @@
 # Authentication
 
-Dashforge supports OAuth 2.0 authentication with GitHub and Google providers, using JWT tokens for session management.
+UIForge supports OAuth 2.0 authentication with GitHub and Google providers, using JWT tokens for session management.
 
 ## Overview
 
 ```
 ┌─────────┐     ┌───────────┐     ┌──────────────┐
-│ Browser │────▶│ Dashforge │────▶│ GitHub/Google│
+│ Browser │────▶│ UIForge │────▶│ GitHub/Google│
 │         │◀────│  Server   │◀────│    OAuth     │
 └─────────┘     └───────────┘     └──────────────┘
      │                │
@@ -15,11 +15,11 @@ Dashforge supports OAuth 2.0 authentication with GitHub and Google providers, us
 ```
 
 1. User clicks "Login with GitHub/Google"
-2. Dashforge redirects to OAuth provider
+2. UIForge redirects to OAuth provider
 3. User authenticates with provider
 4. Provider redirects back with authorization code
-5. Dashforge exchanges code for user info
-6. Dashforge creates/updates user and returns JWT tokens
+5. UIForge exchanges code for user info
+6. UIForge creates/updates user and returns JWT tokens
 
 ## Setting Up OAuth
 
@@ -28,7 +28,7 @@ Dashforge supports OAuth 2.0 authentication with GitHub and Google providers, us
 1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
 2. Click "New OAuth App"
 3. Fill in:
-   - **Application name**: Dashforge
+   - **Application name**: UIForge
    - **Homepage URL**: `https://your-domain.com`
    - **Authorization callback URL**: `https://your-domain.com/api/v1/auth/github/callback`
 4. Save and note the Client ID and Client Secret
@@ -183,7 +183,7 @@ curl -H "Authorization: Bearer eyJhbGc..." \
 
 ## User Roles
 
-Dashforge uses role-based access control:
+UIForge uses role-based access control:
 
 | Role | Permissions |
 |------|-------------|

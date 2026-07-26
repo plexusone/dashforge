@@ -1,6 +1,6 @@
 # Cube.js Integration
 
-Dashforge integrates with [Cube.js](https://cube.dev/) to provide a semantic data layer. This enables business-friendly queries and provides rich context for AI-powered dashboard generation.
+UIForge integrates with [Cube.js](https://cube.dev/) to provide a semantic data layer. This enables business-friendly queries and provides rich context for AI-powered dashboard generation.
 
 ## Why Cube.js?
 

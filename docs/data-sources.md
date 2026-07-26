@@ -1,10 +1,10 @@
 # Data Sources
 
-Data sources define where dashboard data comes from. Dashforge supports multiple data source types for different deployment scenarios.
+Data sources define where dashboard data comes from. UIForge supports multiple data source types for different deployment scenarios.
 
 ## Overview
 
-Dashforge has two levels of data sources:
+UIForge has two levels of data sources:
 
 1. **Dashboard Data Sources** - Defined in the dashboard JSON, these specify how widgets get their data (inline, URL, database query, etc.)
 2. **External Data Sources** - Server-side database connections (PostgreSQL, MySQL, etc.) managed via API that dashboard queries can reference
@@ -240,7 +240,7 @@ Configure error behavior:
 
 ## External Data Sources (Server Mode)
 
-In server mode, Dashforge supports connecting to external databases through a plugin-style provider system. This allows dashboards to query multiple databases like Metabase.
+In server mode, UIForge supports connecting to external databases through a plugin-style provider system. This allows dashboards to query multiple databases like Metabase.
 
 ### Supported Providers
 
@@ -442,7 +442,7 @@ Different databases use different parameter placeholders:
 | postgres | Positional dollar | `$1`, `$2`, `$3` |
 | mysql | Positional question | `?`, `?`, `?` |
 
-When using named parameters (`:name` or `@name`), Dashforge automatically converts them to the provider's native style.
+When using named parameters (`:name` or `@name`), UIForge automatically converts them to the provider's native style.
 
 ### Custom Providers
 
@@ -466,4 +466,4 @@ datasource.Register(&MyProvider{})
 manager.RegisterCustomProvider(&MyProvider{})
 ```
 
-See the [Development](development.md) guide for more details on extending Dashforge.
+See the [Development](development.md) guide for more details on extending UIForge.
