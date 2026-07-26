@@ -1544,20 +1544,20 @@
 <li><a href="api-reference/">API Reference</a> - REST API documentation</li>
 </ul>
 <h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌─────────────────────────────────────────────────────────────────┐
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│                        UIForge                                 │
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├─────────────────────────────────────────────────────────────────┤
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│  Builder Mode            │  Static Mode     │  Server Mode      │
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│  ────────────            │  ───────────     │  ───────────      │
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│  /builder/               │  viewer/         │  uiforge-server │
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│  React + TypeScript      │  index.html      │  PostgreSQL + Ent │
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│  Cube.js queries         │  JSON files      │  OAuth            │
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│  AI generation           │  GitHub Pages    │  Multi-tenant RLS │
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>├─────────────────────────────────────────────────────────────────┤
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│                        UIForge                                   │
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├──────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│  Builder Mode            │  Static Mode     │  Server Mode       │
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│  ────────────            │  ───────────     │  ───────────       │
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│  /builder/               │  viewer/         │  uiforge-server    │
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│  React + TypeScript      │  index.html      │  PostgreSQL + Ent  │
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│  Cube.js queries         │  JSON files      │  OAuth             │
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│  AI generation           │  GitHub Pages    │  Multi-tenant RLS  │
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>├──────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│                    Dashboard IR (JSON)                           │
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>│                    ChartIR (echartify)                           │
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>│                    Cube.js Semantic Layer                        │
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>└─────────────────────────────────────────────────────────────────┘
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>└──────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h2 id="ai-first-design">AI-First Design<a class="headerlink" href="#ai-first-design" title="Permanent link">&para;</a></h2>
 <p>UIForge is designed from the ground up to work seamlessly with LLM agents:</p>
