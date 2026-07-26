@@ -5,16 +5,16 @@ A phased approach to building a Metabase alternative, starting with static dashb
 ## Repository Structure
 
 ```
-dashforge/
+uiforge/
 ├── cmd/
-│   ├── dashforge/              # Static CLI (minimal deps)
+│   ├── uiforge/              # Static CLI (minimal deps)
 │   │   ├── main.go
 │   │   └── cmd/
 │   │       ├── root.go
 │   │       ├── serve.go        # Local dev server
 │   │       ├── validate.go     # Dashboard validation
 │   │       └── version.go
-│   └── dashforge-server/       # Full server (db, auth)
+│   └── uiforge-server/       # Full server (db, auth)
 │       ├── main.go
 │       └── cmd/
 │           ├── root.go
@@ -44,7 +44,7 @@ dashforge/
 
 ## Current State
 
-### Static CLI (`dashforge`)
+### Static CLI (`uiforge`)
 
 - [x] DashboardIR Go types
 - [x] JSON Schema generation from Go types
@@ -60,11 +60,11 @@ dashforge/
   - [x] URL param sync (shareable links)
   - [x] Dynamic options from data sources
   - [x] Variable interpolation in transforms (`${var:id}`)
-- [x] `dashforge serve` - local dev server
-- [x] `dashforge validate` - dashboard validation
+- [x] `uiforge serve` - local dev server
+- [x] `uiforge validate` - dashboard validation
 - [x] Example compliance dashboard
 
-### Server (`dashforge-server`) - Scaffolded
+### Server (`uiforge-server`) - Scaffolded
 
 - [x] CLI structure with Cobra
 - [x] Server package with HTTP routing
@@ -86,7 +86,7 @@ dashforge/
 ### 1.1 Schema & Validation ✅ Complete
 
 - [x] Generate JSON Schema from Go types
-- [x] Create `dashforge validate` CLI command
+- [x] Create `uiforge validate` CLI command
 - [ ] Add schema validation to viewer (runtime)
 - [ ] Add schema version migration support
 
@@ -132,9 +132,9 @@ dashforge/
 
 ### 1.7 CLI Tools ✅ Partial
 
-- [x] `dashforge serve` - local dev server with live reload
-- [ ] `dashforge build` - bundle dashboard + data for deployment
-- [ ] `dashforge new` - scaffold new dashboard from template
+- [x] `uiforge serve` - local dev server with live reload
+- [ ] `uiforge build` - bundle dashboard + data for deployment
+- [ ] `uiforge new` - scaffold new dashboard from template
 
 ---
 
@@ -144,7 +144,7 @@ dashforge/
 
 ### 2.1 Server Foundation ✅ Scaffolded
 
-- [x] Go HTTP server (`dashforge-server serve`)
+- [x] Go HTTP server (`uiforge-server serve`)
 - [x] Serve static dashboards
 - [x] REST API scaffolding for dashboard CRUD
 - [x] Health check endpoint
@@ -355,13 +355,13 @@ dashforge/
 ### Static CLI (lightweight)
 
 ```bash
-go install github.com/grokify/dashforge/cmd/dashforge@latest
+go install github.com/grokify/uiforge/cmd/uiforge@latest
 ```
 
 ### Full Server (includes database support)
 
 ```bash
-go install github.com/grokify/dashforge/cmd/dashforge-server@latest
+go install github.com/grokify/uiforge/cmd/uiforge-server@latest
 ```
 
 ---
@@ -372,10 +372,10 @@ go install github.com/grokify/dashforge/cmd/dashforge-server@latest
 
 ```bash
 # Create a dashboard
-dashforge new my-dashboard
+uiforge new my-dashboard
 
 # Serve locally
-dashforge serve ./my-dashboard
+uiforge serve ./my-dashboard
 
 # Deploy: push JSON files to GitHub Pages
 ```
@@ -384,10 +384,10 @@ dashforge serve ./my-dashboard
 
 ```bash
 # Start server with database
-dashforge-server serve --db-url postgres://localhost/analytics
+uiforge-server serve --db-url postgres://localhost/analytics
 
 # Or use config file
-dashforge-server serve --config config.yaml
+uiforge-server serve --config config.yaml
 ```
 
 ---
