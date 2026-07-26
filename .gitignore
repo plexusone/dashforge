@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-dashforge
-dashforge-server
+uiforge
+uiforge-server
 
 # Test binary
 *.test
@@ -16,6 +16,7 @@ coverage.html
 
 # Dependency directories
 vendor/
+node_modules/
 
 # IDE
 .idea/
