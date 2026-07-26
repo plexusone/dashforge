@@ -1,6 +1,6 @@
 # Template Marketplace
 
-Dashforge includes a marketplace for publishing and purchasing dashboard templates.
+UIForge includes a marketplace for publishing and purchasing dashboard templates.
 
 ## Overview
 

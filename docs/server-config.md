@@ -1,6 +1,6 @@
 # Server Configuration
 
-The Dashforge server provides a full-featured backend for dashboard hosting, data queries, and user management.
+The UIForge server provides a full-featured backend for dashboard hosting, data queries, and user management.
 
 ## Starting the Server
 

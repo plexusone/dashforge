@@ -1,13 +1,13 @@
 # Authorization
 
-Dashforge provides flexible authorization with two modes: simple role hierarchy and SpiceDB for fine-grained control.
+UIForge provides flexible authorization with two modes: simple role hierarchy and SpiceDB for fine-grained control.
 
 ## Overview
 
-Dashforge has two distinct organization types with separate role hierarchies:
+UIForge has two distinct organization types with separate role hierarchies:
 
 - **Publishers** - Organizations that create and sell dashboard templates
-- **Consumers** - Organizations that use Dashforge for their own dashboards
+- **Consumers** - Organizations that use UIForge for their own dashboards
 
 ## Role Hierarchies
 
@@ -24,7 +24,7 @@ For organizations creating and selling templates:
 
 ### Consumer Roles
 
-For organizations using Dashforge:
+For organizations using UIForge:
 
 | Role | Level | Permissions |
 |------|-------|-------------|

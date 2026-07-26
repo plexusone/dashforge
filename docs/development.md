@@ -1,6 +1,6 @@
 # Development
 
-This guide covers setting up a development environment and contributing to Dashforge.
+This guide covers setting up a development environment and contributing to UIForge.
 
 ## Prerequisites
 
@@ -111,7 +111,7 @@ npm run dev
 # Opens http://localhost:5173 with hot reload
 ```
 
-The dev server proxies `/api` requests to `http://localhost:8080`, so start the Dashforge server:
+The dev server proxies `/api` requests to `http://localhost:8080`, so start the UIForge server:
 
 ```bash
 # In another terminal
@@ -298,7 +298,7 @@ export DATABASE_URL="postgres://uiforge:password@localhost:5432/uiforge?sslmode=
 ### Full Stack
 
 ```bash
-# Terminal 1: Dashforge server
+# Terminal 1: UIForge server
 export JWT_SECRET="dev-secret-key-at-least-32-chars"
 export DATABASE_URL="postgres://uiforge:password@localhost:5432/uiforge?sslmode=disable"
 go run ./cmd/uiforge-server serve --auto-migrate

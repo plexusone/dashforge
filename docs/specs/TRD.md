@@ -245,7 +245,7 @@ Bindings connect components to data sources. Expressions use `${...}` syntax:
 }
 ```
 
-Phase 1 supports static data and simple expression substitution. Phase 2 adds live data source connectors (reusing `datasource/` from DashForge).
+Phase 1 supports static data and simple expression substitution. Phase 2 adds live data source connectors (reusing `datasource/` from UIForge).
 
 ## Interaction Model
 
@@ -307,7 +307,7 @@ Since the project is early and has few external consumers, the rename is low-ris
 - **Unit tests** — UISpec types, registry validation, expression evaluation, layout resolution. Pure Go, no I/O.
 - **Golden-file tests** — PageSpec JSON → rendered component tree snapshots. Catches unintended IR changes.
 - **Integration tests** — Builder renders PageSpec in headless browser, validates component presence and layout.
-- **Dashboard regression** — existing DashForge test suite runs under the dashboard profile unchanged.
+- **Dashboard regression** — existing UIForge test suite runs under the dashboard profile unchanged.
 - **agentos-web** — existing Playwright tests validate agent workspace renders from PageSpecs.
 
 ## Technology Stack
@@ -316,10 +316,10 @@ Since the project is early and has few external consumers, the rename is low-ris
 |---|---|---|
 | Spec types | Go | Source of truth; `uispec/` package |
 | Schema | JSON Schema (generated) | `invopop/jsonschema` + `schemago` lint |
-| Server | Go + Chi | Existing DashForge server |
-| ORM | Ent (MySQL/Dolt) | Existing DashForge schemas |
+| Server | Go + Chi | Existing UIForge server |
+| ORM | Ent (MySQL/Dolt) | Existing UIForge schemas |
 | Renderer | React 19 | UIForge React renderer package |
-| Builder | Vite + React | Existing DashForge builder (evolve later) |
+| Builder | Vite + React | Existing UIForge builder (evolve later) |
 | Conversation | @assistant-ui/react ^0.7 | Used by agentos-web today |
 | Frontend framework | Next.js 16 | agentos-web |
 | Design system | TBD | Start with tokens in `uispec/theme.go`; extract later |

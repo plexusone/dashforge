@@ -9,7 +9,7 @@
 | Phase | Theme | Repos | Exit Criteria |
 |---|---|---|---|
 | 1 | Foundation — UISpec & Module Rename | uiforge | Go module renamed, UISpec types defined, component registry operational, dashboard profile passes existing tests |
-| 2 | Component Library & Dashboard Parity | uiforge | Core + analytics components registered with manifests, existing DashForge dashboards render via UISpec PageSpecs |
+| 2 | Component Library & Dashboard Parity | uiforge | Core + analytics components registered with manifests, existing UIForge dashboards render via UISpec PageSpecs |
 | 3 | Assistant UI Integration | uiforge | `assistant.*` components registered, sample agent workspace PageSpec renders thread + composer + thread-list |
 | 4 | AgentOS Consumption | agentos, agentos-web | Agent workspace, thread view, and settings pages composed from UIForge PageSpecs; zero hand-coded page layout in agentos-web |
 | 5 | Interaction Engine & Data Binding | uiforge | Cross-component events, expression evaluation, and live data binding working for dashboard drill-down and agent workspace interactions |
@@ -19,7 +19,7 @@
 
 ## Phase 1: Foundation — UISpec & Module Rename
 
-**Goal:** Establish the UISpec type system and component registry as the new foundation, while preserving DashForge compatibility.
+**Goal:** Establish the UISpec type system and component registry as the new foundation, while preserving UIForge compatibility.
 
 **Work:**
 
@@ -47,21 +47,21 @@
 
 ## Phase 2: Component Library & Dashboard Parity
 
-**Goal:** Register concrete component implementations with full manifests. Existing DashForge dashboards render through the new UISpec pipeline.
+**Goal:** Register concrete component implementations with full manifests. Existing UIForge dashboards render through the new UISpec pipeline.
 
 **Work:**
 
 1. **Core components** — register `core.card`, `core.text`, `core.tabs`, `core.button`, `core.modal` with ComponentSpec manifests.
-2. **Analytics components** — register `analytics.line-chart`, `analytics.bar-chart`, `analytics.metric`, `analytics.table`, `analytics.filter`, `analytics.gauge` wrapping existing DashForge widget types.
+2. **Analytics components** — register `analytics.line-chart`, `analytics.bar-chart`, `analytics.metric`, `analytics.table`, `analytics.filter`, `analytics.gauge` wrapping existing UIForge widget types.
 3. **Dashboard profile enforcement** — validate that dashboard-profile PageSpecs only use permitted component namespaces and layout types.
 4. **React renderer** — minimal UISpec → React tree renderer that reads a PageSpec and renders registered components. Start in `ts/` or `builder/`.
 5. **Golden-file tests** — PageSpec JSON → expected component tree snapshots for each registered component.
-6. **Example PageSpecs** — convert 2-3 existing DashForge example dashboards to UISpec PageSpecs in `examples/dashboard/`.
+6. **Example PageSpecs** — convert 2-3 existing UIForge example dashboards to UISpec PageSpecs in `examples/dashboard/`.
 
 **Exit criteria:**
 
 - 10+ core components and 5+ analytics components registered
-- Existing DashForge example dashboards render identically via UISpec pipeline
+- Existing UIForge example dashboards render identically via UISpec pipeline
 - `dashboard.schema.json` and `page.schema.json` both validate their respective example files
 - React renderer produces correct output for all registered components
 
@@ -137,7 +137,7 @@
 1. **Expression evaluator** — `${context.entityId}`, `${event.month}`, `${data.customer.name}` syntax evaluation in Go and TypeScript.
 2. **Event routing** — declarative interaction rules (`when` → `then` action graph) evaluated at runtime.
 3. **State management** — shared page-level state that components can read from and write to.
-4. **Data source connectors** — reuse DashForge's `datasource/` package (SQL, REST, static) through UISpec bindings.
+4. **Data source connectors** — reuse UIForge's `datasource/` package (SQL, REST, static) through UISpec bindings.
 5. **Live refresh** — data source polling and WebSocket push for real-time dashboards.
 6. **Dashboard drill-down** — clicking a chart data point filters a table (classic dashboard interaction, expressed declaratively).
 

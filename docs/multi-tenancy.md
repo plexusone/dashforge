@@ -1,14 +1,14 @@
 # Multi-Tenancy
 
-Dashforge supports multi-tenant deployments using PostgreSQL Row Level Security (RLS) for data isolation.
+UIForge supports multi-tenant deployments using PostgreSQL Row Level Security (RLS) for data isolation.
 
 ## Overview
 
-Multi-tenancy allows multiple organizations to share a single Dashforge instance while keeping their data completely isolated.
+Multi-tenancy allows multiple organizations to share a single UIForge instance while keeping their data completely isolated.
 
 ```
 ┌─────────────────────────────────────────────┐
-│              Dashforge Server                │
+│              UIForge Server                │
 ├─────────────────────────────────────────────┤
 │  Tenant A        │  Tenant B        │ ...   │
 │  ┌────────────┐  │  ┌────────────┐  │       │
