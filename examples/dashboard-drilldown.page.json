@@ -1,0 +1,224 @@
+{
+  "apiVersion": "ui.plexusone.dev/v1",
+  "kind": "Page",
+  "metadata": {
+    "id": "dashboard-drilldown",
+    "name": "dashboard-drilldown",
+    "title": "Revenue Dashboard with Drill-Down",
+    "description": "Demonstrates chart click → table filter interaction pattern"
+  },
+  "profile": "dashboard",
+  "context": {
+    "entityType": "revenue",
+    "period": "monthly"
+  },
+  "layout": {
+    "type": "responsive-grid",
+    "config": {
+      "columns": 12,
+      "gap": "16px",
+      "breakpoints": {
+        "sm": { "minWidth": 640, "columns": 6 },
+        "md": { "minWidth": 768, "columns": 12 }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "period-filter",
+      "type": "analytics.filter",
+      "position": { "row": 0, "col": 0, "colSpan": 12, "rowSpan": 1 },
+      "properties": {
+        "label": "Period",
+        "options": ["daily", "weekly", "monthly", "quarterly"]
+      },
+      "data": {
+        "value": {
+          "source": "state",
+          "operation": "get",
+          "parameters": { "path": "filters.period" },
+          "default": "monthly"
+        }
+      }
+    },
+    {
+      "id": "revenue-chart",
+      "type": "analytics.line-chart",
+      "position": { "row": 1, "col": 0, "colSpan": 8, "rowSpan": 4 },
+      "properties": {
+        "title": "Revenue Over Time",
+        "xAxis": "month",
+        "yAxis": "revenue",
+        "interactive": true
+      },
+      "data": {
+        "series": {
+          "source": "revenue-api",
+          "operation": "getTimeSeries",
+          "parameters": {
+            "period": "${state.filters.period}",
+            "year": "${context.year}"
+          }
+        }
+      }
+    },
+    {
+      "id": "category-chart",
+      "type": "analytics.bar-chart",
+      "position": { "row": 1, "col": 8, "colSpan": 4, "rowSpan": 4 },
+      "properties": {
+        "title": "Revenue by Category",
+        "orientation": "horizontal",
+        "interactive": true
+      },
+      "data": {
+        "series": {
+          "source": "revenue-api",
+          "operation": "getCategoryBreakdown",
+          "parameters": {
+            "month": "${state.selectedMonth}"
+          }
+        }
+      }
+    },
+    {
+      "id": "total-metric",
+      "type": "analytics.metric",
+      "position": { "row": 5, "col": 0, "colSpan": 3, "rowSpan": 2 },
+      "properties": {
+        "title": "Total Revenue",
+        "format": "currency",
+        "prefix": "$"
+      },
+      "data": {
+        "value": {
+          "source": "revenue-api",
+          "operation": "getTotal",
+          "parameters": {
+            "month": "${state.selectedMonth}"
+          }
+        }
+      }
+    },
+    {
+      "id": "growth-metric",
+      "type": "analytics.metric",
+      "position": { "row": 5, "col": 3, "colSpan": 3, "rowSpan": 2 },
+      "properties": {
+        "title": "Growth",
+        "format": "percent",
+        "colorThreshold": { "positive": "green", "negative": "red" }
+      },
+      "data": {
+        "value": {
+          "source": "revenue-api",
+          "operation": "getGrowth",
+          "parameters": {
+            "month": "${state.selectedMonth}"
+          }
+        }
+      }
+    },
+    {
+      "id": "transaction-table",
+      "type": "analytics.table",
+      "position": { "row": 5, "col": 6, "colSpan": 6, "rowSpan": 4 },
+      "properties": {
+        "title": "Transactions",
+        "columns": [
+          { "key": "date", "label": "Date" },
+          { "key": "category", "label": "Category" },
+          { "key": "amount", "label": "Amount", "format": "currency" },
+          { "key": "status", "label": "Status" }
+        ],
+        "pageSize": 10
+      },
+      "data": {
+        "rows": {
+          "source": "revenue-api",
+          "operation": "getTransactions",
+          "parameters": {
+            "month": "${state.selectedMonth}",
+            "category": "${state.selectedCategory}"
+          }
+        }
+      }
+    },
+    {
+      "id": "selection-indicator",
+      "type": "core.text",
+      "position": { "row": 9, "col": 0, "colSpan": 6, "rowSpan": 1 },
+      "properties": {
+        "text": "Showing: ${state.selectedMonth} / ${state.selectedCategory}"
+      },
+      "visibility": {
+        "condition": "${state.selectedMonth}"
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "when": { "component": "revenue-chart", "event": "pointSelected" },
+      "then": [
+        {
+          "action": "state.set",
+          "params": { "path": "selectedMonth", "value": "${event.month}" }
+        },
+        {
+          "action": "component.refresh",
+          "target": "category-chart"
+        },
+        {
+          "action": "component.refresh",
+          "target": "transaction-table"
+        },
+        {
+          "action": "component.refresh",
+          "target": "total-metric"
+        },
+        {
+          "action": "component.refresh",
+          "target": "growth-metric"
+        }
+      ]
+    },
+    {
+      "when": { "component": "category-chart", "event": "barSelected" },
+      "then": [
+        {
+          "action": "state.set",
+          "params": { "path": "selectedCategory", "value": "${event.category}" }
+        },
+        {
+          "action": "component.refresh",
+          "target": "transaction-table"
+        }
+      ]
+    },
+    {
+      "when": { "component": "period-filter", "event": "change" },
+      "then": [
+        {
+          "action": "state.set",
+          "params": { "path": "filters.period", "value": "${event.value}" }
+        },
+        {
+          "action": "component.refresh",
+          "target": "revenue-chart"
+        }
+      ]
+    }
+  ],
+  "theme": {
+    "id": "default",
+    "variant": "light",
+    "tokens": {
+      "spacing-sm": "8px",
+      "spacing-md": "16px",
+      "spacing-lg": "24px",
+      "color-primary": "#0ea5e9",
+      "color-positive": "#22c55e",
+      "color-negative": "#ef4444"
+    }
+  }
+}

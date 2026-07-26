@@ -1,0 +1,77 @@
+{
+  "apiVersion": "ui.plexusone.dev/v1",
+  "kind": "Page",
+  "metadata": {
+    "id": "metrics-overview",
+    "name": "metrics-overview",
+    "title": "System Metrics Overview",
+    "description": "Monitor key system and application metrics",
+    "version": "1.0.0"
+  },
+  "profile": "dashboard",
+  "layout": {
+    "type": "responsive-grid",
+    "config": {
+      "columns": 12,
+      "gap": "8px"
+    }
+  },
+  "components": [
+    {
+      "id": "cpu-gauge",
+      "type": "analytics.gauge",
+      "position": {"row": 0, "col": 0, "colSpan": 3, "rowSpan": 2},
+      "properties": {"title": "CPU Usage", "min": 0, "max": 100, "format": "percent", "size": "lg"},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "memory-gauge",
+      "type": "analytics.gauge",
+      "position": {"row": 0, "col": 3, "colSpan": 3, "rowSpan": 2},
+      "properties": {"title": "Memory", "min": 0, "max": 100, "format": "percent", "size": "lg"},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "disk-gauge",
+      "type": "analytics.gauge",
+      "position": {"row": 0, "col": 6, "colSpan": 3, "rowSpan": 2},
+      "properties": {"title": "Disk", "min": 0, "max": 100, "format": "percent", "size": "lg"},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "uptime-metric",
+      "type": "analytics.metric",
+      "position": {"row": 0, "col": 9, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Uptime", "format": "percent", "suffix": "%"},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "requests-metric",
+      "type": "analytics.metric",
+      "position": {"row": 1, "col": 9, "colSpan": 3, "rowSpan": 1},
+      "properties": {"title": "Requests/min", "format": "number"},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "cpu-history",
+      "type": "analytics.line-chart",
+      "position": {"row": 2, "col": 0, "colSpan": 6, "rowSpan": 3},
+      "properties": {"title": "CPU History", "xAxis": "time", "yAxis": "value", "smooth": true},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    },
+    {
+      "id": "error-rate",
+      "type": "analytics.line-chart",
+      "position": {"row": 2, "col": 6, "colSpan": 6, "rowSpan": 3},
+      "properties": {"title": "Error Rate", "xAxis": "time", "yAxis": "errors", "showLegend": false},
+      "data": {"primary": {"source": "system-metrics", "operation": "query"}}
+    }
+  ],
+  "theme": {
+    "id": "default",
+    "variant": "light",
+    "tokens": {
+      "color-primary": "#8b5cf6"
+    }
+  }
+}

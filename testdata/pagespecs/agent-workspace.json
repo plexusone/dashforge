@@ -1,0 +1,135 @@
+{
+  "apiVersion": "ui.plexusone.dev/v1",
+  "kind": "Page",
+  "metadata": {
+    "id": "agent-workspace",
+    "name": "agent-workspace",
+    "title": "Agent Workspace",
+    "description": "Primary agent interaction workspace with thread list, chat, and tool inspector",
+    "version": "1.0.0"
+  },
+  "profile": "agent",
+  "layout": {
+    "type": "split-pane",
+    "config": {
+      "direction": "horizontal",
+      "sizes": ["260px", "1fr", "320px"],
+      "resizable": true
+    },
+    "regions": [
+      {
+        "name": "sidebar",
+        "layout": {
+          "type": "stack",
+          "config": {"direction": "vertical"}
+        }
+      },
+      {
+        "name": "main",
+        "layout": {
+          "type": "stack",
+          "config": {"direction": "vertical"}
+        }
+      },
+      {
+        "name": "inspector",
+        "layout": {
+          "type": "stack",
+          "config": {"direction": "vertical"}
+        }
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "thread-list",
+      "type": "assistant.thread-list",
+      "slot": "sidebar",
+      "properties": {
+        "showSearch": true,
+        "showNewButton": true,
+        "showFolders": true,
+        "showDelete": true
+      },
+      "data": {
+        "conversations": {
+          "source": "agentos-api",
+          "operation": "listConversations"
+        }
+      }
+    },
+    {
+      "id": "chat-thread",
+      "type": "assistant.thread",
+      "slot": "main",
+      "properties": {
+        "showToolCalls": true,
+        "showTimestamps": true,
+        "markdownEnabled": true,
+        "streamingIndicator": true
+      },
+      "data": {
+        "messages": {
+          "source": "agentos-api",
+          "operation": "streamMessages"
+        }
+      },
+      "style": {"flex": "1"}
+    },
+    {
+      "id": "run-indicator",
+      "type": "assistant.run-status",
+      "slot": "main",
+      "properties": {
+        "showElapsed": true,
+        "showTokenCount": true,
+        "compact": false
+      }
+    },
+    {
+      "id": "composer",
+      "type": "assistant.composer",
+      "slot": "main",
+      "properties": {
+        "placeholder": "Send a message...",
+        "showAttachments": true,
+        "showModelSelector": true
+      }
+    },
+    {
+      "id": "tool-inspector",
+      "type": "assistant.tool-call",
+      "slot": "inspector",
+      "properties": {
+        "showArgs": true,
+        "showResult": true,
+        "collapsible": true
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "when": {"component": "thread-list", "event": "select"},
+      "then": [{"target": "chat-thread", "action": "loadConversation", "params": {"id": "${event.conversationId}"}}]
+    },
+    {
+      "when": {"component": "composer", "event": "submit"},
+      "then": [{"target": "chat-thread", "action": "sendMessage", "params": {"content": "${event.content}"}}]
+    },
+    {
+      "when": {"component": "chat-thread", "event": "messageAdded"},
+      "then": [{"target": "tool-inspector", "action": "update", "params": {"messageId": "${event.messageId}"}}]
+    }
+  ],
+  "theme": {
+    "id": "agentos",
+    "variant": "light",
+    "tokens": {
+      "color-primary": "#6366f1",
+      "color-surface": "#ffffff",
+      "color-border": "#e2e8f0",
+      "color-text": "#0f172a",
+      "color-text-secondary": "#64748b"
+    }
+  }
+}
