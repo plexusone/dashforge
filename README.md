@@ -114,18 +114,18 @@ Full documentation is available at [docs/](docs/):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        UIForge                                │
+│                        UIForge                                  │
 ├─────────────────────────────────────────────────────────────────┤
 │  builder/               Visual dashboard builder (React)        │
 │    ├── src/components/  Canvas, widgets, chart builder          │
 │    ├── src/ai/          AI generation schemas & prompts         │
-│    └── src/api/         UIForge & Cube.js clients             │
+│    └── src/api/         UIForge & Cube.js clients               │
 ├─────────────────────────────────────────────────────────────────┤
 │  cube/                  Cube.js semantic layer                  │
 │    └── model/cubes/     Data models (YAML)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  cmd/uiforge/         Static CLI (validate, convert)          │
-│  cmd/uiforge-server/  Full server with API                    │
+│  cmd/uiforge/         Static CLI (validate, convert)            │
+│  cmd/uiforge-server/  Full server with API                      │
 ├─────────────────────────────────────────────────────────────────┤
 │  dashboardir/           Dashboard JSON schema & types           │
 │  viewer/                Embedded static HTML/JS viewer          │
