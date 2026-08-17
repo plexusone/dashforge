@@ -284,6 +284,16 @@
   </div>
 
   <script>
+    // Formats a raw numeric value for display: caps to at most `maxDecimals`
+    // decimal places (default 2) without padding whole numbers with
+    // trailing zeros, and adds thousands separators. Used anywhere a chart
+    // or metric tile would otherwise show a value's full floating-point
+    // precision (e.g. a summed cost like 3412.7258937500005).
+    function formatMetricNumber(value, maxDecimals = 2) {
+      if (typeof value !== 'number' || Number.isNaN(value)) return value;
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: maxDecimals }).format(value);
+    }
+
     // Dashforge Viewer - Static Dashboard Renderer
     class DashforgeViewer {
       constructor(container) {
@@ -773,7 +783,10 @@
         const option = {
           backgroundColor: 'transparent',
           dataset: { source: data },
-          tooltip: ir.tooltip?.show !== false ? { trigger: ir.tooltip?.trigger || 'axis' } : undefined,
+          tooltip: ir.tooltip?.show !== false ? {
+            trigger: ir.tooltip?.trigger || 'axis',
+            valueFormatter: formatMetricNumber,
+          } : undefined,
           legend: ir.legend?.show !== false ? {
             show: true,
             top: ir.legend?.position === 'bottom' ? 'bottom' : 'top'
@@ -790,13 +803,16 @@
           option.xAxis = ir.axes.filter(a => a.position === 'bottom' || a.position === 'top')
             .map(a => ({ type: a.type, name: a.name, position: a.position }));
           option.yAxis = ir.axes.filter(a => a.position === 'left' || a.position === 'right')
-            .map(a => ({ type: a.type, name: a.name, position: a.position }));
+            .map(a => ({
+              type: a.type, name: a.name, position: a.position,
+              axisLabel: a.type === 'value' ? { formatter: formatMetricNumber } : undefined,
+            }));
         } else {
           // Default axes based on marks
           const firstMark = ir.marks?.[0];
           if (firstMark && firstMark.geometry !== 'pie') {
             option.xAxis = { type: 'category' };
-            option.yAxis = { type: 'value' };
+            option.yAxis = { type: 'value', axisLabel: { formatter: formatMetricNumber } };
           }
         }
 
@@ -839,6 +855,12 @@
         let displayValue = value;
         if (config.format === 'percent') {
           displayValue = `${(value * (value < 1 ? 100 : 1)).toFixed(config.formatOptions?.decimals || 1)}%`;
+        } else if (config.format === 'currency') {
+          // Always 2 decimal places for currency, regardless of
+          // formatOptions.decimals — cost values need cent-level precision
+          // even when the config was authored for whole-dollar display.
+          const prefix = config.formatOptions?.prefix ?? '$';
+          displayValue = `${prefix}${formatMetricNumber(value, 2)}`;
         } else if (config.format === 'number') {
           displayValue = new Intl.NumberFormat(config.formatOptions?.locale || 'en-US', {
             maximumFractionDigits: config.formatOptions?.decimals || 0
