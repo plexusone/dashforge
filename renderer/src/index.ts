@@ -1,7 +1,13 @@
 export { PageRenderer, UIForgeContext, useUIForge } from './PageRenderer'
 export type { PageRendererProps, UIForgeContextValue } from './PageRenderer'
 
-export { registerComponent, getComponent, hasComponent, listComponents, clearRegistry } from './registry'
+export {
+  registerComponent,
+  getComponent,
+  hasComponent,
+  listComponents,
+  clearRegistry,
+} from './registry'
 export type { ComponentProps, UIForgeComponent } from './registry'
 
 export { Layout } from './layouts'

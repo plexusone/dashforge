@@ -149,11 +149,7 @@ describe('Application shell layout', () => {
       ...basePage,
       layout: {
         type: 'application-shell',
-        regions: [
-          { name: 'header' },
-          { name: 'sidebar' },
-          { name: 'main' },
-        ],
+        regions: [{ name: 'header' }, { name: 'sidebar' }, { name: 'main' }],
       },
       components: [{ id: 'content', type: 'core.card', properties: { title: 'Content' } }],
     }

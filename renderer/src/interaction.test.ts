@@ -26,10 +26,9 @@ describe('InteractionEngine', () => {
 
     engine.dispatch(interactions, 'chart', 'click', { x: 10 })
     expect(handler).toHaveBeenCalledTimes(1)
-    expect(handler).toHaveBeenCalledWith(
-      expect.objectContaining({ action: 'custom.action' }),
-      { x: 10 },
-    )
+    expect(handler).toHaveBeenCalledWith(expect.objectContaining({ action: 'custom.action' }), {
+      x: 10,
+    })
   })
 
   it('ignores non-matching interactions', () => {

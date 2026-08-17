@@ -10,17 +10,27 @@ interface LayoutProps {
 export function Layout({ layout, components, renderComponent }: LayoutProps): React.ReactElement {
   switch (layout.type) {
     case 'responsive-grid':
-      return <GridLayout layout={layout} components={components} renderComponent={renderComponent} />
+      return (
+        <GridLayout layout={layout} components={components} renderComponent={renderComponent} />
+      )
     case 'stack':
-      return <StackLayout layout={layout} components={components} renderComponent={renderComponent} />
+      return (
+        <StackLayout layout={layout} components={components} renderComponent={renderComponent} />
+      )
     case 'split-pane':
       return <SplitPaneLayout layout={layout} renderComponent={renderComponent} />
     case 'tabs':
       return <TabsLayout layout={layout} renderComponent={renderComponent} />
     case 'application-shell':
-      return <AppShellLayout layout={layout} components={components} renderComponent={renderComponent} />
+      return (
+        <AppShellLayout layout={layout} components={components} renderComponent={renderComponent} />
+      )
     default:
-      return <div data-uiforge-error={`unknown layout: ${layout.type}`}>{components.map(renderComponent)}</div>
+      return (
+        <div data-uiforge-error={`unknown layout: ${layout.type}`}>
+          {components.map(renderComponent)}
+        </div>
+      )
   }
 }
 
@@ -122,7 +132,10 @@ function TabsLayout({ layout }: RegionLayoutProps): React.ReactElement {
 
   return (
     <div data-uiforge-layout="tabs">
-      <div role="tablist" style={{ display: 'flex', gap: '4px', borderBottom: '1px solid #e2e8f0' }}>
+      <div
+        role="tablist"
+        style={{ display: 'flex', gap: '4px', borderBottom: '1px solid #e2e8f0' }}
+      >
         {regions.map((region) => (
           <button
             key={region.name}
@@ -173,21 +186,15 @@ function AppShellLayout({ layout, components, renderComponent }: LayoutProps): R
 
   return (
     <div style={style} data-uiforge-layout="application-shell">
-      {regionMap.has('header') && (
-        <div style={slotStyle('header')} data-uiforge-region="header" />
-      )}
+      {regionMap.has('header') && <div style={slotStyle('header')} data-uiforge-region="header" />}
       {regionMap.has('sidebar') && (
         <div style={slotStyle('sidebar')} data-uiforge-region="sidebar" />
       )}
       <div style={slotStyle('main')} data-uiforge-region="main">
         {components.map(renderComponent)}
       </div>
-      {regionMap.has('aside') && (
-        <div style={slotStyle('aside')} data-uiforge-region="aside" />
-      )}
-      {regionMap.has('footer') && (
-        <div style={slotStyle('footer')} data-uiforge-region="footer" />
-      )}
+      {regionMap.has('aside') && <div style={slotStyle('aside')} data-uiforge-region="aside" />}
+      {regionMap.has('footer') && <div style={slotStyle('footer')} data-uiforge-region="footer" />}
     </div>
   )
 }

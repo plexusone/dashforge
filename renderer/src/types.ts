@@ -23,12 +23,7 @@ export interface PageMetadata {
   labels?: Record<string, string>
 }
 
-export type LayoutType =
-  | 'responsive-grid'
-  | 'stack'
-  | 'split-pane'
-  | 'tabs'
-  | 'application-shell'
+export type LayoutType = 'responsive-grid' | 'stack' | 'split-pane' | 'tabs' | 'application-shell'
 
 export interface LayoutSpec {
   type: LayoutType

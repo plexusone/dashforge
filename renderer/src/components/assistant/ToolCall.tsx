@@ -24,7 +24,10 @@ export function AssistantToolCall({ instance, children }: ComponentProps): React
     >
       {children ?? (
         <>
-          <div data-uiforge-slot="tool-header" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div
+            data-uiforge-slot="tool-header"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             <span data-uiforge-placeholder="tool-name">Tool name</span>
             <span data-uiforge-slot="status-icon" />
           </div>
