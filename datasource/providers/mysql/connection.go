@@ -20,7 +20,7 @@ type Connection struct {
 }
 
 // Query executes a query and returns results.
-func (c *Connection) Query(ctx context.Context, query string, params map[string]any) (*datasource.QueryResult, error) {
+func (c *Connection) Query(ctx context.Context, query string, params map[string]any) (result *datasource.QueryResult, err error) {
 	// Check read-only mode
 	if c.readOnly && isWriteQuery(query) {
 		return nil, datasource.ErrReadOnlyViolation
@@ -43,10 +43,10 @@ func (c *Connection) Query(ctx context.Context, query string, params map[string]
 		return nil, datasource.NewQueryError(query, err)
 	}
 	defer func() {
-		// Rows are fully scanned below before this runs; a close error at
-		// that point can't invalidate already-retrieved data and there's
-		// no logger on this type to report it to.
-		_ = rows.Close()
+		if cerr := rows.Close(); cerr != nil && err == nil {
+			err = cerr
+			result = nil
+		}
 	}()
 
 	// Get column info

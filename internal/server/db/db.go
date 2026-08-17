@@ -112,7 +112,7 @@ func (p *postgresDB) DB() *sql.DB {
 	return p.db
 }
 
-func (p *postgresDB) Query(ctx context.Context, query string, params map[string]any) (*QueryResult, error) {
+func (p *postgresDB) Query(ctx context.Context, query string, params map[string]any) (result *QueryResult, err error) {
 	start := time.Now()
 
 	// Convert named parameters to positional for PostgreSQL
@@ -136,10 +136,10 @@ func (p *postgresDB) Query(ctx context.Context, query string, params map[string]
 		return nil, fmt.Errorf("executing query: %w", err)
 	}
 	defer func() {
-		// Rows are fully scanned below before this runs; a close error at
-		// that point can't invalidate already-retrieved data and there's
-		// no logger on this type to report it to.
-		_ = rows.Close()
+		if cerr := rows.Close(); cerr != nil && err == nil {
+			err = cerr
+			result = nil
+		}
 	}()
 
 	// Get column names
