@@ -118,7 +118,7 @@ export function validateChartIR(chart: unknown): { valid: boolean; errors: strin
 
   const errors = result.error.errors.map(
     (err: { path: (string | number)[]; message: string }) =>
-      `${err.path.join('.')}: ${err.message}`
+      `${err.path.join('.')}: ${err.message}`,
   )
 
   return { valid: false, errors }

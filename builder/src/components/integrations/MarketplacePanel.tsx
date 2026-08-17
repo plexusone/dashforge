@@ -1,14 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  X,
-  Search,
-  Loader2,
-  MessageSquare,
-  Mail,
-  Globe,
-  Slack,
-  CheckCircle,
-} from 'lucide-react'
+import { X, Search, Loader2, MessageSquare, Mail, Globe, Slack, CheckCircle } from 'lucide-react'
 import { useIntegrationStore } from '../../stores/integration'
 import type { IntegrationDefinition, InstallIntegrationRequest } from '../../types/integration'
 import clsx from 'clsx'
@@ -49,14 +40,15 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
   }, [isOpen, fetchMarketplace])
 
   const filteredIntegrations = marketplaceIntegrations.filter((integration) => {
-    const matchesSearch = searchQuery === '' ||
+    const matchesSearch =
+      searchQuery === '' ||
       integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       integration.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === null || integration.category === selectedCategory
     return matchesSearch && matchesCategory
   })
 
-  const categories = [...new Set(marketplaceIntegrations.map(i => i.category))]
+  const categories = [...new Set(marketplaceIntegrations.map((i) => i.category))]
 
   const handleInstall = async () => {
     if (!selectedIntegration || !installSlug) return
@@ -105,10 +97,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
             <h2 className="text-lg font-semibold text-gray-900">Integration Marketplace</h2>
             <p className="text-sm text-gray-500">Browse and install notification integrations</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -138,7 +127,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                     'px-3 py-1 text-xs rounded-full transition-colors',
                     selectedCategory === null
                       ? 'bg-primary-500 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
                   )}
                 >
                   All
@@ -151,7 +140,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                       'px-3 py-1 text-xs rounded-full transition-colors capitalize',
                       selectedCategory === category
                         ? 'bg-primary-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
                     )}
                   >
                     {category}
@@ -167,9 +156,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
                 </div>
               ) : filteredIntegrations.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
-                  No integrations found
-                </div>
+                <div className="text-center text-gray-500 py-8">No integrations found</div>
               ) : (
                 <div className="grid gap-3">
                   {filteredIntegrations.map((integration) => {
@@ -186,7 +173,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                           'w-full p-4 rounded-lg border text-left transition-colors',
                           selectedIntegration?.slug === integration.slug
                             ? 'border-primary-500 bg-primary-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            : 'border-gray-200 hover:border-gray-300',
                         )}
                       >
                         <div className="flex items-start gap-3">
@@ -205,9 +192,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                               <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600 capitalize">
                                 {integration.category}
                               </span>
-                              <span className="text-xs text-gray-400">
-                                by {integration.author}
-                              </span>
+                              <span className="text-xs text-gray-400">by {integration.author}</span>
                             </div>
                           </div>
                         </div>
@@ -252,28 +237,34 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                         placeholder="my-slack-integration"
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Unique identifier for this integration</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Unique identifier for this integration
+                      </p>
                     </div>
 
                     {/* Dynamic config fields from schema */}
-                    {Object.entries(selectedIntegration.configSchema.properties).map(([key, property]) => (
-                      <div key={key}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {property.title}
-                          {selectedIntegration.configSchema.required?.includes(key) && ' *'}
-                        </label>
-                        <input
-                          type={property.secret ? 'password' : 'text'}
-                          value={installConfig[key] || ''}
-                          onChange={(e) => setInstallConfig({ ...installConfig, [key]: e.target.value })}
-                          placeholder={property.description}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        />
-                        {property.description && (
-                          <p className="text-xs text-gray-500 mt-1">{property.description}</p>
-                        )}
-                      </div>
-                    ))}
+                    {Object.entries(selectedIntegration.configSchema.properties).map(
+                      ([key, property]) => (
+                        <div key={key}>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            {property.title}
+                            {selectedIntegration.configSchema.required?.includes(key) && ' *'}
+                          </label>
+                          <input
+                            type={property.secret ? 'password' : 'text'}
+                            value={installConfig[key] || ''}
+                            onChange={(e) =>
+                              setInstallConfig({ ...installConfig, [key]: e.target.value })
+                            }
+                            placeholder={property.description}
+                            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          />
+                          {property.description && (
+                            <p className="text-xs text-gray-500 mt-1">{property.description}</p>
+                          )}
+                        </div>
+                      ),
+                    )}
                   </div>
 
                   {error && (
@@ -291,7 +282,7 @@ export function MarketplacePanel({ isOpen, onClose }: MarketplacePanelProps) {
                       'w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                       !installSlug || isInstalling
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-primary-500 text-white hover:bg-primary-600'
+                        : 'bg-primary-500 text-white hover:bg-primary-600',
                     )}
                   >
                     {isInstalling ? (

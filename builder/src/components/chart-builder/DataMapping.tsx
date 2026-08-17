@@ -12,7 +12,7 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
   const handleChange = (field: string, value: string) => {
     onChange({
       ...encodings,
-      [field]: value
+      [field]: value,
     })
   }
 
@@ -27,14 +27,12 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
     { value: 'revenue', label: 'Revenue' },
     { value: 'quantity', label: 'Quantity' },
     { value: 'profit', label: 'Profit' },
-    { value: 'cost', label: 'Cost' }
+    { value: 'cost', label: 'Cost' },
   ]
 
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium text-gray-600">
-        Data Mapping
-      </label>
+      <label className="block text-xs font-medium text-gray-600">Data Mapping</label>
 
       {isPieType ? (
         // Pie/Funnel: value and category
@@ -47,7 +45,9 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             >
               {availableFields.map((f) => (
-                <option key={f.value} value={f.value}>{f.label}</option>
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
@@ -59,7 +59,9 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             >
               {availableFields.map((f) => (
-                <option key={f.value} value={f.value}>{f.label}</option>
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
@@ -75,7 +77,9 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             >
               {availableFields.map((f) => (
-                <option key={f.value} value={f.value}>{f.label}</option>
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
@@ -87,7 +91,9 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             >
               {availableFields.map((f) => (
-                <option key={f.value} value={f.value}>{f.label}</option>
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
@@ -99,7 +105,9 @@ export function DataMapping({ geometry, encodings, onChange }: DataMappingProps)
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             >
               {availableFields.map((f) => (
-                <option key={f.value} value={f.value}>{f.label}</option>
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>

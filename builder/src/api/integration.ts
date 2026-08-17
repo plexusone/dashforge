@@ -30,7 +30,7 @@ class IntegrationApiError extends Error {
   constructor(
     message: string,
     public status: number,
-    public apiError?: ApiError
+    public apiError?: ApiError,
   ) {
     super(message)
     this.name = 'IntegrationApiError'
@@ -48,7 +48,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new IntegrationApiError(
       apiError?.error || `HTTP ${response.status}: ${response.statusText}`,
       response.status,
-      apiError
+      apiError,
     )
   }
   return response.json()
@@ -80,35 +80,38 @@ export async function createIntegration(request: CreateIntegrationRequest): Prom
   const response = await fetch(`${API_BASE}/integrations`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   return handleResponse(response)
 }
 
-export async function updateIntegration(id: number, request: UpdateIntegrationRequest): Promise<Integration> {
+export async function updateIntegration(
+  id: number,
+  request: UpdateIntegrationRequest,
+): Promise<Integration> {
   const response = await fetch(`${API_BASE}/integrations/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   return handleResponse(response)
 }
 
 export async function deleteIntegration(id: number): Promise<void> {
   const response = await fetch(`${API_BASE}/integrations/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
   if (!response.ok) {
     throw new IntegrationApiError(
       `Failed to delete integration: ${response.statusText}`,
-      response.status
+      response.status,
     )
   }
 }
 
 export async function testIntegration(id: number): Promise<TestConnectionResult> {
   const response = await fetch(`${API_BASE}/integrations/${id}/test`, {
-    method: 'POST'
+    method: 'POST',
   })
   return handleResponse(response)
 }
@@ -142,7 +145,7 @@ export async function createAlert(request: CreateAlertRequest): Promise<Alert> {
   const response = await fetch(`${API_BASE}/alerts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   return handleResponse(response)
 }
@@ -151,33 +154,30 @@ export async function updateAlert(id: number, request: UpdateAlertRequest): Prom
   const response = await fetch(`${API_BASE}/alerts/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   return handleResponse(response)
 }
 
 export async function deleteAlert(id: number): Promise<void> {
   const response = await fetch(`${API_BASE}/alerts/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
   if (!response.ok) {
-    throw new IntegrationApiError(
-      `Failed to delete alert: ${response.statusText}`,
-      response.status
-    )
+    throw new IntegrationApiError(`Failed to delete alert: ${response.statusText}`, response.status)
   }
 }
 
 export async function enableAlert(id: number): Promise<Alert> {
   const response = await fetch(`${API_BASE}/alerts/${id}/enable`, {
-    method: 'POST'
+    method: 'POST',
   })
   return handleResponse(response)
 }
 
 export async function disableAlert(id: number): Promise<Alert> {
   const response = await fetch(`${API_BASE}/alerts/${id}/disable`, {
-    method: 'POST'
+    method: 'POST',
   })
   return handleResponse(response)
 }
@@ -198,7 +198,9 @@ export async function getDashboardAlerts(dashboardId: number): Promise<ListAlert
 
 // Marketplace API
 
-export async function listMarketplaceIntegrations(category?: string): Promise<ListMarketplaceResponse> {
+export async function listMarketplaceIntegrations(
+  category?: string,
+): Promise<ListMarketplaceResponse> {
   const searchParams = new URLSearchParams()
   if (category) searchParams.set('category', category)
 
@@ -214,12 +216,12 @@ export async function getMarketplaceIntegration(slug: string): Promise<Integrati
 
 export async function installMarketplaceIntegration(
   marketplaceSlug: string,
-  request: InstallIntegrationRequest
+  request: InstallIntegrationRequest,
 ): Promise<Integration> {
   const response = await fetch(`${API_BASE}/marketplace/integrations/${marketplaceSlug}/install`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   return handleResponse(response)
 }

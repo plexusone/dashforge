@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Plus, Trash2, Variable as VariableIcon, X, ChevronDown, ChevronUp, List, Type, Calendar } from 'lucide-react'
+import {
+  Plus,
+  Trash2,
+  Variable as VariableIcon,
+  X,
+  ChevronDown,
+  ChevronUp,
+  List,
+  Type,
+  Calendar,
+} from 'lucide-react'
 import { useDashboardStore } from '../../stores/dashboard'
 import type { Variable, VariableType, VariableOption } from '../../types/dashboard'
 
@@ -12,14 +22,14 @@ const VARIABLE_TYPE_ICONS: Record<VariableType, typeof List> = {
   select: List,
   text: Type,
   date: Calendar,
-  daterange: Calendar
+  daterange: Calendar,
 }
 
 const VARIABLE_TYPE_LABELS: Record<VariableType, string> = {
   select: 'Select / Dropdown',
   text: 'Text Input',
   date: 'Date Picker',
-  daterange: 'Date Range'
+  daterange: 'Date Range',
 }
 
 export function VariablePanel({ isOpen, onClose }: VariablePanelProps) {
@@ -40,10 +50,7 @@ export function VariablePanel({ isOpen, onClose }: VariablePanelProps) {
             <VariableIcon className="w-5 h-5 text-primary-500" />
             <h2 className="text-lg font-semibold text-gray-900">Dashboard Variables</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -52,7 +59,8 @@ export function VariablePanel({ isOpen, onClose }: VariablePanelProps) {
         <div className="flex-1 overflow-y-auto p-6">
           {/* Info */}
           <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-3 mb-4">
-            Variables allow users to filter and interact with dashboard widgets. Reference them in queries using <code className="bg-gray-200 px-1 rounded">{'{{variableName}}'}</code>.
+            Variables allow users to filter and interact with dashboard widgets. Reference them in
+            queries using <code className="bg-gray-200 px-1 rounded">{'{{variableName}}'}</code>.
           </div>
 
           {/* Add Button */}
@@ -122,7 +130,14 @@ interface VariableItemProps {
   onDelete: () => void
 }
 
-function VariableItem({ variable, dataSources, isEditing, onEdit, onUpdate, onDelete }: VariableItemProps) {
+function VariableItem({
+  variable,
+  dataSources,
+  isEditing,
+  onEdit,
+  onUpdate,
+  onDelete,
+}: VariableItemProps) {
   const Icon = VARIABLE_TYPE_ICONS[variable.type]
 
   return (
@@ -167,11 +182,7 @@ function VariableItem({ variable, dataSources, isEditing, onEdit, onUpdate, onDe
       {/* Edit Form */}
       {isEditing && (
         <div className="p-4 border-t border-gray-200">
-          <VariableEditForm
-            variable={variable}
-            dataSources={dataSources}
-            onSave={onUpdate}
-          />
+          <VariableEditForm variable={variable} dataSources={dataSources} onSave={onUpdate} />
         </div>
       )}
     </div>
@@ -202,7 +213,7 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
       name: name || `variable_${Date.now()}`,
       label: label || undefined,
       type,
-      defaultValue: defaultValue || undefined
+      defaultValue: defaultValue || undefined,
     }
 
     if (type === 'select') {
@@ -211,7 +222,7 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
         variable.valueField = valueField
         variable.labelField = labelField
       } else {
-        variable.options = options.filter(o => o.value)
+        variable.options = options.filter((o) => o.value)
       }
     }
 
@@ -233,7 +244,10 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-primary-200 rounded-lg p-4 bg-primary-50/50 mb-4">
+    <form
+      onSubmit={handleSubmit}
+      className="border border-primary-200 rounded-lg p-4 bg-primary-50/50 mb-4"
+    >
       <h3 className="text-sm font-medium text-gray-900 mb-3">New Variable</h3>
 
       <div className="space-y-3">
@@ -356,7 +370,9 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
             {datasourceId && (
               <>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Data Source</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Data Source
+                  </label>
                   <select
                     value={datasourceId}
                     onChange={(e) => setDatasourceId(e.target.value)}
@@ -364,13 +380,17 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
                   >
                     <option value="">Select a data source</option>
                     {dataSources.map((ds) => (
-                      <option key={ds.id} value={ds.id}>{ds.id}</option>
+                      <option key={ds.id} value={ds.id}>
+                        {ds.id}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Value Field</label>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      Value Field
+                    </label>
                     <input
                       type="text"
                       value={valueField}
@@ -380,7 +400,9 @@ function VariableForm({ dataSources, onSave, onCancel }: VariableFormProps) {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Label Field</label>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      Label Field
+                    </label>
                     <input
                       type="text"
                       value={labelField}
@@ -426,7 +448,7 @@ function VariableEditForm({ variable, dataSources, onSave }: VariableEditFormPro
   const [label, setLabel] = useState(variable.label || '')
   const [defaultValue, setDefaultValue] = useState(variable.defaultValue || '')
   const [options, setOptions] = useState<VariableOption[]>(
-    variable.options || [{ label: '', value: '' }]
+    variable.options || [{ label: '', value: '' }],
   )
   const [datasourceId, setDatasourceId] = useState(variable.datasourceId || '')
   const [valueField, setValueField] = useState(variable.valueField || '')
@@ -435,7 +457,7 @@ function VariableEditForm({ variable, dataSources, onSave }: VariableEditFormPro
   const handleSave = () => {
     const updates: Partial<Variable> = {
       label: label || undefined,
-      defaultValue: defaultValue || undefined
+      defaultValue: defaultValue || undefined,
     }
 
     if (variable.type === 'select') {
@@ -445,7 +467,7 @@ function VariableEditForm({ variable, dataSources, onSave }: VariableEditFormPro
         updates.labelField = labelField
         updates.options = undefined
       } else {
-        updates.options = options.filter(o => o.value)
+        updates.options = options.filter((o) => o.value)
         updates.datasourceId = undefined
         updates.valueField = undefined
         updates.labelField = undefined
@@ -569,13 +591,17 @@ function VariableEditForm({ variable, dataSources, onSave }: VariableEditFormPro
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                 >
                   {dataSources.map((ds) => (
-                    <option key={ds.id} value={ds.id}>{ds.id}</option>
+                    <option key={ds.id} value={ds.id}>
+                      {ds.id}
+                    </option>
                   ))}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Value Field</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Value Field
+                  </label>
                   <input
                     type="text"
                     value={valueField}
@@ -584,7 +610,9 @@ function VariableEditForm({ variable, dataSources, onSave }: VariableEditFormPro
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Label Field</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Label Field
+                  </label>
                   <input
                     type="text"
                     value={labelField}

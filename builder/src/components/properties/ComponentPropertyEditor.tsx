@@ -174,7 +174,7 @@ function JSONField({
   onChange: (name: string, value: unknown) => void
 }) {
   const [raw, setRaw] = useState(() =>
-    typeof value === 'string' ? value : JSON.stringify(value ?? def.default ?? null, null, 2)
+    typeof value === 'string' ? value : JSON.stringify(value ?? def.default ?? null, null, 2),
   )
   const [parseError, setParseError] = useState<string | null>(null)
 
@@ -220,7 +220,7 @@ export function ComponentPropertyEditor({
         },
       })
     },
-    [component.properties, onChange]
+    [component.properties, onChange],
   )
 
   const handleStyleChange = useCallback(
@@ -232,7 +232,7 @@ export function ComponentPropertyEditor({
         },
       })
     },
-    [component.style, onChange]
+    [component.style, onChange],
   )
 
   return (

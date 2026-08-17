@@ -2,7 +2,13 @@ import { useMemo } from 'react'
 import { Sidebar, SidebarSection } from '../Sidebar'
 import { useDashboardStore } from '../../stores/dashboard'
 import { ChartBuilder } from '../chart-builder/ChartBuilder'
-import type { ChartConfig, MetricConfig, TableConfig, TextConfig, ImageConfig } from '../../types/dashboard'
+import type {
+  ChartConfig,
+  MetricConfig,
+  TableConfig,
+  TextConfig,
+  ImageConfig,
+} from '../../types/dashboard'
 
 interface PropertiesPanelProps {
   selectedWidgetId: string | null
@@ -12,9 +18,9 @@ interface PropertiesPanelProps {
 export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelProps) {
   const { dashboard, updateWidget } = useDashboardStore()
 
-  const selectedWidget = useMemo(() =>
-    dashboard.widgets.find(w => w.id === selectedWidgetId),
-    [dashboard.widgets, selectedWidgetId]
+  const selectedWidget = useMemo(
+    () => dashboard.widgets.find((w) => w.id === selectedWidgetId),
+    [dashboard.widgets, selectedWidgetId],
   )
 
   if (!selectedWidgetId || !selectedWidget) {
@@ -45,9 +51,7 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
       <SidebarSection title="General">
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Title
-            </label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Title</label>
             <input
               type="text"
               value={selectedWidget.title || ''}
@@ -58,9 +62,7 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Description
-            </label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
             <textarea
               value={selectedWidget.description || ''}
               onChange={(e) => updateWidget(selectedWidgetId, { description: e.target.value })}
@@ -71,17 +73,17 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Data Source
-            </label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Data Source</label>
             <select
               value={selectedWidget.datasourceId || ''}
               onChange={(e) => handleDataSourceChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="">None</option>
-              {dashboard.dataSources.map(ds => (
-                <option key={ds.id} value={ds.id}>{ds.id}</option>
+              {dashboard.dataSources.map((ds) => (
+                <option key={ds.id} value={ds.id}>
+                  {ds.id}
+                </option>
               ))}
             </select>
           </div>
@@ -158,9 +160,7 @@ function MetricConfigEditor({ config, onChange }: MetricConfigEditorProps) {
     <SidebarSection title="Metric Configuration">
       <div className="space-y-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Value Field
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Value Field</label>
           <input
             type="text"
             value={config.valueField || ''}
@@ -171,9 +171,7 @@ function MetricConfigEditor({ config, onChange }: MetricConfigEditorProps) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Format
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Format</label>
           <select
             value={config.format || 'number'}
             onChange={(e) => onChange({ ...config, format: e.target.value })}
@@ -191,10 +189,12 @@ function MetricConfigEditor({ config, onChange }: MetricConfigEditorProps) {
             type="checkbox"
             id="show-comparison"
             checked={config.comparison?.enabled || false}
-            onChange={(e) => onChange({
-              ...config,
-              comparison: { ...config.comparison, enabled: e.target.checked }
-            })}
+            onChange={(e) =>
+              onChange({
+                ...config,
+                comparison: { ...config.comparison, enabled: e.target.checked },
+              })
+            }
             className="rounded border-gray-300"
           />
           <label htmlFor="show-comparison" className="text-sm text-gray-600">
@@ -207,10 +207,12 @@ function MetricConfigEditor({ config, onChange }: MetricConfigEditorProps) {
             type="checkbox"
             id="show-sparkline"
             checked={config.sparkline?.enabled || false}
-            onChange={(e) => onChange({
-              ...config,
-              sparkline: { ...config.sparkline, enabled: e.target.checked }
-            })}
+            onChange={(e) =>
+              onChange({
+                ...config,
+                sparkline: { ...config.sparkline, enabled: e.target.checked },
+              })
+            }
             className="rounded border-gray-300"
           />
           <label htmlFor="show-sparkline" className="text-sm text-gray-600">
@@ -237,10 +239,12 @@ function TableConfigEditor({ config, onChange }: TableConfigEditorProps) {
             type="checkbox"
             id="pagination"
             checked={config.pagination?.enabled || false}
-            onChange={(e) => onChange({
-              ...config,
-              pagination: { ...config.pagination, enabled: e.target.checked }
-            })}
+            onChange={(e) =>
+              onChange({
+                ...config,
+                pagination: { ...config.pagination, enabled: e.target.checked },
+              })
+            }
             className="rounded border-gray-300"
           />
           <label htmlFor="pagination" className="text-sm text-gray-600">
@@ -250,16 +254,20 @@ function TableConfigEditor({ config, onChange }: TableConfigEditorProps) {
 
         {config.pagination?.enabled && (
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Page Size
-            </label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Page Size</label>
             <input
               type="number"
               value={config.pagination?.pageSize || 10}
-              onChange={(e) => onChange({
-                ...config,
-                pagination: { ...config.pagination, enabled: true, pageSize: parseInt(e.target.value) }
-              })}
+              onChange={(e) =>
+                onChange({
+                  ...config,
+                  pagination: {
+                    ...config.pagination,
+                    enabled: true,
+                    pageSize: parseInt(e.target.value),
+                  },
+                })
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
               min={1}
               max={100}
@@ -308,12 +316,12 @@ function TextConfigEditor({ config, onChange }: TextConfigEditorProps) {
     <SidebarSection title="Text Configuration">
       <div className="space-y-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Format
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Format</label>
           <select
             value={config.format || 'plain'}
-            onChange={(e) => onChange({ ...config, format: e.target.value as TextConfig['format'] })}
+            onChange={(e) =>
+              onChange({ ...config, format: e.target.value as TextConfig['format'] })
+            }
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
           >
             <option value="plain">Plain Text</option>
@@ -323,9 +331,7 @@ function TextConfigEditor({ config, onChange }: TextConfigEditorProps) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Content
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Content</label>
           <textarea
             value={config.content || ''}
             onChange={(e) => onChange({ ...config, content: e.target.value })}
@@ -350,9 +356,7 @@ function ImageConfigEditor({ config, onChange }: ImageConfigEditorProps) {
     <SidebarSection title="Image Configuration">
       <div className="space-y-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Image URL
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Image URL</label>
           <input
             type="text"
             value={config.src || ''}
@@ -363,9 +367,7 @@ function ImageConfigEditor({ config, onChange }: ImageConfigEditorProps) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Alt Text
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Alt Text</label>
           <input
             type="text"
             value={config.alt || ''}
@@ -376,9 +378,7 @@ function ImageConfigEditor({ config, onChange }: ImageConfigEditorProps) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Fit Mode
-          </label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Fit Mode</label>
           <select
             value={config.fit || 'contain'}
             onChange={(e) => onChange({ ...config, fit: e.target.value as ImageConfig['fit'] })}

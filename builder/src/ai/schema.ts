@@ -12,11 +12,11 @@ export const DashboardSchema = {
   properties: {
     title: {
       type: 'string',
-      description: 'The display title of the dashboard'
+      description: 'The display title of the dashboard',
     },
     description: {
       type: 'string',
-      description: 'Optional description of the dashboard purpose'
+      description: 'Optional description of the dashboard purpose',
     },
     layout: {
       type: 'object',
@@ -25,21 +25,21 @@ export const DashboardSchema = {
         columns: { type: 'integer', default: 12, minimum: 1, maximum: 24 },
         rowHeight: { type: 'integer', default: 80, minimum: 20 },
         gap: { type: 'integer', default: 8 },
-        padding: { type: 'integer', default: 16 }
-      }
+        padding: { type: 'integer', default: 16 },
+      },
     },
     widgets: {
       type: 'array',
-      items: { $ref: '#/$defs/Widget' }
+      items: { $ref: '#/$defs/Widget' },
     },
     dataSources: {
       type: 'array',
-      items: { $ref: '#/$defs/DataSource' }
+      items: { $ref: '#/$defs/DataSource' },
     },
     variables: {
       type: 'array',
-      items: { $ref: '#/$defs/Variable' }
-    }
+      items: { $ref: '#/$defs/Variable' },
+    },
   },
   $defs: {
     Widget: {
@@ -51,8 +51,8 @@ export const DashboardSchema = {
         title: { type: 'string' },
         position: { $ref: '#/$defs/Position' },
         datasourceId: { type: 'string' },
-        config: { type: 'object' }
-      }
+        config: { type: 'object' },
+      },
     },
     Position: {
       type: 'object',
@@ -61,8 +61,8 @@ export const DashboardSchema = {
         x: { type: 'integer', minimum: 0 },
         y: { type: 'integer', minimum: 0 },
         w: { type: 'integer', minimum: 1, maximum: 12 },
-        h: { type: 'integer', minimum: 1 }
-      }
+        h: { type: 'integer', minimum: 1 },
+      },
     },
     DataSource: {
       type: 'object',
@@ -72,8 +72,8 @@ export const DashboardSchema = {
         type: { enum: ['url', 'inline', 'postgres', 'mysql', 'derived', 'cube'] },
         url: { type: 'string' },
         query: { type: 'string' },
-        data: { type: 'array' }
-      }
+        data: { type: 'array' },
+      },
     },
     Variable: {
       type: 'object',
@@ -83,10 +83,10 @@ export const DashboardSchema = {
         name: { type: 'string' },
         label: { type: 'string' },
         type: { enum: ['select', 'text', 'date', 'daterange'] },
-        defaultValue: { type: 'string' }
-      }
-    }
-  }
+        defaultValue: { type: 'string' },
+      },
+    },
+  },
 }
 
 export const ChartConfigSchema = {
@@ -98,7 +98,7 @@ export const ChartConfigSchema = {
   properties: {
     geometry: {
       enum: ['line', 'bar', 'pie', 'scatter', 'area', 'radar', 'funnel', 'gauge'],
-      description: 'The type of chart to render'
+      description: 'The type of chart to render',
     },
     encodings: {
       type: 'object',
@@ -109,8 +109,8 @@ export const ChartConfigSchema = {
         color: { type: 'string', description: 'Field for color encoding' },
         size: { type: 'string', description: 'Field for size encoding' },
         value: { type: 'string', description: 'Field for value (pie/funnel)' },
-        category: { type: 'string', description: 'Field for category (pie/funnel)' }
-      }
+        category: { type: 'string', description: 'Field for category (pie/funnel)' },
+      },
     },
     style: {
       type: 'object',
@@ -121,10 +121,10 @@ export const ChartConfigSchema = {
         showLabels: { type: 'boolean' },
         smooth: { type: 'boolean', description: 'Smooth lines (line/area charts)' },
         stack: { type: 'boolean', description: 'Stack series (bar/area charts)' },
-        horizontal: { type: 'boolean', description: 'Horizontal bars' }
-      }
-    }
-  }
+        horizontal: { type: 'boolean', description: 'Horizontal bars' },
+      },
+    },
+  },
 }
 
 export const WidgetGenerationSchema = {
@@ -136,26 +136,26 @@ export const WidgetGenerationSchema = {
   properties: {
     type: {
       enum: ['chart', 'metric', 'table', 'text'],
-      description: 'Widget type to create'
+      description: 'Widget type to create',
     },
     title: {
       type: 'string',
-      description: 'Widget title'
+      description: 'Widget title',
     },
     description: {
       type: 'string',
-      description: 'Brief description of what the widget shows'
+      description: 'Brief description of what the widget shows',
     },
     suggestedPosition: {
       type: 'object',
       properties: {
         w: { type: 'integer', minimum: 1, maximum: 12, description: 'Width in grid columns' },
-        h: { type: 'integer', minimum: 1, maximum: 8, description: 'Height in grid rows' }
-      }
+        h: { type: 'integer', minimum: 1, maximum: 8, description: 'Height in grid rows' },
+      },
     },
     chartConfig: {
       $ref: '#/$defs/ChartConfig',
-      description: 'Chart configuration (for chart widgets)'
+      description: 'Chart configuration (for chart widgets)',
     },
     metricConfig: {
       type: 'object',
@@ -163,8 +163,8 @@ export const WidgetGenerationSchema = {
         valueField: { type: 'string' },
         format: { enum: ['number', 'currency', 'percent', 'compact'] },
         showComparison: { type: 'boolean' },
-        showSparkline: { type: 'boolean' }
-      }
+        showSparkline: { type: 'boolean' },
+      },
     },
     tableConfig: {
       type: 'object',
@@ -175,20 +175,20 @@ export const WidgetGenerationSchema = {
             type: 'object',
             properties: {
               field: { type: 'string' },
-              header: { type: 'string' }
-            }
-          }
+              header: { type: 'string' },
+            },
+          },
         },
         sortable: { type: 'boolean' },
-        pagination: { type: 'boolean' }
-      }
+        pagination: { type: 'boolean' },
+      },
     },
     textConfig: {
       type: 'object',
       properties: {
         content: { type: 'string' },
-        format: { enum: ['plain', 'markdown'] }
-      }
+        format: { enum: ['plain', 'markdown'] },
+      },
     },
     suggestedQuery: {
       type: 'object',
@@ -196,13 +196,13 @@ export const WidgetGenerationSchema = {
       properties: {
         measures: { type: 'array', items: { type: 'string' } },
         dimensions: { type: 'array', items: { type: 'string' } },
-        filters: { type: 'array' }
-      }
-    }
+        filters: { type: 'array' },
+      },
+    },
   },
   $defs: {
-    ChartConfig: ChartConfigSchema
-  }
+    ChartConfig: ChartConfigSchema,
+  },
 }
 
 /**
@@ -212,7 +212,7 @@ export function getSchemaForPrompt(schemaName: 'dashboard' | 'chart' | 'widget')
   const schema = {
     dashboard: DashboardSchema,
     chart: ChartConfigSchema,
-    widget: WidgetGenerationSchema
+    widget: WidgetGenerationSchema,
   }[schemaName]
 
   return JSON.stringify(schema, null, 2)

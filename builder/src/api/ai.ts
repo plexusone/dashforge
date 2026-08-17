@@ -98,20 +98,20 @@ export async function getAvailableModels(): Promise<{
 export async function generateDashboard(
   prompt: string,
   schema?: CubeSchema,
-  options?: AIGenerationOptions
+  options?: AIGenerationOptions,
 ): Promise<AIGenerationResult<Dashboard>> {
   const request: GenerateRequest = {
     prompt,
     type: 'dashboard',
     context: schema ? { schema } : undefined,
-    ...options
+    ...options,
   }
 
   try {
     const response = await fetch(`${AI_API_BASE}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     })
 
     const result: GenerateResponse = await response.json()
@@ -120,7 +120,7 @@ export async function generateDashboard(
       return {
         success: false,
         errors: [result.error || 'Failed to generate dashboard'],
-        warnings: result.warnings
+        warnings: result.warnings,
       }
     }
 
@@ -145,14 +145,14 @@ export async function generateDashboard(
     }
 
     // Ensure widget IDs
-    dashboard.widgets = dashboard.widgets.map(w => ({
+    dashboard.widgets = dashboard.widgets.map((w) => ({
       ...w,
       id: w.id || crypto.randomUUID(),
       position: {
         ...w.position,
         minW: w.position.minW || 1,
-        minH: w.position.minH || 1
-      }
+        minH: w.position.minH || 1,
+      },
     }))
 
     return {
@@ -162,13 +162,12 @@ export async function generateDashboard(
       warnings: result.warnings,
       usage: result.usage,
       model: result.model,
-      provider: result.provider
+      provider: result.provider,
     }
-
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
     }
   }
 }
@@ -180,13 +179,13 @@ export async function generateWidget(
   prompt: string,
   existingWidgets: Widget[],
   schema?: CubeSchema,
-  options?: AIGenerationOptions
+  options?: AIGenerationOptions,
 ): Promise<AIGenerationResult<Widget>> {
-  const widgetSummaries = existingWidgets.map(w => ({
+  const widgetSummaries = existingWidgets.map((w) => ({
     id: w.id,
     type: w.type,
     title: w.title || 'Untitled',
-    position: w.position
+    position: w.position,
   }))
 
   const request: GenerateRequest = {
@@ -194,16 +193,16 @@ export async function generateWidget(
     type: 'widget',
     context: {
       existingWidgets: widgetSummaries,
-      schema
+      schema,
     },
-    ...options
+    ...options,
   }
 
   try {
     const response = await fetch(`${AI_API_BASE}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     })
 
     const result: GenerateResponse = await response.json()
@@ -212,7 +211,7 @@ export async function generateWidget(
       return {
         success: false,
         errors: [result.error || 'Failed to generate widget'],
-        warnings: result.warnings
+        warnings: result.warnings,
       }
     }
 
@@ -229,11 +228,11 @@ export async function generateWidget(
         w: Math.max(1, Math.min(12, widget.position?.w || 4)),
         h: Math.max(1, widget.position?.h || 3),
         minW: 1,
-        minH: 1
+        minH: 1,
       },
       config: widget.config || {},
       datasourceId: widget.datasourceId,
-      description: widget.description
+      description: widget.description,
     }
 
     return {
@@ -243,13 +242,12 @@ export async function generateWidget(
       warnings: result.warnings,
       usage: result.usage,
       model: result.model,
-      provider: result.provider
+      provider: result.provider,
     }
-
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
     }
   }
 }
@@ -260,22 +258,22 @@ export async function generateWidget(
 export async function modifyWidget(
   prompt: string,
   widget: Widget,
-  options?: AIGenerationOptions
+  options?: AIGenerationOptions,
 ): Promise<AIGenerationResult<Widget>> {
   const request: GenerateRequest = {
     prompt,
     type: 'modify',
     context: {
-      currentWidget: widget
+      currentWidget: widget,
     },
-    ...options
+    ...options,
   }
 
   try {
     const response = await fetch(`${AI_API_BASE}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     })
 
     const result: GenerateResponse = await response.json()
@@ -284,7 +282,7 @@ export async function modifyWidget(
       return {
         success: false,
         errors: [result.error || 'Failed to modify widget'],
-        warnings: result.warnings
+        warnings: result.warnings,
       }
     }
 
@@ -292,7 +290,7 @@ export async function modifyWidget(
     const modifiedWidget: Widget = {
       ...widget,
       ...(result.data as Partial<Widget>),
-      id: widget.id // Always preserve original ID
+      id: widget.id, // Always preserve original ID
     }
 
     return {
@@ -302,13 +300,12 @@ export async function modifyWidget(
       warnings: result.warnings,
       usage: result.usage,
       model: result.model,
-      provider: result.provider
+      provider: result.provider,
     }
-
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
     }
   }
 }
@@ -319,20 +316,20 @@ export async function modifyWidget(
 export async function generateQuery(
   prompt: string,
   schema: CubeSchema,
-  options?: AIGenerationOptions
+  options?: AIGenerationOptions,
 ): Promise<AIGenerationResult<Record<string, unknown>>> {
   const request: GenerateRequest = {
     prompt,
     type: 'query',
     context: { schema },
-    ...options
+    ...options,
   }
 
   try {
     const response = await fetch(`${AI_API_BASE}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     })
 
     const result: GenerateResponse = await response.json()
@@ -341,7 +338,7 @@ export async function generateQuery(
       return {
         success: false,
         errors: [result.error || 'Failed to generate query'],
-        warnings: result.warnings
+        warnings: result.warnings,
       }
     }
 
@@ -352,13 +349,12 @@ export async function generateQuery(
       warnings: result.warnings,
       usage: result.usage,
       model: result.model,
-      provider: result.provider
+      provider: result.provider,
     }
-
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
     }
   }
 }
@@ -370,19 +366,19 @@ export async function* streamGenerate(
   prompt: string,
   type: 'dashboard' | 'widget' | 'query' | 'modify',
   context?: GenerateRequest['context'],
-  options?: AIGenerationOptions
+  options?: AIGenerationOptions,
 ): AsyncGenerator<{ content?: string; error?: string; done?: boolean }> {
   const request: GenerateRequest = {
     prompt,
     type,
     context,
-    ...options
+    ...options,
   }
 
   const response = await fetch(`${AI_API_BASE}/stream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
 
   if (!response.ok) {
@@ -434,7 +430,7 @@ export async function* streamGenerate(
  */
 function findNextY(widgets: Widget[]): number {
   if (widgets.length === 0) return 0
-  return Math.max(...widgets.map(w => w.position.y + w.position.h))
+  return Math.max(...widgets.map((w) => w.position.y + w.position.h))
 }
 
 /**
@@ -442,14 +438,18 @@ function findNextY(widgets: Widget[]): number {
  */
 export async function mockGenerateWidget(
   prompt: string,
-  existingWidgets: Widget[]
+  existingWidgets: Widget[],
 ): Promise<AIGenerationResult<Widget>> {
   const lowerPrompt = prompt.toLowerCase()
 
   let widgetType: 'chart' | 'metric' | 'table' | 'text' = 'chart'
   let geometry: 'line' | 'bar' | 'pie' | 'scatter' | 'area' = 'bar'
 
-  if (lowerPrompt.includes('metric') || lowerPrompt.includes('kpi') || lowerPrompt.includes('total')) {
+  if (
+    lowerPrompt.includes('metric') ||
+    lowerPrompt.includes('kpi') ||
+    lowerPrompt.includes('total')
+  ) {
     widgetType = 'metric'
   } else if (lowerPrompt.includes('table') || lowerPrompt.includes('list')) {
     widgetType = 'table'
@@ -477,29 +477,31 @@ export async function mockGenerateWidget(
       w: widgetType === 'metric' ? 2 : widgetType === 'table' ? 6 : 4,
       h: widgetType === 'metric' ? 2 : widgetType === 'table' ? 4 : 3,
       minW: 1,
-      minH: 1
+      minH: 1,
     },
-    config: widgetType === 'chart'
-      ? {
-          geometry,
-          encodings: geometry === 'pie'
-            ? { value: 'revenue', category: 'category' }
-            : { x: 'date', y: 'revenue' },
-          style: { showLegend: true }
-        }
-      : widgetType === 'metric'
-      ? { valueField: 'total', format: 'number' }
-      : widgetType === 'table'
-      ? { columns: [], sortable: true, pagination: { enabled: true } }
-      : { content: 'Enter text here...', format: 'markdown' }
+    config:
+      widgetType === 'chart'
+        ? {
+            geometry,
+            encodings:
+              geometry === 'pie'
+                ? { value: 'revenue', category: 'category' }
+                : { x: 'date', y: 'revenue' },
+            style: { showLegend: true },
+          }
+        : widgetType === 'metric'
+          ? { valueField: 'total', format: 'number' }
+          : widgetType === 'table'
+            ? { columns: [], sortable: true, pagination: { enabled: true } }
+            : { content: 'Enter text here...', format: 'markdown' },
   }
 
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   return {
     success: true,
     data: widget,
-    warnings: ['Using mock AI generation - connect AI backend for full functionality']
+    warnings: ['Using mock AI generation - connect AI backend for full functionality'],
   }
 }

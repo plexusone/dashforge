@@ -8,7 +8,7 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle,
-  Wand2
+  Wand2,
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useDashboardStore } from '../../stores/dashboard'
@@ -29,7 +29,7 @@ const EXAMPLE_PROMPTS = [
   'Create a metric showing total customers',
   'Add a pie chart for sales by category',
   'Add a table of top 10 products',
-  'Create a sales dashboard with KPIs and charts'
+  'Create a sales dashboard with KPIs and charts',
 ]
 
 export function AIChat() {
@@ -39,9 +39,10 @@ export function AIChat() {
     {
       id: 'welcome',
       role: 'system',
-      content: 'Hi! I can help you build dashboards. Try asking me to add a chart, create a metric, or generate a complete dashboard.',
-      timestamp: new Date()
-    }
+      content:
+        'Hi! I can help you build dashboards. Try asking me to add a chart, create a metric, or generate a complete dashboard.',
+      timestamp: new Date(),
+    },
   ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -66,14 +67,14 @@ export function AIChat() {
     const newMessage: Message = {
       ...message,
       id: crypto.randomUUID(),
-      timestamp: new Date()
+      timestamp: new Date(),
     }
-    setMessages(prev => [...prev, newMessage])
+    setMessages((prev) => [...prev, newMessage])
     return newMessage.id
   }, [])
 
   const updateMessage = useCallback((id: string, updates: Partial<Message>) => {
-    setMessages(prev => prev.map(m => m.id === id ? { ...m, ...updates } : m))
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)))
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,15 +91,18 @@ export function AIChat() {
     const assistantId = addMessage({
       role: 'assistant',
       content: 'Thinking...',
-      status: 'pending'
+      status: 'pending',
     })
 
     setIsLoading(true)
 
     try {
       // Determine if this is a dashboard or widget request
-      const isDashboardRequest = userMessage.toLowerCase().includes('dashboard') &&
-        (userMessage.toLowerCase().includes('create') || userMessage.toLowerCase().includes('build') || userMessage.toLowerCase().includes('generate'))
+      const isDashboardRequest =
+        userMessage.toLowerCase().includes('dashboard') &&
+        (userMessage.toLowerCase().includes('create') ||
+          userMessage.toLowerCase().includes('build') ||
+          userMessage.toLowerCase().includes('generate'))
 
       let result: AIGenerationResult<Widget | Dashboard>
 
@@ -108,16 +112,17 @@ export function AIChat() {
           const newDashboard = result.data as Dashboard
           // Ensure IDs exist
           if (!newDashboard.id) newDashboard.id = crypto.randomUUID()
-          newDashboard.widgets = newDashboard.widgets?.map(w => ({
-            ...w,
-            id: w.id || crypto.randomUUID()
-          })) || []
+          newDashboard.widgets =
+            newDashboard.widgets?.map((w) => ({
+              ...w,
+              id: w.id || crypto.randomUUID(),
+            })) || []
 
           setDashboard(newDashboard)
           updateMessage(assistantId, {
             content: `Created dashboard "${newDashboard.title}" with ${newDashboard.widgets.length} widget(s).`,
             status: 'success',
-            data: newDashboard
+            data: newDashboard,
           })
         } else {
           throw new Error(result.errors?.join(', ') || 'Failed to generate dashboard')
@@ -131,7 +136,7 @@ export function AIChat() {
           updateMessage(assistantId, {
             content: `Added ${widget.type} widget: "${widget.title || 'Untitled'}"`,
             status: 'success',
-            data: widget
+            data: widget,
           })
         } else {
           throw new Error(result.errors?.join(', ') || 'Failed to generate widget')
@@ -142,14 +147,13 @@ export function AIChat() {
       if (result.warnings && result.warnings.length > 0) {
         addMessage({
           role: 'system',
-          content: `Note: ${result.warnings.join(', ')}`
+          content: `Note: ${result.warnings.join(', ')}`,
         })
       }
-
     } catch (error) {
       updateMessage(assistantId, {
         content: error instanceof Error ? error.message : 'Something went wrong',
-        status: 'error'
+        status: 'error',
       })
     } finally {
       setIsLoading(false)
@@ -177,7 +181,7 @@ export function AIChat() {
     <div
       className={clsx(
         'fixed bottom-4 right-4 z-50 bg-white rounded-xl shadow-2xl border border-gray-200 transition-all',
-        isMinimized ? 'w-72' : 'w-96'
+        isMinimized ? 'w-72' : 'w-96',
       )}
     >
       {/* Header */}
@@ -258,7 +262,7 @@ export function AIChat() {
                   'p-2 rounded-lg transition-colors',
                   input.trim() && !isLoading
                     ? 'bg-primary-500 text-white hover:bg-primary-600'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed',
                 )}
               >
                 {isLoading ? (
@@ -284,20 +288,15 @@ function MessageBubble({ message }: MessageBubbleProps) {
   const isSystem = message.role === 'system'
 
   return (
-    <div
-      className={clsx(
-        'flex',
-        isUser ? 'justify-end' : 'justify-start'
-      )}
-    >
+    <div className={clsx('flex', isUser ? 'justify-end' : 'justify-start')}>
       <div
         className={clsx(
           'max-w-[85%] px-3 py-2 rounded-lg text-sm',
           isUser
             ? 'bg-primary-500 text-white'
             : isSystem
-            ? 'bg-gray-100 text-gray-600 italic'
-            : 'bg-gray-100 text-gray-800'
+              ? 'bg-gray-100 text-gray-600 italic'
+              : 'bg-gray-100 text-gray-800',
         )}
       >
         <div className="flex items-start gap-2">

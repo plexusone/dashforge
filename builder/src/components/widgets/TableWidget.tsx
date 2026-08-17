@@ -23,7 +23,7 @@ const defaultColumns: TableConfig['columns'] = [
   { field: 'name', header: 'Name' },
   { field: 'category', header: 'Category' },
   { field: 'revenue', header: 'Revenue', align: 'right' },
-  { field: 'units', header: 'Units', align: 'right' }
+  { field: 'units', header: 'Units', align: 'right' },
 ]
 
 export function TableWidget({ widget }: TableWidgetProps) {
@@ -70,7 +70,7 @@ export function TableWidget({ widget }: TableWidgetProps) {
       if (format === 'currency') {
         return new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'USD'
+          currency: 'USD',
         }).format(value)
       }
       return new Intl.NumberFormat('en-US').format(value)
@@ -91,18 +91,20 @@ export function TableWidget({ widget }: TableWidgetProps) {
                   className={clsx(
                     'px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider border-b',
                     col.align === 'right' ? 'text-right' : 'text-left',
-                    config.sortable && 'cursor-pointer hover:bg-gray-100'
+                    config.sortable && 'cursor-pointer hover:bg-gray-100',
                   )}
                   style={{ width: col.width }}
                   onClick={() => handleSort(col.field)}
                 >
                   <div className="flex items-center gap-1">
                     <span>{col.header || col.field}</span>
-                    {config.sortable && sortField === col.field && (
-                      sortOrder === 'asc'
-                        ? <ChevronUp className="w-3 h-3" />
-                        : <ChevronDown className="w-3 h-3" />
-                    )}
+                    {config.sortable &&
+                      sortField === col.field &&
+                      (sortOrder === 'asc' ? (
+                        <ChevronUp className="w-3 h-3" />
+                      ) : (
+                        <ChevronDown className="w-3 h-3" />
+                      ))}
                   </div>
                 </th>
               ))}
@@ -116,7 +118,7 @@ export function TableWidget({ widget }: TableWidgetProps) {
                     key={col.field}
                     className={clsx(
                       'px-3 py-2 whitespace-nowrap',
-                      col.align === 'right' ? 'text-right' : 'text-left'
+                      col.align === 'right' ? 'text-right' : 'text-left',
                     )}
                   >
                     {formatCell((row as Record<string, unknown>)[col.field], col.format)}
@@ -132,15 +134,16 @@ export function TableWidget({ widget }: TableWidgetProps) {
       {config.pagination?.enabled && totalPages > 1 && (
         <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-t text-xs">
           <span className="text-gray-500">
-            {(page - 1) * pageSize + 1}-{Math.min(page * pageSize, sortedData.length)} of {sortedData.length}
+            {(page - 1) * pageSize + 1}-{Math.min(page * pageSize, sortedData.length)} of{' '}
+            {sortedData.length}
           </span>
           <div className="flex items-center gap-1">
             <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className={clsx(
                 'p-1 rounded hover:bg-gray-200',
-                page === 1 && 'opacity-50 cursor-not-allowed'
+                page === 1 && 'opacity-50 cursor-not-allowed',
               )}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -149,11 +152,11 @@ export function TableWidget({ widget }: TableWidgetProps) {
               {page} / {totalPages}
             </span>
             <button
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className={clsx(
                 'p-1 rounded hover:bg-gray-200',
-                page === totalPages && 'opacity-50 cursor-not-allowed'
+                page === totalPages && 'opacity-50 cursor-not-allowed',
               )}
             >
               <ChevronRight className="w-4 h-4" />

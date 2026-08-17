@@ -17,7 +17,7 @@ export function GridOverlay({ columns, rowHeight, gap, width }: GridOverlayProps
           linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
         `,
         backgroundSize: `${columnWidth + gap}px ${rowHeight + gap}px`,
-        backgroundPosition: `${gap}px ${gap}px`
+        backgroundPosition: `${gap}px ${gap}px`,
       }}
     />
   )

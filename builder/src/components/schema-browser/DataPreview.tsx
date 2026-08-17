@@ -26,7 +26,7 @@ export function DataPreview({ dimensions, measures }: DataPreviewProps) {
       const query: Query = {
         measures: measures.slice(0, 3),
         dimensions: dimensions.slice(0, 3),
-        limit: 10
+        limit: 10,
       }
 
       const resultSet = await executeQuery(query)
@@ -61,9 +61,7 @@ export function DataPreview({ dimensions, measures }: DataPreviewProps) {
 
       {/* Content */}
       <div className="max-h-40 overflow-auto">
-        {error && (
-          <div className="p-3 text-sm text-red-500">{error}</div>
-        )}
+        {error && <div className="p-3 text-sm text-red-500">{error}</div>}
 
         {!data && !error && (
           <div className="p-4 text-center text-gray-400 text-sm">
@@ -100,9 +98,7 @@ export function DataPreview({ dimensions, measures }: DataPreviewProps) {
         )}
 
         {data && data.length === 0 && (
-          <div className="p-3 text-center text-gray-400 text-sm">
-            No data found
-          </div>
+          <div className="p-3 text-center text-gray-400 text-sm">No data found</div>
         )}
       </div>
     </div>

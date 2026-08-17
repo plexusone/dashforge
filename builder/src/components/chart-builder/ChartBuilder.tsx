@@ -11,28 +11,29 @@ interface ChartBuilderProps {
 export function ChartBuilder({ config, onChange }: ChartBuilderProps) {
   const handleGeometryChange = (geometry: GeometryType) => {
     // Reset encodings based on geometry type
-    const newEncodings = geometry === 'pie' || geometry === 'funnel'
-      ? { value: config.encodings?.value || '', category: config.encodings?.category || '' }
-      : { x: config.encodings?.x || '', y: config.encodings?.y || '' }
+    const newEncodings =
+      geometry === 'pie' || geometry === 'funnel'
+        ? { value: config.encodings?.value || '', category: config.encodings?.category || '' }
+        : { x: config.encodings?.x || '', y: config.encodings?.y || '' }
 
     onChange({
       ...config,
       geometry,
-      encodings: newEncodings
+      encodings: newEncodings,
     })
   }
 
   const handleEncodingsChange = (encodings: ChartConfig['encodings']) => {
     onChange({
       ...config,
-      encodings
+      encodings,
     })
   }
 
   const handleStyleChange = (style: ChartConfig['style']) => {
     onChange({
       ...config,
-      style
+      style,
     })
   }
 
@@ -40,13 +41,8 @@ export function ChartBuilder({ config, onChange }: ChartBuilderProps) {
     <div className="space-y-4">
       {/* Geometry Selection */}
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-2">
-          Chart Type
-        </label>
-        <GeometryPicker
-          value={config.geometry}
-          onChange={handleGeometryChange}
-        />
+        <label className="block text-xs font-medium text-gray-600 mb-2">Chart Type</label>
+        <GeometryPicker value={config.geometry} onChange={handleGeometryChange} />
       </div>
 
       {/* Data Mapping */}

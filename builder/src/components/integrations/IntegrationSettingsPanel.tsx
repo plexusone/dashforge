@@ -56,7 +56,7 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
     }
   }, [isOpen, fetchIntegrations])
 
-  const selectedIntegration = integrations.find(i => i.id === selectedId)
+  const selectedIntegration = integrations.find((i) => i.id === selectedId)
 
   const handleTest = async () => {
     if (!selectedId) return
@@ -93,10 +93,7 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
             <h2 className="text-lg font-semibold text-gray-900">Integrations</h2>
             <p className="text-sm text-gray-500">Manage your notification channels</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -130,7 +127,7 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                           'w-full p-3 rounded-lg text-left transition-colors mb-1',
                           selectedId === integration.id
                             ? 'bg-primary-50 border border-primary-200'
-                            : 'hover:bg-gray-50'
+                            : 'hover:bg-gray-50',
                         )}
                       >
                         <div className="flex items-center gap-3">
@@ -142,10 +139,12 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                               {integration.name}
                             </p>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className={clsx(
-                                'text-xs px-1.5 py-0.5 rounded-full capitalize',
-                                statusColors[integration.status]
-                              )}>
+                              <span
+                                className={clsx(
+                                  'text-xs px-1.5 py-0.5 rounded-full capitalize',
+                                  statusColors[integration.status],
+                                )}
+                              >
                                 {integration.status}
                               </span>
                             </div>
@@ -180,10 +179,12 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                         <p className="text-sm text-gray-500">{selectedIntegration.slug}</p>
                       </div>
                     </div>
-                    <span className={clsx(
-                      'text-sm px-2 py-1 rounded-full capitalize',
-                      statusColors[selectedIntegration.status]
-                    )}>
+                    <span
+                      className={clsx(
+                        'text-sm px-2 py-1 rounded-full capitalize',
+                        statusColors[selectedIntegration.status],
+                      )}
+                    >
                       {selectedIntegration.status}
                     </span>
                   </div>
@@ -191,25 +192,35 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                   {/* Details */}
                   <div className="space-y-4">
                     <div>
-                      <label className="text-xs font-medium text-gray-500 uppercase">Channel Type</label>
-                      <p className="text-sm text-gray-900 capitalize">{selectedIntegration.channelType}</p>
+                      <label className="text-xs font-medium text-gray-500 uppercase">
+                        Channel Type
+                      </label>
+                      <p className="text-sm text-gray-900 capitalize">
+                        {selectedIntegration.channelType}
+                      </p>
                     </div>
 
                     <div>
                       <label className="text-xs font-medium text-gray-500 uppercase">Source</label>
-                      <p className="text-sm text-gray-900 capitalize">{selectedIntegration.source}</p>
+                      <p className="text-sm text-gray-900 capitalize">
+                        {selectedIntegration.source}
+                      </p>
                     </div>
 
                     {selectedIntegration.statusMessage && (
                       <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase">Status Message</label>
+                        <label className="text-xs font-medium text-gray-500 uppercase">
+                          Status Message
+                        </label>
                         <p className="text-sm text-red-600">{selectedIntegration.statusMessage}</p>
                       </div>
                     )}
 
                     {selectedIntegration.lastUsedAt && (
                       <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase">Last Used</label>
+                        <label className="text-xs font-medium text-gray-500 uppercase">
+                          Last Used
+                        </label>
                         <p className="text-sm text-gray-900">
                           {new Date(selectedIntegration.lastUsedAt).toLocaleString()}
                         </p>
@@ -224,36 +235,43 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                     </div>
 
                     {/* Configuration (non-sensitive) */}
-                    {selectedIntegration.config && Object.keys(selectedIntegration.config).length > 0 && (
-                      <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">Configuration</label>
-                        <div className="bg-gray-50 rounded-lg p-3 text-sm">
-                          {Object.entries(selectedIntegration.config).map(([key, value]) => (
-                            <div key={key} className="flex justify-between py-1">
-                              <span className="text-gray-600">{key}</span>
-                              <span className="text-gray-900">{String(value)}</span>
-                            </div>
-                          ))}
+                    {selectedIntegration.config &&
+                      Object.keys(selectedIntegration.config).length > 0 && (
+                        <div>
+                          <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">
+                            Configuration
+                          </label>
+                          <div className="bg-gray-50 rounded-lg p-3 text-sm">
+                            {Object.entries(selectedIntegration.config).map(([key, value]) => (
+                              <div key={key} className="flex justify-between py-1">
+                                <span className="text-gray-600">{key}</span>
+                                <span className="text-gray-900">{String(value)}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
                     {/* Test Result */}
                     {testResult && (
-                      <div className={clsx(
-                        'p-4 rounded-lg',
-                        testResult.success ? 'bg-green-50' : 'bg-red-50'
-                      )}>
+                      <div
+                        className={clsx(
+                          'p-4 rounded-lg',
+                          testResult.success ? 'bg-green-50' : 'bg-red-50',
+                        )}
+                      >
                         <div className="flex items-center gap-2">
                           {testResult.success ? (
                             <CheckCircle className="w-5 h-5 text-green-600" />
                           ) : (
                             <XCircle className="w-5 h-5 text-red-600" />
                           )}
-                          <span className={clsx(
-                            'font-medium',
-                            testResult.success ? 'text-green-700' : 'text-red-700'
-                          )}>
+                          <span
+                            className={clsx(
+                              'font-medium',
+                              testResult.success ? 'text-green-700' : 'text-red-700',
+                            )}
+                          >
                             {testResult.success ? 'Connection successful!' : 'Connection failed'}
                           </span>
                         </div>
@@ -297,7 +315,7 @@ export function IntegrationSettingsPanel({ isOpen, onClose }: IntegrationSetting
                       'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                       isTesting
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-primary-500 text-white hover:bg-primary-600'
+                        : 'bg-primary-500 text-white hover:bg-primary-600',
                     )}
                   >
                     {isTesting ? (

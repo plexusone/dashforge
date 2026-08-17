@@ -5,6 +5,6 @@ export {
   type Mark,
   type ChartStyle,
   type ChartIR,
-  validateChartIR
+  validateChartIR,
 } from './chartir'
 // Note: GeometryType is exported from dashboard.ts (it's duplicated in chartir.ts)

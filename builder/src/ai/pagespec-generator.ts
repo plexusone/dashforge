@@ -19,13 +19,7 @@ export interface PageSpecGenerationResult {
   retryCount: number
 }
 
-const VALID_LAYOUT_TYPES = [
-  'responsive-grid',
-  'stack',
-  'split-pane',
-  'tabs',
-  'application-shell',
-]
+const VALID_LAYOUT_TYPES = ['responsive-grid', 'stack', 'split-pane', 'tabs', 'application-shell']
 
 export function validatePageSpec(data: unknown): ValidationResult {
   const errors: string[] = []
@@ -65,7 +59,7 @@ export function validatePageSpec(data: unknown): ValidationResult {
       errors.push('layout.type is required (string)')
     } else if (!VALID_LAYOUT_TYPES.includes(layout.type as string)) {
       errors.push(
-        `Invalid layout.type "${layout.type}". Must be one of: ${VALID_LAYOUT_TYPES.join(', ')}`
+        `Invalid layout.type "${layout.type}". Must be one of: ${VALID_LAYOUT_TYPES.join(', ')}`,
       )
     }
   }
@@ -102,7 +96,7 @@ export function validatePageSpec(data: unknown): ValidationResult {
         const when = inter.when as Record<string, unknown> | undefined
         if (when?.component && !ids.has(when.component as string)) {
           warnings.push(
-            `interactions[${i}].when.component "${when.component}" does not match any component id`
+            `interactions[${i}].when.component "${when.component}" does not match any component id`,
           )
         }
       }
@@ -198,7 +192,7 @@ function extractJSON(response: string): string {
 export async function generatePageSpec(
   request: PageSpecGenerationRequest,
   callAI: (prompt: string) => Promise<string>,
-  maxRetries: number = 3
+  maxRetries: number = 3,
 ): Promise<PageSpecGenerationResult> {
   let prompt = buildPageSpecPrompt(request)
   let lastValidation: ValidationResult = { valid: false, errors: ['No response yet'], warnings: [] }
