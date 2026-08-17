@@ -3,17 +3,17 @@ import React from 'react';
 export function Layout({ layout, components, renderComponent }) {
     switch (layout.type) {
         case 'responsive-grid':
-            return _jsx(GridLayout, { layout: layout, components: components, renderComponent: renderComponent });
+            return (_jsx(GridLayout, { layout: layout, components: components, renderComponent: renderComponent }));
         case 'stack':
-            return _jsx(StackLayout, { layout: layout, components: components, renderComponent: renderComponent });
+            return (_jsx(StackLayout, { layout: layout, components: components, renderComponent: renderComponent }));
         case 'split-pane':
             return _jsx(SplitPaneLayout, { layout: layout, renderComponent: renderComponent });
         case 'tabs':
             return _jsx(TabsLayout, { layout: layout, renderComponent: renderComponent });
         case 'application-shell':
-            return _jsx(AppShellLayout, { layout: layout, components: components, renderComponent: renderComponent });
+            return (_jsx(AppShellLayout, { layout: layout, components: components, renderComponent: renderComponent }));
         default:
-            return _jsx("div", { "data-uiforge-error": `unknown layout: ${layout.type}`, children: components.map(renderComponent) });
+            return (_jsx("div", { "data-uiforge-error": `unknown layout: ${layout.type}`, children: components.map(renderComponent) }));
     }
 }
 function GridLayout({ layout, components, renderComponent }) {
@@ -96,6 +96,6 @@ function AppShellLayout({ layout, components, renderComponent }) {
         minHeight: '100vh',
     };
     const slotStyle = (area) => ({ gridArea: area });
-    return (_jsxs("div", { style: style, "data-uiforge-layout": "application-shell", children: [regionMap.has('header') && (_jsx("div", { style: slotStyle('header'), "data-uiforge-region": "header" })), regionMap.has('sidebar') && (_jsx("div", { style: slotStyle('sidebar'), "data-uiforge-region": "sidebar" })), _jsx("div", { style: slotStyle('main'), "data-uiforge-region": "main", children: components.map(renderComponent) }), regionMap.has('aside') && (_jsx("div", { style: slotStyle('aside'), "data-uiforge-region": "aside" })), regionMap.has('footer') && (_jsx("div", { style: slotStyle('footer'), "data-uiforge-region": "footer" }))] }));
+    return (_jsxs("div", { style: style, "data-uiforge-layout": "application-shell", children: [regionMap.has('header') && _jsx("div", { style: slotStyle('header'), "data-uiforge-region": "header" }), regionMap.has('sidebar') && (_jsx("div", { style: slotStyle('sidebar'), "data-uiforge-region": "sidebar" })), _jsx("div", { style: slotStyle('main'), "data-uiforge-region": "main", children: components.map(renderComponent) }), regionMap.has('aside') && _jsx("div", { style: slotStyle('aside'), "data-uiforge-region": "aside" }), regionMap.has('footer') && _jsx("div", { style: slotStyle('footer'), "data-uiforge-region": "footer" })] }));
 }
 //# sourceMappingURL=layouts.js.map
