@@ -181,7 +181,12 @@ func (m *Manager) TestConnection(ctx context.Context, ds DataSourceConfig) error
 		return err
 	}
 	defer func() {
-		_ = conn.Close()
+		if cerr := conn.Close(); cerr != nil {
+			m.logger.Error("error closing test connection",
+				"datasource_type", ds.Type,
+				"error", cerr,
+			)
+		}
 	}()
 
 	return conn.Ping(ctx)
@@ -268,8 +273,14 @@ func (m *Manager) Info() []ConnectionInfo {
 
 // RefreshConnection closes and reopens a connection.
 func (m *Manager) RefreshConnection(ctx context.Context, ds DataSourceConfig) (Connection, error) {
-	// Close existing if any
-	_ = m.CloseConnection(ds.ID)
+	// Close existing if any. A close failure shouldn't block getting a
+	// fresh connection back, but it's worth logging.
+	if err := m.CloseConnection(ds.ID); err != nil {
+		m.logger.Error("error closing connection during refresh",
+			"datasource_id", ds.ID,
+			"error", err,
+		)
+	}
 
 	// Create new
 	return m.createConnection(ctx, ds)

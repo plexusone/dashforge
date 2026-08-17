@@ -323,13 +323,17 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 
 		if err := s.db.Ping(ctx); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			_, _ = w.Write([]byte(`{"status":"unhealthy","database":"disconnected"}`))
+			if _, werr := w.Write([]byte(`{"status":"unhealthy","database":"disconnected"}`)); werr != nil {
+				s.logger.Error("error writing health response", "error", werr)
+			}
 			return
 		}
 	}
 
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(`{"status":"ok"}`))
+	if _, err := w.Write([]byte(`{"status":"ok"}`)); err != nil {
+		s.logger.Error("error writing health response", "error", err)
+	}
 }
 
 // ListenAndServe starts the HTTP server.
