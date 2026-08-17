@@ -4,6 +4,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -54,11 +55,8 @@ func (p *Provider) Connect(ctx context.Context, config datasource.ConnectionConf
 
 	// Test connection
 	if err := db.PingContext(ctx); err != nil {
-		// db is discarded either way (we're returning the ping error, not
-		// a usable connection); a close failure here has no caller left to
-		// report to and there's no logger on this type.
-		_ = db.Close()
-		return nil, datasource.NewConnectionError("mysql", config.Host, config.Port, config.Database, err)
+		closeErr := db.Close()
+		return nil, errors.Join(datasource.NewConnectionError("mysql", config.Host, config.Port, config.Database, err), closeErr)
 	}
 
 	return &Connection{
@@ -146,8 +144,11 @@ func buildDSN(config datasource.ConnectionConfig) string {
 	dsn.WriteString("tcp(")
 	dsn.WriteString(config.Host)
 	if config.Port > 0 {
-		// strings.Builder.Write never returns a non-nil error.
-		_, _ = fmt.Fprintf(&dsn, ":%d", config.Port)
+		if _, err := fmt.Fprintf(&dsn, ":%d", config.Port); err != nil {
+			// strings.Builder.Write is documented to never return a
+			// non-nil error; a failure here means that invariant broke.
+			panic(fmt.Sprintf("dsn builder write failed: %v", err))
+		}
 	} else {
 		dsn.WriteString(":3306") // Default MySQL port
 	}
