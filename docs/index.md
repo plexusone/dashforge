@@ -44,6 +44,8 @@ Perfect for:
 open viewer/index.html?dashboard=./examples/dashboard.json
 ```
 
+The viewer includes a light/dark theme toggle in the header (persisted via `localStorage`, defaulting to the OS's `prefers-color-scheme`) and formats numeric values — including a `"currency"` metric format — to at most 2 decimal places in tooltips, axis labels, and metric tiles.
+
 ### Server Mode
 
 Full-featured analytics platform with:

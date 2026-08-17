@@ -82,6 +82,8 @@ python3 -m http.server 8080
 # Open http://localhost:8080/viewer/?dashboard=../examples/compliance-dashboard.json
 ```
 
+The viewer has a light/dark theme toggle (top-right, persisted via `localStorage`) and caps numeric display in tooltips, axis labels, and metric tiles to 2 decimal places.
+
 ### Server Mode
 
 ```bash
