@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashforge Viewer</title>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/theme/dark.js"></script>
   <style>
     :root {
       --bg-primary: #ffffff;
@@ -27,6 +28,53 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { transition: background-color 0.2s ease, color 0.2s ease; }
+    .dashboard-header, .widget { transition: background-color 0.2s ease, border-color 0.2s ease; }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-primary);
+      user-select: none;
+    }
+
+    .theme-toggle-track {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      background: var(--border-color);
+      border-radius: 999px;
+      transition: background-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      transition: transform 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .theme-toggle-track {
+      background: var(--accent-color);
+    }
+
+    [data-theme="dark"] .theme-toggle-thumb {
+      transform: translateX(16px);
+    }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -444,6 +492,11 @@
         const { dashboard } = this;
         const layout = dashboard.layout || { type: 'grid', columns: 12, rowHeight: 80, gap: 16 };
 
+        // Dispose charts from any previous render (e.g. a theme toggle) so
+        // ECharts doesn't keep instances bound to discarded DOM nodes.
+        for (const chart of this.charts.values()) chart.dispose();
+        this.charts.clear();
+
         // Build HTML
         let html = `
           <header class="dashboard-header">
@@ -451,6 +504,10 @@
               <h1 class="dashboard-title">${this.escapeHtml(dashboard.title)}</h1>
               ${dashboard.description ? `<p class="dashboard-description">${this.escapeHtml(dashboard.description)}</p>` : ''}
             </div>
+            <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">
+              <span id="theme-toggle-label">${document.documentElement.getAttribute('data-theme') === 'dark' ? 'Dark' : 'Light'}</span>
+              <span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+            </button>
           </header>
         `;
 
@@ -495,6 +552,12 @@
 
         // Attach filter event handlers
         this.attachFilterHandlers();
+
+        // Attach theme toggle handler
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+          themeToggle.addEventListener('click', () => toggleTheme(this));
+        }
       }
 
       renderFilterBar(variables) {
@@ -693,7 +756,8 @@
         }
 
         container.innerHTML = '';
-        const chart = echarts.init(container);
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const chart = echarts.init(container, isDark ? 'dark' : null);
         this.charts.set(widget.id, chart);
 
         // Convert ChartIR to ECharts options
@@ -707,6 +771,7 @@
       compileChartIR(ir, data) {
         // Simple ChartIR to ECharts compiler
         const option = {
+          backgroundColor: 'transparent',
           dataset: { source: data },
           tooltip: ir.tooltip?.show !== false ? { trigger: ir.tooltip?.trigger || 'axis' } : undefined,
           legend: ir.legend?.show !== false ? {
@@ -848,8 +913,26 @@
       }
     }
 
+    // Theme: applied before first render so the initial paint and the
+    // toggle's starting label already match (localStorage > OS preference).
+    function applyInitialTheme() {
+      const stored = localStorage.getItem('uiforge-viewer-theme');
+      const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function toggleTheme(viewer) {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('uiforge-viewer-theme', next);
+      if (viewer.dashboard) viewer.render();
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
+      applyInitialTheme();
+
       const params = new URLSearchParams(window.location.search);
       const dashboardUrl = params.get('dashboard') || './examples/compliance-dashboard.json';
 
