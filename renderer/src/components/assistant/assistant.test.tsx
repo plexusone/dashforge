@@ -1,6 +1,5 @@
-import React from 'react'
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { PageRenderer } from '../../PageRenderer'
 import { clearRegistry } from '../../registry'
 import { registerAssistantComponents } from './register'
@@ -46,7 +45,11 @@ describe('Assistant components', () => {
 
   it('renders assistant.composer', () => {
     const page = agentPage([
-      { id: 'composer', type: 'assistant.composer', properties: { placeholder: 'Ask something...' } },
+      {
+        id: 'composer',
+        type: 'assistant.composer',
+        properties: { placeholder: 'Ask something...' },
+      },
     ])
     const { container } = render(<PageRenderer page={page} />)
     expect(container.querySelector('[data-uiforge-type="assistant.composer"]')).not.toBeNull()
@@ -63,7 +66,11 @@ describe('Assistant components', () => {
 
   it('renders assistant.tool-call', () => {
     const page = agentPage([
-      { id: 'tool', type: 'assistant.tool-call', properties: { showArgs: true, collapsible: true } },
+      {
+        id: 'tool',
+        type: 'assistant.tool-call',
+        properties: { showArgs: true, collapsible: true },
+      },
     ])
     const { container } = render(<PageRenderer page={page} />)
     expect(container.querySelector('[data-uiforge-type="assistant.tool-call"]')).not.toBeNull()
