@@ -12,6 +12,7 @@ export interface UIForgeContextValue {
   state: PageState
   engine: InteractionEngine
   dataSources: DataSourceRegistry
+  onInteraction?: (componentId: string, event: string, data?: Record<string, unknown>) => void
 }
 
 export const UIForgeContext = React.createContext<UIForgeContextValue | null>(null)
@@ -39,8 +40,7 @@ export function PageRenderer({
   dataSources: dataSourceConnectors,
   onInteraction,
 }: PageRendererProps): React.ReactElement {
-  const contextRef = React.useRef<UIForgeContextValue | null>(null)
-  if (!contextRef.current) {
+  const [ctx] = React.useState<UIForgeContextValue>(() => {
     const pageState = new PageState()
     if (page.context) {
       pageState.load({ context: page.context })
@@ -56,55 +56,56 @@ export function PageRenderer({
         dsRegistry.register(c)
       }
     }
-    contextRef.current = { state: pageState, engine, dataSources: dsRegistry }
-  }
-
-  const ctx = contextRef.current
+    return { state: pageState, engine, dataSources: dsRegistry, onInteraction }
+  })
 
   const themeStyle = buildThemeStyle(page.theme)
   const mergedStyle = { ...themeStyle, ...style }
 
-  const renderComponent = React.useCallback(
-    (instance: ComponentInstance): React.ReactNode => {
-      if (instance.visibility?.condition) {
-        const cond = instance.visibility.condition
-        if (cond === 'false') {
+  function renderComponent(instance: ComponentInstance): React.ReactNode {
+    if (instance.visibility?.condition) {
+      const cond = instance.visibility.condition
+      if (cond === 'false') {
+        return null
+      }
+      if (containsExpression(cond)) {
+        const exprCtx = { state: ctx.state.snapshot(), context: page.context ?? {} }
+        try {
+          const result = evaluateExpression(cond, exprCtx)
+          if (!result) return null
+        } catch {
           return null
         }
-        if (containsExpression(cond)) {
-          const exprCtx = { state: ctx.state.snapshot(), context: page.context ?? {} }
-          try {
-            const result = evaluateExpression(cond, exprCtx)
-            if (!result) return null
-          } catch {
-            return null
-          }
-        }
       }
+    }
 
-      const Component = getComponent(instance.type)
-      if (!Component) {
-        return (
-          <div
-            key={instance.id}
-            data-uiforge-missing={instance.type}
-            style={{ padding: '8px', border: '1px dashed #cbd5e1', borderRadius: '4px', color: '#94a3b8', fontSize: '0.8rem' }}
-          >
-            Unknown component: {instance.type}
-          </div>
-        )
-      }
-
-      const children = instance.children?.map(renderComponent)
-
+    const Component = getComponent(instance.type)
+    if (!Component) {
       return (
-        <ErrorBoundary key={instance.id} componentId={instance.id} onError={onError}>
-          <Component instance={instance}>{children}</Component>
-        </ErrorBoundary>
+        <div
+          key={instance.id}
+          data-uiforge-missing={instance.type}
+          style={{
+            padding: '8px',
+            border: '1px dashed #cbd5e1',
+            borderRadius: '4px',
+            color: '#94a3b8',
+            fontSize: '0.8rem',
+          }}
+        >
+          Unknown component: {instance.type}
+        </div>
       )
-    },
-    [onError, ctx, page.context],
-  )
+    }
+
+    const children = instance.children?.map(renderComponent)
+
+    return (
+      <ErrorBoundary key={instance.id} componentId={instance.id} onError={onError}>
+        <Component instance={instance}>{children}</Component>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <UIForgeContext.Provider value={ctx}>
@@ -114,7 +115,11 @@ export function PageRenderer({
         data-uiforge-page={page.metadata.id}
         data-uiforge-profile={page.profile}
       >
-        <Layout layout={page.layout} components={page.components} renderComponent={renderComponent} />
+        <Layout
+          layout={page.layout}
+          components={page.components}
+          renderComponent={renderComponent}
+        />
       </div>
     </UIForgeContext.Provider>
   )
@@ -155,7 +160,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       return (
         <div
           data-uiforge-error={this.props.componentId}
-          style={{ padding: '8px', border: '1px solid #ef4444', borderRadius: '4px', color: '#ef4444', fontSize: '0.8rem' }}
+          style={{
+            padding: '8px',
+            border: '1px solid #ef4444',
+            borderRadius: '4px',
+            color: '#ef4444',
+            fontSize: '0.8rem',
+          }}
         >
           Error in {this.props.componentId}: {this.state.error.message}
         </div>
