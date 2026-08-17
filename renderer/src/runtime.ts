@@ -133,10 +133,13 @@ export function createAgentOSRuntime(config: RuntimeConfig): ExternalStoreRuntim
     },
 
     async loadConversation(id: string): Promise<Message[]> {
-      const resp = await fetch(`${baseUrl}/api/v1/conversations/${encodeURIComponent(id)}/messages`, {
-        headers: buildHeaders(),
-        credentials,
-      })
+      const resp = await fetch(
+        `${baseUrl}/api/v1/conversations/${encodeURIComponent(id)}/messages`,
+        {
+          headers: buildHeaders(),
+          credentials,
+        },
+      )
       if (!resp.ok) throw new Error(`Load conversation failed: ${resp.status}`)
       return resp.json()
     },

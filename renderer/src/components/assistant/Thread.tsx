@@ -30,9 +30,7 @@ export function AssistantThread({ instance, children }: ComponentProps): React.R
           </span>
         </div>
       )}
-      {props.showToolCalls !== false && (
-        <span data-uiforge-config="showToolCalls" hidden />
-      )}
+      {props.showToolCalls !== false && <span data-uiforge-config="showToolCalls" hidden />}
       {props.streamingIndicator !== false && (
         <span data-uiforge-config="streamingIndicator" hidden />
       )}
