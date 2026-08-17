@@ -1,6 +1,6 @@
 module github.com/plexusone/uiforge
 
-go 1.26.6
+go 1.26.5
 
 // authzed/spicedb v1.56.0 pins authzed/cel-go v0.20.2 and its
 // pkg/caveats/replacer depends on that version's cel.NewStaticOptimizer
