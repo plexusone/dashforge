@@ -1,2 +1,3 @@
 export { AIChat } from './AIChat'
-export { AICommandBar, useAICommandBar } from './AICommandBar'
+export { AICommandBar } from './AICommandBar'
+export { useAICommandBar } from './useAICommandBar'

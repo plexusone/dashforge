@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   Search,
   Plus,
@@ -10,9 +11,9 @@ import {
   Clock,
   Loader2,
   Grid3X3,
-  List
+  List,
 } from 'lucide-react'
-import { listDashboards, deleteDashboard, duplicateDashboard, ListDashboardsResponse } from '../../api/dashforge'
+import { listDashboards, deleteDashboard, duplicateDashboard } from '../../api/dashforge'
 import { useDashboardStore } from '../../stores/dashboard'
 import type { Dashboard } from '../../types/dashboard'
 import clsx from 'clsx'
@@ -24,47 +25,35 @@ interface DashboardGalleryProps {
   onCreateNew: () => void
 }
 
-export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateNew }: DashboardGalleryProps) {
-  const [dashboards, setDashboards] = useState<Dashboard[]>([])
+export function DashboardGallery({
+  isOpen,
+  onClose,
+  onSelectDashboard,
+  onCreateNew,
+}: DashboardGalleryProps) {
   const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [total, setTotal] = useState(0)
 
   const { dashboard: currentDashboard, isDirty } = useDashboardStore()
 
-  const loadDashboards = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const result: ListDashboardsResponse = await listDashboards({
-        search: search || undefined,
-        limit: 50
-      })
-      setDashboards(result.dashboards)
-      setTotal(result.total)
-    } catch (err) {
-      console.error('Failed to load dashboards:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load dashboards')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [search])
+  // Data fetching is delegated to react-query (as used elsewhere in this app, e.g.
+  // SchemaBrowser/QueryBuilder) instead of a manual useEffect, so loading/error
+  // state doesn't require synchronous setState calls inside an effect body.
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['dashboards', search],
+    queryFn: () => listDashboards({ search: search || undefined, limit: 50 }),
+    enabled: isOpen,
+  })
 
-  useEffect(() => {
-    if (isOpen) {
-      loadDashboards()
-    }
-  }, [isOpen, loadDashboards])
+  const dashboards = data?.dashboards ?? []
+  const total = data?.total ?? 0
 
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Delete dashboard "${title}"? This cannot be undone.`)) return
 
     try {
       await deleteDashboard(id)
-      setDashboards(dashboards.filter(d => d.id !== id))
-      setTotal(total - 1)
+      await refetch()
     } catch (err) {
       console.error('Failed to delete dashboard:', err)
       alert(err instanceof Error ? err.message : 'Failed to delete dashboard')
@@ -73,9 +62,8 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
 
   const handleDuplicate = async (id: string) => {
     try {
-      const newDashboard = await duplicateDashboard(id)
-      setDashboards([newDashboard, ...dashboards])
-      setTotal(total + 1)
+      await duplicateDashboard(id)
+      await refetch()
     } catch (err) {
       console.error('Failed to duplicate dashboard:', err)
       alert(err instanceof Error ? err.message : 'Failed to duplicate dashboard')
@@ -102,14 +90,9 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
           <div className="flex items-center gap-3">
             <LayoutDashboard className="w-5 h-5 text-primary-500" />
             <h2 className="text-lg font-semibold text-gray-900">Dashboards</h2>
-            {!isLoading && (
-              <span className="text-sm text-gray-500">({total} total)</span>
-            )}
+            {!isLoading && <span className="text-sm text-gray-500">({total} total)</span>}
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -135,7 +118,9 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
                 onClick={() => setViewMode('grid')}
                 className={clsx(
                   'p-2 transition-colors',
-                  viewMode === 'grid' ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
+                  viewMode === 'grid'
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:bg-gray-50',
                 )}
                 title="Grid view"
               >
@@ -145,7 +130,9 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
                 onClick={() => setViewMode('list')}
                 className={clsx(
                   'p-2 transition-colors',
-                  viewMode === 'list' ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
+                  viewMode === 'list'
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:bg-gray-50',
                 )}
                 title="List view"
               >
@@ -177,9 +164,11 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
 
           {error && !isLoading && (
             <div className="text-center py-12">
-              <div className="text-red-500 mb-4">{error}</div>
+              <div className="text-red-500 mb-4">
+                {error instanceof Error ? error.message : 'Failed to load dashboards'}
+              </div>
               <button
-                onClick={loadDashboards}
+                onClick={() => refetch()}
                 className="text-primary-600 hover:text-primary-700 text-sm"
               >
                 Try again
@@ -207,8 +196,10 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
             </div>
           )}
 
-          {!isLoading && !error && dashboards.length > 0 && (
-            viewMode === 'grid' ? (
+          {!isLoading &&
+            !error &&
+            dashboards.length > 0 &&
+            (viewMode === 'grid' ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {dashboards.map((dashboard) => (
                   <DashboardCard
@@ -234,8 +225,7 @@ export function DashboardGallery({ isOpen, onClose, onSelectDashboard, onCreateN
                   />
                 ))}
               </div>
-            )
-          )}
+            ))}
         </div>
       </div>
     </div>
@@ -250,12 +240,20 @@ interface DashboardCardProps {
   onDelete: () => void
 }
 
-function DashboardCard({ dashboard, isCurrent, onSelect, onDuplicate, onDelete }: DashboardCardProps) {
+function DashboardCard({
+  dashboard,
+  isCurrent,
+  onSelect,
+  onDuplicate,
+  onDelete,
+}: DashboardCardProps) {
   return (
     <div
       className={clsx(
         'group relative border rounded-lg overflow-hidden cursor-pointer transition-all hover:shadow-md',
-        isCurrent ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
+        isCurrent
+          ? 'border-primary-500 ring-2 ring-primary-200'
+          : 'border-gray-200 hover:border-gray-300',
       )}
       onClick={onSelect}
     >
@@ -267,10 +265,14 @@ function DashboardCard({ dashboard, isCurrent, onSelect, onDuplicate, onDelete }
             <div key={i} className="bg-gray-300 rounded" />
           ))}
           {(dashboard.widgets?.length || 0) < 6 &&
-            Array(6 - (dashboard.widgets?.length || 0)).fill(0).map((_, i) => (
-              <div key={`empty-${i}`} className="bg-gray-200 rounded border border-dashed border-gray-300" />
-            ))
-          }
+            Array(6 - (dashboard.widgets?.length || 0))
+              .fill(0)
+              .map((_, i) => (
+                <div
+                  key={`empty-${i}`}
+                  className="bg-gray-200 rounded border border-dashed border-gray-300"
+                />
+              ))}
         </div>
 
         {/* Widget count badge */}
@@ -328,12 +330,18 @@ interface DashboardListItemProps {
   onDelete: () => void
 }
 
-function DashboardListItem({ dashboard, isCurrent, onSelect, onDuplicate, onDelete }: DashboardListItemProps) {
+function DashboardListItem({
+  dashboard,
+  isCurrent,
+  onSelect,
+  onDuplicate,
+  onDelete,
+}: DashboardListItemProps) {
   return (
     <div
       className={clsx(
         'flex items-center justify-between px-4 py-3 border rounded-lg cursor-pointer transition-all hover:shadow-sm',
-        isCurrent ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'
+        isCurrent ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300',
       )}
       onClick={onSelect}
     >

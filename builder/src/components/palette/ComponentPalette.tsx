@@ -19,27 +19,39 @@ function nameFromId(id: string): string {
   const name = parts[parts.length - 1]
   return name
     .split('-')
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
 }
 
 function categoryIcon(category: string): string {
   switch (category) {
-    case 'core': return 'C'
-    case 'analytics': return 'A'
-    case 'assistant': return 'T'
-    case 'application': return 'P'
-    default: return category.charAt(0).toUpperCase()
+    case 'core':
+      return 'C'
+    case 'analytics':
+      return 'A'
+    case 'assistant':
+      return 'T'
+    case 'application':
+      return 'P'
+    default:
+      return category.charAt(0).toUpperCase()
   }
 }
 
+const CATEGORY_ORDER = ['core', 'analytics', 'assistant', 'application']
+
 function categoryColor(category: string): string {
   switch (category) {
-    case 'core': return 'bg-blue-100 text-blue-700'
-    case 'analytics': return 'bg-emerald-100 text-emerald-700'
-    case 'assistant': return 'bg-purple-100 text-purple-700'
-    case 'application': return 'bg-amber-100 text-amber-700'
-    default: return 'bg-gray-100 text-gray-700'
+    case 'core':
+      return 'bg-blue-100 text-blue-700'
+    case 'analytics':
+      return 'bg-emerald-100 text-emerald-700'
+    case 'assistant':
+      return 'bg-purple-100 text-purple-700'
+    case 'application':
+      return 'bg-amber-100 text-amber-700'
+    default:
+      return 'bg-gray-100 text-gray-700'
   }
 }
 
@@ -67,7 +79,7 @@ function CategoryGroup({ category, items, onAdd, defaultExpanded = true }: Categ
         <span
           className={clsx(
             'w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center',
-            categoryColor(category)
+            categoryColor(category),
           )}
         >
           {categoryIcon(category)}
@@ -87,7 +99,7 @@ function CategoryGroup({ category, items, onAdd, defaultExpanded = true }: Categ
               className={clsx(
                 'w-full flex items-center gap-2 px-3 py-2 rounded-md text-left',
                 'hover:bg-primary-50 hover:border-primary-200 transition-colors',
-                'border border-transparent'
+                'border border-transparent',
               )}
             >
               <Plus className="w-3.5 h-3.5 text-gray-400" />
@@ -108,7 +120,7 @@ export function ComponentPalette({ components, onAdd }: ComponentPaletteProps) {
     if (!searchQuery.trim()) return components
     const q = searchQuery.toLowerCase()
     return components.filter(
-      (c) => c.id.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+      (c) => c.id.toLowerCase().includes(q) || c.category.toLowerCase().includes(q),
     )
   }, [components, searchQuery])
 
@@ -125,12 +137,11 @@ export function ComponentPalette({ components, onAdd }: ComponentPaletteProps) {
     return groups
   }, [filtered])
 
-  const categoryOrder = ['core', 'analytics', 'assistant', 'application']
   const sortedCategories = useMemo(() => {
     const cats = Array.from(grouped.keys())
     cats.sort((a, b) => {
-      const ai = categoryOrder.indexOf(a)
-      const bi = categoryOrder.indexOf(b)
+      const ai = CATEGORY_ORDER.indexOf(a)
+      const bi = CATEGORY_ORDER.indexOf(b)
       const aIdx = ai >= 0 ? ai : 100
       const bIdx = bi >= 0 ? bi : 100
       return aIdx - bIdx

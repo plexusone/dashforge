@@ -29,15 +29,13 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
 
   const { dashboard, addWidget, setDashboard } = useDashboardStore()
 
-  // Focus input when opened
+  // Focus input on mount. Input/error/success state resets for free each time
+  // this opens because the parent remounts this component via a `key` change
+  // (see App.tsx) rather than toggling visibility in place, so no effect-based
+  // state reset is needed here.
   useEffect(() => {
-    if (isOpen) {
-      inputRef.current?.focus()
-      setInput('')
-      setError(null)
-      setSuccess(null)
-    }
-  }, [isOpen])
+    inputRef.current?.focus()
+  }, [])
 
   // Handle escape key
   useEffect(() => {
@@ -60,23 +58,27 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
     setSuccess(null)
 
     try {
-      const isDashboardRequest = userMessage.toLowerCase().includes('dashboard') &&
+      const isDashboardRequest =
+        userMessage.toLowerCase().includes('dashboard') &&
         (userMessage.toLowerCase().includes('create') ||
-         userMessage.toLowerCase().includes('build') ||
-         userMessage.toLowerCase().includes('generate'))
+          userMessage.toLowerCase().includes('build') ||
+          userMessage.toLowerCase().includes('generate'))
 
       if (isDashboardRequest) {
         const result = await generateDashboard(userMessage)
         if (result.success && result.data) {
           const newDashboard = result.data as Dashboard
           if (!newDashboard.id) newDashboard.id = crypto.randomUUID()
-          newDashboard.widgets = newDashboard.widgets?.map(w => ({
-            ...w,
-            id: w.id || crypto.randomUUID()
-          })) || []
+          newDashboard.widgets =
+            newDashboard.widgets?.map((w) => ({
+              ...w,
+              id: w.id || crypto.randomUUID(),
+            })) || []
 
           setDashboard(newDashboard)
-          setSuccess(`Created dashboard "${newDashboard.title}" with ${newDashboard.widgets.length} widget(s)`)
+          setSuccess(
+            `Created dashboard "${newDashboard.title}" with ${newDashboard.widgets.length} widget(s)`,
+          )
           setTimeout(() => onClose(), 1500)
         } else {
           throw new Error(result.errors?.join(', ') || 'Failed to generate dashboard')
@@ -105,9 +107,7 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
   }
 
   const filteredSuggestions = input
-    ? SUGGESTIONS.filter(s =>
-        s.text.toLowerCase().includes(input.toLowerCase())
-      ).slice(0, 5)
+    ? SUGGESTIONS.filter((s) => s.text.toLowerCase().includes(input.toLowerCase())).slice(0, 5)
     : SUGGESTIONS.slice(0, 5)
 
   if (!isOpen) return null
@@ -115,10 +115,7 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       {/* Command bar */}
       <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden">
@@ -150,16 +147,8 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
         </form>
 
         {/* Status messages */}
-        {error && (
-          <div className="px-4 py-3 bg-red-50 text-red-600 text-sm">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="px-4 py-3 bg-green-50 text-green-600 text-sm">
-            {success}
-          </div>
-        )}
+        {error && <div className="px-4 py-3 bg-red-50 text-red-600 text-sm">{error}</div>}
+        {success && <div className="px-4 py-3 bg-green-50 text-green-600 text-sm">{success}</div>}
 
         {/* Suggestions */}
         {!isLoading && !success && (
@@ -173,12 +162,14 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
                 onClick={() => handleSuggestionClick(suggestion.text)}
                 className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-left"
               >
-                <div className={clsx(
-                  'w-6 h-6 rounded flex items-center justify-center text-xs',
-                  suggestion.type === 'dashboard'
-                    ? 'bg-purple-100 text-purple-600'
-                    : 'bg-primary-100 text-primary-600'
-                )}>
+                <div
+                  className={clsx(
+                    'w-6 h-6 rounded flex items-center justify-center text-xs',
+                    suggestion.type === 'dashboard'
+                      ? 'bg-purple-100 text-purple-600'
+                      : 'bg-primary-100 text-primary-600',
+                  )}
+                >
                   {suggestion.type === 'dashboard' ? 'D' : 'W'}
                 </div>
                 <span className="text-sm text-gray-700">{suggestion.text}</span>
@@ -191,11 +182,15 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
         <div className="px-4 py-2 bg-gray-50 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">Enter</kbd>
+              <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">
+                Enter
+              </kbd>
               to submit
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">Esc</kbd>
+              <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs">
+                Esc
+              </kbd>
               to close
             </span>
           </div>
@@ -204,30 +199,4 @@ export function AICommandBar({ isOpen, onClose }: AICommandBarProps) {
       </div>
     </div>
   )
-}
-
-/**
- * Hook to open the AI command bar with Cmd+K / Ctrl+K
- */
-export function useAICommandBar() {
-  const [isOpen, setIsOpen] = useState(false)
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setIsOpen(prev => !prev)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
-  return {
-    isOpen,
-    open: () => setIsOpen(true),
-    close: () => setIsOpen(false),
-    toggle: () => setIsOpen(prev => !prev)
-  }
 }
