@@ -14,7 +14,7 @@ let cubeApi: CubeApi | null = null
 
 export function initCubeClient(config: CubeConfig): CubeApi {
   cubeApi = cubejs(config.apiToken || '', {
-    apiUrl: config.apiUrl
+    apiUrl: config.apiUrl,
   })
   return cubeApi
 }
@@ -23,7 +23,7 @@ export function getCubeClient(): CubeApi {
   if (!cubeApi) {
     // Default to local Cube.js instance
     cubeApi = cubejs('', {
-      apiUrl: 'http://localhost:4000/cubejs-api/v1'
+      apiUrl: 'http://localhost:4000/cubejs-api/v1',
     })
   }
   return cubeApi
@@ -49,7 +49,7 @@ export interface CubeDimension extends CubeMember {
   primaryKey?: boolean
 }
 
-export interface CubeSegment extends CubeMember {}
+export type CubeSegment = CubeMember
 
 export interface CubeDefinition {
   name: string
@@ -82,7 +82,7 @@ export async function fetchSchema(): Promise<CubeSchema> {
       shortTitle: m.shortTitle || m.name,
       type: m.type,
       description: (m as { description?: string }).description,
-      aggType: m.aggType
+      aggType: m.aggType,
     })),
     dimensions: cube.dimensions.map((d) => ({
       name: d.name,
@@ -90,15 +90,16 @@ export async function fetchSchema(): Promise<CubeSchema> {
       shortTitle: d.shortTitle || d.name,
       type: d.type,
       description: (d as { description?: string }).description,
-      primaryKey: (d as { primaryKey?: boolean }).primaryKey
+      primaryKey: (d as { primaryKey?: boolean }).primaryKey,
     })),
-    segments: cube.segments?.map((s) => ({
-      name: s.name,
-      title: s.title || s.name,
-      shortTitle: s.shortTitle || s.name,
-      type: 'segment',
-      description: (s as { description?: string }).description
-    })) || []
+    segments:
+      cube.segments?.map((s) => ({
+        name: s.name,
+        title: s.title || s.name,
+        shortTitle: s.shortTitle || s.name,
+        type: 'segment',
+        description: (s as { description?: string }).description,
+      })) || [],
   }))
 
   return { cubes }
@@ -143,7 +144,7 @@ export function buildQuery(input: QueryBuilderInput): Query {
     filters: (input.filters || []) as Filter[],
     order: input.order,
     limit: input.limit,
-    offset: input.offset
+    offset: input.offset,
   }
 }
 
@@ -157,16 +158,16 @@ export interface ChartData {
 }
 
 export function resultSetToChartData(resultSet: ResultSet): ChartData {
-  const columns = resultSet.tableColumns().map(c => c.key)
+  const columns = resultSet.tableColumns().map((c) => c.key)
   const rows = resultSet.tablePivot()
 
   // Extract series names for multi-series charts
-  const seriesNames = resultSet.seriesNames().map(s => s.title)
+  const seriesNames = resultSet.seriesNames().map((s) => s.title)
 
   return {
     columns,
     rows,
-    seriesNames: seriesNames.length > 0 ? seriesNames : undefined
+    seriesNames: seriesNames.length > 0 ? seriesNames : undefined,
   }
 }
 
@@ -179,10 +180,10 @@ export function describeQuery(query: Query, schema: CubeSchema): string {
 
   // Describe measures
   if (query.measures && query.measures.length > 0) {
-    const measureNames = query.measures.map(m => {
+    const measureNames = query.measures.map((m) => {
       const [cubeName, measureName] = m.split('.')
-      const cube = schema.cubes.find(c => c.name === cubeName)
-      const measure = cube?.measures.find(me => me.name === m)
+      const cube = schema.cubes.find((c) => c.name === cubeName)
+      const measure = cube?.measures.find((me) => me.name === m)
       return measure?.title || measureName
     })
     parts.push(`Showing ${measureNames.join(', ')}`)
@@ -190,10 +191,10 @@ export function describeQuery(query: Query, schema: CubeSchema): string {
 
   // Describe dimensions
   if (query.dimensions && query.dimensions.length > 0) {
-    const dimNames = query.dimensions.map(d => {
+    const dimNames = query.dimensions.map((d) => {
       const [cubeName, dimName] = d.split('.')
-      const cube = schema.cubes.find(c => c.name === cubeName)
-      const dimension = cube?.dimensions.find(di => di.name === d)
+      const cube = schema.cubes.find((c) => c.name === cubeName)
+      const dimension = cube?.dimensions.find((di) => di.name === d)
       return dimension?.title || dimName
     })
     parts.push(`by ${dimNames.join(', ')}`)
@@ -216,7 +217,7 @@ export function describeQuery(query: Query, schema: CubeSchema): string {
 
   // Describe filters
   if (query.filters && query.filters.length > 0) {
-    const filterDescs = query.filters.map(f => {
+    const filterDescs = query.filters.map((f) => {
       if ('member' in f) {
         return `${f.member} ${f.operator} ${f.values?.join(', ') || ''}`
       }

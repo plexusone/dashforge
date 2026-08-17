@@ -80,10 +80,7 @@ function App() {
 
         {/* Main Canvas */}
         <div className="flex-1 overflow-auto bg-gray-100 p-4">
-          <Canvas
-            selectedWidgetId={selectedWidgetId}
-            onSelectWidget={setSelectedWidgetId}
-          />
+          <Canvas selectedWidgetId={selectedWidgetId} onSelectWidget={setSelectedWidgetId} />
         </div>
 
         {/* Right Sidebar - Properties Panel */}
@@ -96,6 +93,7 @@ function App() {
       {/* AI Components */}
       <AIChat />
       <AICommandBar
+        key={aiCommandBar.isOpen ? 'open' : 'closed'}
         isOpen={aiCommandBar.isOpen}
         onClose={aiCommandBar.close}
       />
