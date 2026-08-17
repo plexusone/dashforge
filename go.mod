@@ -86,7 +86,6 @@ require (
 	github.com/creasty/defaults v1.8.0 // indirect
 	github.com/dalzilio/rudd v1.1.1-0.20230806153452-9e08a6ea8170 // indirect
 	github.com/danielgtaylor/huma/v2 v2.39.1 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.37.0 // indirect
@@ -147,7 +146,6 @@ require (
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240917153116-6f2963f01587 // indirect
 	github.com/plexusone/omniobserve v0.12.0 // indirect
 	github.com/plexusone/omnistorage-core v0.5.1 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.24.1 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.70.1 // indirect
@@ -172,7 +170,7 @@ require (
 	github.com/spf13/viper v1.21.0 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.8.1 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
-	github.com/stretchr/testify v1.11.1 // indirect
+	github.com/stretchr/testify v1.12.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/zclconf/go-cty v1.19.0 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
