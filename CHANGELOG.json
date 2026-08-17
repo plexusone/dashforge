@@ -7,6 +7,41 @@
   "maintainers": ["grokify"],
   "releases": [
     {
+      "version": "v0.5.0",
+      "date": "2026-08-17",
+      "highlights": [
+        { "description": "Static viewer: light/dark theme toggle, persisted via localStorage and defaulting to the OS's prefers-color-scheme" },
+        { "description": "Static viewer: numeric display capped to 2 decimal places in chart tooltips, value-axis labels, and metric tiles, plus a new \"currency\" metric format" },
+        { "description": "Resolved all 10 pre-existing \"error discard without comment\" findings in datasource/ and internal/server/ via proper return/panic handling, per the org error-handling protocol" },
+        { "description": "Added ESLint (flat config) and Prettier to builder/ and renderer/, which had never been configured despite builder/'s package.json already declaring a lint script; all resulting findings fixed" },
+        { "description": "Fixed a pre-existing broken build in builder/: src/types/chartir.ts imports @grokify/echartify, which was never declared as a dependency" }
+      ],
+      "added": [
+        { "description": "Light/dark theme toggle in the static viewer header, re-initializing ECharts widgets with the official dark theme and persisting the choice via localStorage", "commit": "63e771c" },
+        { "description": "\"currency\" metric format in the static viewer (was previously undocumented-but-unimplemented; only \"percent\" and \"number\" were handled) and a shared formatMetricNumber helper capping chart tooltips and value-axis labels to 2 decimal places", "commit": "8a71a1c" }
+      ],
+      "fixed": [
+        { "description": "Add missing @grokify/echartify runtime dependency to builder/package.json; src/types/chartir.ts already imported it, so typecheck/build were broken before this release", "commit": "6287ef0" },
+        { "description": "Resolve builder/ ESLint findings: empty-interface cleanup, two react-hooks/set-state-in-effect fixes (remount-via-key, and switching to useQuery to match existing patterns), a Fast-Refresh export split, and a hoisted useMemo dependency", "commit": "257d865" },
+        { "description": "Resolve renderer/ ESLint findings: wire up the previously-unused onInteraction prop into UIForgeContextValue, refactor two hook patterns flagged by eslint-plugin-react-hooks v7's React-Compiler-oriented rules, and remove dead test imports", "commit": "a1a875c" },
+        { "description": "datasource/manager.go and internal/server/server.go: log previously-discarded connection-close and response-write errors instead of silently dropping them", "commit": "eea77fc" },
+        { "description": "mysql/postgres Query() and internal/server/db/db.go's postgresDB.Query(): use named returns so a deferred rows.Close() failure is actually returned to the caller instead of discarded; provider.go's db.Close() after a failed ping is now joined into the returned error via errors.Join; a strings.Builder write that can never fail now panics instead of silently ignoring its (impossible) error", "commit": "c7ef2dc" }
+      ],
+      "documentation": [
+        { "description": "Document the static viewer's theme toggle and numeric formatting in README.md and docs/index.md" }
+      ],
+      "dependencies": [
+        { "description": "Pin authzed/cel-go to v0.20.2 for spicedb v1.56.0 compatibility (a prior go get -u had bumped it to v0.30.0, which changed cel.NewStaticOptimizer's signature and broke the build)", "commit": "2101350" },
+        { "description": "Routine transitive dependency updates via go mod tidy", "commit": "8e4d264" },
+        { "description": "Routine transitive dependency updates via go mod tidy", "commit": "f744e45" }
+      ],
+      "internal": [
+        { "description": "Add eslint.config.js/.mjs, .prettierrc.json, and .prettierignore to builder/ and renderer/; apply Prettier formatting across both workspaces (whitespace/quote-style only, no behavior change)", "commit": "e313925" },
+        { "description": "Rebuild builder/dist (committed for go:embed) and renderer/dist to reflect the dependency fix, lint fixes, and formatting; renderer/dist was also independently stale, missing compiled output for several modules that already existed in src/", "commit": "5796c33" },
+        { "description": "Investigated bumping the go toolchain to 1.26.6 to clear 7 govulncheck-found stdlib CVEs, but reverted to 1.26.5: the shared plexusone/.github reusable go-ci.yaml pins GOTOOLCHAIN=local after resolving \"1.26.x\", so it doesn't auto-upgrade to a newer patch just because go.mod asks for one. The CVEs remain unaddressed pending a fix to the shared workflow or CI's cached Go version catching up.", "commit": "1dd32ad" }
+      ]
+    },
+    {
       "version": "v0.4.0",
       "date": "2026-07-25",
       "highlights": [
