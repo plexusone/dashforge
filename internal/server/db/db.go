@@ -136,6 +136,9 @@ func (p *postgresDB) Query(ctx context.Context, query string, params map[string]
 		return nil, fmt.Errorf("executing query: %w", err)
 	}
 	defer func() {
+		// Rows are fully scanned below before this runs; a close error at
+		// that point can't invalidate already-retrieved data and there's
+		// no logger on this type to report it to.
 		_ = rows.Close()
 	}()
 

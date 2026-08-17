@@ -54,6 +54,9 @@ func (p *Provider) Connect(ctx context.Context, config datasource.ConnectionConf
 
 	// Test connection
 	if err := db.PingContext(ctx); err != nil {
+		// db is discarded either way (we're returning the ping error, not
+		// a usable connection); a close failure here has no caller left to
+		// report to and there's no logger on this type.
 		_ = db.Close()
 		return nil, datasource.NewConnectionError("mysql", config.Host, config.Port, config.Database, err)
 	}
@@ -143,6 +146,7 @@ func buildDSN(config datasource.ConnectionConfig) string {
 	dsn.WriteString("tcp(")
 	dsn.WriteString(config.Host)
 	if config.Port > 0 {
+		// strings.Builder.Write never returns a non-nil error.
 		_, _ = fmt.Fprintf(&dsn, ":%d", config.Port)
 	} else {
 		dsn.WriteString(":3306") // Default MySQL port

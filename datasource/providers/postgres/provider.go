@@ -55,6 +55,9 @@ func (p *Provider) Connect(ctx context.Context, config datasource.ConnectionConf
 
 	// Test connection
 	if err := db.PingContext(ctx); err != nil {
+		// db is discarded either way (we're returning the ping error, not
+		// a usable connection); a close failure here has no caller left to
+		// report to and there's no logger on this type.
 		_ = db.Close()
 		return nil, datasource.NewConnectionError("postgres", config.Host, config.Port, config.Database, err)
 	}
