@@ -79,7 +79,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
     }
   }, [selectedId, showHistory, fetchAlertEvents])
 
-  const selectedAlert = alerts.find(a => a.id === selectedId)
+  const selectedAlert = alerts.find((a) => a.id === selectedId)
   const selectedAlertEvents = selectedId ? alertEvents[selectedId] || [] : []
 
   const handleCreate = async () => {
@@ -189,18 +189,22 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                           'w-full p-3 rounded-lg text-left transition-colors mb-1',
                           selectedId === alert.id
                             ? 'bg-primary-50 border border-primary-200'
-                            : 'hover:bg-gray-50'
+                            : 'hover:bg-gray-50',
                         )}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={clsx(
-                            'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0',
-                            alert.enabled ? 'bg-green-100' : 'bg-gray-100'
-                          )}>
-                            <Icon className={clsx(
-                              'w-4 h-4',
-                              alert.enabled ? 'text-green-600' : 'text-gray-400'
-                            )} />
+                          <div
+                            className={clsx(
+                              'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0',
+                              alert.enabled ? 'bg-green-100' : 'bg-gray-100',
+                            )}
+                          >
+                            <Icon
+                              className={clsx(
+                                'w-4 h-4',
+                                alert.enabled ? 'text-green-600' : 'text-gray-400',
+                              )}
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-900 truncate">
@@ -236,9 +240,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Name *
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
                       <input
                         type="text"
                         value={newAlertData.name}
@@ -249,9 +251,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Slug *
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
                       <input
                         type="text"
                         value={newAlertData.slug}
@@ -267,11 +267,13 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                       </label>
                       <select
                         value={newAlertData.triggerType}
-                        onChange={(e) => setNewAlertData({
-                          ...newAlertData,
-                          triggerType: e.target.value as TriggerType,
-                          triggerConfig: {},
-                        })}
+                        onChange={(e) =>
+                          setNewAlertData({
+                            ...newAlertData,
+                            triggerType: e.target.value as TriggerType,
+                            triggerConfig: {},
+                          })
+                        }
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
                         <option value="threshold">Threshold</option>
@@ -283,7 +285,9 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                     <TriggerForm
                       triggerType={newAlertData.triggerType!}
                       config={newAlertData.triggerConfig || {}}
-                      onChange={(config) => setNewAlertData({ ...newAlertData, triggerConfig: config })}
+                      onChange={(config) =>
+                        setNewAlertData({ ...newAlertData, triggerConfig: config })
+                      }
                     />
 
                     <div>
@@ -293,7 +297,12 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                       <input
                         type="number"
                         value={newAlertData.cooldownSeconds}
-                        onChange={(e) => setNewAlertData({ ...newAlertData, cooldownSeconds: parseInt(e.target.value) || 300 })}
+                        onChange={(e) =>
+                          setNewAlertData({
+                            ...newAlertData,
+                            cooldownSeconds: parseInt(e.target.value) || 300,
+                          })
+                        }
                         min={60}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
@@ -313,15 +322,23 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                               onChange={(e) => {
                                 const ids = newAlertData.channelIds || []
                                 if (e.target.checked) {
-                                  setNewAlertData({ ...newAlertData, channelIds: [...ids, integration.id] })
+                                  setNewAlertData({
+                                    ...newAlertData,
+                                    channelIds: [...ids, integration.id],
+                                  })
                                 } else {
-                                  setNewAlertData({ ...newAlertData, channelIds: ids.filter(id => id !== integration.id) })
+                                  setNewAlertData({
+                                    ...newAlertData,
+                                    channelIds: ids.filter((id) => id !== integration.id),
+                                  })
                                 }
                               }}
                               className="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
                             />
                             <span className="text-sm text-gray-700">{integration.name}</span>
-                            <span className="text-xs text-gray-500 capitalize">({integration.channelType})</span>
+                            <span className="text-xs text-gray-500 capitalize">
+                              ({integration.channelType})
+                            </span>
                           </label>
                         ))}
                         {integrations.length === 0 && (
@@ -331,9 +348,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                     </div>
 
                     {error && (
-                      <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg">
-                        {error}
-                      </div>
+                      <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg">{error}</div>
                     )}
                   </div>
                 </div>
@@ -352,7 +367,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                       'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                       !newAlertData.name || !newAlertData.slug || isSaving
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-primary-500 text-white hover:bg-primary-600'
+                        : 'bg-primary-500 text-white hover:bg-primary-600',
                     )}
                   >
                     {isSaving ? (
@@ -382,7 +397,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                         'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                         selectedAlert.enabled
                           ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
                       )}
                     >
                       {selectedAlert.enabled ? (
@@ -407,7 +422,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                         'pb-2 text-sm font-medium transition-colors',
                         !showHistory
                           ? 'text-primary-600 border-b-2 border-primary-500'
-                          : 'text-gray-500 hover:text-gray-700'
+                          : 'text-gray-500 hover:text-gray-700',
                       )}
                     >
                       Details
@@ -418,7 +433,7 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                         'pb-2 text-sm font-medium transition-colors',
                         showHistory
                           ? 'text-primary-600 border-b-2 border-primary-500'
-                          : 'text-gray-500 hover:text-gray-700'
+                          : 'text-gray-500 hover:text-gray-700',
                       )}
                     >
                       History
@@ -429,18 +444,28 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                     // Details tab
                     <div className="space-y-4">
                       <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase">Trigger Type</label>
-                        <p className="text-sm text-gray-900">{triggerTypeLabels[selectedAlert.triggerType]}</p>
+                        <label className="text-xs font-medium text-gray-500 uppercase">
+                          Trigger Type
+                        </label>
+                        <p className="text-sm text-gray-900">
+                          {triggerTypeLabels[selectedAlert.triggerType]}
+                        </p>
                       </div>
 
                       <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase">Cooldown</label>
-                        <p className="text-sm text-gray-900">{selectedAlert.cooldownSeconds} seconds</p>
+                        <label className="text-xs font-medium text-gray-500 uppercase">
+                          Cooldown
+                        </label>
+                        <p className="text-sm text-gray-900">
+                          {selectedAlert.cooldownSeconds} seconds
+                        </p>
                       </div>
 
                       {selectedAlert.lastTriggeredAt && (
                         <div>
-                          <label className="text-xs font-medium text-gray-500 uppercase">Last Triggered</label>
+                          <label className="text-xs font-medium text-gray-500 uppercase">
+                            Last Triggered
+                          </label>
                           <p className="text-sm text-gray-900">
                             {new Date(selectedAlert.lastTriggeredAt).toLocaleString()}
                           </p>
@@ -449,14 +474,18 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
 
                       {selectedAlert.lastError && (
                         <div>
-                          <label className="text-xs font-medium text-gray-500 uppercase">Last Error</label>
+                          <label className="text-xs font-medium text-gray-500 uppercase">
+                            Last Error
+                          </label>
                           <p className="text-sm text-red-600">{selectedAlert.lastError}</p>
                         </div>
                       )}
 
                       {selectedAlert.channels && selectedAlert.channels.length > 0 && (
                         <div>
-                          <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">Channels</label>
+                          <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">
+                            Channels
+                          </label>
                           <div className="flex flex-wrap gap-2">
                             {selectedAlert.channels.map((channel) => (
                               <span
@@ -471,7 +500,9 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                       )}
 
                       <div>
-                        <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">Trigger Configuration</label>
+                        <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">
+                          Trigger Configuration
+                        </label>
                         <pre className="bg-gray-50 rounded-lg p-3 text-xs text-gray-700 overflow-x-auto">
                           {JSON.stringify(selectedAlert.triggerConfig, null, 2)}
                         </pre>
@@ -491,14 +522,23 @@ export function AlertPanel({ isOpen, onClose }: AlertPanelProps) {
                               event.eventType === 'triggered' && 'bg-yellow-50 border-yellow-200',
                               event.eventType === 'resolved' && 'bg-green-50 border-green-200',
                               event.eventType === 'error' && 'bg-red-50 border-red-200',
-                              !['triggered', 'resolved', 'error'].includes(event.eventType) && 'bg-gray-50 border-gray-200'
+                              !['triggered', 'resolved', 'error'].includes(event.eventType) &&
+                                'bg-gray-50 border-gray-200',
                             )}
                           >
                             <div className="flex items-center gap-2 mb-1">
-                              {event.eventType === 'triggered' && <AlertTriangle className="w-4 h-4 text-yellow-600" />}
-                              {event.eventType === 'resolved' && <CheckCircle className="w-4 h-4 text-green-600" />}
-                              {event.eventType === 'error' && <XCircle className="w-4 h-4 text-red-600" />}
-                              <span className="text-sm font-medium capitalize">{event.eventType.replace('_', ' ')}</span>
+                              {event.eventType === 'triggered' && (
+                                <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                              )}
+                              {event.eventType === 'resolved' && (
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                              )}
+                              {event.eventType === 'error' && (
+                                <XCircle className="w-4 h-4 text-red-600" />
+                              )}
+                              <span className="text-sm font-medium capitalize">
+                                {event.eventType.replace('_', ' ')}
+                              </span>
                               <span className="text-xs text-gray-500 ml-auto">
                                 {new Date(event.createdAt).toLocaleString()}
                               </span>

@@ -22,13 +22,17 @@ export function QueryBuilder({ onQueryResult }: QueryBuilderProps) {
   const [error, setError] = useState<string | null>(null)
 
   // Fetch Cube schema
-  const { data: schema, isLoading: isLoadingSchema, error: schemaError } = useQuery({
+  const {
+    data: schema,
+    isLoading: isLoadingSchema,
+    error: schemaError,
+  } = useQuery({
     queryKey: ['cube-schema'],
     queryFn: fetchSchema,
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const selectedCubeSchema = schema?.cubes.find(c => c.name === selectedCube)
+  const selectedCubeSchema = schema?.cubes.find((c) => c.name === selectedCube)
 
   const handleExecuteQuery = async () => {
     if (!measures.length && !dimensions.length) {
@@ -43,7 +47,7 @@ export function QueryBuilder({ onQueryResult }: QueryBuilderProps) {
       const query = buildQuery({
         measures,
         dimensions,
-        filters
+        filters,
       })
 
       const resultSet = await executeQuery(query)
@@ -143,9 +147,7 @@ export function QueryBuilder({ onQueryResult }: QueryBuilderProps) {
           )}
 
           {/* Results Preview */}
-          {queryResult && (
-            <QueryPreview data={queryResult} />
-          )}
+          {queryResult && <QueryPreview data={queryResult} />}
         </>
       )}
     </div>

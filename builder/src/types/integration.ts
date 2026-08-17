@@ -19,7 +19,8 @@ export type TriggerType = 'threshold' | 'schedule' | 'data_change'
 export type Severity = 'info' | 'warning' | 'error' | 'critical'
 
 // Alert event types
-export type AlertEventType = 'triggered' | 'resolved' | 'acknowledged' | 'error' | 'cooldown_skipped'
+export type AlertEventType =
+  'triggered' | 'resolved' | 'acknowledged' | 'error' | 'cooldown_skipped'
 
 // Channel capabilities
 export interface ChannelCapabilities {
@@ -56,7 +57,10 @@ export interface Integration {
 }
 
 // Integration with credentials (for creation/update)
-export interface IntegrationWithCredentials extends Omit<Integration, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'statusMessage' | 'lastUsedAt'> {
+export interface IntegrationWithCredentials extends Omit<
+  Integration,
+  'id' | 'createdAt' | 'updatedAt' | 'status' | 'statusMessage' | 'lastUsedAt'
+> {
   credentials?: Record<string, unknown>
 }
 

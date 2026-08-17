@@ -13,10 +13,15 @@ export function SchemaBrowser({ onSelectMember }: SchemaBrowserProps) {
   const [expandedCubes, setExpandedCubes] = useState<Set<string>>(new Set())
   const [selectedCube, setSelectedCube] = useState<string | null>(null)
 
-  const { data: schema, isLoading, error, refetch } = useQuery({
+  const {
+    data: schema,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['cube-schema'],
     queryFn: fetchSchema,
-    staleTime: 5 * 60 * 1000
+    staleTime: 5 * 60 * 1000,
   })
 
   const toggleCube = (cubeName: string) => {
@@ -42,10 +47,7 @@ export function SchemaBrowser({ onSelectMember }: SchemaBrowserProps) {
     return (
       <div className="p-4 text-center">
         <p className="text-sm text-red-500 mb-2">Failed to load schema</p>
-        <button
-          onClick={() => refetch()}
-          className="text-sm text-primary-600 hover:underline"
-        >
+        <button onClick={() => refetch()} className="text-sm text-primary-600 hover:underline">
           Retry
         </button>
       </div>
@@ -81,16 +83,14 @@ export function SchemaBrowser({ onSelectMember }: SchemaBrowserProps) {
         ))}
 
         {schema?.cubes.length === 0 && (
-          <div className="p-4 text-center text-gray-400 text-sm">
-            No cubes found
-          </div>
+          <div className="p-4 text-center text-gray-400 text-sm">No cubes found</div>
         )}
       </div>
 
       {/* Details Panel */}
       {selectedCube && (
         <CubeDetails
-          cube={schema?.cubes.find(c => c.name === selectedCube)}
+          cube={schema?.cubes.find((c) => c.name === selectedCube)}
           onClose={() => setSelectedCube(null)}
         />
       )}
@@ -113,7 +113,7 @@ function CubeTreeItem({
   isSelected,
   onToggle,
   onSelect,
-  onSelectMember
+  onSelectMember,
 }: CubeTreeItemProps) {
   return (
     <div>
@@ -121,7 +121,7 @@ function CubeTreeItem({
       <div
         className={clsx(
           'flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50',
-          isSelected && 'bg-primary-50'
+          isSelected && 'bg-primary-50',
         )}
       >
         <button onClick={onToggle} className="p-0.5">
@@ -132,10 +132,7 @@ function CubeTreeItem({
           )}
         </button>
         <Database className="w-4 h-4 text-primary-500" />
-        <span
-          className="flex-1 text-sm font-medium text-gray-700 truncate"
-          onClick={onSelect}
-        >
+        <span className="flex-1 text-sm font-medium text-gray-700 truncate" onClick={onSelect}>
           {cube.title || cube.name}
         </span>
         <span className="text-xs text-gray-400">
@@ -163,9 +160,7 @@ function CubeTreeItem({
                     {measure.shortTitle || measure.title}
                   </span>
                   {measure.aggType && (
-                    <span className="text-xs text-gray-400">
-                      {measure.aggType}
-                    </span>
+                    <span className="text-xs text-gray-400">{measure.aggType}</span>
                   )}
                 </div>
               ))}

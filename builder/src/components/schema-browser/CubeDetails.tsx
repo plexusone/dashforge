@@ -14,10 +14,7 @@ export function CubeDetails({ cube, onClose }: CubeDetailsProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
         <h4 className="text-sm font-medium text-gray-700">{cube.title}</h4>
-        <button
-          onClick={onClose}
-          className="p-1 hover:bg-gray-200 rounded"
-        >
+        <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded">
           <X className="w-4 h-4 text-gray-500" />
         </button>
       </div>
@@ -34,9 +31,7 @@ export function CubeDetails({ cube, onClose }: CubeDetailsProps) {
 
         {/* Measures */}
         <div>
-          <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">
-            Measures
-          </h5>
+          <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Measures</h5>
           <div className="space-y-1">
             {cube.measures.map((measure) => (
               <div
@@ -45,17 +40,13 @@ export function CubeDetails({ cube, onClose }: CubeDetailsProps) {
               >
                 <Hash className="w-3 h-3 text-primary-500 mt-1" />
                 <div>
-                  <div className="font-medium text-gray-700">
-                    {measure.title}
-                  </div>
+                  <div className="font-medium text-gray-700">{measure.title}</div>
                   <div className="text-xs text-gray-500">
                     {measure.name}
                     {measure.aggType && ` (${measure.aggType})`}
                   </div>
                   {measure.description && (
-                    <div className="text-xs text-gray-400 mt-1">
-                      {measure.description}
-                    </div>
+                    <div className="text-xs text-gray-400 mt-1">{measure.description}</div>
                   )}
                 </div>
               </div>
@@ -65,9 +56,7 @@ export function CubeDetails({ cube, onClose }: CubeDetailsProps) {
 
         {/* Dimensions */}
         <div>
-          <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">
-            Dimensions
-          </h5>
+          <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Dimensions</h5>
           <div className="space-y-1">
             {cube.dimensions.map((dimension) => (
               <div
@@ -84,9 +73,7 @@ export function CubeDetails({ cube, onClose }: CubeDetailsProps) {
                     {dimension.name} ({dimension.type})
                   </div>
                   {dimension.description && (
-                    <div className="text-xs text-gray-400 mt-1">
-                      {dimension.description}
-                    </div>
+                    <div className="text-xs text-gray-400 mt-1">{dimension.description}</div>
                   )}
                 </div>
               </div>

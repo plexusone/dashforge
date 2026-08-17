@@ -33,10 +33,7 @@ Always respond with valid JSON only. No explanations or markdown.`
 /**
  * Generate a prompt for creating a full dashboard
  */
-export function generateDashboardPrompt(
-  userRequest: string,
-  schema?: CubeSchema
-): string {
+export function generateDashboardPrompt(userRequest: string, schema?: CubeSchema): string {
   let prompt = `${DASHBOARD_SYSTEM_PROMPT}
 
 Dashboard Schema:
@@ -47,9 +44,13 @@ ${getSchemaForPrompt('dashboard')}
   // Add available data context if schema is provided
   if (schema && schema.cubes.length > 0) {
     prompt += `Available data cubes:
-${schema.cubes.map(cube => `- ${cube.name}: ${cube.title}
-  Measures: ${cube.measures.map(m => m.name).join(', ')}
-  Dimensions: ${cube.dimensions.map(d => d.name).join(', ')}`).join('\n')}
+${schema.cubes
+  .map(
+    (cube) => `- ${cube.name}: ${cube.title}
+  Measures: ${cube.measures.map((m) => m.name).join(', ')}
+  Dimensions: ${cube.dimensions.map((d) => d.name).join(', ')}`,
+  )
+  .join('\n')}
 
 `
   }
@@ -66,8 +67,12 @@ Generate a complete dashboard JSON configuration. Include appropriate widgets, l
  */
 export function generateWidgetPrompt(
   userRequest: string,
-  existingWidgets: { type: string; title: string; position: { x: number; y: number; w: number; h: number } }[],
-  schema?: CubeSchema
+  existingWidgets: {
+    type: string
+    title: string
+    position: { x: number; y: number; w: number; h: number }
+  }[],
+  schema?: CubeSchema,
 ): string {
   let prompt = `${DASHBOARD_SYSTEM_PROMPT}
 
@@ -78,8 +83,9 @@ ${getSchemaForPrompt('widget')}
 
   // Add existing widgets context
   if (existingWidgets.length > 0) {
-    const occupiedPositions = existingWidgets.map(w =>
-      `${w.title}: x=${w.position.x}, y=${w.position.y}, w=${w.position.w}, h=${w.position.h}`
+    const occupiedPositions = existingWidgets.map(
+      (w) =>
+        `${w.title}: x=${w.position.x}, y=${w.position.y}, w=${w.position.w}, h=${w.position.h}`,
     )
     prompt += `Existing widgets in dashboard:
 ${occupiedPositions.join('\n')}
@@ -92,9 +98,18 @@ Avoid overlapping with existing widgets.
   // Add available data context
   if (schema && schema.cubes.length > 0) {
     prompt += `Available data:
-${schema.cubes.map(cube =>
-  `${cube.name}: measures=[${cube.measures.slice(0, 5).map(m => m.shortTitle).join(', ')}], dimensions=[${cube.dimensions.slice(0, 5).map(d => d.shortTitle).join(', ')}]`
-).join('\n')}
+${schema.cubes
+  .map(
+    (cube) =>
+      `${cube.name}: measures=[${cube.measures
+        .slice(0, 5)
+        .map((m) => m.shortTitle)
+        .join(', ')}], dimensions=[${cube.dimensions
+        .slice(0, 5)
+        .map((d) => d.shortTitle)
+        .join(', ')}]`,
+  )
+  .join('\n')}
 
 `
   }
@@ -111,7 +126,7 @@ Generate a single widget JSON configuration with suggested position that doesn't
  */
 export function generateWidgetModificationPrompt(
   userRequest: string,
-  currentWidget: unknown
+  currentWidget: unknown,
 ): string {
   return `${DASHBOARD_SYSTEM_PROMPT}
 
@@ -126,18 +141,19 @@ Generate the modified widget JSON. Only change what the user requested, keep oth
 /**
  * Generate a prompt for natural language querying
  */
-export function generateQueryPrompt(
-  userRequest: string,
-  schema: CubeSchema
-): string {
-  const schemaContext = schema.cubes.map(cube => `
+export function generateQueryPrompt(userRequest: string, schema: CubeSchema): string {
+  const schemaContext = schema.cubes
+    .map(
+      (cube) => `
 Cube: ${cube.name} (${cube.title})
 ${cube.description ? `Description: ${cube.description}` : ''}
 Measures:
-${cube.measures.map(m => `  - ${m.name}: ${m.title}${m.description ? ` - ${m.description}` : ''} [${m.aggType || 'count'}]`).join('\n')}
+${cube.measures.map((m) => `  - ${m.name}: ${m.title}${m.description ? ` - ${m.description}` : ''} [${m.aggType || 'count'}]`).join('\n')}
 Dimensions:
-${cube.dimensions.map(d => `  - ${d.name}: ${d.title}${d.description ? ` - ${d.description}` : ''} [${d.type}]`).join('\n')}
-`).join('\n---\n')
+${cube.dimensions.map((d) => `  - ${d.name}: ${d.title}${d.description ? ` - ${d.description}` : ''} [${d.type}]`).join('\n')}
+`,
+    )
+    .join('\n---\n')
 
   return `You are a query assistant that translates natural language questions into Cube.js queries.
 
@@ -166,22 +182,22 @@ export const EXAMPLE_PROMPTS = {
   dashboard: [
     'Create a sales dashboard with revenue by region and monthly trends',
     'Build an executive dashboard showing KPIs for revenue, customers, and orders',
-    'Design a marketing analytics dashboard with campaign performance metrics'
+    'Design a marketing analytics dashboard with campaign performance metrics',
   ],
   widget: [
     'Add a line chart showing revenue over the last 6 months',
     'Add a metric card showing total customers',
     'Add a pie chart breaking down sales by category',
-    'Add a table listing top 10 products by revenue'
+    'Add a table listing top 10 products by revenue',
   ],
   modify: [
     'Change the bar chart to show percentages instead of absolute values',
     'Make the chart horizontal instead of vertical',
-    'Add a comparison to previous period'
+    'Add a comparison to previous period',
   ],
   query: [
     'Show me total revenue by month for this year',
     'Which products have the highest profit margin?',
-    'How many new customers did we get last quarter?'
-  ]
+    'How many new customers did we get last quarter?',
+  ],
 }

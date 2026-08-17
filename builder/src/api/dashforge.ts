@@ -17,7 +17,7 @@ class DashforgeApiError extends Error {
   constructor(
     message: string,
     public status: number,
-    public apiError?: ApiError
+    public apiError?: ApiError,
   ) {
     super(message)
     this.name = 'DashforgeApiError'
@@ -35,7 +35,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new DashforgeApiError(
       apiError?.message || `HTTP ${response.status}: ${response.statusText}`,
       response.status,
-      apiError
+      apiError,
     )
   }
   return response.json()
@@ -57,7 +57,7 @@ export interface ListDashboardsResponse {
 }
 
 export async function listDashboards(
-  params?: ListDashboardsParams
+  params?: ListDashboardsParams,
 ): Promise<ListDashboardsResponse> {
   const searchParams = new URLSearchParams()
   if (params?.page) searchParams.set('page', String(params.page))
@@ -74,39 +74,44 @@ export async function getDashboard(id: string): Promise<Dashboard> {
   return handleResponse(response)
 }
 
-export async function createDashboard(dashboard: Omit<Dashboard, 'id' | 'createdAt' | 'updatedAt'>): Promise<Dashboard> {
+export async function createDashboard(
+  dashboard: Omit<Dashboard, 'id' | 'createdAt' | 'updatedAt'>,
+): Promise<Dashboard> {
   const response = await fetch(`${API_BASE}/dashboards`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dashboard)
+    body: JSON.stringify(dashboard),
   })
   return handleResponse(response)
 }
 
-export async function updateDashboard(id: string, dashboard: Partial<Dashboard>): Promise<Dashboard> {
+export async function updateDashboard(
+  id: string,
+  dashboard: Partial<Dashboard>,
+): Promise<Dashboard> {
   const response = await fetch(`${API_BASE}/dashboards/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dashboard)
+    body: JSON.stringify(dashboard),
   })
   return handleResponse(response)
 }
 
 export async function deleteDashboard(id: string): Promise<void> {
   const response = await fetch(`${API_BASE}/dashboards/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
   if (!response.ok) {
     throw new DashforgeApiError(
       `Failed to delete dashboard: ${response.statusText}`,
-      response.status
+      response.status,
     )
   }
 }
 
 export async function duplicateDashboard(id: string): Promise<Dashboard> {
   const response = await fetch(`${API_BASE}/dashboards/${id}/duplicate`, {
-    method: 'POST'
+    method: 'POST',
   })
   return handleResponse(response)
 }
@@ -132,28 +137,31 @@ export async function createDataSource(dataSource: Omit<DataSource, 'id'>): Prom
   const response = await fetch(`${API_BASE}/datasources`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dataSource)
+    body: JSON.stringify(dataSource),
   })
   return handleResponse(response)
 }
 
-export async function updateDataSource(id: string, dataSource: Partial<DataSource>): Promise<DataSource> {
+export async function updateDataSource(
+  id: string,
+  dataSource: Partial<DataSource>,
+): Promise<DataSource> {
   const response = await fetch(`${API_BASE}/datasources/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dataSource)
+    body: JSON.stringify(dataSource),
   })
   return handleResponse(response)
 }
 
 export async function deleteDataSource(id: string): Promise<void> {
   const response = await fetch(`${API_BASE}/datasources/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
   if (!response.ok) {
     throw new DashforgeApiError(
       `Failed to delete data source: ${response.statusText}`,
-      response.status
+      response.status,
     )
   }
 }
@@ -177,8 +185,8 @@ export async function executeQuery(params: QueryParams): Promise<QueryResult> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: params.query,
-      variables: params.variables
-    })
+      variables: params.variables,
+    }),
   })
   return handleResponse(response)
 }

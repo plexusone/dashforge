@@ -90,7 +90,8 @@ export interface DataSource {
 }
 
 // Transform types
-export type TransformType = 'extract' | 'filter' | 'aggregate' | 'sort' | 'limit' | 'select' | 'rename' | 'compute'
+export type TransformType =
+  'extract' | 'filter' | 'aggregate' | 'sort' | 'limit' | 'select' | 'rename' | 'compute'
 
 export interface TransformExtractConfig {
   path: string
@@ -98,7 +99,18 @@ export interface TransformExtractConfig {
 
 export interface TransformFilterConfig {
   field: string
-  operator: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'startsWith' | 'endsWith' | 'in' | 'notIn'
+  operator:
+    | 'eq'
+    | 'neq'
+    | 'gt'
+    | 'gte'
+    | 'lt'
+    | 'lte'
+    | 'contains'
+    | 'startsWith'
+    | 'endsWith'
+    | 'in'
+    | 'notIn'
   value: unknown
 }
 
@@ -136,9 +148,15 @@ export interface TransformComputeConfig {
 
 export interface Transform {
   type: TransformType
-  config: TransformExtractConfig | TransformFilterConfig | TransformAggregateConfig |
-         TransformSortConfig | TransformLimitConfig | TransformSelectConfig |
-         TransformRenameConfig | TransformComputeConfig
+  config:
+    | TransformExtractConfig
+    | TransformFilterConfig
+    | TransformAggregateConfig
+    | TransformSortConfig
+    | TransformLimitConfig
+    | TransformSelectConfig
+    | TransformRenameConfig
+    | TransformComputeConfig
 }
 
 // Widget types
@@ -174,7 +192,18 @@ export interface Widget {
 }
 
 // Chart config types (from echartify ChartIR)
-export type GeometryType = 'line' | 'bar' | 'pie' | 'scatter' | 'area' | 'radar' | 'funnel' | 'gauge' | 'heatmap' | 'treemap' | 'sankey'
+export type GeometryType =
+  | 'line'
+  | 'bar'
+  | 'pie'
+  | 'scatter'
+  | 'area'
+  | 'radar'
+  | 'funnel'
+  | 'gauge'
+  | 'heatmap'
+  | 'treemap'
+  | 'sankey'
 
 export interface ChartConfig {
   geometry: GeometryType
@@ -184,16 +213,16 @@ export interface ChartConfig {
     color?: string
     size?: string
     label?: string
-    value?: string      // For pie/funnel
-    category?: string   // For pie/funnel
+    value?: string // For pie/funnel
+    category?: string // For pie/funnel
   }
   style?: {
     colors?: string[]
     showLegend?: boolean
     legendPosition?: 'top' | 'bottom' | 'left' | 'right'
     showLabels?: boolean
-    smooth?: boolean    // For line/area
-    stack?: boolean     // For bar/area
+    smooth?: boolean // For line/area
+    stack?: boolean // For bar/area
     horizontal?: boolean // For bar
   }
 }

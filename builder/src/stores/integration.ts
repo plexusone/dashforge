@@ -58,7 +58,10 @@ interface IntegrationState {
 
   // Marketplace actions
   fetchMarketplace: (category?: string) => Promise<void>
-  installIntegration: (marketplaceSlug: string, request: InstallIntegrationRequest) => Promise<Integration | null>
+  installIntegration: (
+    marketplaceSlug: string,
+    request: InstallIntegrationRequest,
+  ) => Promise<Integration | null>
 
   // Channel actions
   fetchChannels: () => Promise<void>
@@ -108,7 +111,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const integration = await api.getIntegration(id)
           set((state) => {
-            const index = state.integrations.findIndex(i => i.id === id)
+            const index = state.integrations.findIndex((i) => i.id === id)
             if (index >= 0) {
               state.integrations[index] = integration
             } else {
@@ -143,7 +146,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const integration = await api.updateIntegration(id, request)
           set((state) => {
-            const index = state.integrations.findIndex(i => i.id === id)
+            const index = state.integrations.findIndex((i) => i.id === id)
             if (index >= 0) {
               state.integrations[index] = integration
             }
@@ -161,7 +164,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           await api.deleteIntegration(id)
           set((state) => {
-            state.integrations = state.integrations.filter(i => i.id !== id)
+            state.integrations = state.integrations.filter((i) => i.id !== id)
             if (state.selectedIntegrationId === id) {
               state.selectedIntegrationId = null
             }
@@ -220,7 +223,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const alert = await api.getAlert(id)
           set((state) => {
-            const index = state.alerts.findIndex(a => a.id === id)
+            const index = state.alerts.findIndex((a) => a.id === id)
             if (index >= 0) {
               state.alerts[index] = alert
             } else {
@@ -255,7 +258,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const alert = await api.updateAlert(id, request)
           set((state) => {
-            const index = state.alerts.findIndex(a => a.id === id)
+            const index = state.alerts.findIndex((a) => a.id === id)
             if (index >= 0) {
               state.alerts[index] = alert
             }
@@ -273,7 +276,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           await api.deleteAlert(id)
           set((state) => {
-            state.alerts = state.alerts.filter(a => a.id !== id)
+            state.alerts = state.alerts.filter((a) => a.id !== id)
             if (state.selectedAlertId === id) {
               state.selectedAlertId = null
             }
@@ -292,7 +295,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const alert = await api.enableAlert(id)
           set((state) => {
-            const index = state.alerts.findIndex(a => a.id === id)
+            const index = state.alerts.findIndex((a) => a.id === id)
             if (index >= 0) {
               state.alerts[index] = alert
             }
@@ -310,7 +313,7 @@ export const useIntegrationStore = create<IntegrationState>()(
         try {
           const alert = await api.disableAlert(id)
           set((state) => {
-            const index = state.alerts.findIndex(a => a.id === id)
+            const index = state.alerts.findIndex((a) => a.id === id)
             if (index >= 0) {
               state.alerts[index] = alert
             }
@@ -402,8 +405,8 @@ export const useIntegrationStore = create<IntegrationState>()(
         })
       },
     })),
-    { name: 'integration-store' }
-  )
+    { name: 'integration-store' },
+  ),
 )
 
 // Selectors
@@ -412,8 +415,8 @@ export const selectAlerts = (state: IntegrationState) => state.alerts
 export const selectMarketplace = (state: IntegrationState) => state.marketplaceIntegrations
 export const selectChannels = (state: IntegrationState) => state.channels
 export const selectSelectedIntegration = (state: IntegrationState) =>
-  state.integrations.find(i => i.id === state.selectedIntegrationId)
+  state.integrations.find((i) => i.id === state.selectedIntegrationId)
 export const selectSelectedAlert = (state: IntegrationState) =>
-  state.alerts.find(a => a.id === state.selectedAlertId)
+  state.alerts.find((a) => a.id === state.selectedAlertId)
 export const selectAlertEvents = (alertId: number) => (state: IntegrationState) =>
   state.alertEvents[alertId] || []

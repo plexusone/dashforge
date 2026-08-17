@@ -19,15 +19,15 @@ const operators = [
   { value: 'lt', label: '<' },
   { value: 'lte', label: '<=' },
   { value: 'set', label: 'is set' },
-  { value: 'notSet', label: 'is not set' }
+  { value: 'notSet', label: 'is not set' },
 ]
 
 export function FilterBuilder({ dimensions, measures, filters, onChange }: FilterBuilderProps) {
   const [, setShowAddFilter] = useState(false)
 
   const allMembers = [
-    ...dimensions.map(d => ({ name: d.name, title: d.title, type: 'dimension' })),
-    ...measures.map(m => ({ name: m.name, title: m.title, type: 'measure' }))
+    ...dimensions.map((d) => ({ name: d.name, title: d.title, type: 'dimension' })),
+    ...measures.map((m) => ({ name: m.name, title: m.title, type: 'measure' })),
   ]
 
   const addFilter = () => {
@@ -37,13 +37,16 @@ export function FilterBuilder({ dimensions, measures, filters, onChange }: Filte
       {
         member: allMembers[0].name,
         operator: 'equals',
-        values: []
-      }
+        values: [],
+      },
     ])
     setShowAddFilter(false)
   }
 
-  const updateFilter = (index: number, updates: Partial<NonNullable<QueryBuilderInput['filters']>[0]>) => {
+  const updateFilter = (
+    index: number,
+    updates: Partial<NonNullable<QueryBuilderInput['filters']>[0]>,
+  ) => {
     const newFilters = [...filters]
     newFilters[index] = { ...newFilters[index], ...updates }
     onChange(newFilters)
@@ -58,9 +61,7 @@ export function FilterBuilder({ dimensions, measures, filters, onChange }: Filte
       <label className="block text-xs font-medium text-gray-600 mb-2">
         Filters
         {filters.length > 0 && (
-          <span className="text-gray-400 font-normal ml-1">
-            ({filters.length})
-          </span>
+          <span className="text-gray-400 font-normal ml-1">({filters.length})</span>
         )}
       </label>
 
@@ -101,9 +102,14 @@ export function FilterBuilder({ dimensions, measures, filters, onChange }: Filte
               <input
                 type="text"
                 value={filter.values?.join(', ') || ''}
-                onChange={(e) => updateFilter(index, {
-                  values: e.target.value.split(',').map(v => v.trim()).filter(Boolean)
-                })}
+                onChange={(e) =>
+                  updateFilter(index, {
+                    values: e.target.value
+                      .split(',')
+                      .map((v) => v.trim())
+                      .filter(Boolean),
+                  })
+                }
                 placeholder="value"
                 className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
               />

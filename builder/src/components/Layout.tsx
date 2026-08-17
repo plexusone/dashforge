@@ -58,7 +58,7 @@ export function Layout({ children }: LayoutProps) {
     canRedo,
     exportDashboard,
     setDashboard,
-    markClean
+    markClean,
   } = useDashboardStore()
 
   const handleSave = useCallback(async () => {
@@ -159,7 +159,7 @@ export function Layout({ children }: LayoutProps) {
         columns: 12,
         rowHeight: 80,
         gap: 8,
-        padding: 16
+        padding: 16,
       },
       theme: {
         name: 'default',
@@ -169,12 +169,12 @@ export function Layout({ children }: LayoutProps) {
           background: '#f8fafc',
           surface: '#ffffff',
           text: '#0f172a',
-          border: '#e2e8f0'
-        }
+          border: '#e2e8f0',
+        },
       },
       variables: [],
       dataSources: [],
-      widgets: []
+      widgets: [],
     })
     // Clear URL params
     window.history.pushState({}, '', window.location.pathname)
@@ -226,7 +226,7 @@ export function Layout({ children }: LayoutProps) {
               disabled={!canUndo()}
               className={clsx(
                 'p-2 rounded-lg transition-colors',
-                canUndo() ? 'hover:bg-gray-100' : 'opacity-40 cursor-not-allowed'
+                canUndo() ? 'hover:bg-gray-100' : 'opacity-40 cursor-not-allowed',
               )}
               title="Undo (Ctrl+Z)"
             >
@@ -237,7 +237,7 @@ export function Layout({ children }: LayoutProps) {
               disabled={!canRedo()}
               className={clsx(
                 'p-2 rounded-lg transition-colors',
-                canRedo() ? 'hover:bg-gray-100' : 'opacity-40 cursor-not-allowed'
+                canRedo() ? 'hover:bg-gray-100' : 'opacity-40 cursor-not-allowed',
               )}
               title="Redo (Ctrl+Shift+Z)"
             >
@@ -290,9 +290,7 @@ export function Layout({ children }: LayoutProps) {
             onClick={() => setEditMode(!isEditing)}
             className={clsx(
               'flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors',
-              isEditing
-                ? 'bg-gray-100 text-gray-700'
-                : 'bg-primary-50 text-primary-700'
+              isEditing ? 'bg-gray-100 text-gray-700' : 'bg-primary-50 text-primary-700',
             )}
           >
             {isEditing ? (
@@ -317,9 +315,9 @@ export function Layout({ children }: LayoutProps) {
               saveStatus === 'error'
                 ? 'bg-red-500 text-white hover:bg-red-600'
                 : saveStatus === 'saved'
-                ? 'bg-green-500 text-white'
-                : 'bg-primary-500 text-white hover:bg-primary-600',
-              saveStatus === 'saving' && 'opacity-75 cursor-wait'
+                  ? 'bg-green-500 text-white'
+                  : 'bg-primary-500 text-white hover:bg-primary-600',
+              saveStatus === 'saving' && 'opacity-75 cursor-wait',
             )}
             title={saveError || undefined}
           >
@@ -336,10 +334,10 @@ export function Layout({ children }: LayoutProps) {
               {saveStatus === 'saving'
                 ? 'Saving...'
                 : saveStatus === 'saved'
-                ? 'Saved!'
-                : saveStatus === 'error'
-                ? 'Error'
-                : 'Save'}
+                  ? 'Saved!'
+                  : saveStatus === 'error'
+                    ? 'Error'
+                    : 'Save'}
             </span>
           </button>
 
@@ -369,9 +367,7 @@ export function Layout({ children }: LayoutProps) {
                   Import JSON
                 </button>
                 <hr className="my-1 border-gray-200" />
-                <button
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                >
+                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                   <HelpCircle className="w-4 h-4" />
                   Help
                 </button>
@@ -382,21 +378,13 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden">
-        {children}
-      </main>
+      <main className="flex-1 overflow-hidden">{children}</main>
 
       {/* Data Source Panel */}
-      <DataSourcePanel
-        isOpen={showDataSources}
-        onClose={() => setShowDataSources(false)}
-      />
+      <DataSourcePanel isOpen={showDataSources} onClose={() => setShowDataSources(false)} />
 
       {/* Variable Panel */}
-      <VariablePanel
-        isOpen={showVariables}
-        onClose={() => setShowVariables(false)}
-      />
+      <VariablePanel isOpen={showVariables} onClose={() => setShowVariables(false)} />
 
       {/* Dashboard Gallery */}
       <DashboardGallery
@@ -407,10 +395,7 @@ export function Layout({ children }: LayoutProps) {
       />
 
       {/* Marketplace Panel */}
-      <MarketplacePanel
-        isOpen={showMarketplace}
-        onClose={() => setShowMarketplace(false)}
-      />
+      <MarketplacePanel isOpen={showMarketplace} onClose={() => setShowMarketplace(false)} />
 
       {/* Integration Settings Panel */}
       <IntegrationSettingsPanel
@@ -419,10 +404,7 @@ export function Layout({ children }: LayoutProps) {
       />
 
       {/* Alert Panel */}
-      <AlertPanel
-        isOpen={showAlerts}
-        onClose={() => setShowAlerts(false)}
-      />
+      <AlertPanel isOpen={showAlerts} onClose={() => setShowAlerts(false)} />
     </div>
   )
 }

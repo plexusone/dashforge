@@ -225,7 +225,9 @@ function DataChangeTriggerForm({ config, onChange }: FormProps) {
       </div>
 
       <div>
-        <label className="block text-sm text-gray-600 mb-1">Compare Field (for increase/decrease)</label>
+        <label className="block text-sm text-gray-600 mb-1">
+          Compare Field (for increase/decrease)
+        </label>
         <input
           type="text"
           value={(config.compareField as string) || ''}

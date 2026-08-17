@@ -36,9 +36,9 @@ export function validateDashboard(data: unknown): ValidationResult {
     dashboard.widgets.forEach((widget: unknown, index: number) => {
       const widgetResult = validateWidget(widget)
       if (!widgetResult.valid) {
-        errors.push(...widgetResult.errors.map(e => `Widget ${index}: ${e}`))
+        errors.push(...widgetResult.errors.map((e) => `Widget ${index}: ${e}`))
       }
-      warnings.push(...widgetResult.warnings.map(w => `Widget ${index}: ${w}`))
+      warnings.push(...widgetResult.warnings.map((w) => `Widget ${index}: ${w}`))
     })
 
     // Check for overlapping widgets
@@ -55,7 +55,10 @@ export function validateDashboard(data: unknown): ValidationResult {
       errors.push('Layout must be an object')
     } else {
       const layout = dashboard.layout as Record<string, unknown>
-      if (layout.columns && (typeof layout.columns !== 'number' || layout.columns < 1 || layout.columns > 24)) {
+      if (
+        layout.columns &&
+        (typeof layout.columns !== 'number' || layout.columns < 1 || layout.columns > 24)
+      ) {
         errors.push('Layout columns must be between 1 and 24')
       }
       if (layout.rowHeight && (typeof layout.rowHeight !== 'number' || layout.rowHeight < 20)) {
@@ -239,9 +242,9 @@ export function autoFixWidget(widget: Partial<Widget>): Widget {
       w: Math.max(1, Math.min(12, widget.position?.w || 4)),
       h: Math.max(1, widget.position?.h || 3),
       minW: 1,
-      minH: 1
+      minH: 1,
     },
-    config: widget.config || {}
+    config: widget.config || {},
   }
 
   if (widget.datasourceId) {
@@ -260,7 +263,7 @@ export function autoFixWidget(widget: Partial<Widget>): Widget {
  */
 export function parseAIResponse<T>(
   response: string,
-  validator: (data: unknown) => ValidationResult
+  validator: (data: unknown) => ValidationResult,
 ): { data: T | null; result: ValidationResult } {
   // Try to extract JSON from response (handle markdown code blocks)
   let jsonString = response.trim()
@@ -281,8 +284,8 @@ export function parseAIResponse<T>(
       result: {
         valid: false,
         errors: [`Invalid JSON: ${(e as Error).message}`],
-        warnings: []
-      }
+        warnings: [],
+      },
     }
   }
 
@@ -291,6 +294,6 @@ export function parseAIResponse<T>(
 
   return {
     data: result.valid ? (data as T) : null,
-    result
+    result,
   }
 }

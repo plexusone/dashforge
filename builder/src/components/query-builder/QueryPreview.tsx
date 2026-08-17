@@ -11,9 +11,7 @@ export function QueryPreview({ data }: QueryPreviewProps) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="p-4 bg-gray-50 rounded-lg text-center text-gray-500 text-sm">
-        No results
-      </div>
+      <div className="p-4 bg-gray-50 rounded-lg text-center text-gray-500 text-sm">No results</div>
     )
   }
 
@@ -31,7 +29,7 @@ export function QueryPreview({ data }: QueryPreviewProps) {
             onClick={() => setViewMode('table')}
             className={clsx(
               'p-1 rounded',
-              viewMode === 'table' ? 'bg-white shadow' : 'hover:bg-gray-200'
+              viewMode === 'table' ? 'bg-white shadow' : 'hover:bg-gray-200',
             )}
           >
             <Table2 className="w-4 h-4" />
@@ -40,7 +38,7 @@ export function QueryPreview({ data }: QueryPreviewProps) {
             onClick={() => setViewMode('json')}
             className={clsx(
               'p-1 rounded',
-              viewMode === 'json' ? 'bg-white shadow' : 'hover:bg-gray-200'
+              viewMode === 'json' ? 'bg-white shadow' : 'hover:bg-gray-200',
             )}
           >
             <Code className="w-4 h-4" />

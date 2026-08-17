@@ -10,17 +10,17 @@ const colorPresets = [
   ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de'],
   ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
   ['#0ea5e9', '#22c55e', '#eab308', '#f43f5e', '#a855f7'],
-  ['#6366f1', '#14b8a6', '#f97316', '#ec4899', '#84cc16']
+  ['#6366f1', '#14b8a6', '#f97316', '#ec4899', '#84cc16'],
 ]
 
 export function StyleEditor({ geometry, style, onChange }: StyleEditorProps) {
   const handleChange = <K extends keyof NonNullable<ChartConfig['style']>>(
     key: K,
-    value: NonNullable<ChartConfig['style']>[K]
+    value: NonNullable<ChartConfig['style']>[K],
   ) => {
     onChange({
       ...style,
-      [key]: value
+      [key]: value,
     })
   }
 
@@ -31,9 +31,7 @@ export function StyleEditor({ geometry, style, onChange }: StyleEditorProps) {
 
   return (
     <div className="space-y-4">
-      <label className="block text-xs font-medium text-gray-600">
-        Style Options
-      </label>
+      <label className="block text-xs font-medium text-gray-600">Style Options</label>
 
       {/* Color Palette */}
       <div>
@@ -50,11 +48,7 @@ export function StyleEditor({ geometry, style, onChange }: StyleEditorProps) {
               }`}
             >
               {palette.map((color) => (
-                <div
-                  key={color}
-                  className="w-5 h-5 rounded"
-                  style={{ backgroundColor: color }}
-                />
+                <div key={color} className="w-5 h-5 rounded" style={{ backgroundColor: color }} />
               ))}
             </button>
           ))}
@@ -77,7 +71,9 @@ export function StyleEditor({ geometry, style, onChange }: StyleEditorProps) {
           <label className="block text-xs text-gray-500 mb-1">Legend Position</label>
           <select
             value={style?.legendPosition || 'top'}
-            onChange={(e) => handleChange('legendPosition', e.target.value as 'top' | 'bottom' | 'left' | 'right')}
+            onChange={(e) =>
+              handleChange('legendPosition', e.target.value as 'top' | 'bottom' | 'left' | 'right')
+            }
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
           >
             <option value="top">Top</option>

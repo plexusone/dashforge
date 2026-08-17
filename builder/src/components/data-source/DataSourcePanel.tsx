@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Plus, Trash2, Database, Globe, Server, Code, X, ChevronDown, ChevronUp } from 'lucide-react'
+import {
+  Plus,
+  Trash2,
+  Database,
+  Globe,
+  Server,
+  Code,
+  X,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react'
 import { useDashboardStore } from '../../stores/dashboard'
 import type { DataSource, DataSourceType } from '../../types/dashboard'
 
@@ -14,7 +24,7 @@ const DATA_SOURCE_ICONS: Record<DataSourceType, typeof Database> = {
   postgres: Database,
   mysql: Database,
   derived: Server,
-  cube: Server
+  cube: Server,
 }
 
 const DATA_SOURCE_LABELS: Record<DataSourceType, string> = {
@@ -23,7 +33,7 @@ const DATA_SOURCE_LABELS: Record<DataSourceType, string> = {
   postgres: 'PostgreSQL',
   mysql: 'MySQL',
   derived: 'Derived',
-  cube: 'Cube.js'
+  cube: 'Cube.js',
 }
 
 export function DataSourcePanel({ isOpen, onClose }: DataSourcePanelProps) {
@@ -42,10 +52,7 @@ export function DataSourcePanel({ isOpen, onClose }: DataSourcePanelProps) {
             <Database className="w-5 h-5 text-primary-500" />
             <h2 className="text-lg font-semibold text-gray-900">Data Sources</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -116,7 +123,13 @@ interface DataSourceItemProps {
   onDelete: () => void
 }
 
-function DataSourceItem({ dataSource, isEditing, onEdit, onUpdate, onDelete }: DataSourceItemProps) {
+function DataSourceItem({
+  dataSource,
+  isEditing,
+  onEdit,
+  onUpdate,
+  onDelete,
+}: DataSourceItemProps) {
   const Icon = DATA_SOURCE_ICONS[dataSource.type]
 
   return (
@@ -157,10 +170,7 @@ function DataSourceItem({ dataSource, isEditing, onEdit, onUpdate, onDelete }: D
       {/* Edit Form */}
       {isEditing && (
         <div className="p-4 border-t border-gray-200">
-          <DataSourceEditForm
-            dataSource={dataSource}
-            onSave={onUpdate}
-          />
+          <DataSourceEditForm dataSource={dataSource} onSave={onUpdate} />
         </div>
       )}
     </div>
@@ -190,7 +200,7 @@ function DataSourceForm({ onSave, onCancel }: DataSourceFormProps) {
 
     const dataSource: DataSource = {
       id: id || `ds-${Date.now()}`,
-      type
+      type,
     }
 
     if (type === 'url') {
@@ -208,7 +218,7 @@ function DataSourceForm({ onSave, onCancel }: DataSourceFormProps) {
         port: port ? parseInt(port, 10) : undefined,
         database,
         username,
-        password
+        password,
       }
       dataSource.query = query
     }
@@ -217,7 +227,10 @@ function DataSourceForm({ onSave, onCancel }: DataSourceFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-primary-200 rounded-lg p-4 bg-primary-50/50 mb-4">
+    <form
+      onSubmit={handleSubmit}
+      className="border border-primary-200 rounded-lg p-4 bg-primary-50/50 mb-4"
+    >
       <h3 className="text-sm font-medium text-gray-900 mb-3">New Data Source</h3>
 
       <div className="space-y-3">
@@ -361,7 +374,8 @@ function DataSourceForm({ onSave, onCancel }: DataSourceFormProps) {
 
         {type === 'cube' && (
           <div className="text-sm text-gray-500 bg-gray-100 rounded-lg p-3">
-            Cube.js data sources are configured via the Query Builder panel when editing a chart widget.
+            Cube.js data sources are configured via the Query Builder panel when editing a chart
+            widget.
           </div>
         )}
       </div>
@@ -395,7 +409,7 @@ function DataSourceEditForm({ dataSource, onSave }: DataSourceEditFormProps) {
   const [url, setUrl] = useState(dataSource.url || '')
   const [method, setMethod] = useState(dataSource.method || 'GET')
   const [inlineData, setInlineData] = useState(
-    dataSource.data ? JSON.stringify(dataSource.data, null, 2) : ''
+    dataSource.data ? JSON.stringify(dataSource.data, null, 2) : '',
   )
   const [host, setHost] = useState(dataSource.connection?.host || '')
   const [port, setPort] = useState(dataSource.connection?.port?.toString() || '')
@@ -422,7 +436,7 @@ function DataSourceEditForm({ dataSource, onSave }: DataSourceEditFormProps) {
         port: port ? parseInt(port, 10) : undefined,
         database,
         username,
-        password
+        password,
       }
       updates.query = query
     }

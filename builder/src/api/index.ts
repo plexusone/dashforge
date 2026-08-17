@@ -18,5 +18,5 @@ export {
   type ChartData,
   type Query,
   type ResultSet,
-  type Meta
+  type Meta,
 } from './cube'

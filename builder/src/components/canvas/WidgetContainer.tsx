@@ -15,12 +15,7 @@ interface WidgetContainerProps {
   isEditing: boolean
 }
 
-export function WidgetContainer({
-  widget,
-  isSelected,
-  onSelect,
-  isEditing
-}: WidgetContainerProps) {
+export function WidgetContainer({ widget, isSelected, onSelect, isEditing }: WidgetContainerProps) {
   const { removeWidget, duplicateWidget } = useDashboardStore()
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -63,7 +58,7 @@ export function WidgetContainer({
         isSelected
           ? 'border-primary-500 ring-2 ring-primary-200'
           : 'border-gray-200 hover:border-gray-300',
-        isEditing && 'cursor-move'
+        isEditing && 'cursor-move',
       )}
       onClick={(e) => {
         e.stopPropagation()
@@ -78,7 +73,8 @@ export function WidgetContainer({
               <GripVertical className="w-3 h-3 text-gray-400" />
             </div>
             <span className="text-xs font-medium text-gray-600 truncate max-w-32">
-              {widget.title || `${widget.type.charAt(0).toUpperCase() + widget.type.slice(1)} Widget`}
+              {widget.title ||
+                `${widget.type.charAt(0).toUpperCase() + widget.type.slice(1)} Widget`}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -101,10 +97,7 @@ export function WidgetContainer({
       )}
 
       {/* Widget Content */}
-      <div className={clsx(
-        'w-full overflow-hidden',
-        isEditing ? 'h-[calc(100%-2rem)]' : 'h-full'
-      )}>
+      <div className={clsx('w-full overflow-hidden', isEditing ? 'h-[calc(100%-2rem)]' : 'h-full')}>
         {renderWidget()}
       </div>
     </div>

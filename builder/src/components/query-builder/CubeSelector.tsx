@@ -10,9 +10,7 @@ interface CubeSelectorProps {
 export function CubeSelector({ cubes, selectedCube, onChange }: CubeSelectorProps) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-2">
-        Data Cube
-      </label>
+      <label className="block text-xs font-medium text-gray-600 mb-2">Data Cube</label>
       <div className="relative">
         <Database className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <select
@@ -30,7 +28,7 @@ export function CubeSelector({ cubes, selectedCube, onChange }: CubeSelectorProp
       </div>
       {selectedCube && (
         <p className="mt-1 text-xs text-gray-500">
-          {cubes.find(c => c.name === selectedCube)?.description || 'No description'}
+          {cubes.find((c) => c.name === selectedCube)?.description || 'No description'}
         </p>
       )}
     </div>
