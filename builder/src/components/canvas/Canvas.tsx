@@ -4,7 +4,7 @@ import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import { useDashboardStore } from '../../stores/dashboard'
 import { WidgetContainer } from './WidgetContainer'
-import { GridOverlay } from './GridOverlay'
+import { gridBackgroundStyle } from './GridOverlay'
 // Widget type is inferred from dashboard store
 
 interface CanvasProps {
@@ -81,12 +81,14 @@ export function Canvas({ selectedWidgetId, onSelectWidget }: CanvasProps) {
   const handleDrop = useCallback(
     (_layout: GridLayoutItem[], item: GridLayoutItem, e: DragEvent) => {
       const widgetType = e.dataTransfer?.getData('widget-type')
+      const widgetTemplate = e.dataTransfer?.getData('widget-template')
       if (widgetType) {
         // The WidgetPalette will handle creating the actual widget
         // This just provides the drop position
         const event = new CustomEvent('widget-drop', {
           detail: {
             type: widgetType,
+            templateLabel: widgetTemplate ? JSON.parse(widgetTemplate).label : undefined,
             position: { x: item.x, y: item.y, w: item.w, h: item.h },
           },
         })
@@ -98,21 +100,19 @@ export function Canvas({ selectedWidgetId, onSelectWidget }: CanvasProps) {
 
   return (
     <div className="relative min-h-full" onClick={handleCanvasClick}>
-      {/* Grid overlay (visible in edit mode) */}
-      {isEditing && (
-        <GridOverlay columns={columns} rowHeight={rowHeight} gap={gap} width={canvasWidth} />
-      )}
-
       {/* Main grid layout */}
       <div
-        className="relative z-10 bg-white rounded-lg shadow-sm border border-gray-200 mx-auto"
-        style={{ width: canvasWidth }}
+        className="relative bg-white rounded-lg shadow-sm border border-gray-200 mx-auto overflow-hidden"
+        style={{
+          width: canvasWidth,
+          ...(isEditing ? gridBackgroundStyle({ columns, rowHeight, gap, width: canvasWidth }) : {}),
+        }}
       >
         {widgets.length === 0 && isEditing ? (
-          <div className="flex items-center justify-center h-96 text-gray-400">
-            <div className="text-center">
-              <p className="text-lg mb-2">No widgets yet</p>
-              <p className="text-sm">Drag widgets from the palette to get started</p>
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center rounded-lg border border-gray-200 bg-white/85 px-8 py-6 shadow-sm backdrop-blur-sm">
+              <p className="text-lg font-medium text-gray-700 mb-2">No widgets yet</p>
+              <p className="text-sm text-gray-500">Drag widgets from the palette to get started</p>
             </div>
           </div>
         ) : (

@@ -89,6 +89,55 @@ export interface DataSource {
   cache?: CacheConfig
 }
 
+// Analytics catalog types
+export type AnalyticsSourceType = 'application' | 'sql'
+
+export type AnalyticsFieldSource = 'standard' | 'custom' | 'derived' | 'metadata'
+
+export type AnalyticsFieldRole = 'dimension' | 'measure' | 'time' | 'link'
+
+export type AnalyticsFieldType = 'string' | 'number' | 'bool' | 'date' | 'json'
+
+export interface AnalyticsCatalog {
+  id: string
+  name: string
+  description?: string
+  sources: AnalyticsSource[]
+}
+
+export interface AnalyticsSource {
+  id: string
+  name: string
+  type: AnalyticsSourceType
+  description?: string
+  datasets: AnalyticsDataset[]
+}
+
+export interface AnalyticsDataset {
+  id: string
+  name: string
+  queryName: string
+  description?: string
+  fields: AnalyticsField[]
+}
+
+export interface AnalyticsField {
+  id: string
+  name: string
+  queryName: string
+  type: AnalyticsFieldType | string
+  source: AnalyticsFieldSource | string
+  role?: AnalyticsFieldRole | string
+  description?: string
+  selectable: boolean
+  filterable: boolean
+  sortable: boolean
+  nullable?: boolean
+  count?: number
+  coverage?: number
+  sampleValues?: string[]
+}
+
 // Transform types
 export type TransformType =
   'extract' | 'filter' | 'aggregate' | 'sort' | 'limit' | 'select' | 'rename' | 'compute'
@@ -186,6 +235,11 @@ export interface Widget {
   description?: string
   position: Position
   datasourceId?: string
+  questionId?: string
+  visualization?: {
+    type?: 'table' | 'bar' | 'line' | 'metric' | string
+    [key: string]: unknown
+  }
   transforms?: Transform[]
   config: unknown // Type-specific config (ChartConfig, TableConfig, etc.)
   drillDown?: DrillDown

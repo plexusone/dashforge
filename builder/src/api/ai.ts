@@ -29,6 +29,36 @@ export interface AIGenerationResult<T> {
   provider?: string
 }
 
+export interface QuestionAssistantContext {
+  source?: {
+    id: string
+    name: string
+    type: string
+  }
+  dataset?: {
+    id: string
+    name: string
+    queryName: string
+    fields: {
+      name: string
+      queryName: string
+      type: string
+      selectable?: boolean
+      filterable?: boolean
+      sortable?: boolean
+      sampleValues?: unknown[]
+    }[]
+  }
+  currentQuery: string
+}
+
+export interface QuestionAssistantResult {
+  query?: string
+  summary: string
+  title?: string
+  notes?: string[]
+}
+
 interface GenerateRequest {
   prompt: string
   systemPrompt?: string
@@ -356,6 +386,143 @@ export async function generateQuery(
       success: false,
       errors: [error instanceof Error ? error.message : 'Unknown error'],
     }
+  }
+}
+
+/**
+ * Ask the GrokifyQL question assistant to summarize or rewrite a saved-question query.
+ */
+export async function askQuestionAssistant(
+  prompt: string,
+  context: QuestionAssistantContext,
+  options?: AIGenerationOptions,
+): Promise<AIGenerationResult<QuestionAssistantResult>> {
+  const systemPrompt = `You are a GrokifyQL question assistant for UIForge.
+
+Help users create and modify read-only GrokifyQL questions for analytics dashboards.
+
+Rules:
+- Output valid JSON only. No markdown.
+- Return this shape: {"summary":"...", "query":"...", "title":"...", "notes":["..."]}.
+- If the user only asks for a summary, omit "query" and summarize the current query.
+- If rewriting SQL, return a complete GrokifyQL query, not a fragment.
+- Use only the selected dataset in FROM.
+- Use only available field queryName values.
+- Prefer explicit SELECT fields over SELECT *.
+- Preserve LIMIT unless the user asks otherwise. Add LIMIT 100 if missing.
+- GrokifyQL supports SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT, joins, CTEs, nested sources, and aggregate functions COUNT, SUM, AVG, MIN, MAX.
+- Keep the query read-only.
+- For MoSCoW/RICE-style requests, infer field names from the available catalog. If an exact field is absent, explain that in notes and use the closest available field only when obvious.`
+
+  const request: GenerateRequest = {
+    prompt: buildQuestionAssistantPrompt(prompt, context),
+    systemPrompt,
+    type: 'query',
+    temperature: 0.2,
+    maxTokens: 1200,
+    ...options,
+  }
+
+  try {
+    const response = await fetch(`${AI_API_BASE}/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    })
+
+    const result: GenerateResponse = await response.json()
+
+    if (!result.success) {
+      return {
+        success: false,
+        errors: [result.error || 'Question assistant failed'],
+        warnings: result.warnings,
+      }
+    }
+
+    const data = parseQuestionAssistantResult(result.data, result.text)
+    if (!data) {
+      return {
+        success: false,
+        text: result.text,
+        errors: ['Question assistant did not return valid JSON'],
+        warnings: result.warnings,
+      }
+    }
+
+    return {
+      success: true,
+      data,
+      text: result.text,
+      warnings: result.warnings,
+      usage: result.usage,
+      model: result.model,
+      provider: result.provider,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      errors: [error instanceof Error ? error.message : 'Unknown error'],
+    }
+  }
+}
+
+function buildQuestionAssistantPrompt(prompt: string, context: QuestionAssistantContext) {
+  return JSON.stringify(
+    {
+      userRequest: prompt,
+      currentQuery: context.currentQuery,
+      source: context.source,
+      dataset: context.dataset
+        ? {
+            id: context.dataset.id,
+            name: context.dataset.name,
+            queryName: context.dataset.queryName,
+            fields: context.dataset.fields.map((field) => ({
+              name: field.name,
+              queryName: field.queryName,
+              type: field.type,
+              selectable: field.selectable,
+              filterable: field.filterable,
+              sortable: field.sortable,
+              sampleValues: field.sampleValues?.slice(0, 4),
+            })),
+          }
+        : undefined,
+    },
+    null,
+    2,
+  )
+}
+
+function parseQuestionAssistantResult(
+  data: unknown,
+  text?: string,
+): QuestionAssistantResult | null {
+  const candidate = data ?? extractJSONObject(text)
+  if (!candidate || typeof candidate !== 'object') return null
+  const value = candidate as Record<string, unknown>
+  const summary = typeof value.summary === 'string' ? value.summary : text?.trim()
+  if (!summary) return null
+  return {
+    summary,
+    query: typeof value.query === 'string' ? value.query.trim() : undefined,
+    title: typeof value.title === 'string' ? value.title : undefined,
+    notes: Array.isArray(value.notes)
+      ? value.notes.filter((note): note is string => typeof note === 'string')
+      : undefined,
+  }
+}
+
+function extractJSONObject(text?: string): unknown {
+  if (!text) return null
+  const start = text.indexOf('{')
+  const end = text.lastIndexOf('}')
+  if (start === -1 || end === -1 || end <= start) return null
+  try {
+    return JSON.parse(text.slice(start, end + 1))
+  } catch {
+    return null
   }
 }
 
