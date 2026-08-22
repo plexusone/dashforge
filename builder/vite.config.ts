@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@grokify/grokifyql': path.resolve(__dirname, '../../../grokify/grokifyql/ts/dist/index.js'),
     },
   },
   server: {

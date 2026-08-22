@@ -6,6 +6,7 @@ import { MetricWidget } from '../widgets/MetricWidget'
 import { TableWidget } from '../widgets/TableWidget'
 import { TextWidget } from '../widgets/TextWidget'
 import { ImageWidget } from '../widgets/ImageWidget'
+import { QuestionWidget } from '../widgets/QuestionWidget'
 import type { Widget } from '../../types/dashboard'
 
 interface WidgetContainerProps {
@@ -31,6 +32,9 @@ export function WidgetContainer({ widget, isSelected, onSelect, isEditing }: Wid
   }
 
   const renderWidget = () => {
+    if (widget.questionId) {
+      return <QuestionWidget widget={widget} />
+    }
     switch (widget.type) {
       case 'chart':
         return <ChartWidget widget={widget} />

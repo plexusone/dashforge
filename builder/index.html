@@ -7,6 +7,19 @@
     <title>Dashforge Builder</title>
   </head>
   <body>
+    <script>
+      ;(() => {
+        const theme = localStorage.getItem('uiforge.theme')
+        const resolved =
+          theme === 'light' || theme === 'dark'
+            ? theme
+            : window.matchMedia?.('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+        document.documentElement.dataset.theme = resolved
+        document.documentElement.classList.toggle('dark', resolved === 'dark')
+      })()
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

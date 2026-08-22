@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Sidebar, SidebarSection } from '../Sidebar'
 import { useDashboardStore } from '../../stores/dashboard'
 import { ChartBuilder } from '../chart-builder/ChartBuilder'
+import { listSavedQuestions, type SavedQuestion } from '../../api/dashforge'
 import type {
   ChartConfig,
   MetricConfig,
@@ -17,11 +18,24 @@ interface PropertiesPanelProps {
 
 export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelProps) {
   const { dashboard, updateWidget } = useDashboardStore()
+  const [questions, setQuestions] = useState<SavedQuestion[]>([])
+  const [questionsError, setQuestionsError] = useState<string | null>(null)
 
   const selectedWidget = useMemo(
     () => dashboard.widgets.find((w) => w.id === selectedWidgetId),
     [dashboard.widgets, selectedWidgetId],
   )
+
+  useEffect(() => {
+    listSavedQuestions()
+      .then((response) => {
+        setQuestions(response.questions)
+        setQuestionsError(null)
+      })
+      .catch((err) => {
+        setQuestionsError(err instanceof Error ? err.message : 'Failed to load saved questions')
+      })
+  }, [])
 
   if (!selectedWidgetId || !selectedWidget) {
     return (
@@ -43,6 +57,23 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
 
   const handleDataSourceChange = (datasourceId: string) => {
     updateWidget(selectedWidgetId, { datasourceId })
+  }
+
+  const handleQuestionChange = (questionId: string) => {
+    const question = questions.find((candidate) => candidate.id === questionId)
+    updateWidget(selectedWidgetId, {
+      questionId: questionId || undefined,
+      title: question && !selectedWidget.title ? question.name : selectedWidget.title,
+      visualization: questionId
+        ? { type: visualizationType(selectedWidget.visualization?.type ?? question?.visualization?.type) }
+        : undefined,
+    })
+  }
+
+  const handleVisualizationChange = (type: string) => {
+    updateWidget(selectedWidgetId, {
+      visualization: { ...(selectedWidget.visualization ?? {}), type },
+    })
   }
 
   return (
@@ -87,6 +118,39 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
               ))}
             </select>
           </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Question</label>
+            <select
+              value={selectedWidget.questionId || ''}
+              onChange={(e) => handleQuestionChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="">None</option>
+              {questions.map((question) => (
+                <option key={question.id} value={question.id}>
+                  {question.name}
+                </option>
+              ))}
+            </select>
+            {questionsError && <p className="mt-1 text-xs text-red-600">{questionsError}</p>}
+          </div>
+
+          {selectedWidget.questionId && (
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Render as</label>
+              <select
+                value={visualizationType(selectedWidget.visualization?.type)}
+                onChange={(e) => handleVisualizationChange(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              >
+                <option value="table">Table</option>
+                <option value="bar">Bar chart</option>
+                <option value="line">Line chart</option>
+                <option value="metric">Metric</option>
+              </select>
+            </div>
+          )}
         </div>
       </SidebarSection>
 
@@ -147,6 +211,11 @@ export function PropertiesPanel({ selectedWidgetId, onClose }: PropertiesPanelPr
       </SidebarSection>
     </Sidebar>
   )
+}
+
+function visualizationType(value: unknown): string {
+  if (value === 'bar' || value === 'line' || value === 'metric') return value
+  return 'table'
 }
 
 // Metric Config Editor

@@ -23,7 +23,8 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@grokify/grokifyql": ["../../../grokify/grokifyql/ts/dist/index.d.ts"]
     }
   },
   "include": ["src"],

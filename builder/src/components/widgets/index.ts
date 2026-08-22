@@ -1,5 +1,6 @@
 export { ChartWidget } from './ChartWidget'
 export { MetricWidget } from './MetricWidget'
 export { TableWidget } from './TableWidget'
+export { QuestionWidget } from './QuestionWidget'
 export { TextWidget } from './TextWidget'
 export { ImageWidget } from './ImageWidget'

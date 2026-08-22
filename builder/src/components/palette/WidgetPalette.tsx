@@ -9,6 +9,7 @@ import {
   Image,
   ScatterChart,
   AreaChart,
+  FileQuestion,
 } from 'lucide-react'
 import { Sidebar, SidebarSection } from '../Sidebar'
 import { useDashboardStore } from '../../stores/dashboard'
@@ -22,6 +23,7 @@ interface WidgetTemplate {
   defaultConfig: unknown
   defaultSize: { w: number; h: number }
   geometry?: GeometryType
+  questionBacked?: boolean
 }
 
 const widgetTemplates: WidgetTemplate[] = [
@@ -88,6 +90,19 @@ const widgetTemplates: WidgetTemplate[] = [
   },
 
   // Data widgets
+  {
+    type: 'table',
+    label: 'Question',
+    icon: <FileQuestion className="w-5 h-5" />,
+    defaultConfig: {
+      columns: [],
+      pagination: { enabled: true, pageSize: 10 },
+      sortable: true,
+      filterable: false,
+    },
+    defaultSize: { w: 6, h: 4 },
+    questionBacked: true,
+  },
   {
     type: 'metric',
     label: 'Metric',
@@ -178,10 +193,13 @@ export function WidgetPalette() {
     const handleWidgetDrop = (
       e: CustomEvent<{
         type: WidgetType
+        templateLabel?: string
         position: { x: number; y: number; w: number; h: number }
       }>,
     ) => {
-      const template = widgetTemplates.find((t) => t.type === e.detail.type)
+      const template = widgetTemplates.find(
+        (t) => t.type === e.detail.type && (!e.detail.templateLabel || t.label === e.detail.templateLabel),
+      )
       if (!template) return
 
       const widget: Widget = {
@@ -197,6 +215,8 @@ export function WidgetPalette() {
           minH: 1,
         },
         config: template.defaultConfig,
+        questionId: template.questionBacked ? '' : undefined,
+        visualization: template.questionBacked ? { type: 'table' } : undefined,
       }
 
       addWidget(widget)
@@ -225,13 +245,15 @@ export function WidgetPalette() {
         minH: 1,
       },
       config: template.defaultConfig,
+      questionId: template.questionBacked ? '' : undefined,
+      visualization: template.questionBacked ? { type: 'table' } : undefined,
     }
 
     addWidget(widget)
   }
 
   const chartWidgets = widgetTemplates.filter((t) => t.type === 'chart')
-  const dataWidgets = widgetTemplates.filter((t) => t.type === 'metric' || t.type === 'table')
+  const dataWidgets = widgetTemplates.filter((t) => t.questionBacked || t.type === 'metric' || t.type === 'table')
   const contentWidgets = widgetTemplates.filter((t) => t.type === 'text' || t.type === 'image')
 
   return (
@@ -252,7 +274,7 @@ export function WidgetPalette() {
         <div className="space-y-2">
           {dataWidgets.map((template) => (
             <DraggableWidget
-              key={template.type}
+              key={`${template.type}-${template.label}`}
               template={template}
               onDragStart={handleDragStart}
             />
@@ -264,7 +286,7 @@ export function WidgetPalette() {
         <div className="space-y-2">
           {contentWidgets.map((template) => (
             <DraggableWidget
-              key={template.type}
+              key={`${template.type}-${template.label}`}
               template={template}
               onDragStart={handleDragStart}
             />
