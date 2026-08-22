@@ -54,6 +54,9 @@ nav:
       - Dashboard IR: dashboard-ir.md
       - Widgets: widgets.md
       - Data Sources: data-sources.md
+      - Analytics Catalog: analytics-catalog.md
+      - Analytics Authorization: analytics-authorization.md
+      - Agent Integration: agent-integration.md
       - Transforms: transforms.md
   - Server:
       - Configuration: server-config.md

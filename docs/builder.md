@@ -62,6 +62,14 @@ go run ./cmd/uiforge-server serve --port 8080
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+The builder has two primary work surfaces:
+
+- **Dashboards**: a grid canvas where charts, metrics, tables, text, and saved
+  Question widgets are placed and resized.
+- **Questions**: a Metabase-style analytical workspace for creating reusable
+  read-only GrokifyQL queries, previewing results, and choosing a default
+  visualization.
+
 ## Widget Palette
 
 Drag widgets from the left sidebar onto the canvas.
@@ -106,6 +114,36 @@ The canvas uses a 12-column grid layout, similar to Bootstrap:
 - **Resize**: Drag the bottom-right corner
 - **Delete**: Click the trash icon in the header
 - **Duplicate**: Click the copy icon in the header
+
+The dashboard canvas shows a grid background so users can see placement cells
+before widgets are added. Saved Question widgets can be added to zero, one, or
+many dashboards; the widget stores presentation choices while the Question
+stores the query.
+
+## Question Builder
+
+The Question builder is the SQL-like analytics workflow:
+
+1. Pick an analytics source and dataset from the catalog.
+2. Write or generate a read-only GrokifyQL query.
+3. Run it and inspect the result table.
+4. Choose a default visualization such as table, bar, line, or metric.
+5. Save the Question for reuse in dashboards.
+
+New Questions start with the SQL editor open. Existing saved Questions open in a
+formatted, syntax-highlighted read view; click **Edit** to switch back to the SQL
+editor. The formatter can rewrite GrokifyQL as multiline or single-line text.
+
+Result tables scroll horizontally inside the middle column so wide datasets do
+not stretch the whole builder. SQL display wraps long lines while still allowing
+scrolling inside the SQL panel.
+
+The field browser can insert fields into the current query and can list distinct
+values for filterable fields. Field value lookup supports all rows or the
+current query filter, which helps users build `IN (...)` predicates safely.
+
+Saved Questions can be created, opened, updated, deleted, and exported as CSV or
+XLSX after a query run.
 
 ### Keyboard Shortcuts
 
@@ -248,4 +286,5 @@ The builder is built with:
 - **react-grid-layout** - Drag-and-drop grid
 - **ECharts** - Chart rendering via echarts-for-react
 - **Cube.js Client** - Semantic queries
+- **GrokifyQL TypeScript** - Browser-side formatting and syntax highlighting
 - **Lucide React** - Icons

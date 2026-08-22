@@ -124,6 +124,28 @@ Generated query:
 }
 ```
 
+### 5. Question Assistant
+
+The Question builder includes an LLM chat panel for GrokifyQL. Users can ask for
+query rewrites, summaries, or recommended filters:
+
+```
+User: "Show initiatives where MoSCoW is empty"
+
+Assistant:
+- summarizes the current query
+- returns a complete GrokifyQL replacement
+- notes which fields or assumptions it used
+```
+
+Applied assistant output switches the SQL pane into edit mode so the user can
+review the generated GrokifyQL before running or saving it.
+
+AI provider configuration is optional. When no provider is configured, the
+builder still supports manual Question editing, running, saving, exporting, and
+dashboard use. Local Ollama can be enabled through the server CLI for offline
+development.
+
 ## JSON Schemas
 
 The AI uses JSON Schema definitions to ensure valid output.
@@ -238,6 +260,10 @@ The prompt includes:
 ## Validation
 
 All AI-generated output is validated before use.
+
+For Questions, validation includes GrokifyQL parsing and catalog-aware policy
+checks before save or execution. Agents and assistant flows do not bypass the
+same backend checks used by manual queries.
 
 ### Validation Steps
 
