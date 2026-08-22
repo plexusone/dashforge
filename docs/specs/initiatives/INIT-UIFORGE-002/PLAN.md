@@ -34,6 +34,16 @@ Backend foundation with no behavior change to the running server yet.
 
 **Exit criteria:** full walkthrough from the PRD works end-to-end in the browser at `/builder/?mode=questions`; builder lint/typecheck green; docs match the shipped behavior.
 
+### Phase 4 — Dolt metadata DB and shared Dolt library
+
+Cross-repo phase; can proceed in parallel with Phase 3 once Phase 1 lands.
+
+10. godolt: server lifecycle package (`EnsureServer`, `InitDatabase`, DSN helpers, `Client.Commit`/status), extracted from `omniroadmap/store/doltstore.go`; release as godolt v0.3.0.
+11. UIForge: implement the `mysql://` branch of `internal/server/db` with Ent's MySQL dialect + godolt helpers, making Dolt the documented local metadata DB (Postgres stays the hosted/RLS option).
+12. OmniRoadmap and VisionStudio: refactor their duplicated Dolt wiring onto godolt with no behavior change.
+
+**Exit criteria:** `uiforge-server serve --db-url mysql://...` (Dolt) runs migrations and persists analytics sources in the ent store; all three consumers build against the same godolt release.
+
 ## Risks and Mitigations
 
 - **Ent codegen churn** — regenerating `ent/` produces a large diff. Mitigate: isolate codegen in its own commit (`chore`).
