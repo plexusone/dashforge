@@ -1,0 +1,111 @@
+# TRD — DashForge Rename & UIForge Split
+
+**Initiative:** `INIT-DASHFORGE-001`
+**Status:** Draft (blocked on landing INIT-UIFORGE-002)
+
+## Current State
+
+- Repo `github.com/plexusone/uiforge`; GitHub redirect alias
+  `github.com/plexusone/dashforge` → this repo (verified: `gh repo view
+  plexusone/dashforge` returns `"name": "uiforge"`). The redirect is the
+  artifact of the original dashforge→uiforge rename and is load-bearing for
+  the plan: renaming back reverses it, and the freed `uiforge` name can be
+  reused — but only after the redirect is provably unused.
+- Go module `github.com/plexusone/uiforge`, v0 (no major-version path suffix
+  to manage; the path change is still breaking for consumers).
+- Known consumers importing the module: `grokify/omniroadmap` (via local
+  `replace`). VisionStudio registers the repo; org CLAUDE.md files and
+  ecosystem docs reference it by name.
+- Residual dashforge naming already in-tree (helps the rename, must be made
+  consistent rather than removed): server help text, `internal/server/db`
+  package docs, `builder/src/api/dashforge.ts`, `DashforgeApiError`,
+  `docs/specs/PRD.md` history.
+- The component-platform vision (UISpec, PageSpec, component namespaces,
+  `renderer/`, `ts/`) lives in `docs/specs/{PRD,TRD}.md` and partially in
+  code, entangled with dashboard rendering.
+
+## Design
+
+### Rename mechanics (Phase 1)
+
+1. **GitHub**: `gh repo rename dashforge` on `plexusone/uiforge`. History,
+   issues, stars carry over; `uiforge` becomes the redirect.
+2. **Local**: move checkout to `~/go/src/github.com/plexusone/dashforge`,
+   update `origin`; update VisionStudio registry path for
+   `github.com/plexusone/dashforge` and retire the old registry entry.
+3. **Module path**: `go.mod` module → `github.com/plexusone/dashforge`; every
+   in-repo import rewritten (mechanical `gofmt -r` / sed sweep + build).
+4. **Binaries**: `cmd/uiforge-server` → `cmd/dashforge-server`,
+   `cmd/uiforge` → `cmd/dashforge`. Cobra `Use`/help text, `.gitignore`
+   entries (fixing the over-broad `uiforge-server` pattern that currently
+   matches `cmd/uiforge-server/`), embed paths.
+5. **Frontend/docs**: builder package name, UF logo mark → DF, UI strings,
+   README, mkdocs, `examples/`. `dashforge.ts` and `DashforgeApiError` are
+   already correctly named.
+6. **Consumers**: omniroadmap `go.mod` require/replace + imports switch to
+   `dashforge` (cross-repo RMI). Org-level docs sweep
+   (`plexusone/.github/CLAUDE.md`, ecosystem references).
+
+### Verification gate (Phase 1 exit)
+
+Before the `uiforge` name may be reused:
+
+- `grep -r "plexusone/uiforge"` across `~/go/src/github.com` returns only
+  historical documents (specs, changelogs) — no `go.mod`, import, CI, remote,
+  or registry references.
+- `git remote -v` in the renamed checkout and all consumers points at
+  `dashforge`.
+- CI green on the renamed repo (the shared `go-ci.yaml` workflow re-run under
+  the new name).
+
+### UIForge split (Phase 2)
+
+1. **Boundary inventory** (doc, in dashforge): classify each candidate —
+   `renderer/`, `ts/`, UISpec/PageSpec types, builder widget components —
+   as *dashforge-core* (analytics-specific rendering) or *uiforge-extract*
+   (generic UI composition). Decision recorded per package with its
+   dependency direction; the invariant is dashforge → uiforge, never the
+   reverse.
+2. **New repo**: create `plexusone/uiforge` fresh (this deliberately retires
+   the redirect — hence the Phase 1 gate). Seed with the component-platform
+   PRD/TRD (adapted from the original UIForge specs), module
+   `github.com/plexusone/uiforge`, standard plexusone scaffolding (CI, lint,
+   CLAUDE.md).
+3. **First extraction**: move the cleanest UISpec units (types + schema
+   generation first, renderer pieces as they untangle) into uiforge;
+   dashforge consumes them as a normal dependency. Incremental by design — a
+   bulk move would relocate the entanglement rather than resolve it.
+
+### Tracking migration
+
+- VisionStudio: `github.com/plexusone/dashforge` registered (done at
+  initiative creation); after the rename, the old
+  `github.com/plexusone/uiforge` registry entry is repointed/archived, and —
+  once the new uiforge repo exists — re-registered at the new local path for
+  the component platform. New RMIs use `RMI-DASHFORGE-*` (and later
+  `RMI-UIFORGE-*` numbering continues from 054 for the new repo's work).
+- Historical `INIT-UIFORGE-*` / `RMI-UIFORGE-*` records are immutable.
+
+## Risks
+
+- **Redirect reuse trap**: mitigated by the Phase 1 verification gate as a
+  hard RMI dependency (see PRD "Sequencing Constraint").
+- **Uncommitted-work collision**: the rename must not begin until
+  INIT-UIFORGE-002's working-tree changes are committed and released;
+  mixing a mass mechanical rename into substantive diffs makes both
+  unreviewable. Enforced as the initiative's entry gate in PLAN.md.
+- **Go module proxy cache**: `proxy.golang.org` retains
+  `github.com/plexusone/uiforge` versions; old tags remain fetchable under
+  the old path. Acceptable — consumers are in-house and switch in Phase 1;
+  no new tags are ever cut under the old path.
+- **prism-control / PRISM tracking**: INIT-UIFORGE-001 lives in
+  prism-control's records with the old repo name; treated as historical, not
+  rewritten.
+
+## Testing Strategy
+
+- Rename phases: `go build ./... && go test ./...` in dashforge and every
+  consumer after each mechanical step; builder `typecheck`/`lint`/`build`;
+  the Phase 1 grep-sweep gate.
+- Split phase: new uiforge repo carries its own unit tests from the first
+  extracted package; dashforge CI proves consumption of the extracted units.

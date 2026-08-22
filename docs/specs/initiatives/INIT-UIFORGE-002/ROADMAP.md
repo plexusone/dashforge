@@ -33,6 +33,7 @@
 
 - [ ] `RMI-UIFORGE-046` AnalyticsSourcePanel in Question workspace with add/edit/test/remove and catalog refresh
   - Depends on: `RMI-UIFORGE-044`
+- [x] `RMI-UIFORGE-049` Shared AppNav: consistent Dashboards/Questions/Data sources navigation across builder modes
 - [ ] `RMI-UIFORGE-047` Documentation updates: analytics-catalog.md, README start command, examples
   - Depends on: `RMI-UIFORGE-045`
 
@@ -52,3 +53,15 @@ managed by `roadmap import` of this file).
   - Depends on: `RMI-GODOLT-001`
 - [ ] `RMI-VISIONSTUDIO-549` (repo `github.com/ProductBuildersHQ/visionstudio`) Refactor Dolt server wiring to consume godolt lifecycle helpers
   - Depends on: `RMI-GODOLT-001`
+
+## Phase 5 — Navigation Shell
+
+**Theme:** Consolidate builder chrome into a collapsible left rail with contextual section columns; top bars carry document tools only
+
+- [ ] `RMI-UIFORGE-050` AppShell: collapsible left rail with product sections wrapping both builder modes
+- [ ] `RMI-UIFORGE-051` Dashboards section: persistent list column replacing the gallery modal
+  - Depends on: `RMI-UIFORGE-050`
+- [ ] `RMI-UIFORGE-052` Unified Data section: analytics sources and SQL connections as tabs of one view
+  - Depends on: `RMI-UIFORGE-050`
+- [ ] `RMI-UIFORGE-053` Top bar cleanup: document chrome only, Variables moved into dashboard settings
+  - Depends on: `RMI-UIFORGE-050`
