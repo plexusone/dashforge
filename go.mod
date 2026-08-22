@@ -14,7 +14,7 @@ require (
 	github.com/go-chi/chi/v5 v5.3.1
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/google/uuid v1.6.0
-	github.com/grokify/godolt v0.2.0
+	github.com/grokify/godolt v0.3.0
 	github.com/grokify/grokifyql v0.0.0
 	github.com/grokify/grokifyql/authzsystemforge v0.0.0
 	github.com/grokify/systemforge v0.8.0
@@ -283,6 +283,3 @@ replace github.com/grokify/systemforge => ../../grokify/systemforge
 
 
 replace github.com/plexusone/omnillm => ../omnillm
-
-replace github.com/grokify/godolt => ../../grokify/godolt
-
