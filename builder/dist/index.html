@@ -5,10 +5,23 @@
     <link rel="icon" type="image/svg+xml" href="/builder/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashforge Builder</title>
-    <script type="module" crossorigin src="/builder/assets/index-BekP0PFA.js"></script>
-    <link rel="stylesheet" crossorigin href="/builder/assets/index-CBCbtI1p.css">
+    <script type="module" crossorigin src="/builder/assets/index-Q1pOzLna.js"></script>
+    <link rel="stylesheet" crossorigin href="/builder/assets/index-OUaP602m.css">
   </head>
   <body>
+    <script>
+      ;(() => {
+        const theme = localStorage.getItem('uiforge.theme')
+        const resolved =
+          theme === 'light' || theme === 'dark'
+            ? theme
+            : window.matchMedia?.('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+        document.documentElement.dataset.theme = resolved
+        document.documentElement.classList.toggle('dark', resolved === 'dark')
+      })()
+    </script>
     <div id="root"></div>
   </body>
 </html>
