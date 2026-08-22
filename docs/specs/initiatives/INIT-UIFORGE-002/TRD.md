@@ -117,6 +117,36 @@ New `components/data-sources/AnalyticsSourcePanel.tsx` in the Question workspace
 - On any mutation, re-fetch `/api/v1/analytics/catalog` so the schema browser updates.
 - API client additions in `builder/src/api/dashforge.ts`.
 
+## Metadata Database — Dolt Locally, Postgres in Cloud
+
+Decision (2026-08-19): UIForge's local metadata database is **Dolt**, matching
+OmniRoadmap (`:13307`) and VisionStudio (`:13306`); Postgres remains the
+hosted multi-tenant option because RLS (`internal/server/db/rls.go`) is a
+Postgres feature. Ent abstracts the dialect, so both are supported by
+`db.Open`:
+
+- `mysql://` (and go-sql-driver DSNs) → Ent MySQL dialect over the MySQL wire
+  protocol; works against `dolt sql-server`. Currently a "not yet implemented"
+  stub — implemented in this initiative.
+- `postgres://` → existing path, unchanged; required for `--enable-rls`.
+
+Shared Dolt wiring consolidates into `github.com/grokify/godolt` (three
+consumers: OmniRoadmap, VisionStudio, UIForge). godolt v0.2.0 already covers
+remotes/push/pull/fetch/backup; this initiative adds the server-lifecycle half,
+extracted from `omniroadmap/store/doltstore.go` (itself copied from
+VisionStudio):
+
+- `EnsureServer(dataDir, port)` — reachability check, subprocess launch of
+  `dolt sql-server`, readiness wait.
+- `InitDatabase(dsn)` — `CREATE DATABASE IF NOT EXISTS` against a
+  database-less DSN.
+- DSN helpers — `ensureParseTime`, `splitDSN`, default-DSN construction.
+- `Client.Commit` / dirty-status check via `dolt_status` (joins the existing
+  `Client` proc-call methods).
+
+OmniRoadmap and VisionStudio then refactor onto godolt (cross-repo RMIs in
+Phase 4); their behavior must not change.
+
 ## Security Considerations
 
 - Raw DSNs rejected on input (`IsSecretRef` gate) — nothing secret at rest in either store.

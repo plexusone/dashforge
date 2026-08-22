@@ -35,3 +35,20 @@
   - Depends on: `RMI-UIFORGE-044`
 - [ ] `RMI-UIFORGE-047` Documentation updates: analytics-catalog.md, README start command, examples
   - Depends on: `RMI-UIFORGE-045`
+
+## Phase 4 — Dolt Metadata DB and Shared Dolt Library
+
+**Theme:** Dolt as UIForge's local metadata DB; consolidate shared Dolt wiring into grokify/godolt
+
+Note: `RMI-GODOLT-001`, `RMI-OMNIROADMAP-010`, and `RMI-VISIONSTUDIO-549` are
+cross-repo RMIs created directly in VisionStudio (roadmap import assigns a
+single repository, so they are listed here for reference only and are not
+managed by `roadmap import` of this file).
+
+- [ ] `RMI-GODOLT-001` (repo `github.com/grokify/godolt`) Server lifecycle package: EnsureServer, InitDatabase, DSN helpers, Commit/Status client methods
+- [ ] `RMI-UIFORGE-048` Dolt metadata DB: implement mysql:// in internal/server/db via Ent MySQL dialect and godolt
+  - Depends on: `RMI-GODOLT-001`
+- [ ] `RMI-OMNIROADMAP-010` (repo `github.com/grokify/omniroadmap`) Refactor store/doltstore.go to consume godolt server lifecycle helpers
+  - Depends on: `RMI-GODOLT-001`
+- [ ] `RMI-VISIONSTUDIO-549` (repo `github.com/ProductBuildersHQ/visionstudio`) Refactor Dolt server wiring to consume godolt lifecycle helpers
+  - Depends on: `RMI-GODOLT-001`
