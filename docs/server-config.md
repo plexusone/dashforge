@@ -30,14 +30,53 @@ Configuration can be provided via:
 | Flag | Environment Variable | Default | Description |
 |------|---------------------|---------|-------------|
 | `--port` | `PORT` | 8080 | HTTP server port |
-| `--database-url` | `DATABASE_URL` | - | PostgreSQL connection string |
+| `--db-url` | `DATABASE_URL` | - | Metadata DB connection string: `mysql://` (Dolt/MySQL, local default) or `postgres://` (required for RLS) |
 | `--dashboard-dir` | `DASHBOARD_DIR` | - | Directory for static dashboard files |
 | `--jwt-secret` | `JWT_SECRET` | - | Secret for signing JWT tokens |
 | `--base-url` | `BASE_URL` | - | Public URL (for OAuth callbacks) |
 | `--auto-migrate` | `AUTO_MIGRATE` | false | Run database migrations on startup |
 | `--enable-rls` | `ENABLE_RLS` | false | Enable Row Level Security |
 | `--disable-auth` | `DISABLE_AUTH` | false | Disable authentication (dev only) |
+| `--analytics-source-store` | - | `.uiforge/analytics-sources.json` | Analytics source config JSON file when no metadata DB is set |
 | `--config` | - | - | Path to YAML config file |
+
+### Metadata Database — Dolt Locally, Postgres in Cloud
+
+UIForge's metadata database (dashboards, users, saved questions, analytics
+source configs) supports two backends:
+
+- **Dolt (local default)** — `--db-url 'mysql://root@127.0.0.1:13307/uiforge'`
+  connects over the MySQL wire to a `dolt sql-server`, matching the
+  OmniRoadmap (`:13307`) and VisionStudio (`:13306`) local pattern. The target
+  database is created automatically if it does not exist. Vanilla MySQL works
+  through the same URL scheme.
+- **PostgreSQL (hosted/multi-tenant)** — `--db-url 'postgres://...'`; required
+  for `--enable-rls` Row Level Security.
+
+Without `--db-url`, the server runs database-free with JSON file stores for
+saved questions and analytics sources.
+
+### Analytics Sources
+
+Analytics sources (OmniRoadmap and other application catalogs) are not
+configured with flags. They are persisted configuration managed at runtime via
+`/api/v1/analytics/sources` or the builder's **Data sources** panel, storing an
+OmniVault secret reference (`env://VAR_NAME`, `file:///path`) instead of a raw
+DSN. See [Analytics Catalog](analytics-catalog.md) for the management API and
+credential policy. One-time setup for a local OmniRoadmap source:
+
+```bash
+export UIFORGE_OMNIROADMAP_DSN='root:@tcp(127.0.0.1:13307)/omniroadmap'
+./uiforge-server serve --address 127.0.0.1:13319
+
+curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
+  -H 'Content-Type: application/json' \
+  -d '{"id":"omniroadmap","name":"OmniRoadmap","connector":"omniroadmap",
+       "dsnRef":"env://UIFORGE_OMNIROADMAP_DSN","enabled":true}'
+```
+
+The source persists across restarts; keep exporting the referenced environment
+variable before starting the server.
 
 ### Environment Variables
 
