@@ -63,7 +63,7 @@ func Open(url string) (Database, error) {
 	case strings.HasPrefix(url, "postgres://"), strings.HasPrefix(url, "postgresql://"):
 		return openPostgres(url)
 	case strings.HasPrefix(url, "mysql://"):
-		return nil, fmt.Errorf("mysql not yet implemented")
+		return openMySQL(url)
 	case strings.HasPrefix(url, "sqlite://"), strings.HasPrefix(url, "file:"):
 		return nil, fmt.Errorf("sqlite not yet implemented")
 	default:
