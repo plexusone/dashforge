@@ -3,11 +3,20 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"html"
 	"log/slog"
 	"net/http"
+	"os"
+	"path/filepath"
+	"sort"
+	"strings"
 	"time"
 
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humachi"
+	"github.com/go-chi/chi/v5"
 	"github.com/grokify/systemforge/authz"
 	"github.com/grokify/systemforge/authz/spicedb"
 	"github.com/plexusone/uiforge/builder"
@@ -23,6 +32,7 @@ import (
 	_ "github.com/plexusone/uiforge/integration/channel/webhook"
 	_ "github.com/plexusone/uiforge/integration/channel/whatsapp"
 	localAuthz "github.com/plexusone/uiforge/internal/authz"
+	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 	"github.com/plexusone/uiforge/internal/server/api"
 	"github.com/plexusone/uiforge/internal/server/auth"
 	"github.com/plexusone/uiforge/internal/server/db"
@@ -31,6 +41,9 @@ import (
 
 // Config holds server configuration.
 type Config struct {
+	// Host to listen on.
+	Host string
+
 	// Port to listen on.
 	Port int
 
@@ -71,6 +84,19 @@ type Config struct {
 	CoreControlCallbackURL  string
 	CoreControlScopes       []string
 
+	// AnalyticsSourceStorePath is the JSON file for persisted analytics source
+	// configs when the metadata database is not configured. Defaults to
+	// .uiforge/analytics-sources.json.
+	AnalyticsSourceStorePath string
+
+	// QuestionStorePath is the file path for saved question metadata when the
+	// primary UIForge metadata database is not configured.
+	QuestionStorePath string
+
+	// AI provider settings
+	EnableOllama  bool
+	OllamaBaseURL string
+
 	// Authorization settings
 	AuthZMode       string // "simple" or "spicedb"
 	SpiceDBEndpoint string
@@ -83,7 +109,8 @@ type Server struct {
 	config       Config
 	logger       *slog.Logger
 	db           db.Database
-	mux          *http.ServeMux
+	mux          chi.Router
+	api          huma.API
 	jwtService   *auth.JWTService
 	oauthHandler *auth.OAuthHandler
 	authzService *localAuthz.Service
@@ -91,6 +118,13 @@ type Server struct {
 	// Data source management
 	dsManager  *datasource.Manager
 	dsExecutor *datasource.QueryExecutor
+
+	// Analytics catalog providers
+	analyticsService *serveranalytics.Service
+
+	// Saved question metadata handler
+	questionHandler         *api.SavedQuestionHandler
+	grokifyQLPolicyProvider api.GrokifyQLPolicyProvider
 
 	// AI handler
 	aiHandler *api.AIHandler
@@ -151,12 +185,28 @@ func NewServerWithDatabase(cfg Config, logger *slog.Logger, database db.Database
 // newServerInternal contains the shared server initialization logic.
 // Both standalone and multi-app deployments use this function.
 func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*Server, error) {
+	if cfg.DashboardDir != "" {
+		info, err := os.Stat(cfg.DashboardDir)
+		if err != nil {
+			logger.Warn("dashboard directory unavailable; static dashboard route disabled", "dir", cfg.DashboardDir, "error", err)
+			cfg.DashboardDir = ""
+		} else if !info.IsDir() {
+			logger.Warn("dashboard path is not a directory; static dashboard route disabled", "dir", cfg.DashboardDir)
+			cfg.DashboardDir = ""
+		}
+	}
+
 	s := &Server{
 		config: cfg,
 		logger: logger,
-		mux:    http.NewServeMux(),
+		mux:    chi.NewRouter(),
 		db:     database,
 	}
+	humaConfig := huma.DefaultConfig("UIForge API", "0.1.0")
+	humaConfig.OpenAPIPath = "/api/openapi"
+	humaConfig.DocsPath = "/api/docs"
+	humaConfig.SchemasPath = "/api/schemas"
+	s.api = humachi.New(s.mux, humaConfig)
 
 	// Initialize data source manager (always, even without primary DB)
 	s.dsManager = datasource.NewManager(datasource.ManagerConfig{
@@ -171,6 +221,27 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 		MaxRowsDefault: 1000,
 		MaxRowsLimit:   10000,
 	})
+
+	// Analytics sources are persisted configuration (secret references only),
+	// stored in the metadata DB when available and a JSON file otherwise, and
+	// resolved at connect time via OmniVault.
+	resolver, err := serveranalytics.NewDefaultResolver()
+	if err != nil {
+		return nil, fmt.Errorf("creating secret resolver: %w", err)
+	}
+	var sourceStore serveranalytics.SourceStore
+	if database != nil {
+		sourceStore, err = serveranalytics.NewSourceEntStore(database.Client())
+	} else {
+		sourceStore, err = serveranalytics.NewSourceFileStore(cfg.AnalyticsSourceStorePath)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("opening analytics source store: %w", err)
+	}
+	s.analyticsService = serveranalytics.NewManagedService(sourceStore, resolver, logger)
+	if err := s.analyticsService.LoadAll(context.Background()); err != nil {
+		return nil, fmt.Errorf("loading analytics sources: %w", err)
+	}
 
 	// Initialize JWT service if secret provided
 	if cfg.JWTSecret != "" {
@@ -237,14 +308,27 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 		s.authzService = localAuthz.NewService(s.db.Client(), authzOpts...)
 	}
 
+	s.grokifyQLPolicyProvider = api.SystemForgeGrokifyQLPolicyProvider{
+		Authorizer: s.authzService,
+		Analytics:  s.analyticsService,
+	}
+
+	questionHandler, err := api.NewSavedQuestionHandler(cfg.QuestionStorePath, logger, s.grokifyQLPolicyProvider)
+	if err != nil {
+		return nil, fmt.Errorf("opening saved question store: %w", err)
+	}
+	s.questionHandler = questionHandler
+
 	// Initialize AI handler (reads API keys from environment)
 	aiHandler, err := api.NewAIHandler(api.AIConfig{
 		EnableFallback: true,
+		EnableOllama:   cfg.EnableOllama,
+		OllamaBaseURL:  cfg.OllamaBaseURL,
 		Timeout:        60 * time.Second,
 	}, logger)
 	if err != nil {
 		logger.Warn("AI handler initialization failed", "error", err)
-	} else {
+	} else if aiHandler.Configured() {
 		s.aiHandler = aiHandler
 	}
 
@@ -256,61 +340,142 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 
 func (s *Server) setupRoutes() {
 	// Health check
-	s.mux.HandleFunc("GET /health", s.handleHealth)
+	s.mux.MethodFunc(http.MethodGet, "/health", s.handleHealth)
 
 	// Embedded viewer
-	s.mux.Handle("GET /viewer/", http.StripPrefix("/viewer/", http.FileServer(http.FS(viewer.FS()))))
+	s.mux.Method(http.MethodGet, "/viewer/*", http.StripPrefix("/viewer/", http.FileServer(http.FS(viewer.FS()))))
 
 	// Embedded builder (dashboard editor)
-	s.mux.Handle("GET /builder/", http.StripPrefix("/builder/", http.FileServer(http.FS(builder.FS()))))
+	s.mux.Method(http.MethodGet, "/builder/*", http.StripPrefix("/builder/", http.FileServer(http.FS(builder.FS()))))
 
 	// OAuth/Auth routes (if configured)
 	if s.oauthHandler != nil {
-		s.mux.Handle("/api/v1/auth/", s.oauthHandler)
+		s.mux.Handle("/api/v1/auth/*", s.oauthHandler)
 	}
 
 	// API routes
 	apiHandler := api.NewHandler(s.db, s.logger)
-	s.mux.Handle("/api/", apiHandler)
+	s.mux.Handle("/api/*", apiHandler)
 
 	// Data source API routes (separate handler for cleaner organization)
 	dsHandler := api.NewDataSourceHandler(s.db, s.dsManager, s.dsExecutor, s.logger)
 	s.mux.Handle("/api/v1/datasources", dsHandler)
-	s.mux.Handle("/api/v1/datasources/", dsHandler)
+	s.mux.Handle("/api/v1/datasources/*", dsHandler)
+
+	// Analytics catalog API routes. This works even when UIForge's own metadata
+	// database is not configured, as long as at least one analytics source is.
+	analyticsHandler := api.NewAnalyticsHandler(s.analyticsService, s.logger, s.grokifyQLPolicyProvider)
+	s.mux.Handle("/api/v1/analytics/*", analyticsHandler)
+
+	// Saved question metadata API. This intentionally works without UIForge's
+	// primary metadata database so local analytics workspaces can persist state.
+	if s.questionHandler != nil {
+		api.RegisterSavedQuestionRoutes(s.api, s.questionHandler)
+	}
 
 	// AI API routes
 	if s.aiHandler != nil {
-		s.mux.Handle("/api/v1/ai/", s.aiHandler)
+		s.mux.Handle("/api/v1/ai/*", s.aiHandler)
 	}
 
 	// Integration API routes
 	integrationHandler := api.NewIntegrationHandler(s.db, s.logger)
 	s.mux.Handle("/api/v1/integrations", integrationHandler)
-	s.mux.Handle("/api/v1/integrations/", integrationHandler)
+	s.mux.Handle("/api/v1/integrations/*", integrationHandler)
 
 	// Alert API routes
 	alertHandler := api.NewAlertHandler(s.db, s.logger)
 	s.mux.Handle("/api/v1/alerts", alertHandler)
-	s.mux.Handle("/api/v1/alerts/", alertHandler)
+	s.mux.Handle("/api/v1/alerts/*", alertHandler)
 
 	// Marketplace API routes
 	marketplaceHandler := api.NewMarketplaceHandler(s.db, s.logger)
-	s.mux.Handle("/api/v1/marketplace/", marketplaceHandler)
+	s.mux.Handle("/api/v1/marketplace/*", marketplaceHandler)
 
 	// Static dashboard files
 	if s.config.DashboardDir != "" {
-		s.mux.Handle("GET /dashboards/", http.StripPrefix("/dashboards/",
-			http.FileServer(http.Dir(s.config.DashboardDir))))
+		s.mux.Method(http.MethodGet, "/dashboards/*", s.dashboardFilesHandler())
 	}
 
 	// Root redirect to viewer
-	s.mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.NotFound(w, r)
+			return
+		}
 		if r.URL.Path == "/" {
 			http.Redirect(w, r, "/viewer/", http.StatusTemporaryRedirect)
 			return
 		}
 		http.NotFound(w, r)
 	})
+}
+
+func (s *Server) dashboardFilesHandler() http.Handler {
+	fileServer := http.StripPrefix("/dashboards/", http.FileServer(http.Dir(s.config.DashboardDir)))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/dashboards/" {
+			s.handleDashboardIndex(w, r)
+			return
+		}
+		fileServer.ServeHTTP(w, r)
+	})
+}
+
+func (s *Server) handleDashboardIndex(w http.ResponseWriter, r *http.Request) {
+	entries, err := os.ReadDir(s.config.DashboardDir)
+	if err != nil {
+		http.Error(w, "dashboard directory unavailable", http.StatusInternalServerError)
+		return
+	}
+
+	type dashboardFile struct {
+		File  string
+		Title string
+	}
+	var dashboards []dashboardFile
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		title := dashboardTitle(filepath.Join(s.config.DashboardDir, entry.Name()))
+		if title == "" {
+			title = strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name()))
+		}
+		dashboards = append(dashboards, dashboardFile{File: entry.Name(), Title: title})
+	}
+	sort.Slice(dashboards, func(i, j int) bool {
+		return strings.ToLower(dashboards[i].Title) < strings.ToLower(dashboards[j].Title)
+	})
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprint(w, "<!doctype html><html><head><meta name=\"viewport\" content=\"width=device-width\"><title>UIForge Dashboards</title>")
+	fmt.Fprint(w, "<style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;margin:32px;line-height:1.4;color:#172033;background:#f7f8fb}main{max-width:840px}h1{font-size:28px;margin:0 0 20px}ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}a{display:block;padding:14px 16px;border:1px solid #d8deea;border-radius:8px;background:#fff;color:#123260;text-decoration:none}a:hover{border-color:#7a9bd8}.file{display:block;color:#667085;font-size:13px;margin-top:4px}</style></head><body><main><h1>UIForge Dashboards</h1>")
+	if len(dashboards) == 0 {
+		fmt.Fprint(w, "<p>No dashboard JSON files found.</p>")
+	} else {
+		fmt.Fprint(w, "<ul>")
+		for _, dashboard := range dashboards {
+			viewerURL := "/viewer/?dashboard=/dashboards/" + dashboard.File
+			fmt.Fprintf(w, "<li><a href=%q>%s<span class=\"file\">%s</span></a></li>", viewerURL, html.EscapeString(dashboard.Title), html.EscapeString(dashboard.File))
+		}
+		fmt.Fprint(w, "</ul>")
+	}
+	fmt.Fprint(w, "</main></body></html>")
+}
+
+func dashboardTitle(path string) string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	var metadata struct {
+		Title string `json:"title"`
+	}
+	if err := json.Unmarshal(data, &metadata); err != nil {
+		return ""
+	}
+	return metadata.Title
 }
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
@@ -338,7 +503,11 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 
 // ListenAndServe starts the HTTP server.
 func (s *Server) ListenAndServe() error {
-	addr := fmt.Sprintf(":%d", s.config.Port)
+	host := s.config.Host
+	if host == "" {
+		host = "0.0.0.0"
+	}
+	addr := fmt.Sprintf("%s:%d", host, s.config.Port)
 
 	server := &http.Server{
 		Addr:              addr,
@@ -356,12 +525,14 @@ func (s *Server) ListenAndServe() error {
 	)
 
 	fmt.Printf("\nDashforge Server starting...\n")
-	fmt.Printf("  Builder:    http://localhost:%d/builder/\n", s.config.Port)
-	fmt.Printf("  Viewer:     http://localhost:%d/viewer/\n", s.config.Port)
-	fmt.Printf("  API:        http://localhost:%d/api/v1/\n", s.config.Port)
-	fmt.Printf("  Health:     http://localhost:%d/health\n", s.config.Port)
+	fmt.Printf("  Builder:    http://%s/builder/\n", addr)
+	fmt.Printf("  Viewer:     http://%s/viewer/\n", addr)
+	fmt.Printf("  API:        http://%s/api/v1/\n", addr)
+	fmt.Printf("  OpenAPI:    http://%s/api/openapi.json\n", addr)
+	fmt.Printf("  API Docs:   http://%s/api/docs\n", addr)
+	fmt.Printf("  Health:     http://%s/health\n", addr)
 	if s.config.DashboardDir != "" {
-		fmt.Printf("  Dashboards: http://localhost:%d/dashboards/\n", s.config.Port)
+		fmt.Printf("  Dashboards: http://%s/dashboards/\n", addr)
 	}
 	if s.db != nil {
 		fmt.Printf("  Database:   %s (connected)\n", s.db.Type())
@@ -371,10 +542,10 @@ func (s *Server) ListenAndServe() error {
 			s.config.GitHubClientID != "", s.config.GoogleClientID != "",
 			s.config.CoreControlClientID != "")
 	}
-	if s.aiHandler != nil {
-		fmt.Printf("  AI:         Enabled (set ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.)\n")
+	if s.aiHandler != nil && s.aiHandler.Configured() {
+		fmt.Printf("  AI:         Enabled\n")
 	} else {
-		fmt.Printf("  AI:         Disabled (no API keys configured)\n")
+		fmt.Printf("  AI:         Disabled (no provider configured)\n")
 	}
 	fmt.Println("\nPress Ctrl+C to stop")
 
@@ -391,6 +562,12 @@ func (s *Server) Shutdown(ctx context.Context) error {
 	}
 
 	// Close primary database
+	if s.analyticsService != nil {
+		if err := s.analyticsService.Close(); err != nil {
+			s.logger.Error("error closing analytics service", "error", err)
+		}
+	}
+
 	if s.db != nil {
 		if err := s.db.Close(); err != nil {
 			s.logger.Error("error closing database", "error", err)
