@@ -50,7 +50,13 @@ export function DataSourcePanel({ isOpen, onClose }: DataSourcePanelProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <Database className="w-5 h-5 text-primary-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Data Sources</h2>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Dashboard Data Sources</h2>
+              <p className="text-xs text-gray-500">
+                Data bindings scoped to this dashboard. App-wide analytics sources live under
+                &ldquo;Data sources&rdquo; in the left rail.
+              </p>
+            </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5 text-gray-500" />

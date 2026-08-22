@@ -1,1 +1,1 @@
-export { DashboardGallery } from './DashboardGallery'
+export { DashboardBrowsePage } from './DashboardBrowsePage'
