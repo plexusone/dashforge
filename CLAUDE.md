@@ -18,6 +18,40 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 - **CLI:** Cobra (`github.com/spf13/cobra`)
 - **Frontend:** React + TypeScript (in `ts/` and `builder/`)
 - **JSON Schema:** generated from Go types via `invopop/jsonschema`, linted with `schemago`
+- **Query safety:** GrokifyQL for saved Questions and analytics queries
+- **Authorization:** SystemForge `authz.Authorizer`, with SpiceDB mode for fine-grained permissions
+
+## Analytics Notes
+
+- Saved Questions are read-only GrokifyQL artifacts persisted by the UIForge
+  backend. Dashboard widgets reference Questions and choose their own
+  visualization.
+- The Question builder intentionally separates SQL display and editing:
+  existing saved Questions open in formatted, syntax-highlighted read mode;
+  new Questions and query mutations switch to edit mode. Result tables should
+  scroll horizontally inside the middle column for wide result sets.
+- The analytics catalog is the source of truth for queryable sources, datasets,
+  and fields. Use `dashboardir.AnalyticsCatalog` and
+  `internal/server/analytics` instead of hard-coding OmniRoadmap-specific
+  assumptions into UI code.
+- Persist analytics source connection metadata in UIForge's metadata DB, but
+  store only secret references (`env://...`, `keyring://...`, `aws-sm://...`,
+  etc.). Resolve them at runtime with OmniVault; use VaultGuard when posture and
+  provider-selection policy are needed. Never return resolved DSNs/tokens to the
+  browser.
+- If a self-contained encrypted-in-DB fallback is needed, use OmniVault's SQL
+  store provider (`sql://...`) with a UIForge-owned table and an encryption key
+  sourced outside that database. Do not create a parallel UIForge-only secret
+  interface.
+- Agent marketplace concepts live in `github.com/plexusone/omniagent`, not in
+  UIForge. UIForge should consume OmniAgent marketplace providers and publish
+  app-owned capability names such as `uiforge.query.run`,
+  `uiforge.question.write`, and `uiforge.field_values.read`.
+- GrokifyQL policy is enforced both when saving Questions and when executing
+  ad-hoc `/api/v1/analytics/query` requests.
+- In SpiceDB mode, UIForge uses SystemForge as the bridge and maps catalog
+  datasets/fields to `analytics_dataset` and `analytics_field` resources.
+  Keep resource ID generation stable when changing query names.
 
 ## Known Gotchas
 

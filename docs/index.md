@@ -5,6 +5,8 @@ A JSON-first dashboard framework that starts simple with static hosting and grow
 ## Why UIForge?
 
 - **Visual Dashboard Builder** - Drag-and-drop editor optimized for both humans and LLM agents
+- **Saved Questions** - Metabase-style GrokifyQL questions that can be run,
+  formatted, exported, and reused across dashboards
 - **JSON IR First** - Dashboards are defined in a non-polymorphic, AI-friendly JSON format that's easy to generate, validate, and version control
 - **Cube.js Semantic Layer** - Business-friendly queries with pre-built relationships and AI context
 - **Static to Dynamic** - Start with static file hosting (GitHub Pages), graduate to a full PostgreSQL-backed server when you need it
@@ -23,6 +25,7 @@ Visual drag-and-drop dashboard creation:
 - Real-time chart preview with ECharts
 - Cube.js query builder for semantic queries
 - AI-powered widget generation from natural language
+- Question builder with formatted SQL display, edit mode, results preview, CSV/XLSX export, and field value browsing
 
 ```bash
 cd builder && npm install && npm run build && cd ..
@@ -54,7 +57,8 @@ Full-featured analytics platform with:
 - User authentication (OAuth)
 - Multi-tenant isolation
 - Dashboard CRUD API
-- Saved queries
+- Saved Questions
+- Optional OmniAgent marketplace integration for reusable analytics agents
 
 ```bash
 ./uiforge-server serve --database-url postgres://... --auto-migrate
@@ -66,6 +70,7 @@ Full-featured analytics platform with:
 - [Dashboard Builder](builder.md) - Visual editor guide
 - [Cube.js Integration](cube-integration.md) - Semantic data layer
 - [AI Features](ai-features.md) - LLM-powered generation
+- [Agent Integration](agent-integration.md) - OmniAgent marketplace boundary and UIForge capabilities
 - [Dashboard IR](dashboard-ir.md) - JSON schema reference
 - [Server Configuration](server-config.md) - Running the server
 - [API Reference](api-reference.md) - REST API documentation
@@ -80,7 +85,7 @@ Full-featured analytics platform with:
 │  ────────────            │  ───────────     │  ───────────       │
 │  /builder/               │  viewer/         │  uiforge-server    │
 │  React + TypeScript      │  index.html      │  PostgreSQL + Ent  │
-│  Cube.js queries         │  JSON files      │  OAuth             │
+│  Questions + dashboards  │  JSON files      │  OAuth             │
 │  AI generation           │  GitHub Pages    │  Multi-tenant RLS  │
 ├──────────────────────────────────────────────────────────────────┤
 │                    Dashboard IR (JSON)                           │
