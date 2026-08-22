@@ -22,6 +22,13 @@ type Widget struct {
 	// DataSourceID references the data source for this widget.
 	DataSourceID string `json:"dataSourceId,omitempty"`
 
+	// QuestionID references a saved analytical question. When set, the widget
+	// renders the question result using Visualization or the question default.
+	QuestionID string `json:"questionId,omitempty"`
+
+	// Visualization is the dashboard-local render override for a saved question.
+	Visualization map[string]any `json:"visualization,omitempty"`
+
 	// Transform applies widget-specific data transformations.
 	// Applied after the data source's transforms.
 	Transform []Transform `json:"transform,omitempty"`
