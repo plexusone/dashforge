@@ -41,6 +41,10 @@ secrets.json
 uploads/
 tmp/
 *.log
+IDEATION_CHAT*.md
+
+# Local runtime state (file-backed question and analytics-source stores)
+.uiforge/
 
 # Build artifacts
 # Note: builder/dist/ is committed for go:embed (not ignored)
