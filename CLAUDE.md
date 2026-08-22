@@ -19,6 +19,29 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 - **Frontend:** React + TypeScript (in `ts/` and `builder/`)
 - **JSON Schema:** generated from Go types via `invopop/jsonschema`, linted with `schemago`
 
+## Known Gotchas
+
+- **`cube/` has no lint/typecheck/format tooling, by design.** It's a thin
+  Cube.js semantic-layer service directory (`@cubejs-backend/*` deps only,
+  `build` script is a no-op echo) — it was never meant to be a
+  typechecked/linted TS app like `builder/` or `renderer/`. `atrelease
+  release`'s validation auto-detects it as a TS project anyway (it has
+  `.ts` files) and fails on missing eslint config / no `tsc`. This is a
+  false positive, not real debt — don't add tooling to `cube/` to silence
+  it; run `atrelease release <version> --skip-checks` instead (after
+  manually verifying `go build`/`go test`/`golangci-lint`/`builder/` and
+  `renderer/`'s own lint+format are actually clean).
+- **CI can't run a newer Go patch than what it cached.** The shared
+  `plexusone/.github` reusable `go-ci.yaml` (`actions/setup-go@v7`)
+  resolves `go-version: "1.26.x"` to whatever patch it last cached and
+  pins `GOTOOLCHAIN=local` — it does not auto-upgrade just because
+  `go.mod`'s `go` directive asks for a newer patch. Bumping `go.mod` past
+  CI's cached version breaks the build with `go: go.mod requires go >=
+  X (running go Y; GOTOOLCHAIN=local)`. Check CI's actual resolved
+  version before bumping (or fix the shared workflow to
+  `check-latest: true`) — don't just bump-and-push. See the same note in
+  the `plexusone` org CLAUDE.md.
+
 ## PRISM Control
 
 This repo's roadmap items are tracked in [prism-control](https://github.com/ProductBuildersHQ/prism-control). The initiative is **INIT-UIFORGE-001** with 37 RMIs across 6 phases.
