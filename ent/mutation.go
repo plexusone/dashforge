@@ -15,6 +15,7 @@ import (
 	"github.com/plexusone/uiforge/ent/alert"
 	"github.com/plexusone/uiforge/ent/alertchannel"
 	"github.com/plexusone/uiforge/ent/alertevent"
+	"github.com/plexusone/uiforge/ent/analyticssource"
 	"github.com/plexusone/uiforge/ent/dashboard"
 	"github.com/plexusone/uiforge/ent/dashboardtemplate"
 	"github.com/plexusone/uiforge/ent/dashboardversion"
@@ -50,6 +51,7 @@ const (
 	TypeAlert               = "Alert"
 	TypeAlertChannel        = "AlertChannel"
 	TypeAlertEvent          = "AlertEvent"
+	TypeAnalyticsSource     = "AnalyticsSource"
 	TypeDashboard           = "Dashboard"
 	TypeDashboardTemplate   = "DashboardTemplate"
 	TypeDashboardVersion    = "DashboardVersion"
@@ -2930,6 +2932,656 @@ func (m *AlertEventMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown AlertEvent edge %s", name)
+}
+
+// AnalyticsSourceMutation represents an operation that mutates the AnalyticsSource nodes in the graph.
+type AnalyticsSourceMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	created_at    *time.Time
+	updated_at    *time.Time
+	slug          *string
+	name          *string
+	connector     *string
+	dsn_ref       *string
+	enabled       *bool
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*AnalyticsSource, error)
+	predicates    []predicate.AnalyticsSource
+}
+
+var _ ent.Mutation = (*AnalyticsSourceMutation)(nil)
+
+// analyticssourceOption allows management of the mutation configuration using functional options.
+type analyticssourceOption func(*AnalyticsSourceMutation)
+
+// newAnalyticsSourceMutation creates new mutation for the AnalyticsSource entity.
+func newAnalyticsSourceMutation(c config, op Op, opts ...analyticssourceOption) *AnalyticsSourceMutation {
+	m := &AnalyticsSourceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAnalyticsSource,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAnalyticsSourceID sets the ID field of the mutation.
+func withAnalyticsSourceID(id int) analyticssourceOption {
+	return func(m *AnalyticsSourceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AnalyticsSource
+		)
+		m.oldValue = func(ctx context.Context) (*AnalyticsSource, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AnalyticsSource.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAnalyticsSource sets the old AnalyticsSource of the mutation.
+func withAnalyticsSource(node *AnalyticsSource) analyticssourceOption {
+	return func(m *AnalyticsSourceMutation) {
+		m.oldValue = func(context.Context) (*AnalyticsSource, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AnalyticsSourceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AnalyticsSourceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AnalyticsSourceMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AnalyticsSourceMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AnalyticsSource.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AnalyticsSourceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AnalyticsSourceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AnalyticsSourceMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AnalyticsSourceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AnalyticsSourceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AnalyticsSourceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetSlug sets the "slug" field.
+func (m *AnalyticsSourceMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *AnalyticsSourceMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *AnalyticsSourceMutation) ResetSlug() {
+	m.slug = nil
+}
+
+// SetName sets the "name" field.
+func (m *AnalyticsSourceMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *AnalyticsSourceMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *AnalyticsSourceMutation) ResetName() {
+	m.name = nil
+}
+
+// SetConnector sets the "connector" field.
+func (m *AnalyticsSourceMutation) SetConnector(s string) {
+	m.connector = &s
+}
+
+// Connector returns the value of the "connector" field in the mutation.
+func (m *AnalyticsSourceMutation) Connector() (r string, exists bool) {
+	v := m.connector
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldConnector returns the old "connector" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldConnector(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldConnector is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldConnector requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldConnector: %w", err)
+	}
+	return oldValue.Connector, nil
+}
+
+// ResetConnector resets all changes to the "connector" field.
+func (m *AnalyticsSourceMutation) ResetConnector() {
+	m.connector = nil
+}
+
+// SetDsnRef sets the "dsn_ref" field.
+func (m *AnalyticsSourceMutation) SetDsnRef(s string) {
+	m.dsn_ref = &s
+}
+
+// DsnRef returns the value of the "dsn_ref" field in the mutation.
+func (m *AnalyticsSourceMutation) DsnRef() (r string, exists bool) {
+	v := m.dsn_ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDsnRef returns the old "dsn_ref" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldDsnRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDsnRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDsnRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDsnRef: %w", err)
+	}
+	return oldValue.DsnRef, nil
+}
+
+// ResetDsnRef resets all changes to the "dsn_ref" field.
+func (m *AnalyticsSourceMutation) ResetDsnRef() {
+	m.dsn_ref = nil
+}
+
+// SetEnabled sets the "enabled" field.
+func (m *AnalyticsSourceMutation) SetEnabled(b bool) {
+	m.enabled = &b
+}
+
+// Enabled returns the value of the "enabled" field in the mutation.
+func (m *AnalyticsSourceMutation) Enabled() (r bool, exists bool) {
+	v := m.enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEnabled returns the old "enabled" field's value of the AnalyticsSource entity.
+// If the AnalyticsSource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AnalyticsSourceMutation) OldEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEnabled: %w", err)
+	}
+	return oldValue.Enabled, nil
+}
+
+// ResetEnabled resets all changes to the "enabled" field.
+func (m *AnalyticsSourceMutation) ResetEnabled() {
+	m.enabled = nil
+}
+
+// Where appends a list predicates to the AnalyticsSourceMutation builder.
+func (m *AnalyticsSourceMutation) Where(ps ...predicate.AnalyticsSource) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AnalyticsSourceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AnalyticsSourceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AnalyticsSource, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AnalyticsSourceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AnalyticsSourceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AnalyticsSource).
+func (m *AnalyticsSourceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AnalyticsSourceMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, analyticssource.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, analyticssource.FieldUpdatedAt)
+	}
+	if m.slug != nil {
+		fields = append(fields, analyticssource.FieldSlug)
+	}
+	if m.name != nil {
+		fields = append(fields, analyticssource.FieldName)
+	}
+	if m.connector != nil {
+		fields = append(fields, analyticssource.FieldConnector)
+	}
+	if m.dsn_ref != nil {
+		fields = append(fields, analyticssource.FieldDsnRef)
+	}
+	if m.enabled != nil {
+		fields = append(fields, analyticssource.FieldEnabled)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AnalyticsSourceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case analyticssource.FieldCreatedAt:
+		return m.CreatedAt()
+	case analyticssource.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case analyticssource.FieldSlug:
+		return m.Slug()
+	case analyticssource.FieldName:
+		return m.Name()
+	case analyticssource.FieldConnector:
+		return m.Connector()
+	case analyticssource.FieldDsnRef:
+		return m.DsnRef()
+	case analyticssource.FieldEnabled:
+		return m.Enabled()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AnalyticsSourceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case analyticssource.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case analyticssource.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case analyticssource.FieldSlug:
+		return m.OldSlug(ctx)
+	case analyticssource.FieldName:
+		return m.OldName(ctx)
+	case analyticssource.FieldConnector:
+		return m.OldConnector(ctx)
+	case analyticssource.FieldDsnRef:
+		return m.OldDsnRef(ctx)
+	case analyticssource.FieldEnabled:
+		return m.OldEnabled(ctx)
+	}
+	return nil, fmt.Errorf("unknown AnalyticsSource field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AnalyticsSourceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case analyticssource.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case analyticssource.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case analyticssource.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
+	case analyticssource.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case analyticssource.FieldConnector:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetConnector(v)
+		return nil
+	case analyticssource.FieldDsnRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDsnRef(v)
+		return nil
+	case analyticssource.FieldEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEnabled(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AnalyticsSource field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AnalyticsSourceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AnalyticsSourceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AnalyticsSourceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AnalyticsSource numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AnalyticsSourceMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AnalyticsSourceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AnalyticsSourceMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown AnalyticsSource nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AnalyticsSourceMutation) ResetField(name string) error {
+	switch name {
+	case analyticssource.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case analyticssource.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case analyticssource.FieldSlug:
+		m.ResetSlug()
+		return nil
+	case analyticssource.FieldName:
+		m.ResetName()
+		return nil
+	case analyticssource.FieldConnector:
+		m.ResetConnector()
+		return nil
+	case analyticssource.FieldDsnRef:
+		m.ResetDsnRef()
+		return nil
+	case analyticssource.FieldEnabled:
+		m.ResetEnabled()
+		return nil
+	}
+	return fmt.Errorf("unknown AnalyticsSource field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AnalyticsSourceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AnalyticsSourceMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AnalyticsSourceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AnalyticsSourceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AnalyticsSourceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AnalyticsSourceMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AnalyticsSourceMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AnalyticsSource unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AnalyticsSourceMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AnalyticsSource edge %s", name)
 }
 
 // DashboardMutation represents an operation that mutates the Dashboard nodes in the graph.
@@ -7136,6 +7788,14 @@ type HumanMutation struct {
 	is_platform_admin *bool
 	last_login_at     *time.Time
 	email_verified_at *time.Time
+	slug              *string
+	headline          *string
+	bio               *string
+	linkedin_url      *string
+	github_url        *string
+	twitter_url       *string
+	website_url       *string
+	public_profile    *bool
 	clearedFields     map[string]struct{}
 	principal         *uuid.UUID
 	clearedprincipal  bool
@@ -7673,6 +8333,385 @@ func (m *HumanMutation) ResetEmailVerifiedAt() {
 	delete(m.clearedFields, human.FieldEmailVerifiedAt)
 }
 
+// SetSlug sets the "slug" field.
+func (m *HumanMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *HumanMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldSlug(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *HumanMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[human.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *HumanMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[human.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *HumanMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, human.FieldSlug)
+}
+
+// SetHeadline sets the "headline" field.
+func (m *HumanMutation) SetHeadline(s string) {
+	m.headline = &s
+}
+
+// Headline returns the value of the "headline" field in the mutation.
+func (m *HumanMutation) Headline() (r string, exists bool) {
+	v := m.headline
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHeadline returns the old "headline" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldHeadline(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHeadline is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHeadline requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHeadline: %w", err)
+	}
+	return oldValue.Headline, nil
+}
+
+// ClearHeadline clears the value of the "headline" field.
+func (m *HumanMutation) ClearHeadline() {
+	m.headline = nil
+	m.clearedFields[human.FieldHeadline] = struct{}{}
+}
+
+// HeadlineCleared returns if the "headline" field was cleared in this mutation.
+func (m *HumanMutation) HeadlineCleared() bool {
+	_, ok := m.clearedFields[human.FieldHeadline]
+	return ok
+}
+
+// ResetHeadline resets all changes to the "headline" field.
+func (m *HumanMutation) ResetHeadline() {
+	m.headline = nil
+	delete(m.clearedFields, human.FieldHeadline)
+}
+
+// SetBio sets the "bio" field.
+func (m *HumanMutation) SetBio(s string) {
+	m.bio = &s
+}
+
+// Bio returns the value of the "bio" field in the mutation.
+func (m *HumanMutation) Bio() (r string, exists bool) {
+	v := m.bio
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBio returns the old "bio" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldBio(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBio is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBio requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBio: %w", err)
+	}
+	return oldValue.Bio, nil
+}
+
+// ClearBio clears the value of the "bio" field.
+func (m *HumanMutation) ClearBio() {
+	m.bio = nil
+	m.clearedFields[human.FieldBio] = struct{}{}
+}
+
+// BioCleared returns if the "bio" field was cleared in this mutation.
+func (m *HumanMutation) BioCleared() bool {
+	_, ok := m.clearedFields[human.FieldBio]
+	return ok
+}
+
+// ResetBio resets all changes to the "bio" field.
+func (m *HumanMutation) ResetBio() {
+	m.bio = nil
+	delete(m.clearedFields, human.FieldBio)
+}
+
+// SetLinkedinURL sets the "linkedin_url" field.
+func (m *HumanMutation) SetLinkedinURL(s string) {
+	m.linkedin_url = &s
+}
+
+// LinkedinURL returns the value of the "linkedin_url" field in the mutation.
+func (m *HumanMutation) LinkedinURL() (r string, exists bool) {
+	v := m.linkedin_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLinkedinURL returns the old "linkedin_url" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldLinkedinURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLinkedinURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLinkedinURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLinkedinURL: %w", err)
+	}
+	return oldValue.LinkedinURL, nil
+}
+
+// ClearLinkedinURL clears the value of the "linkedin_url" field.
+func (m *HumanMutation) ClearLinkedinURL() {
+	m.linkedin_url = nil
+	m.clearedFields[human.FieldLinkedinURL] = struct{}{}
+}
+
+// LinkedinURLCleared returns if the "linkedin_url" field was cleared in this mutation.
+func (m *HumanMutation) LinkedinURLCleared() bool {
+	_, ok := m.clearedFields[human.FieldLinkedinURL]
+	return ok
+}
+
+// ResetLinkedinURL resets all changes to the "linkedin_url" field.
+func (m *HumanMutation) ResetLinkedinURL() {
+	m.linkedin_url = nil
+	delete(m.clearedFields, human.FieldLinkedinURL)
+}
+
+// SetGithubURL sets the "github_url" field.
+func (m *HumanMutation) SetGithubURL(s string) {
+	m.github_url = &s
+}
+
+// GithubURL returns the value of the "github_url" field in the mutation.
+func (m *HumanMutation) GithubURL() (r string, exists bool) {
+	v := m.github_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGithubURL returns the old "github_url" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldGithubURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGithubURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGithubURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGithubURL: %w", err)
+	}
+	return oldValue.GithubURL, nil
+}
+
+// ClearGithubURL clears the value of the "github_url" field.
+func (m *HumanMutation) ClearGithubURL() {
+	m.github_url = nil
+	m.clearedFields[human.FieldGithubURL] = struct{}{}
+}
+
+// GithubURLCleared returns if the "github_url" field was cleared in this mutation.
+func (m *HumanMutation) GithubURLCleared() bool {
+	_, ok := m.clearedFields[human.FieldGithubURL]
+	return ok
+}
+
+// ResetGithubURL resets all changes to the "github_url" field.
+func (m *HumanMutation) ResetGithubURL() {
+	m.github_url = nil
+	delete(m.clearedFields, human.FieldGithubURL)
+}
+
+// SetTwitterURL sets the "twitter_url" field.
+func (m *HumanMutation) SetTwitterURL(s string) {
+	m.twitter_url = &s
+}
+
+// TwitterURL returns the value of the "twitter_url" field in the mutation.
+func (m *HumanMutation) TwitterURL() (r string, exists bool) {
+	v := m.twitter_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTwitterURL returns the old "twitter_url" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldTwitterURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTwitterURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTwitterURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTwitterURL: %w", err)
+	}
+	return oldValue.TwitterURL, nil
+}
+
+// ClearTwitterURL clears the value of the "twitter_url" field.
+func (m *HumanMutation) ClearTwitterURL() {
+	m.twitter_url = nil
+	m.clearedFields[human.FieldTwitterURL] = struct{}{}
+}
+
+// TwitterURLCleared returns if the "twitter_url" field was cleared in this mutation.
+func (m *HumanMutation) TwitterURLCleared() bool {
+	_, ok := m.clearedFields[human.FieldTwitterURL]
+	return ok
+}
+
+// ResetTwitterURL resets all changes to the "twitter_url" field.
+func (m *HumanMutation) ResetTwitterURL() {
+	m.twitter_url = nil
+	delete(m.clearedFields, human.FieldTwitterURL)
+}
+
+// SetWebsiteURL sets the "website_url" field.
+func (m *HumanMutation) SetWebsiteURL(s string) {
+	m.website_url = &s
+}
+
+// WebsiteURL returns the value of the "website_url" field in the mutation.
+func (m *HumanMutation) WebsiteURL() (r string, exists bool) {
+	v := m.website_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWebsiteURL returns the old "website_url" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldWebsiteURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWebsiteURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWebsiteURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWebsiteURL: %w", err)
+	}
+	return oldValue.WebsiteURL, nil
+}
+
+// ClearWebsiteURL clears the value of the "website_url" field.
+func (m *HumanMutation) ClearWebsiteURL() {
+	m.website_url = nil
+	m.clearedFields[human.FieldWebsiteURL] = struct{}{}
+}
+
+// WebsiteURLCleared returns if the "website_url" field was cleared in this mutation.
+func (m *HumanMutation) WebsiteURLCleared() bool {
+	_, ok := m.clearedFields[human.FieldWebsiteURL]
+	return ok
+}
+
+// ResetWebsiteURL resets all changes to the "website_url" field.
+func (m *HumanMutation) ResetWebsiteURL() {
+	m.website_url = nil
+	delete(m.clearedFields, human.FieldWebsiteURL)
+}
+
+// SetPublicProfile sets the "public_profile" field.
+func (m *HumanMutation) SetPublicProfile(b bool) {
+	m.public_profile = &b
+}
+
+// PublicProfile returns the value of the "public_profile" field in the mutation.
+func (m *HumanMutation) PublicProfile() (r bool, exists bool) {
+	v := m.public_profile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicProfile returns the old "public_profile" field's value of the Human entity.
+// If the Human object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HumanMutation) OldPublicProfile(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicProfile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicProfile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicProfile: %w", err)
+	}
+	return oldValue.PublicProfile, nil
+}
+
+// ResetPublicProfile resets all changes to the "public_profile" field.
+func (m *HumanMutation) ResetPublicProfile() {
+	m.public_profile = nil
+}
+
 // ClearPrincipal clears the "principal" edge to the Principal entity.
 func (m *HumanMutation) ClearPrincipal() {
 	m.clearedprincipal = true
@@ -7734,7 +8773,7 @@ func (m *HumanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HumanMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, human.FieldCreatedAt)
 	}
@@ -7765,6 +8804,30 @@ func (m *HumanMutation) Fields() []string {
 	if m.email_verified_at != nil {
 		fields = append(fields, human.FieldEmailVerifiedAt)
 	}
+	if m.slug != nil {
+		fields = append(fields, human.FieldSlug)
+	}
+	if m.headline != nil {
+		fields = append(fields, human.FieldHeadline)
+	}
+	if m.bio != nil {
+		fields = append(fields, human.FieldBio)
+	}
+	if m.linkedin_url != nil {
+		fields = append(fields, human.FieldLinkedinURL)
+	}
+	if m.github_url != nil {
+		fields = append(fields, human.FieldGithubURL)
+	}
+	if m.twitter_url != nil {
+		fields = append(fields, human.FieldTwitterURL)
+	}
+	if m.website_url != nil {
+		fields = append(fields, human.FieldWebsiteURL)
+	}
+	if m.public_profile != nil {
+		fields = append(fields, human.FieldPublicProfile)
+	}
 	return fields
 }
 
@@ -7793,6 +8856,22 @@ func (m *HumanMutation) Field(name string) (ent.Value, bool) {
 		return m.LastLoginAt()
 	case human.FieldEmailVerifiedAt:
 		return m.EmailVerifiedAt()
+	case human.FieldSlug:
+		return m.Slug()
+	case human.FieldHeadline:
+		return m.Headline()
+	case human.FieldBio:
+		return m.Bio()
+	case human.FieldLinkedinURL:
+		return m.LinkedinURL()
+	case human.FieldGithubURL:
+		return m.GithubURL()
+	case human.FieldTwitterURL:
+		return m.TwitterURL()
+	case human.FieldWebsiteURL:
+		return m.WebsiteURL()
+	case human.FieldPublicProfile:
+		return m.PublicProfile()
 	}
 	return nil, false
 }
@@ -7822,6 +8901,22 @@ func (m *HumanMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldLastLoginAt(ctx)
 	case human.FieldEmailVerifiedAt:
 		return m.OldEmailVerifiedAt(ctx)
+	case human.FieldSlug:
+		return m.OldSlug(ctx)
+	case human.FieldHeadline:
+		return m.OldHeadline(ctx)
+	case human.FieldBio:
+		return m.OldBio(ctx)
+	case human.FieldLinkedinURL:
+		return m.OldLinkedinURL(ctx)
+	case human.FieldGithubURL:
+		return m.OldGithubURL(ctx)
+	case human.FieldTwitterURL:
+		return m.OldTwitterURL(ctx)
+	case human.FieldWebsiteURL:
+		return m.OldWebsiteURL(ctx)
+	case human.FieldPublicProfile:
+		return m.OldPublicProfile(ctx)
 	}
 	return nil, fmt.Errorf("unknown Human field %s", name)
 }
@@ -7901,6 +8996,62 @@ func (m *HumanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmailVerifiedAt(v)
 		return nil
+	case human.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
+	case human.FieldHeadline:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHeadline(v)
+		return nil
+	case human.FieldBio:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBio(v)
+		return nil
+	case human.FieldLinkedinURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLinkedinURL(v)
+		return nil
+	case human.FieldGithubURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGithubURL(v)
+		return nil
+	case human.FieldTwitterURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTwitterURL(v)
+		return nil
+	case human.FieldWebsiteURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWebsiteURL(v)
+		return nil
+	case human.FieldPublicProfile:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicProfile(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Human field %s", name)
 }
@@ -7946,6 +9097,27 @@ func (m *HumanMutation) ClearedFields() []string {
 	if m.FieldCleared(human.FieldEmailVerifiedAt) {
 		fields = append(fields, human.FieldEmailVerifiedAt)
 	}
+	if m.FieldCleared(human.FieldSlug) {
+		fields = append(fields, human.FieldSlug)
+	}
+	if m.FieldCleared(human.FieldHeadline) {
+		fields = append(fields, human.FieldHeadline)
+	}
+	if m.FieldCleared(human.FieldBio) {
+		fields = append(fields, human.FieldBio)
+	}
+	if m.FieldCleared(human.FieldLinkedinURL) {
+		fields = append(fields, human.FieldLinkedinURL)
+	}
+	if m.FieldCleared(human.FieldGithubURL) {
+		fields = append(fields, human.FieldGithubURL)
+	}
+	if m.FieldCleared(human.FieldTwitterURL) {
+		fields = append(fields, human.FieldTwitterURL)
+	}
+	if m.FieldCleared(human.FieldWebsiteURL) {
+		fields = append(fields, human.FieldWebsiteURL)
+	}
 	return fields
 }
 
@@ -7974,6 +9146,27 @@ func (m *HumanMutation) ClearField(name string) error {
 		return nil
 	case human.FieldEmailVerifiedAt:
 		m.ClearEmailVerifiedAt()
+		return nil
+	case human.FieldSlug:
+		m.ClearSlug()
+		return nil
+	case human.FieldHeadline:
+		m.ClearHeadline()
+		return nil
+	case human.FieldBio:
+		m.ClearBio()
+		return nil
+	case human.FieldLinkedinURL:
+		m.ClearLinkedinURL()
+		return nil
+	case human.FieldGithubURL:
+		m.ClearGithubURL()
+		return nil
+	case human.FieldTwitterURL:
+		m.ClearTwitterURL()
+		return nil
+	case human.FieldWebsiteURL:
+		m.ClearWebsiteURL()
 		return nil
 	}
 	return fmt.Errorf("unknown Human nullable field %s", name)
@@ -8012,6 +9205,30 @@ func (m *HumanMutation) ResetField(name string) error {
 		return nil
 	case human.FieldEmailVerifiedAt:
 		m.ResetEmailVerifiedAt()
+		return nil
+	case human.FieldSlug:
+		m.ResetSlug()
+		return nil
+	case human.FieldHeadline:
+		m.ResetHeadline()
+		return nil
+	case human.FieldBio:
+		m.ResetBio()
+		return nil
+	case human.FieldLinkedinURL:
+		m.ResetLinkedinURL()
+		return nil
+	case human.FieldGithubURL:
+		m.ResetGithubURL()
+		return nil
+	case human.FieldTwitterURL:
+		m.ResetTwitterURL()
+		return nil
+	case human.FieldWebsiteURL:
+		m.ResetWebsiteURL()
+		return nil
+	case human.FieldPublicProfile:
+		m.ResetPublicProfile()
 		return nil
 	}
 	return fmt.Errorf("unknown Human field %s", name)

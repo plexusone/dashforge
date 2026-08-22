@@ -106,6 +106,46 @@ func EmailVerifiedAt(v time.Time) predicate.Human {
 	return predicate.Human(sql.FieldEQ(FieldEmailVerifiedAt, v))
 }
 
+// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
+func Slug(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldSlug, v))
+}
+
+// Headline applies equality check predicate on the "headline" field. It's identical to HeadlineEQ.
+func Headline(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldHeadline, v))
+}
+
+// Bio applies equality check predicate on the "bio" field. It's identical to BioEQ.
+func Bio(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldBio, v))
+}
+
+// LinkedinURL applies equality check predicate on the "linkedin_url" field. It's identical to LinkedinURLEQ.
+func LinkedinURL(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldLinkedinURL, v))
+}
+
+// GithubURL applies equality check predicate on the "github_url" field. It's identical to GithubURLEQ.
+func GithubURL(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldGithubURL, v))
+}
+
+// TwitterURL applies equality check predicate on the "twitter_url" field. It's identical to TwitterURLEQ.
+func TwitterURL(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldTwitterURL, v))
+}
+
+// WebsiteURL applies equality check predicate on the "website_url" field. It's identical to WebsiteURLEQ.
+func WebsiteURL(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldWebsiteURL, v))
+}
+
+// PublicProfile applies equality check predicate on the "public_profile" field. It's identical to PublicProfileEQ.
+func PublicProfile(v bool) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldPublicProfile, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Human {
 	return predicate.Human(sql.FieldEQ(FieldCreatedAt, v))
@@ -604,6 +644,541 @@ func EmailVerifiedAtIsNil() predicate.Human {
 // EmailVerifiedAtNotNil applies the NotNil predicate on the "email_verified_at" field.
 func EmailVerifiedAtNotNil() predicate.Human {
 	return predicate.Human(sql.FieldNotNull(FieldEmailVerifiedAt))
+}
+
+// SlugEQ applies the EQ predicate on the "slug" field.
+func SlugEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldSlug, v))
+}
+
+// SlugNEQ applies the NEQ predicate on the "slug" field.
+func SlugNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldSlug, v))
+}
+
+// SlugIn applies the In predicate on the "slug" field.
+func SlugIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldSlug, vs...))
+}
+
+// SlugNotIn applies the NotIn predicate on the "slug" field.
+func SlugNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldSlug, vs...))
+}
+
+// SlugGT applies the GT predicate on the "slug" field.
+func SlugGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldSlug, v))
+}
+
+// SlugGTE applies the GTE predicate on the "slug" field.
+func SlugGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldSlug, v))
+}
+
+// SlugLT applies the LT predicate on the "slug" field.
+func SlugLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldSlug, v))
+}
+
+// SlugLTE applies the LTE predicate on the "slug" field.
+func SlugLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldSlug, v))
+}
+
+// SlugContains applies the Contains predicate on the "slug" field.
+func SlugContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldSlug, v))
+}
+
+// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
+func SlugHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldSlug, v))
+}
+
+// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
+func SlugHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldSlug, v))
+}
+
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldSlug))
+}
+
+// SlugEqualFold applies the EqualFold predicate on the "slug" field.
+func SlugEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldSlug, v))
+}
+
+// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
+func SlugContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldSlug, v))
+}
+
+// HeadlineEQ applies the EQ predicate on the "headline" field.
+func HeadlineEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldHeadline, v))
+}
+
+// HeadlineNEQ applies the NEQ predicate on the "headline" field.
+func HeadlineNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldHeadline, v))
+}
+
+// HeadlineIn applies the In predicate on the "headline" field.
+func HeadlineIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldHeadline, vs...))
+}
+
+// HeadlineNotIn applies the NotIn predicate on the "headline" field.
+func HeadlineNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldHeadline, vs...))
+}
+
+// HeadlineGT applies the GT predicate on the "headline" field.
+func HeadlineGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldHeadline, v))
+}
+
+// HeadlineGTE applies the GTE predicate on the "headline" field.
+func HeadlineGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldHeadline, v))
+}
+
+// HeadlineLT applies the LT predicate on the "headline" field.
+func HeadlineLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldHeadline, v))
+}
+
+// HeadlineLTE applies the LTE predicate on the "headline" field.
+func HeadlineLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldHeadline, v))
+}
+
+// HeadlineContains applies the Contains predicate on the "headline" field.
+func HeadlineContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldHeadline, v))
+}
+
+// HeadlineHasPrefix applies the HasPrefix predicate on the "headline" field.
+func HeadlineHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldHeadline, v))
+}
+
+// HeadlineHasSuffix applies the HasSuffix predicate on the "headline" field.
+func HeadlineHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldHeadline, v))
+}
+
+// HeadlineIsNil applies the IsNil predicate on the "headline" field.
+func HeadlineIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldHeadline))
+}
+
+// HeadlineNotNil applies the NotNil predicate on the "headline" field.
+func HeadlineNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldHeadline))
+}
+
+// HeadlineEqualFold applies the EqualFold predicate on the "headline" field.
+func HeadlineEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldHeadline, v))
+}
+
+// HeadlineContainsFold applies the ContainsFold predicate on the "headline" field.
+func HeadlineContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldHeadline, v))
+}
+
+// BioEQ applies the EQ predicate on the "bio" field.
+func BioEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldBio, v))
+}
+
+// BioNEQ applies the NEQ predicate on the "bio" field.
+func BioNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldBio, v))
+}
+
+// BioIn applies the In predicate on the "bio" field.
+func BioIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldBio, vs...))
+}
+
+// BioNotIn applies the NotIn predicate on the "bio" field.
+func BioNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldBio, vs...))
+}
+
+// BioGT applies the GT predicate on the "bio" field.
+func BioGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldBio, v))
+}
+
+// BioGTE applies the GTE predicate on the "bio" field.
+func BioGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldBio, v))
+}
+
+// BioLT applies the LT predicate on the "bio" field.
+func BioLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldBio, v))
+}
+
+// BioLTE applies the LTE predicate on the "bio" field.
+func BioLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldBio, v))
+}
+
+// BioContains applies the Contains predicate on the "bio" field.
+func BioContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldBio, v))
+}
+
+// BioHasPrefix applies the HasPrefix predicate on the "bio" field.
+func BioHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldBio, v))
+}
+
+// BioHasSuffix applies the HasSuffix predicate on the "bio" field.
+func BioHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldBio, v))
+}
+
+// BioIsNil applies the IsNil predicate on the "bio" field.
+func BioIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldBio))
+}
+
+// BioNotNil applies the NotNil predicate on the "bio" field.
+func BioNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldBio))
+}
+
+// BioEqualFold applies the EqualFold predicate on the "bio" field.
+func BioEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldBio, v))
+}
+
+// BioContainsFold applies the ContainsFold predicate on the "bio" field.
+func BioContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldBio, v))
+}
+
+// LinkedinURLEQ applies the EQ predicate on the "linkedin_url" field.
+func LinkedinURLEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldLinkedinURL, v))
+}
+
+// LinkedinURLNEQ applies the NEQ predicate on the "linkedin_url" field.
+func LinkedinURLNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldLinkedinURL, v))
+}
+
+// LinkedinURLIn applies the In predicate on the "linkedin_url" field.
+func LinkedinURLIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldLinkedinURL, vs...))
+}
+
+// LinkedinURLNotIn applies the NotIn predicate on the "linkedin_url" field.
+func LinkedinURLNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldLinkedinURL, vs...))
+}
+
+// LinkedinURLGT applies the GT predicate on the "linkedin_url" field.
+func LinkedinURLGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldLinkedinURL, v))
+}
+
+// LinkedinURLGTE applies the GTE predicate on the "linkedin_url" field.
+func LinkedinURLGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldLinkedinURL, v))
+}
+
+// LinkedinURLLT applies the LT predicate on the "linkedin_url" field.
+func LinkedinURLLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldLinkedinURL, v))
+}
+
+// LinkedinURLLTE applies the LTE predicate on the "linkedin_url" field.
+func LinkedinURLLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldLinkedinURL, v))
+}
+
+// LinkedinURLContains applies the Contains predicate on the "linkedin_url" field.
+func LinkedinURLContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldLinkedinURL, v))
+}
+
+// LinkedinURLHasPrefix applies the HasPrefix predicate on the "linkedin_url" field.
+func LinkedinURLHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldLinkedinURL, v))
+}
+
+// LinkedinURLHasSuffix applies the HasSuffix predicate on the "linkedin_url" field.
+func LinkedinURLHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldLinkedinURL, v))
+}
+
+// LinkedinURLIsNil applies the IsNil predicate on the "linkedin_url" field.
+func LinkedinURLIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldLinkedinURL))
+}
+
+// LinkedinURLNotNil applies the NotNil predicate on the "linkedin_url" field.
+func LinkedinURLNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldLinkedinURL))
+}
+
+// LinkedinURLEqualFold applies the EqualFold predicate on the "linkedin_url" field.
+func LinkedinURLEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldLinkedinURL, v))
+}
+
+// LinkedinURLContainsFold applies the ContainsFold predicate on the "linkedin_url" field.
+func LinkedinURLContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldLinkedinURL, v))
+}
+
+// GithubURLEQ applies the EQ predicate on the "github_url" field.
+func GithubURLEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldGithubURL, v))
+}
+
+// GithubURLNEQ applies the NEQ predicate on the "github_url" field.
+func GithubURLNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldGithubURL, v))
+}
+
+// GithubURLIn applies the In predicate on the "github_url" field.
+func GithubURLIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldGithubURL, vs...))
+}
+
+// GithubURLNotIn applies the NotIn predicate on the "github_url" field.
+func GithubURLNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldGithubURL, vs...))
+}
+
+// GithubURLGT applies the GT predicate on the "github_url" field.
+func GithubURLGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldGithubURL, v))
+}
+
+// GithubURLGTE applies the GTE predicate on the "github_url" field.
+func GithubURLGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldGithubURL, v))
+}
+
+// GithubURLLT applies the LT predicate on the "github_url" field.
+func GithubURLLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldGithubURL, v))
+}
+
+// GithubURLLTE applies the LTE predicate on the "github_url" field.
+func GithubURLLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldGithubURL, v))
+}
+
+// GithubURLContains applies the Contains predicate on the "github_url" field.
+func GithubURLContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldGithubURL, v))
+}
+
+// GithubURLHasPrefix applies the HasPrefix predicate on the "github_url" field.
+func GithubURLHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldGithubURL, v))
+}
+
+// GithubURLHasSuffix applies the HasSuffix predicate on the "github_url" field.
+func GithubURLHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldGithubURL, v))
+}
+
+// GithubURLIsNil applies the IsNil predicate on the "github_url" field.
+func GithubURLIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldGithubURL))
+}
+
+// GithubURLNotNil applies the NotNil predicate on the "github_url" field.
+func GithubURLNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldGithubURL))
+}
+
+// GithubURLEqualFold applies the EqualFold predicate on the "github_url" field.
+func GithubURLEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldGithubURL, v))
+}
+
+// GithubURLContainsFold applies the ContainsFold predicate on the "github_url" field.
+func GithubURLContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldGithubURL, v))
+}
+
+// TwitterURLEQ applies the EQ predicate on the "twitter_url" field.
+func TwitterURLEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldTwitterURL, v))
+}
+
+// TwitterURLNEQ applies the NEQ predicate on the "twitter_url" field.
+func TwitterURLNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldTwitterURL, v))
+}
+
+// TwitterURLIn applies the In predicate on the "twitter_url" field.
+func TwitterURLIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldTwitterURL, vs...))
+}
+
+// TwitterURLNotIn applies the NotIn predicate on the "twitter_url" field.
+func TwitterURLNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldTwitterURL, vs...))
+}
+
+// TwitterURLGT applies the GT predicate on the "twitter_url" field.
+func TwitterURLGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldTwitterURL, v))
+}
+
+// TwitterURLGTE applies the GTE predicate on the "twitter_url" field.
+func TwitterURLGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldTwitterURL, v))
+}
+
+// TwitterURLLT applies the LT predicate on the "twitter_url" field.
+func TwitterURLLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldTwitterURL, v))
+}
+
+// TwitterURLLTE applies the LTE predicate on the "twitter_url" field.
+func TwitterURLLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldTwitterURL, v))
+}
+
+// TwitterURLContains applies the Contains predicate on the "twitter_url" field.
+func TwitterURLContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldTwitterURL, v))
+}
+
+// TwitterURLHasPrefix applies the HasPrefix predicate on the "twitter_url" field.
+func TwitterURLHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldTwitterURL, v))
+}
+
+// TwitterURLHasSuffix applies the HasSuffix predicate on the "twitter_url" field.
+func TwitterURLHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldTwitterURL, v))
+}
+
+// TwitterURLIsNil applies the IsNil predicate on the "twitter_url" field.
+func TwitterURLIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldTwitterURL))
+}
+
+// TwitterURLNotNil applies the NotNil predicate on the "twitter_url" field.
+func TwitterURLNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldTwitterURL))
+}
+
+// TwitterURLEqualFold applies the EqualFold predicate on the "twitter_url" field.
+func TwitterURLEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldTwitterURL, v))
+}
+
+// TwitterURLContainsFold applies the ContainsFold predicate on the "twitter_url" field.
+func TwitterURLContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldTwitterURL, v))
+}
+
+// WebsiteURLEQ applies the EQ predicate on the "website_url" field.
+func WebsiteURLEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldWebsiteURL, v))
+}
+
+// WebsiteURLNEQ applies the NEQ predicate on the "website_url" field.
+func WebsiteURLNEQ(v string) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldWebsiteURL, v))
+}
+
+// WebsiteURLIn applies the In predicate on the "website_url" field.
+func WebsiteURLIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldIn(FieldWebsiteURL, vs...))
+}
+
+// WebsiteURLNotIn applies the NotIn predicate on the "website_url" field.
+func WebsiteURLNotIn(vs ...string) predicate.Human {
+	return predicate.Human(sql.FieldNotIn(FieldWebsiteURL, vs...))
+}
+
+// WebsiteURLGT applies the GT predicate on the "website_url" field.
+func WebsiteURLGT(v string) predicate.Human {
+	return predicate.Human(sql.FieldGT(FieldWebsiteURL, v))
+}
+
+// WebsiteURLGTE applies the GTE predicate on the "website_url" field.
+func WebsiteURLGTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldGTE(FieldWebsiteURL, v))
+}
+
+// WebsiteURLLT applies the LT predicate on the "website_url" field.
+func WebsiteURLLT(v string) predicate.Human {
+	return predicate.Human(sql.FieldLT(FieldWebsiteURL, v))
+}
+
+// WebsiteURLLTE applies the LTE predicate on the "website_url" field.
+func WebsiteURLLTE(v string) predicate.Human {
+	return predicate.Human(sql.FieldLTE(FieldWebsiteURL, v))
+}
+
+// WebsiteURLContains applies the Contains predicate on the "website_url" field.
+func WebsiteURLContains(v string) predicate.Human {
+	return predicate.Human(sql.FieldContains(FieldWebsiteURL, v))
+}
+
+// WebsiteURLHasPrefix applies the HasPrefix predicate on the "website_url" field.
+func WebsiteURLHasPrefix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasPrefix(FieldWebsiteURL, v))
+}
+
+// WebsiteURLHasSuffix applies the HasSuffix predicate on the "website_url" field.
+func WebsiteURLHasSuffix(v string) predicate.Human {
+	return predicate.Human(sql.FieldHasSuffix(FieldWebsiteURL, v))
+}
+
+// WebsiteURLIsNil applies the IsNil predicate on the "website_url" field.
+func WebsiteURLIsNil() predicate.Human {
+	return predicate.Human(sql.FieldIsNull(FieldWebsiteURL))
+}
+
+// WebsiteURLNotNil applies the NotNil predicate on the "website_url" field.
+func WebsiteURLNotNil() predicate.Human {
+	return predicate.Human(sql.FieldNotNull(FieldWebsiteURL))
+}
+
+// WebsiteURLEqualFold applies the EqualFold predicate on the "website_url" field.
+func WebsiteURLEqualFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldEqualFold(FieldWebsiteURL, v))
+}
+
+// WebsiteURLContainsFold applies the ContainsFold predicate on the "website_url" field.
+func WebsiteURLContainsFold(v string) predicate.Human {
+	return predicate.Human(sql.FieldContainsFold(FieldWebsiteURL, v))
+}
+
+// PublicProfileEQ applies the EQ predicate on the "public_profile" field.
+func PublicProfileEQ(v bool) predicate.Human {
+	return predicate.Human(sql.FieldEQ(FieldPublicProfile, v))
+}
+
+// PublicProfileNEQ applies the NEQ predicate on the "public_profile" field.
+func PublicProfileNEQ(v bool) predicate.Human {
+	return predicate.Human(sql.FieldNEQ(FieldPublicProfile, v))
 }
 
 // HasPrincipal applies the HasEdge predicate on the "principal" edge.

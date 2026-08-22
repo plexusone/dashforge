@@ -19,6 +19,7 @@ import (
 	"github.com/plexusone/uiforge/ent/alert"
 	"github.com/plexusone/uiforge/ent/alertchannel"
 	"github.com/plexusone/uiforge/ent/alertevent"
+	"github.com/plexusone/uiforge/ent/analyticssource"
 	"github.com/plexusone/uiforge/ent/dashboard"
 	"github.com/plexusone/uiforge/ent/dashboardtemplate"
 	"github.com/plexusone/uiforge/ent/dashboardversion"
@@ -51,6 +52,8 @@ type Client struct {
 	AlertChannel *AlertChannelClient
 	// AlertEvent is the client for interacting with the AlertEvent builders.
 	AlertEvent *AlertEventClient
+	// AnalyticsSource is the client for interacting with the AnalyticsSource builders.
+	AnalyticsSource *AnalyticsSourceClient
 	// Dashboard is the client for interacting with the Dashboard builders.
 	Dashboard *DashboardClient
 	// DashboardTemplate is the client for interacting with the DashboardTemplate builders.
@@ -103,6 +106,7 @@ func (c *Client) init() {
 	c.Alert = NewAlertClient(c.config)
 	c.AlertChannel = NewAlertChannelClient(c.config)
 	c.AlertEvent = NewAlertEventClient(c.config)
+	c.AnalyticsSource = NewAnalyticsSourceClient(c.config)
 	c.Dashboard = NewDashboardClient(c.config)
 	c.DashboardTemplate = NewDashboardTemplateClient(c.config)
 	c.DashboardVersion = NewDashboardVersionClient(c.config)
@@ -217,6 +221,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Alert:               NewAlertClient(cfg),
 		AlertChannel:        NewAlertChannelClient(cfg),
 		AlertEvent:          NewAlertEventClient(cfg),
+		AnalyticsSource:     NewAnalyticsSourceClient(cfg),
 		Dashboard:           NewDashboardClient(cfg),
 		DashboardTemplate:   NewDashboardTemplateClient(cfg),
 		DashboardVersion:    NewDashboardVersionClient(cfg),
@@ -258,6 +263,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Alert:               NewAlertClient(cfg),
 		AlertChannel:        NewAlertChannelClient(cfg),
 		AlertEvent:          NewAlertEventClient(cfg),
+		AnalyticsSource:     NewAnalyticsSourceClient(cfg),
 		Dashboard:           NewDashboardClient(cfg),
 		DashboardTemplate:   NewDashboardTemplateClient(cfg),
 		DashboardVersion:    NewDashboardVersionClient(cfg),
@@ -306,10 +312,10 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardTemplate,
-		c.DashboardVersion, c.DataSource, c.Human, c.Integration, c.License, c.Listing,
-		c.Membership, c.OAuthAccount, c.Organization, c.Principal,
-		c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
+		c.Alert, c.AlertChannel, c.AlertEvent, c.AnalyticsSource, c.Dashboard,
+		c.DashboardTemplate, c.DashboardVersion, c.DataSource, c.Human, c.Integration,
+		c.License, c.Listing, c.Membership, c.OAuthAccount, c.Organization,
+		c.Principal, c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
 		c.SeatAssignment, c.Subscription, c.User,
 	} {
 		n.Use(hooks...)
@@ -320,10 +326,10 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Alert, c.AlertChannel, c.AlertEvent, c.Dashboard, c.DashboardTemplate,
-		c.DashboardVersion, c.DataSource, c.Human, c.Integration, c.License, c.Listing,
-		c.Membership, c.OAuthAccount, c.Organization, c.Principal,
-		c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
+		c.Alert, c.AlertChannel, c.AlertEvent, c.AnalyticsSource, c.Dashboard,
+		c.DashboardTemplate, c.DashboardVersion, c.DataSource, c.Human, c.Integration,
+		c.License, c.Listing, c.Membership, c.OAuthAccount, c.Organization,
+		c.Principal, c.PrincipalMembership, c.Publisher, c.RefreshToken, c.SavedQuery,
 		c.SeatAssignment, c.Subscription, c.User,
 	} {
 		n.Intercept(interceptors...)
@@ -339,6 +345,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AlertChannel.mutate(ctx, m)
 	case *AlertEventMutation:
 		return c.AlertEvent.mutate(ctx, m)
+	case *AnalyticsSourceMutation:
+		return c.AnalyticsSource.mutate(ctx, m)
 	case *DashboardMutation:
 		return c.Dashboard.mutate(ctx, m)
 	case *DashboardTemplateMutation:
@@ -857,6 +865,139 @@ func (c *AlertEventClient) mutate(ctx context.Context, m *AlertEventMutation) (V
 		return (&AlertEventDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown AlertEvent mutation op: %q", m.Op())
+	}
+}
+
+// AnalyticsSourceClient is a client for the AnalyticsSource schema.
+type AnalyticsSourceClient struct {
+	config
+}
+
+// NewAnalyticsSourceClient returns a client for the AnalyticsSource from the given config.
+func NewAnalyticsSourceClient(c config) *AnalyticsSourceClient {
+	return &AnalyticsSourceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `analyticssource.Hooks(f(g(h())))`.
+func (c *AnalyticsSourceClient) Use(hooks ...Hook) {
+	c.hooks.AnalyticsSource = append(c.hooks.AnalyticsSource, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `analyticssource.Intercept(f(g(h())))`.
+func (c *AnalyticsSourceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AnalyticsSource = append(c.inters.AnalyticsSource, interceptors...)
+}
+
+// Create returns a builder for creating a AnalyticsSource entity.
+func (c *AnalyticsSourceClient) Create() *AnalyticsSourceCreate {
+	mutation := newAnalyticsSourceMutation(c.config, OpCreate)
+	return &AnalyticsSourceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AnalyticsSource entities.
+func (c *AnalyticsSourceClient) CreateBulk(builders ...*AnalyticsSourceCreate) *AnalyticsSourceCreateBulk {
+	return &AnalyticsSourceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AnalyticsSourceClient) MapCreateBulk(slice any, setFunc func(*AnalyticsSourceCreate, int)) *AnalyticsSourceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AnalyticsSourceCreateBulk{err: fmt.Errorf("calling to AnalyticsSourceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AnalyticsSourceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AnalyticsSourceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AnalyticsSource.
+func (c *AnalyticsSourceClient) Update() *AnalyticsSourceUpdate {
+	mutation := newAnalyticsSourceMutation(c.config, OpUpdate)
+	return &AnalyticsSourceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AnalyticsSourceClient) UpdateOne(_m *AnalyticsSource) *AnalyticsSourceUpdateOne {
+	mutation := newAnalyticsSourceMutation(c.config, OpUpdateOne, withAnalyticsSource(_m))
+	return &AnalyticsSourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AnalyticsSourceClient) UpdateOneID(id int) *AnalyticsSourceUpdateOne {
+	mutation := newAnalyticsSourceMutation(c.config, OpUpdateOne, withAnalyticsSourceID(id))
+	return &AnalyticsSourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AnalyticsSource.
+func (c *AnalyticsSourceClient) Delete() *AnalyticsSourceDelete {
+	mutation := newAnalyticsSourceMutation(c.config, OpDelete)
+	return &AnalyticsSourceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AnalyticsSourceClient) DeleteOne(_m *AnalyticsSource) *AnalyticsSourceDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AnalyticsSourceClient) DeleteOneID(id int) *AnalyticsSourceDeleteOne {
+	builder := c.Delete().Where(analyticssource.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AnalyticsSourceDeleteOne{builder}
+}
+
+// Query returns a query builder for AnalyticsSource.
+func (c *AnalyticsSourceClient) Query() *AnalyticsSourceQuery {
+	return &AnalyticsSourceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAnalyticsSource},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AnalyticsSource entity by its id.
+func (c *AnalyticsSourceClient) Get(ctx context.Context, id int) (*AnalyticsSource, error) {
+	return c.Query().Where(analyticssource.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AnalyticsSourceClient) GetX(ctx context.Context, id int) *AnalyticsSource {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AnalyticsSourceClient) Hooks() []Hook {
+	return c.hooks.AnalyticsSource
+}
+
+// Interceptors returns the client interceptors.
+func (c *AnalyticsSourceClient) Interceptors() []Interceptor {
+	return c.inters.AnalyticsSource
+}
+
+func (c *AnalyticsSourceClient) mutate(ctx context.Context, m *AnalyticsSourceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AnalyticsSourceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AnalyticsSourceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AnalyticsSourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AnalyticsSourceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown AnalyticsSource mutation op: %q", m.Op())
 	}
 }
 
@@ -4286,15 +4427,15 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Alert, AlertChannel, AlertEvent, Dashboard, DashboardTemplate, DashboardVersion,
-		DataSource, Human, Integration, License, Listing, Membership, OAuthAccount,
-		Organization, Principal, PrincipalMembership, Publisher, RefreshToken,
-		SavedQuery, SeatAssignment, Subscription, User []ent.Hook
+		Alert, AlertChannel, AlertEvent, AnalyticsSource, Dashboard, DashboardTemplate,
+		DashboardVersion, DataSource, Human, Integration, License, Listing, Membership,
+		OAuthAccount, Organization, Principal, PrincipalMembership, Publisher,
+		RefreshToken, SavedQuery, SeatAssignment, Subscription, User []ent.Hook
 	}
 	inters struct {
-		Alert, AlertChannel, AlertEvent, Dashboard, DashboardTemplate, DashboardVersion,
-		DataSource, Human, Integration, License, Listing, Membership, OAuthAccount,
-		Organization, Principal, PrincipalMembership, Publisher, RefreshToken,
-		SavedQuery, SeatAssignment, Subscription, User []ent.Interceptor
+		Alert, AlertChannel, AlertEvent, AnalyticsSource, Dashboard, DashboardTemplate,
+		DashboardVersion, DataSource, Human, Integration, License, Listing, Membership,
+		OAuthAccount, Organization, Principal, PrincipalMembership, Publisher,
+		RefreshToken, SavedQuery, SeatAssignment, Subscription, User []ent.Interceptor
 	}
 )

@@ -39,6 +39,22 @@ type Human struct {
 	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
 	// When email was verified
 	EmailVerifiedAt *time.Time `json:"email_verified_at,omitempty"`
+	// URL-safe username for public profile (e.g., /u/{slug})
+	Slug *string `json:"slug,omitempty"`
+	// Professional headline (e.g., 'AI Researcher at Stanford')
+	Headline *string `json:"headline,omitempty"`
+	// Public biography (Markdown supported)
+	Bio *string `json:"bio,omitempty"`
+	// LinkedIn profile URL
+	LinkedinURL *string `json:"linkedin_url,omitempty"`
+	// GitHub profile URL
+	GithubURL *string `json:"github_url,omitempty"`
+	// Twitter/X profile URL
+	TwitterURL *string `json:"twitter_url,omitempty"`
+	// Personal website URL
+	WebsiteURL *string `json:"website_url,omitempty"`
+	// Whether public profile is visible
+	PublicProfile bool `json:"public_profile,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HumanQuery when eager-loading is set.
 	Edges        HumanEdges `json:"edges"`
@@ -70,9 +86,9 @@ func (*Human) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case human.FieldIsPlatformAdmin:
+		case human.FieldIsPlatformAdmin, human.FieldPublicProfile:
 			values[i] = new(sql.NullBool)
-		case human.FieldEmail, human.FieldName, human.FieldPasswordHash, human.FieldAvatarURL:
+		case human.FieldEmail, human.FieldName, human.FieldPasswordHash, human.FieldAvatarURL, human.FieldSlug, human.FieldHeadline, human.FieldBio, human.FieldLinkedinURL, human.FieldGithubURL, human.FieldTwitterURL, human.FieldWebsiteURL:
 			values[i] = new(sql.NullString)
 		case human.FieldCreatedAt, human.FieldUpdatedAt, human.FieldLastLoginAt, human.FieldEmailVerifiedAt:
 			values[i] = new(sql.NullTime)
@@ -162,6 +178,61 @@ func (_m *Human) assignValues(columns []string, values []any) error {
 				_m.EmailVerifiedAt = new(time.Time)
 				*_m.EmailVerifiedAt = value.Time
 			}
+		case human.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				_m.Slug = new(string)
+				*_m.Slug = value.String
+			}
+		case human.FieldHeadline:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field headline", values[i])
+			} else if value.Valid {
+				_m.Headline = new(string)
+				*_m.Headline = value.String
+			}
+		case human.FieldBio:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field bio", values[i])
+			} else if value.Valid {
+				_m.Bio = new(string)
+				*_m.Bio = value.String
+			}
+		case human.FieldLinkedinURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field linkedin_url", values[i])
+			} else if value.Valid {
+				_m.LinkedinURL = new(string)
+				*_m.LinkedinURL = value.String
+			}
+		case human.FieldGithubURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field github_url", values[i])
+			} else if value.Valid {
+				_m.GithubURL = new(string)
+				*_m.GithubURL = value.String
+			}
+		case human.FieldTwitterURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field twitter_url", values[i])
+			} else if value.Valid {
+				_m.TwitterURL = new(string)
+				*_m.TwitterURL = value.String
+			}
+		case human.FieldWebsiteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field website_url", values[i])
+			} else if value.Valid {
+				_m.WebsiteURL = new(string)
+				*_m.WebsiteURL = value.String
+			}
+		case human.FieldPublicProfile:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field public_profile", values[i])
+			} else if value.Valid {
+				_m.PublicProfile = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -237,6 +308,44 @@ func (_m *Human) String() string {
 		builder.WriteString("email_verified_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	if v := _m.Slug; v != nil {
+		builder.WriteString("slug=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.Headline; v != nil {
+		builder.WriteString("headline=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.Bio; v != nil {
+		builder.WriteString("bio=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.LinkedinURL; v != nil {
+		builder.WriteString("linkedin_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.GithubURL; v != nil {
+		builder.WriteString("github_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.TwitterURL; v != nil {
+		builder.WriteString("twitter_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.WebsiteURL; v != nil {
+		builder.WriteString("website_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("public_profile=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicProfile))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/plexusone/uiforge/ent/alert"
 	"github.com/plexusone/uiforge/ent/alertchannel"
 	"github.com/plexusone/uiforge/ent/alertevent"
+	"github.com/plexusone/uiforge/ent/analyticssource"
 	"github.com/plexusone/uiforge/ent/dashboard"
 	"github.com/plexusone/uiforge/ent/dashboardtemplate"
 	"github.com/plexusone/uiforge/ent/dashboardversion"
@@ -93,6 +94,41 @@ func init() {
 	alerteventDescCreatedAt := alerteventFields[7].Descriptor()
 	// alertevent.DefaultCreatedAt holds the default value on creation for the created_at field.
 	alertevent.DefaultCreatedAt = alerteventDescCreatedAt.Default.(func() time.Time)
+	analyticssourceMixin := schema.AnalyticsSource{}.Mixin()
+	analyticssourceMixinFields0 := analyticssourceMixin[0].Fields()
+	_ = analyticssourceMixinFields0
+	analyticssourceFields := schema.AnalyticsSource{}.Fields()
+	_ = analyticssourceFields
+	// analyticssourceDescCreatedAt is the schema descriptor for created_at field.
+	analyticssourceDescCreatedAt := analyticssourceMixinFields0[0].Descriptor()
+	// analyticssource.DefaultCreatedAt holds the default value on creation for the created_at field.
+	analyticssource.DefaultCreatedAt = analyticssourceDescCreatedAt.Default.(func() time.Time)
+	// analyticssourceDescUpdatedAt is the schema descriptor for updated_at field.
+	analyticssourceDescUpdatedAt := analyticssourceMixinFields0[1].Descriptor()
+	// analyticssource.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	analyticssource.DefaultUpdatedAt = analyticssourceDescUpdatedAt.Default.(func() time.Time)
+	// analyticssource.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	analyticssource.UpdateDefaultUpdatedAt = analyticssourceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// analyticssourceDescSlug is the schema descriptor for slug field.
+	analyticssourceDescSlug := analyticssourceFields[0].Descriptor()
+	// analyticssource.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	analyticssource.SlugValidator = analyticssourceDescSlug.Validators[0].(func(string) error)
+	// analyticssourceDescName is the schema descriptor for name field.
+	analyticssourceDescName := analyticssourceFields[1].Descriptor()
+	// analyticssource.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	analyticssource.NameValidator = analyticssourceDescName.Validators[0].(func(string) error)
+	// analyticssourceDescConnector is the schema descriptor for connector field.
+	analyticssourceDescConnector := analyticssourceFields[2].Descriptor()
+	// analyticssource.ConnectorValidator is a validator for the "connector" field. It is called by the builders before save.
+	analyticssource.ConnectorValidator = analyticssourceDescConnector.Validators[0].(func(string) error)
+	// analyticssourceDescDsnRef is the schema descriptor for dsn_ref field.
+	analyticssourceDescDsnRef := analyticssourceFields[3].Descriptor()
+	// analyticssource.DsnRefValidator is a validator for the "dsn_ref" field. It is called by the builders before save.
+	analyticssource.DsnRefValidator = analyticssourceDescDsnRef.Validators[0].(func(string) error)
+	// analyticssourceDescEnabled is the schema descriptor for enabled field.
+	analyticssourceDescEnabled := analyticssourceFields[4].Descriptor()
+	// analyticssource.DefaultEnabled holds the default value on creation for the enabled field.
+	analyticssource.DefaultEnabled = analyticssourceDescEnabled.Default.(bool)
 	dashboardFields := schema.Dashboard{}.Fields()
 	_ = dashboardFields
 	// dashboardDescSlug is the schema descriptor for slug field.
@@ -243,6 +279,32 @@ func init() {
 	humanDescIsPlatformAdmin := humanMixinFields0[8].Descriptor()
 	// human.DefaultIsPlatformAdmin holds the default value on creation for the is_platform_admin field.
 	human.DefaultIsPlatformAdmin = humanDescIsPlatformAdmin.Default.(bool)
+	// humanDescSlug is the schema descriptor for slug field.
+	humanDescSlug := humanMixinFields0[11].Descriptor()
+	// human.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	human.SlugValidator = func() func(string) error {
+		validators := humanDescSlug.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(slug string) error {
+			for _, fn := range fns {
+				if err := fn(slug); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// humanDescHeadline is the schema descriptor for headline field.
+	humanDescHeadline := humanMixinFields0[12].Descriptor()
+	// human.HeadlineValidator is a validator for the "headline" field. It is called by the builders before save.
+	human.HeadlineValidator = humanDescHeadline.Validators[0].(func(string) error)
+	// humanDescPublicProfile is the schema descriptor for public_profile field.
+	humanDescPublicProfile := humanMixinFields0[18].Descriptor()
+	// human.DefaultPublicProfile holds the default value on creation for the public_profile field.
+	human.DefaultPublicProfile = humanDescPublicProfile.Default.(bool)
 	// humanDescID is the schema descriptor for id field.
 	humanDescID := humanMixinFields0[0].Descriptor()
 	// human.DefaultID holds the default value on creation for the id field.
