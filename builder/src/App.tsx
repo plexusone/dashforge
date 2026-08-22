@@ -4,11 +4,31 @@ import { Canvas } from './components/canvas/Canvas'
 import { WidgetPalette } from './components/palette/WidgetPalette'
 import { PropertiesPanel } from './components/properties/PropertiesPanel'
 import { AIChat, AICommandBar, useAICommandBar } from './components/ai'
+import { QuestionWorkspace } from './components/questions/QuestionWorkspace'
+import { DashboardBrowsePage } from './components/dashboard-gallery'
 import { useDashboardStore } from './stores/dashboard'
+import { PreferencesProvider } from './stores/preferences'
 import { getDashboard } from './api/dashforge'
 import { Loader2 } from 'lucide-react'
 
 function App() {
+  const params = new URLSearchParams(window.location.search)
+  const mode = params.get('mode')
+
+  return (
+    <PreferencesProvider>
+      {mode === 'questions' ? (
+        <QuestionWorkspace />
+      ) : mode === 'dashboards' ? (
+        <DashboardBrowsePage />
+      ) : (
+        <DashboardBuilderApp />
+      )}
+    </PreferencesProvider>
+  )
+}
+
+function DashboardBuilderApp() {
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
