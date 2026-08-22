@@ -35,6 +35,22 @@ const (
 	FieldLastLoginAt = "last_login_at"
 	// FieldEmailVerifiedAt holds the string denoting the email_verified_at field in the database.
 	FieldEmailVerifiedAt = "email_verified_at"
+	// FieldSlug holds the string denoting the slug field in the database.
+	FieldSlug = "slug"
+	// FieldHeadline holds the string denoting the headline field in the database.
+	FieldHeadline = "headline"
+	// FieldBio holds the string denoting the bio field in the database.
+	FieldBio = "bio"
+	// FieldLinkedinURL holds the string denoting the linkedin_url field in the database.
+	FieldLinkedinURL = "linkedin_url"
+	// FieldGithubURL holds the string denoting the github_url field in the database.
+	FieldGithubURL = "github_url"
+	// FieldTwitterURL holds the string denoting the twitter_url field in the database.
+	FieldTwitterURL = "twitter_url"
+	// FieldWebsiteURL holds the string denoting the website_url field in the database.
+	FieldWebsiteURL = "website_url"
+	// FieldPublicProfile holds the string denoting the public_profile field in the database.
+	FieldPublicProfile = "public_profile"
 	// EdgePrincipal holds the string denoting the principal edge name in mutations.
 	EdgePrincipal = "principal"
 	// Table holds the table name of the human in the database.
@@ -61,6 +77,14 @@ var Columns = []string{
 	FieldIsPlatformAdmin,
 	FieldLastLoginAt,
 	FieldEmailVerifiedAt,
+	FieldSlug,
+	FieldHeadline,
+	FieldBio,
+	FieldLinkedinURL,
+	FieldGithubURL,
+	FieldTwitterURL,
+	FieldWebsiteURL,
+	FieldPublicProfile,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -84,6 +108,12 @@ var (
 	EmailValidator func(string) error
 	// DefaultIsPlatformAdmin holds the default value on creation for the "is_platform_admin" field.
 	DefaultIsPlatformAdmin bool
+	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	SlugValidator func(string) error
+	// HeadlineValidator is a validator for the "headline" field. It is called by the builders before save.
+	HeadlineValidator func(string) error
+	// DefaultPublicProfile holds the default value on creation for the "public_profile" field.
+	DefaultPublicProfile bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -144,6 +174,46 @@ func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
 // ByEmailVerifiedAt orders the results by the email_verified_at field.
 func ByEmailVerifiedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailVerifiedAt, opts...).ToFunc()
+}
+
+// BySlug orders the results by the slug field.
+func BySlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlug, opts...).ToFunc()
+}
+
+// ByHeadline orders the results by the headline field.
+func ByHeadline(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeadline, opts...).ToFunc()
+}
+
+// ByBio orders the results by the bio field.
+func ByBio(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBio, opts...).ToFunc()
+}
+
+// ByLinkedinURL orders the results by the linkedin_url field.
+func ByLinkedinURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLinkedinURL, opts...).ToFunc()
+}
+
+// ByGithubURL orders the results by the github_url field.
+func ByGithubURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGithubURL, opts...).ToFunc()
+}
+
+// ByTwitterURL orders the results by the twitter_url field.
+func ByTwitterURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTwitterURL, opts...).ToFunc()
+}
+
+// ByWebsiteURL orders the results by the website_url field.
+func ByWebsiteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWebsiteURL, opts...).ToFunc()
+}
+
+// ByPublicProfile orders the results by the public_profile field.
+func ByPublicProfile(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPublicProfile, opts...).ToFunc()
 }
 
 // ByPrincipalField orders the results by principal field.

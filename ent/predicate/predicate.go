@@ -15,6 +15,9 @@ type AlertChannel func(*sql.Selector)
 // AlertEvent is the predicate function for alertevent builders.
 type AlertEvent func(*sql.Selector)
 
+// AnalyticsSource is the predicate function for analyticssource builders.
+type AnalyticsSource func(*sql.Selector)
+
 // Dashboard is the predicate function for dashboard builders.
 type Dashboard func(*sql.Selector)
 

@@ -146,6 +146,118 @@ func (_c *HumanCreate) SetNillableEmailVerifiedAt(v *time.Time) *HumanCreate {
 	return _c
 }
 
+// SetSlug sets the "slug" field.
+func (_c *HumanCreate) SetSlug(v string) *HumanCreate {
+	_c.mutation.SetSlug(v)
+	return _c
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableSlug(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetSlug(*v)
+	}
+	return _c
+}
+
+// SetHeadline sets the "headline" field.
+func (_c *HumanCreate) SetHeadline(v string) *HumanCreate {
+	_c.mutation.SetHeadline(v)
+	return _c
+}
+
+// SetNillableHeadline sets the "headline" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableHeadline(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetHeadline(*v)
+	}
+	return _c
+}
+
+// SetBio sets the "bio" field.
+func (_c *HumanCreate) SetBio(v string) *HumanCreate {
+	_c.mutation.SetBio(v)
+	return _c
+}
+
+// SetNillableBio sets the "bio" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableBio(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetBio(*v)
+	}
+	return _c
+}
+
+// SetLinkedinURL sets the "linkedin_url" field.
+func (_c *HumanCreate) SetLinkedinURL(v string) *HumanCreate {
+	_c.mutation.SetLinkedinURL(v)
+	return _c
+}
+
+// SetNillableLinkedinURL sets the "linkedin_url" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableLinkedinURL(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetLinkedinURL(*v)
+	}
+	return _c
+}
+
+// SetGithubURL sets the "github_url" field.
+func (_c *HumanCreate) SetGithubURL(v string) *HumanCreate {
+	_c.mutation.SetGithubURL(v)
+	return _c
+}
+
+// SetNillableGithubURL sets the "github_url" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableGithubURL(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetGithubURL(*v)
+	}
+	return _c
+}
+
+// SetTwitterURL sets the "twitter_url" field.
+func (_c *HumanCreate) SetTwitterURL(v string) *HumanCreate {
+	_c.mutation.SetTwitterURL(v)
+	return _c
+}
+
+// SetNillableTwitterURL sets the "twitter_url" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableTwitterURL(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetTwitterURL(*v)
+	}
+	return _c
+}
+
+// SetWebsiteURL sets the "website_url" field.
+func (_c *HumanCreate) SetWebsiteURL(v string) *HumanCreate {
+	_c.mutation.SetWebsiteURL(v)
+	return _c
+}
+
+// SetNillableWebsiteURL sets the "website_url" field if the given value is not nil.
+func (_c *HumanCreate) SetNillableWebsiteURL(v *string) *HumanCreate {
+	if v != nil {
+		_c.SetWebsiteURL(*v)
+	}
+	return _c
+}
+
+// SetPublicProfile sets the "public_profile" field.
+func (_c *HumanCreate) SetPublicProfile(v bool) *HumanCreate {
+	_c.mutation.SetPublicProfile(v)
+	return _c
+}
+
+// SetNillablePublicProfile sets the "public_profile" field if the given value is not nil.
+func (_c *HumanCreate) SetNillablePublicProfile(v *bool) *HumanCreate {
+	if v != nil {
+		_c.SetPublicProfile(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *HumanCreate) SetID(v uuid.UUID) *HumanCreate {
 	_c.mutation.SetID(v)
@@ -212,6 +324,10 @@ func (_c *HumanCreate) defaults() {
 		v := human.DefaultIsPlatformAdmin
 		_c.mutation.SetIsPlatformAdmin(v)
 	}
+	if _, ok := _c.mutation.PublicProfile(); !ok {
+		v := human.DefaultPublicProfile
+		_c.mutation.SetPublicProfile(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		v := human.DefaultID()
 		_c.mutation.SetID(v)
@@ -239,6 +355,19 @@ func (_c *HumanCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsPlatformAdmin(); !ok {
 		return &ValidationError{Name: "is_platform_admin", err: errors.New(`ent: missing required field "Human.is_platform_admin"`)}
+	}
+	if v, ok := _c.mutation.Slug(); ok {
+		if err := human.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Human.slug": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Headline(); ok {
+		if err := human.HeadlineValidator(v); err != nil {
+			return &ValidationError{Name: "headline", err: fmt.Errorf(`ent: validator failed for field "Human.headline": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.PublicProfile(); !ok {
+		return &ValidationError{Name: "public_profile", err: errors.New(`ent: missing required field "Human.public_profile"`)}
 	}
 	if len(_c.mutation.PrincipalIDs()) == 0 {
 		return &ValidationError{Name: "principal", err: errors.New(`ent: missing required edge "Human.principal"`)}
@@ -313,6 +442,38 @@ func (_c *HumanCreate) createSpec() (*Human, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.EmailVerifiedAt(); ok {
 		_spec.SetField(human.FieldEmailVerifiedAt, field.TypeTime, value)
 		_node.EmailVerifiedAt = &value
+	}
+	if value, ok := _c.mutation.Slug(); ok {
+		_spec.SetField(human.FieldSlug, field.TypeString, value)
+		_node.Slug = &value
+	}
+	if value, ok := _c.mutation.Headline(); ok {
+		_spec.SetField(human.FieldHeadline, field.TypeString, value)
+		_node.Headline = &value
+	}
+	if value, ok := _c.mutation.Bio(); ok {
+		_spec.SetField(human.FieldBio, field.TypeString, value)
+		_node.Bio = &value
+	}
+	if value, ok := _c.mutation.LinkedinURL(); ok {
+		_spec.SetField(human.FieldLinkedinURL, field.TypeString, value)
+		_node.LinkedinURL = &value
+	}
+	if value, ok := _c.mutation.GithubURL(); ok {
+		_spec.SetField(human.FieldGithubURL, field.TypeString, value)
+		_node.GithubURL = &value
+	}
+	if value, ok := _c.mutation.TwitterURL(); ok {
+		_spec.SetField(human.FieldTwitterURL, field.TypeString, value)
+		_node.TwitterURL = &value
+	}
+	if value, ok := _c.mutation.WebsiteURL(); ok {
+		_spec.SetField(human.FieldWebsiteURL, field.TypeString, value)
+		_node.WebsiteURL = &value
+	}
+	if value, ok := _c.mutation.PublicProfile(); ok {
+		_spec.SetField(human.FieldPublicProfile, field.TypeBool, value)
+		_node.PublicProfile = value
 	}
 	if nodes := _c.mutation.PrincipalIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

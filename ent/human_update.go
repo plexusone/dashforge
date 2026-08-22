@@ -162,6 +162,160 @@ func (_u *HumanUpdate) ClearEmailVerifiedAt() *HumanUpdate {
 	return _u
 }
 
+// SetSlug sets the "slug" field.
+func (_u *HumanUpdate) SetSlug(v string) *HumanUpdate {
+	_u.mutation.SetSlug(v)
+	return _u
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableSlug(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetSlug(*v)
+	}
+	return _u
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (_u *HumanUpdate) ClearSlug() *HumanUpdate {
+	_u.mutation.ClearSlug()
+	return _u
+}
+
+// SetHeadline sets the "headline" field.
+func (_u *HumanUpdate) SetHeadline(v string) *HumanUpdate {
+	_u.mutation.SetHeadline(v)
+	return _u
+}
+
+// SetNillableHeadline sets the "headline" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableHeadline(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetHeadline(*v)
+	}
+	return _u
+}
+
+// ClearHeadline clears the value of the "headline" field.
+func (_u *HumanUpdate) ClearHeadline() *HumanUpdate {
+	_u.mutation.ClearHeadline()
+	return _u
+}
+
+// SetBio sets the "bio" field.
+func (_u *HumanUpdate) SetBio(v string) *HumanUpdate {
+	_u.mutation.SetBio(v)
+	return _u
+}
+
+// SetNillableBio sets the "bio" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableBio(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetBio(*v)
+	}
+	return _u
+}
+
+// ClearBio clears the value of the "bio" field.
+func (_u *HumanUpdate) ClearBio() *HumanUpdate {
+	_u.mutation.ClearBio()
+	return _u
+}
+
+// SetLinkedinURL sets the "linkedin_url" field.
+func (_u *HumanUpdate) SetLinkedinURL(v string) *HumanUpdate {
+	_u.mutation.SetLinkedinURL(v)
+	return _u
+}
+
+// SetNillableLinkedinURL sets the "linkedin_url" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableLinkedinURL(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetLinkedinURL(*v)
+	}
+	return _u
+}
+
+// ClearLinkedinURL clears the value of the "linkedin_url" field.
+func (_u *HumanUpdate) ClearLinkedinURL() *HumanUpdate {
+	_u.mutation.ClearLinkedinURL()
+	return _u
+}
+
+// SetGithubURL sets the "github_url" field.
+func (_u *HumanUpdate) SetGithubURL(v string) *HumanUpdate {
+	_u.mutation.SetGithubURL(v)
+	return _u
+}
+
+// SetNillableGithubURL sets the "github_url" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableGithubURL(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetGithubURL(*v)
+	}
+	return _u
+}
+
+// ClearGithubURL clears the value of the "github_url" field.
+func (_u *HumanUpdate) ClearGithubURL() *HumanUpdate {
+	_u.mutation.ClearGithubURL()
+	return _u
+}
+
+// SetTwitterURL sets the "twitter_url" field.
+func (_u *HumanUpdate) SetTwitterURL(v string) *HumanUpdate {
+	_u.mutation.SetTwitterURL(v)
+	return _u
+}
+
+// SetNillableTwitterURL sets the "twitter_url" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableTwitterURL(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetTwitterURL(*v)
+	}
+	return _u
+}
+
+// ClearTwitterURL clears the value of the "twitter_url" field.
+func (_u *HumanUpdate) ClearTwitterURL() *HumanUpdate {
+	_u.mutation.ClearTwitterURL()
+	return _u
+}
+
+// SetWebsiteURL sets the "website_url" field.
+func (_u *HumanUpdate) SetWebsiteURL(v string) *HumanUpdate {
+	_u.mutation.SetWebsiteURL(v)
+	return _u
+}
+
+// SetNillableWebsiteURL sets the "website_url" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillableWebsiteURL(v *string) *HumanUpdate {
+	if v != nil {
+		_u.SetWebsiteURL(*v)
+	}
+	return _u
+}
+
+// ClearWebsiteURL clears the value of the "website_url" field.
+func (_u *HumanUpdate) ClearWebsiteURL() *HumanUpdate {
+	_u.mutation.ClearWebsiteURL()
+	return _u
+}
+
+// SetPublicProfile sets the "public_profile" field.
+func (_u *HumanUpdate) SetPublicProfile(v bool) *HumanUpdate {
+	_u.mutation.SetPublicProfile(v)
+	return _u
+}
+
+// SetNillablePublicProfile sets the "public_profile" field if the given value is not nil.
+func (_u *HumanUpdate) SetNillablePublicProfile(v *bool) *HumanUpdate {
+	if v != nil {
+		_u.SetPublicProfile(*v)
+	}
+	return _u
+}
+
 // Mutation returns the HumanMutation object of the builder.
 func (_u *HumanUpdate) Mutation() *HumanMutation {
 	return _u.mutation
@@ -208,6 +362,16 @@ func (_u *HumanUpdate) check() error {
 	if v, ok := _u.mutation.Email(); ok {
 		if err := human.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "Human.email": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Slug(); ok {
+		if err := human.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Human.slug": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Headline(); ok {
+		if err := human.HeadlineValidator(v); err != nil {
+			return &ValidationError{Name: "headline", err: fmt.Errorf(`ent: validator failed for field "Human.headline": %w`, err)}
 		}
 	}
 	if _u.mutation.PrincipalCleared() && len(_u.mutation.PrincipalIDs()) > 0 {
@@ -266,6 +430,51 @@ func (_u *HumanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EmailVerifiedAtCleared() {
 		_spec.ClearField(human.FieldEmailVerifiedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Slug(); ok {
+		_spec.SetField(human.FieldSlug, field.TypeString, value)
+	}
+	if _u.mutation.SlugCleared() {
+		_spec.ClearField(human.FieldSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.Headline(); ok {
+		_spec.SetField(human.FieldHeadline, field.TypeString, value)
+	}
+	if _u.mutation.HeadlineCleared() {
+		_spec.ClearField(human.FieldHeadline, field.TypeString)
+	}
+	if value, ok := _u.mutation.Bio(); ok {
+		_spec.SetField(human.FieldBio, field.TypeString, value)
+	}
+	if _u.mutation.BioCleared() {
+		_spec.ClearField(human.FieldBio, field.TypeString)
+	}
+	if value, ok := _u.mutation.LinkedinURL(); ok {
+		_spec.SetField(human.FieldLinkedinURL, field.TypeString, value)
+	}
+	if _u.mutation.LinkedinURLCleared() {
+		_spec.ClearField(human.FieldLinkedinURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubURL(); ok {
+		_spec.SetField(human.FieldGithubURL, field.TypeString, value)
+	}
+	if _u.mutation.GithubURLCleared() {
+		_spec.ClearField(human.FieldGithubURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.TwitterURL(); ok {
+		_spec.SetField(human.FieldTwitterURL, field.TypeString, value)
+	}
+	if _u.mutation.TwitterURLCleared() {
+		_spec.ClearField(human.FieldTwitterURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.WebsiteURL(); ok {
+		_spec.SetField(human.FieldWebsiteURL, field.TypeString, value)
+	}
+	if _u.mutation.WebsiteURLCleared() {
+		_spec.ClearField(human.FieldWebsiteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.PublicProfile(); ok {
+		_spec.SetField(human.FieldPublicProfile, field.TypeBool, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -421,6 +630,160 @@ func (_u *HumanUpdateOne) ClearEmailVerifiedAt() *HumanUpdateOne {
 	return _u
 }
 
+// SetSlug sets the "slug" field.
+func (_u *HumanUpdateOne) SetSlug(v string) *HumanUpdateOne {
+	_u.mutation.SetSlug(v)
+	return _u
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableSlug(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetSlug(*v)
+	}
+	return _u
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (_u *HumanUpdateOne) ClearSlug() *HumanUpdateOne {
+	_u.mutation.ClearSlug()
+	return _u
+}
+
+// SetHeadline sets the "headline" field.
+func (_u *HumanUpdateOne) SetHeadline(v string) *HumanUpdateOne {
+	_u.mutation.SetHeadline(v)
+	return _u
+}
+
+// SetNillableHeadline sets the "headline" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableHeadline(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetHeadline(*v)
+	}
+	return _u
+}
+
+// ClearHeadline clears the value of the "headline" field.
+func (_u *HumanUpdateOne) ClearHeadline() *HumanUpdateOne {
+	_u.mutation.ClearHeadline()
+	return _u
+}
+
+// SetBio sets the "bio" field.
+func (_u *HumanUpdateOne) SetBio(v string) *HumanUpdateOne {
+	_u.mutation.SetBio(v)
+	return _u
+}
+
+// SetNillableBio sets the "bio" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableBio(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetBio(*v)
+	}
+	return _u
+}
+
+// ClearBio clears the value of the "bio" field.
+func (_u *HumanUpdateOne) ClearBio() *HumanUpdateOne {
+	_u.mutation.ClearBio()
+	return _u
+}
+
+// SetLinkedinURL sets the "linkedin_url" field.
+func (_u *HumanUpdateOne) SetLinkedinURL(v string) *HumanUpdateOne {
+	_u.mutation.SetLinkedinURL(v)
+	return _u
+}
+
+// SetNillableLinkedinURL sets the "linkedin_url" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableLinkedinURL(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetLinkedinURL(*v)
+	}
+	return _u
+}
+
+// ClearLinkedinURL clears the value of the "linkedin_url" field.
+func (_u *HumanUpdateOne) ClearLinkedinURL() *HumanUpdateOne {
+	_u.mutation.ClearLinkedinURL()
+	return _u
+}
+
+// SetGithubURL sets the "github_url" field.
+func (_u *HumanUpdateOne) SetGithubURL(v string) *HumanUpdateOne {
+	_u.mutation.SetGithubURL(v)
+	return _u
+}
+
+// SetNillableGithubURL sets the "github_url" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableGithubURL(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetGithubURL(*v)
+	}
+	return _u
+}
+
+// ClearGithubURL clears the value of the "github_url" field.
+func (_u *HumanUpdateOne) ClearGithubURL() *HumanUpdateOne {
+	_u.mutation.ClearGithubURL()
+	return _u
+}
+
+// SetTwitterURL sets the "twitter_url" field.
+func (_u *HumanUpdateOne) SetTwitterURL(v string) *HumanUpdateOne {
+	_u.mutation.SetTwitterURL(v)
+	return _u
+}
+
+// SetNillableTwitterURL sets the "twitter_url" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableTwitterURL(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetTwitterURL(*v)
+	}
+	return _u
+}
+
+// ClearTwitterURL clears the value of the "twitter_url" field.
+func (_u *HumanUpdateOne) ClearTwitterURL() *HumanUpdateOne {
+	_u.mutation.ClearTwitterURL()
+	return _u
+}
+
+// SetWebsiteURL sets the "website_url" field.
+func (_u *HumanUpdateOne) SetWebsiteURL(v string) *HumanUpdateOne {
+	_u.mutation.SetWebsiteURL(v)
+	return _u
+}
+
+// SetNillableWebsiteURL sets the "website_url" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillableWebsiteURL(v *string) *HumanUpdateOne {
+	if v != nil {
+		_u.SetWebsiteURL(*v)
+	}
+	return _u
+}
+
+// ClearWebsiteURL clears the value of the "website_url" field.
+func (_u *HumanUpdateOne) ClearWebsiteURL() *HumanUpdateOne {
+	_u.mutation.ClearWebsiteURL()
+	return _u
+}
+
+// SetPublicProfile sets the "public_profile" field.
+func (_u *HumanUpdateOne) SetPublicProfile(v bool) *HumanUpdateOne {
+	_u.mutation.SetPublicProfile(v)
+	return _u
+}
+
+// SetNillablePublicProfile sets the "public_profile" field if the given value is not nil.
+func (_u *HumanUpdateOne) SetNillablePublicProfile(v *bool) *HumanUpdateOne {
+	if v != nil {
+		_u.SetPublicProfile(*v)
+	}
+	return _u
+}
+
 // Mutation returns the HumanMutation object of the builder.
 func (_u *HumanUpdateOne) Mutation() *HumanMutation {
 	return _u.mutation
@@ -480,6 +843,16 @@ func (_u *HumanUpdateOne) check() error {
 	if v, ok := _u.mutation.Email(); ok {
 		if err := human.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "Human.email": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Slug(); ok {
+		if err := human.SlugValidator(v); err != nil {
+			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Human.slug": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Headline(); ok {
+		if err := human.HeadlineValidator(v); err != nil {
+			return &ValidationError{Name: "headline", err: fmt.Errorf(`ent: validator failed for field "Human.headline": %w`, err)}
 		}
 	}
 	if _u.mutation.PrincipalCleared() && len(_u.mutation.PrincipalIDs()) > 0 {
@@ -555,6 +928,51 @@ func (_u *HumanUpdateOne) sqlSave(ctx context.Context) (_node *Human, err error)
 	}
 	if _u.mutation.EmailVerifiedAtCleared() {
 		_spec.ClearField(human.FieldEmailVerifiedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Slug(); ok {
+		_spec.SetField(human.FieldSlug, field.TypeString, value)
+	}
+	if _u.mutation.SlugCleared() {
+		_spec.ClearField(human.FieldSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.Headline(); ok {
+		_spec.SetField(human.FieldHeadline, field.TypeString, value)
+	}
+	if _u.mutation.HeadlineCleared() {
+		_spec.ClearField(human.FieldHeadline, field.TypeString)
+	}
+	if value, ok := _u.mutation.Bio(); ok {
+		_spec.SetField(human.FieldBio, field.TypeString, value)
+	}
+	if _u.mutation.BioCleared() {
+		_spec.ClearField(human.FieldBio, field.TypeString)
+	}
+	if value, ok := _u.mutation.LinkedinURL(); ok {
+		_spec.SetField(human.FieldLinkedinURL, field.TypeString, value)
+	}
+	if _u.mutation.LinkedinURLCleared() {
+		_spec.ClearField(human.FieldLinkedinURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubURL(); ok {
+		_spec.SetField(human.FieldGithubURL, field.TypeString, value)
+	}
+	if _u.mutation.GithubURLCleared() {
+		_spec.ClearField(human.FieldGithubURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.TwitterURL(); ok {
+		_spec.SetField(human.FieldTwitterURL, field.TypeString, value)
+	}
+	if _u.mutation.TwitterURLCleared() {
+		_spec.ClearField(human.FieldTwitterURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.WebsiteURL(); ok {
+		_spec.SetField(human.FieldWebsiteURL, field.TypeString, value)
+	}
+	if _u.mutation.WebsiteURLCleared() {
+		_spec.ClearField(human.FieldWebsiteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.PublicProfile(); ok {
+		_spec.SetField(human.FieldPublicProfile, field.TypeBool, value)
 	}
 	_node = &Human{config: _u.config}
 	_spec.Assign = _node.assignValues

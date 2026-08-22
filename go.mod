@@ -19,6 +19,7 @@ require (
 	github.com/grokify/systemforge v0.8.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/lib/pq v1.12.3
+	github.com/mattn/go-sqlite3 v1.14.50
 	github.com/plexusone/omnillm v0.17.0
 	github.com/plexusone/omnillm-core v0.18.0
 	github.com/plexusone/omnivault v0.5.0

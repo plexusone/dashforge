@@ -18,6 +18,8 @@ type Tx struct {
 	AlertChannel *AlertChannelClient
 	// AlertEvent is the client for interacting with the AlertEvent builders.
 	AlertEvent *AlertEventClient
+	// AnalyticsSource is the client for interacting with the AnalyticsSource builders.
+	AnalyticsSource *AnalyticsSourceClient
 	// Dashboard is the client for interacting with the Dashboard builders.
 	Dashboard *DashboardClient
 	// DashboardTemplate is the client for interacting with the DashboardTemplate builders.
@@ -190,6 +192,7 @@ func (tx *Tx) init() {
 	tx.Alert = NewAlertClient(tx.config)
 	tx.AlertChannel = NewAlertChannelClient(tx.config)
 	tx.AlertEvent = NewAlertEventClient(tx.config)
+	tx.AnalyticsSource = NewAnalyticsSourceClient(tx.config)
 	tx.Dashboard = NewDashboardClient(tx.config)
 	tx.DashboardTemplate = NewDashboardTemplateClient(tx.config)
 	tx.DashboardVersion = NewDashboardVersionClient(tx.config)

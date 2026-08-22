@@ -45,6 +45,18 @@ func (f AlertEventFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AlertEventMutation", m)
 }
 
+// The AnalyticsSourceFunc type is an adapter to allow the use of ordinary
+// function as AnalyticsSource mutator.
+type AnalyticsSourceFunc func(context.Context, *ent.AnalyticsSourceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AnalyticsSourceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AnalyticsSourceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AnalyticsSourceMutation", m)
+}
+
 // The DashboardFunc type is an adapter to allow the use of ordinary
 // function as Dashboard mutator.
 type DashboardFunc func(context.Context, *ent.DashboardMutation) (ent.Value, error)

@@ -15,6 +15,7 @@ import (
 	"github.com/plexusone/uiforge/ent/alert"
 	"github.com/plexusone/uiforge/ent/alertchannel"
 	"github.com/plexusone/uiforge/ent/alertevent"
+	"github.com/plexusone/uiforge/ent/analyticssource"
 	"github.com/plexusone/uiforge/ent/dashboard"
 	"github.com/plexusone/uiforge/ent/dashboardtemplate"
 	"github.com/plexusone/uiforge/ent/dashboardversion"
@@ -97,6 +98,7 @@ func checkColumn(t, c string) error {
 			alert.Table:               alert.ValidColumn,
 			alertchannel.Table:        alertchannel.ValidColumn,
 			alertevent.Table:          alertevent.ValidColumn,
+			analyticssource.Table:     analyticssource.ValidColumn,
 			dashboard.Table:           dashboard.ValidColumn,
 			dashboardtemplate.Table:   dashboardtemplate.ValidColumn,
 			dashboardversion.Table:    dashboardversion.ValidColumn,
