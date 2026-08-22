@@ -299,6 +299,7 @@
       constructor(container) {
         this.container = container;
         this.dashboard = null;
+        this.dashboardBaseUrl = null;
         this.dataSources = new Map();
         this.charts = new Map();
         this.variables = new Map(); // Current variable values
@@ -307,23 +308,44 @@
 
       async load(dashboardUrl) {
         try {
-          // Fetch dashboard definition
-          const response = await fetch(dashboardUrl);
-          if (!response.ok) throw new Error(`Failed to load dashboard: ${response.status}`);
-          this.dashboard = await response.json();
-
-          // Initialize variables from defaults and URL params
-          this.initializeVariables();
-
-          // Fetch all data sources
-          await this.loadDataSources();
-
-          // Render
-          this.render();
+          if (Array.isArray(dashboardUrl)) {
+            return await this.loadFirstAvailable(dashboardUrl);
+          }
+          await this.loadDashboard(dashboardUrl);
         } catch (error) {
           this.container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
           console.error(error);
         }
+      }
+
+      async loadDashboard(dashboardUrl) {
+        // Fetch dashboard definition
+        const response = await fetch(dashboardUrl);
+        if (!response.ok) throw new Error(`Failed to load dashboard: ${response.status}`);
+        this.dashboard = await response.json();
+        this.dashboardBaseUrl = new URL(dashboardUrl, window.location.href);
+
+        // Initialize variables from defaults and URL params
+        this.initializeVariables();
+
+        // Fetch all data sources
+        await this.loadDataSources();
+
+        // Render
+        this.render();
+      }
+
+      async loadFirstAvailable(dashboardUrls) {
+        const errors = [];
+        for (const dashboardUrl of dashboardUrls) {
+          try {
+            await this.loadDashboard(dashboardUrl);
+            return;
+          } catch (error) {
+            errors.push(`${dashboardUrl}: ${error.message}`);
+          }
+        }
+        throw new Error(`Failed to load dashboard. Tried ${errors.join('; ')}`);
       }
 
       initializeVariables() {
@@ -389,8 +411,9 @@
           try {
             let data;
             if (ds.type === 'url') {
-              const response = await fetch(ds.url);
-              if (!response.ok) throw new Error(`Failed to load ${ds.url}`);
+              const url = this.resolveDashboardUrl(ds.url);
+              const response = await fetch(url);
+              if (!response.ok) throw new Error(`Failed to load ${url}`);
               data = await response.json();
             } else if (ds.type === 'inline') {
               data = ds.data;
@@ -409,6 +432,11 @@
         });
 
         await Promise.all(promises);
+      }
+
+      resolveDashboardUrl(url) {
+        if (!url || !this.dashboardBaseUrl) return url;
+        return new URL(url, this.dashboardBaseUrl).toString();
       }
 
       applyTransforms(data, transforms) {
@@ -956,7 +984,11 @@
       applyInitialTheme();
 
       const params = new URLSearchParams(window.location.search);
-      const dashboardUrl = params.get('dashboard') || './examples/compliance-dashboard.json';
+      const dashboardUrl = params.get('dashboard') || [
+        '/dashboards/compliance-dashboard.json',
+        '../examples/compliance-dashboard.json',
+        './examples/compliance-dashboard.json'
+      ];
 
       const viewer = new DashforgeViewer(document.getElementById('app'));
       viewer.load(dashboardUrl);
