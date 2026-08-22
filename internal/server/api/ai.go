@@ -12,15 +12,16 @@ import (
 	"strings"
 	"time"
 
-	omnillm "github.com/plexusone/omnillm-core"
+	"github.com/plexusone/omnillm"
 	"github.com/plexusone/omnillm-core/models"
-	"github.com/plexusone/omnillm-core/provider"
 )
 
 // AIHandler handles AI generation requests using omnillm.
 type AIHandler struct {
-	client *omnillm.ChatClient
-	logger *slog.Logger
+	client       *omnillm.ChatClient
+	logger       *slog.Logger
+	defaultModel string
+	providers    []string
 }
 
 // AIConfig holds configuration for the AI handler.
@@ -30,6 +31,10 @@ type AIConfig struct {
 	OpenAIAPIKey    string
 	GeminiAPIKey    string
 	GrokAPIKey      string
+
+	// Ollama local provider settings.
+	EnableOllama  bool
+	OllamaBaseURL string
 
 	// Default model to use
 	DefaultModel string
@@ -49,6 +54,7 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 
 	// Build provider list from available API keys
 	var providers []omnillm.ProviderConfig
+	var providerNames []string
 
 	// Try to get API keys from config or environment
 	anthropicKey := cfg.AnthropicAPIKey
@@ -60,6 +66,7 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 			Provider: omnillm.ProviderNameAnthropic,
 			APIKey:   anthropicKey,
 		})
+		providerNames = append(providerNames, string(omnillm.ProviderNameAnthropic))
 		logger.Info("AI provider configured", "provider", "anthropic")
 	}
 
@@ -72,6 +79,7 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 			Provider: omnillm.ProviderNameOpenAI,
 			APIKey:   openaiKey,
 		})
+		providerNames = append(providerNames, string(omnillm.ProviderNameOpenAI))
 		logger.Info("AI provider configured", "provider", "openai")
 	}
 
@@ -84,23 +92,35 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 			Provider: omnillm.ProviderNameGemini,
 			APIKey:   geminiKey,
 		})
+		providerNames = append(providerNames, string(omnillm.ProviderNameGemini))
 		logger.Info("AI provider configured", "provider", "gemini")
 	}
 
 	grokKey := cfg.GrokAPIKey
 	if grokKey == "" {
-		grokKey = os.Getenv("GROK_API_KEY")
+		grokKey = firstNonEmpty(os.Getenv("XAI_API_KEY"), os.Getenv("GROK_API_KEY"))
 	}
 	if grokKey != "" {
 		providers = append(providers, omnillm.ProviderConfig{
 			Provider: omnillm.ProviderNameXAI,
 			APIKey:   grokKey,
 		})
+		providerNames = append(providerNames, string(omnillm.ProviderNameXAI))
 		logger.Info("AI provider configured", "provider", "xai")
 	}
 
+	ollamaBaseURL := firstNonEmpty(cfg.OllamaBaseURL, os.Getenv("OLLAMA_BASE_URL"), os.Getenv("OLLAMA_HOST"))
+	if cfg.EnableOllama || envBool("UIFORGE_ENABLE_OLLAMA") || ollamaBaseURL != "" {
+		providers = append(providers, omnillm.ProviderConfig{
+			Provider: omnillm.ProviderNameOllama,
+			BaseURL:  ollamaBaseURL,
+		})
+		providerNames = append(providerNames, string(omnillm.ProviderNameOllama))
+		logger.Info("AI provider configured", "provider", "ollama", "base_url", defaultString(ollamaBaseURL, "default"))
+	}
+
 	if len(providers) == 0 {
-		logger.Warn("no AI providers configured - AI features will be disabled")
+		logger.Info("no AI providers configured; AI features disabled")
 		return &AIHandler{logger: logger}, nil
 	}
 
@@ -109,23 +129,53 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 		Providers: providers,
 	}
 
-	// Enable circuit breaker for fallback
-	if cfg.EnableFallback && len(providers) > 1 {
-		clientConfig.CircuitBreakerConfig = &omnillm.CircuitBreakerConfig{
-			FailureThreshold: 3,
-			Timeout:          30 * time.Second,
-		}
-	}
-
 	client, err := omnillm.NewClient(clientConfig)
 	if err != nil {
 		return nil, fmt.Errorf("creating AI client: %w", err)
 	}
 
 	return &AIHandler{
-		client: client,
-		logger: logger,
+		client:       client,
+		logger:       logger,
+		defaultModel: defaultModel(cfg.DefaultModel, providerNames),
+		providers:    providerNames,
 	}, nil
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if value != "" {
+			return value
+		}
+	}
+	return ""
+}
+
+func defaultString(value, fallback string) string {
+	if value == "" {
+		return fallback
+	}
+	return value
+}
+
+func envBool(name string) bool {
+	value := strings.TrimSpace(strings.ToLower(os.Getenv(name)))
+	return value == "1" || value == "true" || value == "yes" || value == "on"
+}
+
+func defaultModel(configured string, providerNames []string) string {
+	if configured != "" {
+		return configured
+	}
+	if len(providerNames) == 1 && providerNames[0] == string(omnillm.ProviderNameOllama) {
+		return models.OllamaLlama3_8B
+	}
+	return models.Claude3_7Sonnet
+}
+
+// Configured reports whether the handler has an initialized AI client.
+func (h *AIHandler) Configured() bool {
+	return h != nil && h.client != nil
 }
 
 // ServeHTTP implements http.Handler.
@@ -270,15 +320,15 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Build messages
-	messages := []provider.Message{
-		{Role: provider.RoleSystem, Content: systemPrompt},
-		{Role: provider.RoleUser, Content: req.Prompt},
+	messages := []omnillm.Message{
+		{Role: omnillm.RoleSystem, Content: systemPrompt},
+		{Role: omnillm.RoleUser, Content: req.Prompt},
 	}
 
 	// Determine model
 	model := req.Model
 	if model == "" {
-		model = models.Claude3_7Sonnet // Default to Claude 3.7 Sonnet
+		model = h.defaultModel
 	}
 
 	// Set defaults
@@ -292,7 +342,7 @@ func (h *AIHandler) handleGenerate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create completion request
-	completionReq := &provider.ChatCompletionRequest{
+	completionReq := &omnillm.ChatCompletionRequest{
 		Model:       model,
 		Messages:    messages,
 		Temperature: &temperature,
@@ -392,14 +442,14 @@ func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 		systemPrompt = h.buildSystemPrompt(req.Type, req.Context)
 	}
 
-	messages := []provider.Message{
-		{Role: provider.RoleSystem, Content: systemPrompt},
-		{Role: provider.RoleUser, Content: req.Prompt},
+	messages := []omnillm.Message{
+		{Role: omnillm.RoleSystem, Content: systemPrompt},
+		{Role: omnillm.RoleUser, Content: req.Prompt},
 	}
 
 	model := req.Model
 	if model == "" {
-		model = models.Claude3_7Sonnet
+		model = h.defaultModel
 	}
 
 	temperature := req.Temperature
@@ -411,7 +461,7 @@ func (h *AIHandler) handleStream(w http.ResponseWriter, r *http.Request) {
 		maxTokens = 4096
 	}
 
-	completionReq := &provider.ChatCompletionRequest{
+	completionReq := &omnillm.ChatCompletionRequest{
 		Model:       model,
 		Messages:    messages,
 		Temperature: &temperature,
@@ -480,11 +530,17 @@ func (h *AIHandler) handleListModels(w http.ResponseWriter, _ *http.Request) {
 			models.Grok4_0709,
 			models.GrokCodeFast1,
 		},
+		"ollama": {
+			models.OllamaLlama3_8B,
+			models.OllamaMistral7B,
+			models.OllamaQwen2_5,
+			models.OllamaDeepSeek,
+		},
 	}
 
 	h.writeJSON(w, http.StatusOK, map[string]any{
 		"models":  modelList,
-		"default": models.Claude3_7Sonnet,
+		"default": h.defaultModel,
 	})
 }
 
@@ -494,7 +550,8 @@ func (h *AIHandler) handleStatus(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	if h.client != nil {
-		status["providers"] = []string{} // Would need to expose this from omnillm
+		status["providers"] = h.providers
+		status["defaultModel"] = h.defaultModel
 	}
 
 	h.writeJSON(w, http.StatusOK, status)

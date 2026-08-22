@@ -176,6 +176,40 @@ definition data_connector {
 }
 
 // =============================================================================
+// ANALYTICS QUERY MODEL
+// =============================================================================
+
+definition analytics_source {
+    relation org: organization
+    relation owner: principal
+    relation data_source: data_source
+
+    permission manage = owner + org->admin + data_source->manage
+    permission view = manage + org->viewer + data_source->view
+    permission query = manage + org->editor + data_source->use
+}
+
+definition analytics_dataset {
+    relation source: analytics_source
+    relation owner: principal
+
+    permission manage = owner + source->manage
+    permission read = manage + source->query
+    permission list = read
+    permission sort = read
+}
+
+definition analytics_field {
+    relation dataset: analytics_dataset
+    relation owner: principal
+
+    permission manage = owner + dataset->manage
+    permission read = manage + dataset->read
+    permission list = read
+    permission sort = read
+}
+
+// =============================================================================
 // SAVED QUERIES & ALERTS
 // =============================================================================
 
@@ -354,6 +388,9 @@ const (
 	ResourceTypeDashboardTemplate  = "dashboard_template"
 	ResourceTypeDataSource         = "data_source"
 	ResourceTypeDataConnector      = "data_connector"
+	ResourceTypeAnalyticsSource    = "analytics_source"
+	ResourceTypeAnalyticsDataset   = "analytics_dataset"
+	ResourceTypeAnalyticsField     = "analytics_field"
 	ResourceTypeSavedQuery         = "saved_query"
 	ResourceTypeAlert              = "alert"
 	ResourceTypeIntegration        = "integration"

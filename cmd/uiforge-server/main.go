@@ -1,4 +1,3 @@
-// Dashforge Server - Full-featured dashboard server with database support.
 package main
 
 import (
