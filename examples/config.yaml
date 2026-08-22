@@ -1,5 +1,11 @@
 # Dashforge Server Configuration
 # Copy this file and customize for your environment.
+#
+# Note: analytics sources (OmniRoadmap and other application catalogs) are NOT
+# configured here. They are persisted configuration managed at runtime via
+# /api/v1/analytics/sources or the builder's Data sources panel — see
+# examples/analytics-sources.json for the stored shape and
+# docs/analytics-catalog.md for details.
 
 server:
   port: 8080

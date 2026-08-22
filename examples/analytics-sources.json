@@ -1,0 +1,9 @@
+[
+  {
+    "id": "omniroadmap",
+    "name": "OmniRoadmap",
+    "connector": "omniroadmap",
+    "dsnRef": "env://UIFORGE_OMNIROADMAP_DSN",
+    "enabled": true
+  }
+]

@@ -36,6 +36,9 @@ A JSON-first dashboard framework that starts simple with static hosting (GitHub 
 - 🔗 **Cube.js Semantic Layer** - Business-friendly queries with pre-built relationships
 - ⚡ **Static or Dynamic** - Start with static file hosting, graduate to PostgreSQL
 - 🗄️ **Multi-Database Support** - Connect to PostgreSQL, MySQL, and more via plugin providers
+- ❓ **Saved Questions** - Metabase-style read-only GrokifyQL questions with formatting, syntax highlighting, field value browsing, CSV/XLSX export, and dashboard reuse
+- 🤖 **Agent-Ready Analytics** - Integrates with OmniAgent marketplace primitives while UIForge owns query, field-value, and dashboard capabilities
+- 🔑 **Secret References** - Analytics source credentials should use OmniVault/VaultGuard references instead of raw DSNs in catalog storage, with OmniVault SQL store as the encrypted-in-DB fallback
 - 🏢 **Multi-tenant** - Row Level Security (RLS) for tenant isolation
 - 🔐 **SSO Authentication** - GitHub and Google OAuth support
 - 📊 **ChartIR Integration** - Uses [echartify](https://github.com/grokify/echartify) for charts
@@ -51,6 +54,7 @@ A JSON-first dashboard framework that starts simple with static hosting (GitHub 
 ### Authorization
 
 - 🔀 **Dual-Mode Auth** - Simple role hierarchy or SpiceDB for fine-grained control
+- 🧭 **Analytics Policy** - SystemForge/SpiceDB-backed GrokifyQL policy for dataset and field permissions
 - 👤 **Publisher Roles** - Owner, Admin, Creator, Reviewer hierarchies
 - 👥 **Consumer Roles** - Owner, Admin, Editor, Viewer hierarchies
 - 🎯 **Resource Permissions** - Granular control over dashboards, queries, alerts, integrations
@@ -90,12 +94,38 @@ The viewer has a light/dark theme toggle (top-right, persisted via `localStorage
 # Build the server
 go build -o uiforge-server ./cmd/uiforge-server
 
-# Run with PostgreSQL
+# Run with Dolt (local default — connects to a dolt sql-server, creating the
+# database if needed; matches the OmniRoadmap/VisionStudio local pattern)
+./uiforge-server serve --port 8080 --auto-migrate \
+  --db-url 'mysql://root@127.0.0.1:13307/uiforge'
+
+# Or with PostgreSQL (required for Row Level Security / --enable-rls)
 export DATABASE_URL="postgres://user:pass@localhost:5432/uiforge?sslmode=disable"
 export JWT_SECRET="your-secret-key"
 
 ./uiforge-server serve --port 8080 --auto-migrate
 ```
+
+### Analytics Sources
+
+UIForge connects to multiple analytics sources at once, like Metabase. Sources
+are added at runtime — via the **Data sources** panel in the Question builder
+(`/builder/?mode=questions`) or the API — and persist across restarts. Only an
+OmniVault secret reference is stored, never a raw DSN:
+
+```bash
+export UIFORGE_OMNIROADMAP_DSN='root:@tcp(127.0.0.1:13307)/omniroadmap'
+./uiforge-server serve --address 127.0.0.1:13319
+
+# One-time: register the source (or use the builder UI)
+curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
+  -H 'Content-Type: application/json' \
+  -d '{"id":"omniroadmap","name":"OmniRoadmap","connector":"omniroadmap",
+       "dsnRef":"env://UIFORGE_OMNIROADMAP_DSN","enabled":true}'
+```
+
+See [Analytics Catalog](docs/analytics-catalog.md) for the catalog model,
+management API, and credential policy.
 
 ## Documentation
 
@@ -105,6 +135,9 @@ Full documentation is available at [docs/](docs/):
 - [Dashboard Builder](docs/builder.md) - Visual drag-and-drop editor
 - [Dashboard IR Reference](docs/dashboard-ir.md)
 - [Data Sources](docs/data-sources.md) - Database connections & providers
+- [Analytics Catalog](docs/analytics-catalog.md) - Queryable sources, datasets, fields, and Questions
+- [Analytics Authorization](docs/analytics-authorization.md) - GrokifyQL policy with SystemForge and SpiceDB
+- [Agent Integration](docs/agent-integration.md) - OmniAgent marketplace boundary and UIForge analytics capabilities
 - [Cube.js Integration](docs/cube-integration.md) - Semantic data layer
 - [AI Features](docs/ai-features.md) - LLM-powered dashboard generation
 - [Server Configuration](docs/server-config.md)
@@ -139,6 +172,7 @@ Full documentation is available at [docs/](docs/):
 ├─────────────────────────────────────────────────────────────────┤
 │  internal/server/                                               │
 │    ├── api/             REST API handlers                       │
+│    ├── analytics/       Queryable source catalog and providers  │
 │    ├── auth/            JWT + OAuth (GitHub, Google)            │
 │    ├── db/              PostgreSQL with Ent ORM                 │
 │    └── middleware/      Tenant context, logging                 │
@@ -157,6 +191,8 @@ The visual builder provides a Metabase-style drag-and-drop interface:
 - **Chart Builder** - Visual configuration for line, bar, pie, scatter, and area charts
 - **Query Builder** - Connect to Cube.js for semantic queries
 - **AI Integration** - Generate widgets and dashboards from natural language
+- **Question Builder** - Create saved GrokifyQL Questions, browse field values,
+  run results, export CSV/XLSX, and reuse Questions as dashboard widgets
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
