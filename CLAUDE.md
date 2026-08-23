@@ -32,7 +32,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
   scroll horizontally inside the middle column for wide result sets.
 - The analytics catalog is the source of truth for queryable sources, datasets,
   and fields. Use `dashboardir.AnalyticsCatalog` and
-  `internal/server/analytics` instead of hard-coding OmniRoadmap-specific
+  the public `analytics` package instead of hard-coding application-specific
   assumptions into UI code.
 - Persist analytics source connection metadata in UIForge's metadata DB, but
   store only secret references (`env://...`, `keyring://...`, `aws-sm://...`,

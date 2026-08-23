@@ -95,7 +95,7 @@ The viewer has a light/dark theme toggle (top-right, persisted via `localStorage
 go build -o uiforge-server ./cmd/uiforge-server
 
 # Run with Dolt (local default — connects to a dolt sql-server, creating the
-# database if needed; matches the OmniRoadmap/VisionStudio local pattern)
+# database if needed; matches the local dolt sql-server ecosystem pattern)
 ./uiforge-server serve --port 8080 --auto-migrate \
   --db-url 'mysql://root@127.0.0.1:13307/uiforge'
 
@@ -114,14 +114,16 @@ are added at runtime — via the **Data sources** panel in the Question builder
 OmniVault secret reference is stored, never a raw DSN:
 
 ```bash
-export UIFORGE_OMNIROADMAP_DSN='root:@tcp(127.0.0.1:13307)/omniroadmap'
+# Connectors are registered by the consuming application binary — the core
+# engine ships none. Example below assumes an app registered "roadmap-app".
+export UIFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
 ./uiforge-server serve --address 127.0.0.1:13319
 
 # One-time: register the source (or use the builder UI)
 curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
   -H 'Content-Type: application/json' \
-  -d '{"id":"omniroadmap","name":"OmniRoadmap","connector":"omniroadmap",
-       "dsnRef":"env://UIFORGE_OMNIROADMAP_DSN","enabled":true}'
+  -d '{"id":"roadmap-app","name":"Roadmap App","connector":"roadmap-app",
+       "dsnRef":"env://UIFORGE_ROADMAP_APP_DSN","enabled":true}'
 ```
 
 See [Analytics Catalog](docs/analytics-catalog.md) for the catalog model,

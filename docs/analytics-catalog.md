@@ -8,12 +8,12 @@ A catalog contains one or more sources. Each source contains datasets, and each 
 
 ```json
 {
-  "id": "omniroadmap",
-  "name": "OmniRoadmap",
+  "id": "roadmap-app",
+  "name": "Roadmap App",
   "sources": [
     {
-      "id": "omniroadmap",
-      "name": "OmniRoadmap",
+      "id": "roadmap-app",
+      "name": "Roadmap App",
       "type": "application",
       "datasets": [
         {
@@ -71,10 +71,10 @@ is a `SourceConfig`:
 
 ```json
 {
-  "id": "omniroadmap-local",
-  "name": "OmniRoadmap Local",
-  "connector": "omniroadmap",
-  "dsnRef": "env://UIFORGE_OMNIROADMAP_DSN",
+  "id": "roadmap-app-local",
+  "name": "Roadmap App Local",
+  "connector": "roadmap-app",
+  "dsnRef": "env://UIFORGE_ROADMAP_APP_DSN",
   "enabled": true
 }
 ```
@@ -101,9 +101,10 @@ or through the **Data sources** panel in the Question builder header
 server startup; a source that fails to connect surfaces as status `error`
 without preventing startup.
 
-Connectors are registered in `internal/server/analytics` via
-`RegisterConnector`; `omniroadmap` ships today, and additional application
-connectors register the same way.
+Connectors are registered in the public `analytics` package via
+`RegisterConnector`. The engine core ships no connectors — consuming
+application binaries register their own (e.g. a roadmap product registering
+its store as a source) and additional connectors register the same way.
 
 ## Source Credentials
 
@@ -125,7 +126,7 @@ Planned schemes (register on the same resolver without redesign):
   selection before resolving credentials.
 - **Self-contained fallback**: OmniVault's SQL store provider with a
   UIForge-owned table such as `uiforge_vault_secrets`, and references like
-  `sql://analytics-sources/omniroadmap-local`. The SQL store encrypts secret
+  `sql://analytics-sources/roadmap-app-local`. The SQL store encrypts secret
   payloads before writing rows; keep the encryption key outside that database.
 
 ## Questions
@@ -187,4 +188,4 @@ Server mode should expose the combined catalog for all connected sources at:
 GET /api/v1/analytics/catalog
 ```
 
-A UIForge server can combine multiple sources, for example OmniRoadmap, VisionStudio, PostgreSQL, and Dolt, into one catalog response.
+A UIForge server can combine multiple sources — application connectors registered by the consuming binary alongside PostgreSQL and Dolt databases — into one catalog response.
