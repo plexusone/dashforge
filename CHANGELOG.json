@@ -9,6 +9,133 @@
   ],
   "releases": [
     {
+      "version": "v0.6.0",
+      "date": "2026-08-23",
+      "commit": "81fa71b",
+      "highlights": [
+        {
+          "description": "Project renamed back to DashForge: module `github.com/plexusone/dashforge`, `dashforge`/`dashforge-server` CLIs, `DASHFORGE_*` env vars"
+        },
+        {
+          "description": "Persistent analytics sources: managed source configs with OmniVault credential refs, a connector registry, and a Dolt/Ent metadata database"
+        },
+        {
+          "description": "Generic analytics engine with a public connector contract (no roadmap-specific dependencies)"
+        },
+        {
+          "description": "Builder: questions workspace with AI assist, analytics source management, and a collapsible app shell"
+        }
+      ],
+      "breaking": [
+        {
+          "description": "Module path renamed from `github.com/plexusone/uiforge` to `github.com/plexusone/dashforge` (reverting the v0.4.0 rename). CLI binaries (`dashforge`, `dashforge-server`), npm workspace scopes (`@dashforge/*`), and the env var prefix (`DASHFORGE_*`) follow. v0.1.0-v0.3.0 remain importable as `dashforge`; v0.4.0-v0.5.0 remain importable as `uiforge`",
+          "commit": "81fa71b"
+        },
+        {
+          "description": "Analytics engine generalized to a public connector contract; roadmap-specific dependencies removed from the engine",
+          "commit": "fd9a9ab"
+        },
+        {
+          "description": "Server loads persisted analytics sources; the `--omniroadmap-dsn` flag is removed",
+          "commit": "c8bd107"
+        }
+      ],
+      "added": [
+        {
+          "description": "`SourceConfig` model and connector registry for analytics sources",
+          "commit": "bd83946"
+        },
+        {
+          "description": "OmniVault resolver integration for `dsnRef`/`credentialRef` resolution",
+          "commit": "985d1b5"
+        },
+        {
+          "description": "`SourceStore` interface with JSON file backend",
+          "commit": "723df9d"
+        },
+        {
+          "description": "Ent `AnalyticsSource` schema and metadata-DB source store",
+          "commit": "33ea6d1"
+        },
+        {
+          "description": "Dynamic analytics `Service` over managed persisted sources",
+          "commit": "8a5b793"
+        },
+        {
+          "description": "Analytics source CRUD, connection-test, and connectors API endpoints",
+          "commit": "d7302de"
+        },
+        {
+          "description": "Questions, catalog IR, and GrokifyQL policy foundation",
+          "commit": "83540c7"
+        },
+        {
+          "description": "`mysql://` (Dolt) metadata database via Ent and godolt",
+          "commit": "17a7c91"
+        },
+        {
+          "description": "Builder questions workspace with AI assist and widget foundation",
+          "commit": "2f383ab"
+        },
+        {
+          "description": "Builder analytics source management panel",
+          "commit": "363258a"
+        },
+        {
+          "description": "Builder navigation consolidated into a collapsible app shell",
+          "commit": "c703a5f"
+        },
+        {
+          "description": "Updated static dashboard viewer",
+          "commit": "e11fb71"
+        }
+      ],
+      "changed": [
+        {
+          "description": "Dropped local `replace` directives (systemforge, omnillm) that broke CI builds; now consuming released `github.com/grokify/systemforge` v0.9.0 (bringing `goauth/dpop`)",
+          "commit": "81fa71b"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "Lint findings unmasked by restoring CI builds: sha1-based deterministic authz resource-ID derivation annotated (G401/G505), CredentialRef test fixture annotated (G101), saved-questions file mode tightened to 0600 (G306), unused request param removed (unparam)",
+          "commit": "81fa71b"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "Persistent multi-source analytics documentation",
+          "commit": "11031fc"
+        },
+        {
+          "description": "Analytics authorization, agent integration, and platform guides",
+          "commit": "09f6161"
+        },
+        {
+          "description": "ADR-0001: analytics engine and compass roadmap stack",
+          "commit": "2929525"
+        },
+        {
+          "description": "Analytics examples generalized to app-registered connectors",
+          "commit": "45566e3"
+        },
+        {
+          "description": "INIT-UIFORGE-002 and INIT-DASHFORGE-001 specs and roadmap updates",
+          "commit": "745e202"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Use released `godolt` v0.3.0 and `prism-core` v0.5.0",
+          "commit": "992d51b"
+        },
+        {
+          "description": "Bump `github.com/grokify/systemforge` from v0.8.0 to v0.9.0; adds `github.com/grokify/goauth` v0.24.0 (indirect)",
+          "commit": "81fa71b"
+        }
+      ]
+    },
+    {
       "version": "v0.5.0",
       "date": "2026-08-17",
       "highlights": [

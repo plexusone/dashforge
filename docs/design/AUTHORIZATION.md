@@ -449,7 +449,7 @@ authz.Can(ctx, embedToken, "view", dashboard) // true (if embed enabled)
 
 ## Pricing Integration
 
-See [FEAT_MARKETPLACE_PRD.md](./FEAT_MARKETPLACE_PRD.md) for:
+See [FEAT_MARKETPLACE_PRD.md](https://github.com/grokify/systemforge/blob/main/docs/design/FEAT_MARKETPLACE_PRD.md) for:
 
 - Publisher pricing tiers
 - Consumer subscription tiers
