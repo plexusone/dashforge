@@ -5,11 +5,20 @@ import (
 	"testing"
 )
 
+// testConnector is a stand-in connector registered for tests in this package.
+// The engine core no longer bundles any specific connector (OmniRoadmap lives
+// in connectors/omniroadmap), so the contract tests register their own.
+const testConnector = "test-connector"
+
+func init() {
+	RegisterConnector(testConnector, func(string) (QueryProvider, error) { return nil, nil })
+}
+
 func validSourceConfig() SourceConfig {
 	return SourceConfig{
 		ID:        "omniroadmap-local",
 		Name:      "OmniRoadmap Local",
-		Connector: ConnectorOmniRoadmap,
+		Connector: testConnector,
 		DSNRef:    "env://UIFORGE_OMNIROADMAP_DSN",
 		Enabled:   true,
 	}
@@ -49,7 +58,7 @@ func TestSourceConfigValidate(t *testing.T) {
 }
 
 func TestConnectorRegistry(t *testing.T) {
-	if _, ok := LookupConnector(ConnectorOmniRoadmap); !ok {
+	if _, ok := LookupConnector(testConnector); !ok {
 		t.Fatal("omniroadmap connector not registered")
 	}
 	if _, ok := LookupConnector("does-not-exist"); ok {
@@ -57,12 +66,12 @@ func TestConnectorRegistry(t *testing.T) {
 	}
 	found := false
 	for _, name := range Connectors() {
-		if name == ConnectorOmniRoadmap {
+		if name == testConnector {
 			found = true
 		}
 	}
 	if !found {
-		t.Fatalf("Connectors() = %v, missing %q", Connectors(), ConnectorOmniRoadmap)
+		t.Fatalf("Connectors() = %v, missing %q", Connectors(), testConnector)
 	}
 }
 
@@ -72,5 +81,5 @@ func TestRegisterConnectorPanics(t *testing.T) {
 			t.Fatal("expected panic on duplicate registration")
 		}
 	}()
-	RegisterConnector(ConnectorOmniRoadmap, func(string) (QueryProvider, error) { return nil, nil })
+	RegisterConnector(testConnector, func(string) (QueryProvider, error) { return nil, nil })
 }

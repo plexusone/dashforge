@@ -27,12 +27,12 @@ import (
 	_ "github.com/plexusone/uiforge/datasource/providers/postgres"
 
 	// Import channel adapters for registration via init()
+	serveranalytics "github.com/plexusone/uiforge/analytics"
 	_ "github.com/plexusone/uiforge/integration/channel/email"
 	_ "github.com/plexusone/uiforge/integration/channel/slack"
 	_ "github.com/plexusone/uiforge/integration/channel/webhook"
 	_ "github.com/plexusone/uiforge/integration/channel/whatsapp"
 	localAuthz "github.com/plexusone/uiforge/internal/authz"
-	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 	"github.com/plexusone/uiforge/internal/server/api"
 	"github.com/plexusone/uiforge/internal/server/auth"
 	"github.com/plexusone/uiforge/internal/server/db"

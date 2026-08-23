@@ -16,7 +16,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/grokify/grokifyql"
+	"github.com/grokify/guardsql"
 	"github.com/plexusone/uiforge/dashboardir"
 )
 
@@ -251,12 +251,12 @@ func sameQueryName(datasets []string, datasetID string) bool {
 	return strings.EqualFold(strings.TrimSpace(datasets[0]), strings.TrimSpace(datasetID))
 }
 
-func compileGrokifyQLQuestion(input string, policy grokifyql.Policy) (*dashboardir.CompiledQuery, error) {
-	q, err := grokifyql.Parse(input)
+func compileGrokifyQLQuestion(input string, policy guardsql.Policy) (*dashboardir.CompiledQuery, error) {
+	q, err := guardsql.Parse(input)
 	if err != nil {
 		return nil, err
 	}
-	issues := grokifyql.CheckPolicy(q, policy)
+	issues := guardsql.CheckPolicy(q, policy)
 	if len(issues) > 0 {
 		return nil, fmt.Errorf("invalid query policy: %s", issues[0].Message)
 	}
@@ -277,7 +277,7 @@ func compileGrokifyQLQuestion(input string, policy grokifyql.Policy) (*dashboard
 	}, nil
 }
 
-func compiledFields(q *grokifyql.Query) []string {
+func compiledFields(q *guardsql.Query) []string {
 	if q == nil {
 		return nil
 	}
@@ -299,7 +299,7 @@ func compiledFields(q *grokifyql.Query) []string {
 			if !item.Aggregate.Star {
 				add(item.Aggregate.Field)
 			}
-			add(grokifyql.OutputName(item))
+			add(guardsql.OutputName(item))
 			continue
 		}
 		if !item.Star {
@@ -317,15 +317,15 @@ func compiledFields(q *grokifyql.Query) []string {
 	return fields
 }
 
-func collectExprFields(expr grokifyql.Expr, add func(string)) {
+func collectExprFields(expr guardsql.Expr, add func(string)) {
 	switch e := expr.(type) {
 	case nil:
-	case *grokifyql.CompareExpr:
+	case *guardsql.CompareExpr:
 		add(e.Field)
-	case *grokifyql.LogicalExpr:
+	case *guardsql.LogicalExpr:
 		collectExprFields(e.Left, add)
 		collectExprFields(e.Right, add)
-	case *grokifyql.NotExpr:
+	case *guardsql.NotExpr:
 		collectExprFields(e.Expr, add)
 	}
 }

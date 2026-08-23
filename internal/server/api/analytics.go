@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/grokify/grokifyql"
+	"github.com/grokify/guardsql"
+	serveranalytics "github.com/plexusone/uiforge/analytics"
 	"github.com/plexusone/uiforge/dashboardir"
-	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 )
 
 // AnalyticsHandler serves generic analytics metadata and, over time, query
@@ -87,7 +87,7 @@ func (h *AnalyticsHandler) executeQuery(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *AnalyticsHandler) checkGrokifyQLPolicy(r *http.Request, req dashboardir.AnalyticsQueryRequest) error {
-	q, err := grokifyql.Parse(req.Query)
+	q, err := guardsql.Parse(req.Query)
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (h *AnalyticsHandler) checkGrokifyQLPolicy(r *http.Request, req dashboardir
 	if err != nil {
 		return err
 	}
-	if issues := grokifyql.CheckPolicy(q, policy); len(issues) > 0 {
+	if issues := guardsql.CheckPolicy(q, policy); len(issues) > 0 {
 		return fmt.Errorf("invalid query policy: %s", issues[0].Message)
 	}
 	return nil

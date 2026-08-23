@@ -25,7 +25,7 @@ type AnalyticsSource struct {
 	Slug string `json:"slug,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
-	// Connector registry name, e.g. omniroadmap
+	// Connector registry name, e.g. roadmap-app
 	Connector string `json:"connector,omitempty"`
 	// OmniVault secret reference (env://..., file://...); never a raw DSN
 	DsnRef string `json:"dsn_ref,omitempty"`
