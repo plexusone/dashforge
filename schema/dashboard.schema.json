@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/plexusone/uiforge/schema/dashboard.schema.json",
+  "$id": "https://github.com/plexusone/dashforge/schema/dashboard.schema.json",
   "$ref": "#/$defs/Dashboard",
   "$defs": {
     "CacheConfig": {
@@ -329,5 +329,5 @@
     }
   },
   "title": "Dashboard",
-  "description": "UIForge dashboard definition (DashboardIR)"
+  "description": "DashForge dashboard definition (DashboardIR)"
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/plexusone/uiforge/schema/component.schema.json",
+  "$id": "https://github.com/plexusone/dashforge/schema/component.schema.json",
   "$ref": "#/$defs/ComponentSpec",
   "$defs": {
     "ComponentSpec": {
@@ -127,5 +127,5 @@
     }
   },
   "title": "ComponentSpec",
-  "description": "UIForge component manifest — describes a registered component's interface"
+  "description": "DashForge component manifest — describes a registered component's interface"
 }

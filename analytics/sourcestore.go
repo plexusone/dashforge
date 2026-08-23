@@ -27,7 +27,7 @@ type SourceStore interface {
 
 // DefaultSourceStorePath is the JSON file used when no metadata database is
 // configured, alongside the saved-question store.
-const DefaultSourceStorePath = ".uiforge/analytics-sources.json"
+const DefaultSourceStorePath = ".dashforge/analytics-sources.json"
 
 // sourceFileStore is a JSON-file SourceStore for deployments without a
 // metadata database. Safe to keep on disk: it contains dsnRef references,

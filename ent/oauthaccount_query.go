@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/oauthaccount"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/oauthaccount"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthAccountQuery is the builder for querying OAuthAccount entities.

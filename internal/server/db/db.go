@@ -12,7 +12,7 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 	_ "github.com/lib/pq" // PostgreSQL driver
 
-	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/dashforge/ent"
 )
 
 // Database is the interface for database operations.

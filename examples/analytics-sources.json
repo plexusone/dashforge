@@ -3,7 +3,7 @@
     "id": "roadmap-app",
     "name": "Roadmap App",
     "connector": "roadmap-app",
-    "dsnRef": "env://UIFORGE_ROADMAP_APP_DSN",
+    "dsnRef": "env://DASHFORGE_ROADMAP_APP_DSN",
     "enabled": true
   }
 ]

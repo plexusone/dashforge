@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/human"
-	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/human"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // Human is the model entity for the Human schema.

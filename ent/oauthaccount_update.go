@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/oauthaccount"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/oauthaccount"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthAccountUpdate is the builder for updating OAuthAccount entities.

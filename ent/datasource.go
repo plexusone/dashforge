@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/datasource"
-	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/datasource"
+	"github.com/plexusone/dashforge/ent/organization"
 )
 
 // DataSource is the model entity for the DataSource schema.

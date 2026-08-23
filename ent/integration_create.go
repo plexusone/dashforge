@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/integration"
-	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/organization"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.

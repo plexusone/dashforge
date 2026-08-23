@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/dashforge/ent"
 )
 
 // The AlertFunc type is an adapter to allow the use of ordinary

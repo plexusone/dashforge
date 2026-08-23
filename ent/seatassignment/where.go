@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

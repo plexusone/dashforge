@@ -13,10 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/principal"
-	"github.com/plexusone/uiforge/ent/principalmembership"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/principalmembership"
 )
 
 // PrincipalMembershipUpdate is the builder for updating PrincipalMembership entities.

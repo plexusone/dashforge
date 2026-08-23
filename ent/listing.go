@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/dashboardtemplate"
-	"github.com/plexusone/uiforge/ent/listing"
-	"github.com/plexusone/uiforge/ent/principal"
-	"github.com/plexusone/uiforge/ent/publisher"
+	"github.com/plexusone/dashforge/ent/dashboardtemplate"
+	"github.com/plexusone/dashforge/ent/listing"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/publisher"
 )
 
 // Listing is the model entity for the Listing schema.

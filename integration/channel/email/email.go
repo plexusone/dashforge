@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/uiforge/integration/channel"
+	"github.com/plexusone/dashforge/integration/channel"
 )
 
 func init() {
@@ -193,7 +193,7 @@ func (c *Channel) TestConnection(ctx context.Context, config channel.Config) err
 		}
 		defer conn.Close()
 
-		if err := conn.Hello("uiforge"); err != nil {
+		if err := conn.Hello("dashforge"); err != nil {
 			return channel.NewSendError("email", "SMTP HELO failed", err)
 		}
 

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// SavedQuestion is UIForge metadata for a reusable analytical question. A
+// SavedQuestion is DashForge metadata for a reusable analytical question. A
 // question can later be placed on zero, one, or many dashboards.
 type SavedQuestion struct {
 	ID            string         `json:"id"`

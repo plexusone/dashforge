@@ -13,8 +13,8 @@ export function AssistantThread({ instance, children }: ComponentProps): React.R
 
   return (
     <div
-      data-uiforge-component={instance.id}
-      data-uiforge-type="assistant.thread"
+      data-dashforge-component={instance.id}
+      data-dashforge-type="assistant.thread"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -24,15 +24,15 @@ export function AssistantThread({ instance, children }: ComponentProps): React.R
       }}
     >
       {children ?? (
-        <div data-uiforge-slot="messages" style={{ flex: 1 }}>
-          <span data-uiforge-placeholder="assistant.thread">
+        <div data-dashforge-slot="messages" style={{ flex: 1 }}>
+          <span data-dashforge-placeholder="assistant.thread">
             Thread messages render here via @assistant-ui/react Thread primitive
           </span>
         </div>
       )}
-      {props.showToolCalls !== false && <span data-uiforge-config="showToolCalls" hidden />}
+      {props.showToolCalls !== false && <span data-dashforge-config="showToolCalls" hidden />}
       {props.streamingIndicator !== false && (
-        <span data-uiforge-config="streamingIndicator" hidden />
+        <span data-dashforge-config="streamingIndicator" hidden />
       )}
     </div>
   )

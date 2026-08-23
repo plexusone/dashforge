@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 func TestGoldenPageSpecs(t *testing.T) {

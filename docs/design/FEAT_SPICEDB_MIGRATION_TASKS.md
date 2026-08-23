@@ -2,11 +2,11 @@
 
 > **Status**: Pending
 >
-> Add SpiceDB authorization to UIForge for fine-grained dashboard permissions.
+> Add SpiceDB authorization to DashForge for fine-grained dashboard permissions.
 
 ## Overview
 
-UIForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RLS. This migration adds SpiceDB for:
+DashForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RLS. This migration adds SpiceDB for:
 
 - Fine-grained dashboard/resource permissions
 - Cross-organization sharing capabilities

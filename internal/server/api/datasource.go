@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/uiforge/datasource"
-	"github.com/plexusone/uiforge/ent"
-	entdatasource "github.com/plexusone/uiforge/ent/datasource"
-	"github.com/plexusone/uiforge/internal/server/db"
+	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/dashforge/ent"
+	entdatasource "github.com/plexusone/dashforge/ent/datasource"
+	"github.com/plexusone/dashforge/internal/server/db"
 )
 
 // DataSourceHandler handles data source API requests.

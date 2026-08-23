@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/dashforge/ent"
 )
 
 // DataChangeEvaluator evaluates data change alerts.

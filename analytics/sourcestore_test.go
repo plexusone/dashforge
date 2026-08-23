@@ -107,7 +107,7 @@ func TestSourceFileStorePersistsAcrossInstances(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(data), "env://UIFORGE_OMNIROADMAP_DSN") {
+	if !strings.Contains(string(data), "env://DASHFORGE_OMNIROADMAP_DSN") {
 		t.Fatal("expected dsnRef in store file")
 	}
 

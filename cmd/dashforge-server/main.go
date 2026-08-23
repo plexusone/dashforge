@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/plexusone/uiforge/cmd/uiforge-server/cmd"
+	"github.com/plexusone/dashforge/cmd/dashforge-server/cmd"
 )
 
 func main() {

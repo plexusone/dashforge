@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to UIForge are documented here.
+All notable changes to DashForge are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html),
@@ -35,7 +35,7 @@ Static viewer polish: light/dark theme toggle and consistent numeric formatting.
 
 ## [v0.4.0] - 2026-07-25
 
-UISpec type system, component registry, React renderer, AI-powered builder features, new CLIs, JSON schemas, and domain packages. Completes the DashForge → UIForge rename.
+UISpec type system, component registry, React renderer, AI-powered builder features, new CLIs, JSON schemas, and domain packages. Completes the DashForge → DashForge rename.
 
 [:octicons-tag-24: Release Notes](releases/v0.4.0.md){ .md-button }
 
@@ -45,7 +45,7 @@ UISpec type system, component registry, React renderer, AI-powered builder featu
 - Component registry with builtin core, analytics, and assistant namespaces
 - React PageRenderer for UISpec pages
 - AI-powered PageSpec generator and visual builder features
-- New `uiforge` and `uiforge-server` Cobra CLIs
+- New `dashforge` and `dashforge-server` Cobra CLIs
 - Generated component and page JSON schemas
 
 ### Added
@@ -53,14 +53,14 @@ UISpec type system, component registry, React renderer, AI-powered builder featu
 - UISpec type system (page, component, layout, binding, interaction, navigation, theme, capability, profiles)
 - Component registry with manifest validation and experience profiles
 - Domain packages for diff, expression, interaction, state, and bridge
-- `uiforge` and `uiforge-server` Cobra CLIs
+- `dashforge` and `dashforge-server` Cobra CLIs
 - Component and page JSON schemas generated via `invopop/jsonschema`
 - React PageRenderer with UISpec rendering
 - Builder: PageSpec generator, ComponentPalette, ComponentPropertyEditor
 
 ### Changed
 
-- Renamed Go module from `dashforge` to `uiforge`, updating import paths across the codebase
+- Renamed Go module from `dashforge` to `dashforge`, updating import paths across the codebase
 
 ---
 
@@ -133,7 +133,7 @@ Initial release with full-stack dashboard builder.
 
 ---
 
-[v0.4.0]: https://github.com/plexusone/uiforge/compare/v0.3.0...v0.4.0
-[v0.3.0]: https://github.com/plexusone/uiforge/compare/v0.2.0...v0.3.0
-[v0.2.0]: https://github.com/plexusone/uiforge/compare/v0.1.0...v0.2.0
-[v0.1.0]: https://github.com/plexusone/uiforge/releases/tag/v0.1.0
+[v0.4.0]: https://github.com/plexusone/dashforge/compare/v0.3.0...v0.4.0
+[v0.3.0]: https://github.com/plexusone/dashforge/compare/v0.2.0...v0.3.0
+[v0.2.0]: https://github.com/plexusone/dashforge/compare/v0.1.0...v0.2.0
+[v0.1.0]: https://github.com/plexusone/dashforge/releases/tag/v0.1.0

@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/grokify/guardsql"
-	serveranalytics "github.com/plexusone/uiforge/analytics"
-	"github.com/plexusone/uiforge/dashboardir"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
 // AnalyticsHandler serves generic analytics metadata and, over time, query

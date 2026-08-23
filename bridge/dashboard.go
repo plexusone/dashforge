@@ -4,8 +4,8 @@ package bridge
 import (
 	"fmt"
 
-	"github.com/plexusone/uiforge/dashboardir"
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/dashboardir"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 // DashboardToPageSpec converts a DashboardIR Dashboard to a UISpec PageSpec

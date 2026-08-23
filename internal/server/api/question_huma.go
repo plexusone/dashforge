@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/plexusone/uiforge/dashboardir"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
 // RegisterSavedQuestionRoutes registers saved-question endpoints with Huma so

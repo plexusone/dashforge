@@ -13,11 +13,11 @@ import (
 	_ "github.com/go-sql-driver/mysql" // MySQL-wire driver (Dolt, MySQL)
 	"github.com/grokify/godolt"
 
-	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/dashforge/ent"
 )
 
 // openMySQL opens a MySQL-wire connection with Ent. This is the path for
-// Dolt (`dolt sql-server`) as UIForge's local metadata database, and works
+// Dolt (`dolt sql-server`) as DashForge's local metadata database, and works
 // against vanilla MySQL as well. The target database is created if it does
 // not exist, matching the ecosystem's local-Dolt pattern.
 func openMySQL(rawURL string) (Database, error) {

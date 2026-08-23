@@ -19,7 +19,7 @@ func validSourceConfig() SourceConfig {
 		ID:        "omniroadmap-local",
 		Name:      "OmniRoadmap Local",
 		Connector: testConnector,
-		DSNRef:    "env://UIFORGE_OMNIROADMAP_DSN",
+		DSNRef:    "env://DASHFORGE_OMNIROADMAP_DSN",
 		Enabled:   true,
 	}
 }

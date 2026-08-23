@@ -40,7 +40,7 @@ describe('Assistant components', () => {
       { id: 'thread', type: 'assistant.thread', properties: { showToolCalls: true } },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-type="assistant.thread"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-type="assistant.thread"]')).not.toBeNull()
   })
 
   it('renders assistant.composer', () => {
@@ -52,7 +52,7 @@ describe('Assistant components', () => {
       },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-type="assistant.composer"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-type="assistant.composer"]')).not.toBeNull()
   })
 
   it('renders assistant.thread-list with search slot', () => {
@@ -60,8 +60,8 @@ describe('Assistant components', () => {
       { id: 'threads', type: 'assistant.thread-list', properties: { showSearch: true } },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-type="assistant.thread-list"]')).not.toBeNull()
-    expect(container.querySelector('[data-uiforge-slot="search"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-type="assistant.thread-list"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-slot="search"]')).not.toBeNull()
   })
 
   it('renders assistant.tool-call', () => {
@@ -73,8 +73,8 @@ describe('Assistant components', () => {
       },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-type="assistant.tool-call"]')).not.toBeNull()
-    expect(container.querySelector('[data-uiforge-slot="tool-header"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-type="assistant.tool-call"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-slot="tool-header"]')).not.toBeNull()
   })
 
   it('renders assistant.run-status', () => {
@@ -82,8 +82,8 @@ describe('Assistant components', () => {
       { id: 'status', type: 'assistant.run-status', properties: { showElapsed: true } },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-type="assistant.run-status"]')).not.toBeNull()
-    expect(container.querySelector('[data-uiforge-slot="elapsed"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-type="assistant.run-status"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-slot="elapsed"]')).not.toBeNull()
   })
 
   it('hides search slot when showSearch is false', () => {
@@ -91,6 +91,6 @@ describe('Assistant components', () => {
       { id: 'threads', type: 'assistant.thread-list', properties: { showSearch: false } },
     ])
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-slot="search"]')).toBeNull()
+    expect(container.querySelector('[data-dashforge-slot="search"]')).toBeNull()
   })
 })

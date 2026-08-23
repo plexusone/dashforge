@@ -11,18 +11,18 @@ func TestMySQLURLToDSN(t *testing.T) {
 	}{
 		{
 			name: "url with user and port",
-			in:   "mysql://root@127.0.0.1:13308/uiforge",
-			want: "root@tcp(127.0.0.1:13308)/uiforge",
+			in:   "mysql://root@127.0.0.1:13308/dashforge",
+			want: "root@tcp(127.0.0.1:13308)/dashforge",
 		},
 		{
 			name: "url with password and query",
-			in:   "mysql://user:pass@db.example.com/uiforge?tls=true", // #nosec G101 -- placeholder credentials in a parser test
-			want: "user:pass@tcp(db.example.com:3306)/uiforge?tls=true",
+			in:   "mysql://user:pass@db.example.com/dashforge?tls=true", // #nosec G101 -- placeholder credentials in a parser test
+			want: "user:pass@tcp(db.example.com:3306)/dashforge?tls=true",
 		},
 		{
 			name: "raw driver dsn passes through",
-			in:   "root:@tcp(127.0.0.1:13308)/uiforge",
-			want: "root:@tcp(127.0.0.1:13308)/uiforge",
+			in:   "root:@tcp(127.0.0.1:13308)/dashforge",
+			want: "root:@tcp(127.0.0.1:13308)/dashforge",
 		},
 		{
 			name:    "missing database name",

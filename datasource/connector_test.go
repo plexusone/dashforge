@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 type mockConnector struct {

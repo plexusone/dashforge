@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/plexusone/uiforge/ent"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertevent"
-	"github.com/plexusone/uiforge/integration/channel"
+	"github.com/plexusone/dashforge/ent"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertevent"
+	"github.com/plexusone/dashforge/integration/channel"
 )
 
 // DefaultEvaluationInterval is the default time between alert evaluations.

@@ -8,9 +8,9 @@ import (
 	"github.com/grokify/systemforge/authz"
 	"github.com/grokify/systemforge/authz/simple"
 	"github.com/grokify/systemforge/authz/spicedb"
-	"github.com/plexusone/uiforge/ent"
-	"github.com/plexusone/uiforge/ent/human"
-	"github.com/plexusone/uiforge/ent/principalmembership"
+	"github.com/plexusone/dashforge/ent"
+	"github.com/plexusone/dashforge/ent/human"
+	"github.com/plexusone/dashforge/ent/principalmembership"
 )
 
 // Mode specifies the authorization backend.

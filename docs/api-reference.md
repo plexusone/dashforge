@@ -1,6 +1,6 @@
 # API Reference
 
-The UIForge REST API provides programmatic access to dashboards, data sources, and queries.
+The DashForge REST API provides programmatic access to dashboards, data sources, and queries.
 
 ## Base URL
 
@@ -14,7 +14,7 @@ Most endpoints require authentication via JWT Bearer token:
 
 ```bash
 curl -H "Authorization: Bearer <access_token>" \
-  https://uiforge.example.com/api/v1/dashboards
+  https://dashforge.example.com/api/v1/dashboards
 ```
 
 ## Response Format

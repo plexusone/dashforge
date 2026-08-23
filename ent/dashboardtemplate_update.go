@@ -13,10 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/dashboardtemplate"
-	"github.com/plexusone/uiforge/ent/listing"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/publisher"
+	"github.com/plexusone/dashforge/ent/dashboardtemplate"
+	"github.com/plexusone/dashforge/ent/listing"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/publisher"
 )
 
 // DashboardTemplateUpdate is the builder for updating DashboardTemplate entities.

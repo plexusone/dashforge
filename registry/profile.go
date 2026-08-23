@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 // BuiltinProfiles returns the default profile constraint definitions.

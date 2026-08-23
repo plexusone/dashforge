@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/uiforge/ent"
+	"github.com/plexusone/dashforge/ent"
 )
 
 // ScheduleEvaluator evaluates schedule-based alerts.

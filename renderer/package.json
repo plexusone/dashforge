@@ -1,5 +1,5 @@
 {
-  "name": "@uiforge/renderer",
+  "name": "@dashforge/renderer",
   "version": "0.1.0",
   "description": "UISpec React renderer — renders PageSpec JSON as a React component tree",
   "main": "dist/index.js",

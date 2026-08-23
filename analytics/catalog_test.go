@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/plexusone/uiforge/dashboardir"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
 // fakeProvider is a QueryProvider whose catalog reports one source with an
@@ -80,20 +80,20 @@ func fakeSourceConfig(id, envVar string) SourceConfig {
 func TestManagedServiceAddCatalogQueryRemove(t *testing.T) {
 	ctx := context.Background()
 	svc := newManagedServiceForTest(t, filepath.Join(t.TempDir(), "sources.json"))
-	t.Setenv("UIFORGE_TEST_FAKE_A", "dsn-a")
-	t.Setenv("UIFORGE_TEST_FAKE_B", "dsn-b")
+	t.Setenv("DASHFORGE_TEST_FAKE_A", "dsn-a")
+	t.Setenv("DASHFORGE_TEST_FAKE_B", "dsn-b")
 
 	if svc.HasProviders() {
 		t.Fatal("expected no providers before AddSource")
 	}
 
-	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")); err != nil {
+	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := svc.AddSource(ctx, fakeSourceConfig("beta", "UIFORGE_TEST_FAKE_B")); err != nil {
+	if _, err := svc.AddSource(ctx, fakeSourceConfig("beta", "DASHFORGE_TEST_FAKE_B")); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")); err == nil {
+	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")); err == nil {
 		t.Fatal("expected duplicate ID to be rejected")
 	}
 
@@ -155,10 +155,10 @@ func TestManagedServiceAddCatalogQueryRemove(t *testing.T) {
 func TestManagedServiceLoadAllReconnects(t *testing.T) {
 	ctx := context.Background()
 	path := filepath.Join(t.TempDir(), "sources.json")
-	t.Setenv("UIFORGE_TEST_FAKE_A", "dsn-a")
+	t.Setenv("DASHFORGE_TEST_FAKE_A", "dsn-a")
 
 	svc1 := newManagedServiceForTest(t, path)
-	if _, err := svc1.AddSource(ctx, fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")); err != nil {
+	if _, err := svc1.AddSource(ctx, fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")); err != nil {
 		t.Fatal(err)
 	}
 	if err := svc1.Close(); err != nil {
@@ -181,10 +181,10 @@ func TestManagedServiceLoadAllReconnects(t *testing.T) {
 func TestManagedServiceConnectFailure(t *testing.T) {
 	ctx := context.Background()
 	svc := newManagedServiceForTest(t, filepath.Join(t.TempDir(), "sources.json"))
-	t.Setenv("UIFORGE_TEST_FAKE_FAIL", "fail")
+	t.Setenv("DASHFORGE_TEST_FAKE_FAIL", "fail")
 
 	// AddSource refuses a config that cannot connect.
-	if _, err := svc.AddSource(ctx, fakeSourceConfig("broken", "UIFORGE_TEST_FAKE_FAIL")); err == nil {
+	if _, err := svc.AddSource(ctx, fakeSourceConfig("broken", "DASHFORGE_TEST_FAKE_FAIL")); err == nil {
 		t.Fatal("expected AddSource to fail on dial error")
 	}
 
@@ -194,7 +194,7 @@ func TestManagedServiceConnectFailure(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := store.Save(ctx, fakeSourceConfig("broken", "UIFORGE_TEST_FAKE_FAIL")); err != nil {
+	if _, err := store.Save(ctx, fakeSourceConfig("broken", "DASHFORGE_TEST_FAKE_FAIL")); err != nil {
 		t.Fatal(err)
 	}
 	resolver, err := NewDefaultResolver()
@@ -220,9 +220,9 @@ func TestManagedServiceConnectFailure(t *testing.T) {
 func TestManagedServiceTestSource(t *testing.T) {
 	ctx := context.Background()
 	svc := newManagedServiceForTest(t, filepath.Join(t.TempDir(), "sources.json"))
-	t.Setenv("UIFORGE_TEST_FAKE_A", "dsn-a")
+	t.Setenv("DASHFORGE_TEST_FAKE_A", "dsn-a")
 
-	if err := svc.TestSource(ctx, fakeSourceConfig("probe", "UIFORGE_TEST_FAKE_A")); err != nil {
+	if err := svc.TestSource(ctx, fakeSourceConfig("probe", "DASHFORGE_TEST_FAKE_A")); err != nil {
 		t.Fatal(err)
 	}
 	// Nothing persisted by a test.
@@ -238,16 +238,16 @@ func TestManagedServiceTestSource(t *testing.T) {
 func TestManagedServiceUpdateSource(t *testing.T) {
 	ctx := context.Background()
 	svc := newManagedServiceForTest(t, filepath.Join(t.TempDir(), "sources.json"))
-	t.Setenv("UIFORGE_TEST_FAKE_A", "dsn-a")
+	t.Setenv("DASHFORGE_TEST_FAKE_A", "dsn-a")
 
-	if _, err := svc.UpdateSource(ctx, fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")); !errors.Is(err, ErrSourceNotFound) {
+	if _, err := svc.UpdateSource(ctx, fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")); !errors.Is(err, ErrSourceNotFound) {
 		t.Fatalf("expected ErrSourceNotFound for update of unknown source, got %v", err)
 	}
 
-	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")); err != nil {
+	if _, err := svc.AddSource(ctx, fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")); err != nil {
 		t.Fatal(err)
 	}
-	cfg := fakeSourceConfig("alpha", "UIFORGE_TEST_FAKE_A")
+	cfg := fakeSourceConfig("alpha", "DASHFORGE_TEST_FAKE_A")
 	cfg.Enabled = false
 	updated, err := svc.UpdateSource(ctx, cfg)
 	if err != nil {

@@ -6,9 +6,9 @@ import { evaluateExpression, containsExpression } from './expression';
 import { PageState } from './state';
 import { InteractionEngine } from './interaction';
 import { DataSourceRegistry } from './datasource';
-export const UIForgeContext = React.createContext(null);
-export function useUIForge() {
-    return React.useContext(UIForgeContext);
+export const DashForgeContext = React.createContext(null);
+export function useDashForge() {
+    return React.useContext(DashForgeContext);
 }
 export function PageRenderer({ page, className, style, onError, initialState, dataSources: dataSourceConnectors, onInteraction, }) {
     const [ctx] = React.useState(() => {
@@ -51,7 +51,7 @@ export function PageRenderer({ page, className, style, onError, initialState, da
         }
         const Component = getComponent(instance.type);
         if (!Component) {
-            return (_jsxs("div", { "data-uiforge-missing": instance.type, style: {
+            return (_jsxs("div", { "data-dashforge-missing": instance.type, style: {
                     padding: '8px',
                     border: '1px dashed #cbd5e1',
                     borderRadius: '4px',
@@ -62,14 +62,14 @@ export function PageRenderer({ page, className, style, onError, initialState, da
         const children = instance.children?.map(renderComponent);
         return (_jsx(ErrorBoundary, { componentId: instance.id, onError: onError, children: _jsx(Component, { instance: instance, children: children }) }, instance.id));
     }
-    return (_jsx(UIForgeContext.Provider, { value: ctx, children: _jsx("div", { className: className, style: mergedStyle, "data-uiforge-page": page.metadata.id, "data-uiforge-profile": page.profile, children: _jsx(Layout, { layout: page.layout, components: page.components, renderComponent: renderComponent }) }) }));
+    return (_jsx(DashForgeContext.Provider, { value: ctx, children: _jsx("div", { className: className, style: mergedStyle, "data-dashforge-page": page.metadata.id, "data-dashforge-profile": page.profile, children: _jsx(Layout, { layout: page.layout, components: page.components, renderComponent: renderComponent }) }) }));
 }
 function buildThemeStyle(theme) {
     if (!theme?.tokens)
         return {};
     const style = {};
     for (const [key, value] of Object.entries(theme.tokens)) {
-        style[`--uiforge-${key}`] = value;
+        style[`--dashforge-${key}`] = value;
     }
     return style;
 }
@@ -86,7 +86,7 @@ class ErrorBoundary extends React.Component {
     }
     render() {
         if (this.state.error) {
-            return (_jsxs("div", { "data-uiforge-error": this.props.componentId, style: {
+            return (_jsxs("div", { "data-dashforge-error": this.props.componentId, style: {
                     padding: '8px',
                     border: '1px solid #ef4444',
                     borderRadius: '4px',

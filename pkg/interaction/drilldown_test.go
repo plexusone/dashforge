@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/plexusone/uiforge/pkg/state"
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/pkg/state"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 func TestDashboardDrillDown(t *testing.T) {

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/membership"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/user"
+	"github.com/plexusone/dashforge/ent/membership"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/user"
 )
 
 // UserUpdate is the builder for updating User entities.

@@ -6,7 +6,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "uiforge",
+	Use:   "dashforge",
 	Short: "Dashboard framework for static sites and databases",
 	Long: `Dashforge is a JSON-first dashboard framework that starts simple
 with static hosting (GitHub Pages) and grows into a full analytics platform.

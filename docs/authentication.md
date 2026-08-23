@@ -1,12 +1,12 @@
 # Authentication
 
-UIForge supports OAuth 2.0 authentication with GitHub and Google providers, using JWT tokens for session management.
+DashForge supports OAuth 2.0 authentication with GitHub and Google providers, using JWT tokens for session management.
 
 ## Overview
 
 ```
 ┌─────────┐     ┌───────────┐     ┌──────────────┐
-│ Browser │────▶│ UIForge │────▶│ GitHub/Google│
+│ Browser │────▶│ DashForge │────▶│ GitHub/Google│
 │         │◀────│  Server   │◀────│    OAuth     │
 └─────────┘     └───────────┘     └──────────────┘
      │                │
@@ -15,11 +15,11 @@ UIForge supports OAuth 2.0 authentication with GitHub and Google providers, usin
 ```
 
 1. User clicks "Login with GitHub/Google"
-2. UIForge redirects to OAuth provider
+2. DashForge redirects to OAuth provider
 3. User authenticates with provider
 4. Provider redirects back with authorization code
-5. UIForge exchanges code for user info
-6. UIForge creates/updates user and returns JWT tokens
+5. DashForge exchanges code for user info
+6. DashForge creates/updates user and returns JWT tokens
 
 ## Setting Up OAuth
 
@@ -28,7 +28,7 @@ UIForge supports OAuth 2.0 authentication with GitHub and Google providers, usin
 1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
 2. Click "New OAuth App"
 3. Fill in:
-   - **Application name**: UIForge
+   - **Application name**: DashForge
    - **Homepage URL**: `https://your-domain.com`
    - **Authorization callback URL**: `https://your-domain.com/api/v1/auth/github/callback`
 4. Save and note the Client ID and Client Secret
@@ -143,7 +143,7 @@ Access tokens contain:
 
 ```json
 {
-  "iss": "uiforge",
+  "iss": "dashforge",
   "sub": "1",
   "exp": 1705312200,
   "iat": 1705311300,
@@ -156,7 +156,7 @@ Access tokens contain:
 
 | Claim | Description |
 |-------|-------------|
-| iss | Issuer (always "uiforge") |
+| iss | Issuer (always "dashforge") |
 | sub | Subject (user ID as string) |
 | exp | Expiration timestamp |
 | iat | Issued at timestamp |
@@ -171,7 +171,7 @@ Include the access token in the Authorization header:
 
 ```bash
 curl -H "Authorization: Bearer eyJhbGc..." \
-  https://uiforge.example.com/api/v1/dashboards
+  https://dashforge.example.com/api/v1/dashboards
 ```
 
 ### Token Expiration
@@ -183,7 +183,7 @@ curl -H "Authorization: Bearer eyJhbGc..." \
 
 ## User Roles
 
-UIForge uses role-based access control:
+DashForge uses role-based access control:
 
 | Role | Permissions |
 |------|-------------|
@@ -232,7 +232,7 @@ openssl rand -base64 32
 Always use HTTPS in production:
 
 ```bash
-export BASE_URL="https://uiforge.example.com"
+export BASE_URL="https://dashforge.example.com"
 ```
 
 ### Cookie Security
@@ -268,7 +268,7 @@ cors:
 For development only:
 
 ```bash
-./uiforge-server serve --disable-auth
+./dashforge-server serve --disable-auth
 ```
 
 !!! danger "Warning"

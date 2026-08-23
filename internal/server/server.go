@@ -19,24 +19,24 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/grokify/systemforge/authz"
 	"github.com/grokify/systemforge/authz/spicedb"
-	"github.com/plexusone/uiforge/builder"
-	"github.com/plexusone/uiforge/datasource"
+	"github.com/plexusone/dashforge/builder"
+	"github.com/plexusone/dashforge/datasource"
 
 	// Import providers for registration via init()
-	_ "github.com/plexusone/uiforge/datasource/providers/mysql"
-	_ "github.com/plexusone/uiforge/datasource/providers/postgres"
+	_ "github.com/plexusone/dashforge/datasource/providers/mysql"
+	_ "github.com/plexusone/dashforge/datasource/providers/postgres"
 
 	// Import channel adapters for registration via init()
-	serveranalytics "github.com/plexusone/uiforge/analytics"
-	_ "github.com/plexusone/uiforge/integration/channel/email"
-	_ "github.com/plexusone/uiforge/integration/channel/slack"
-	_ "github.com/plexusone/uiforge/integration/channel/webhook"
-	_ "github.com/plexusone/uiforge/integration/channel/whatsapp"
-	localAuthz "github.com/plexusone/uiforge/internal/authz"
-	"github.com/plexusone/uiforge/internal/server/api"
-	"github.com/plexusone/uiforge/internal/server/auth"
-	"github.com/plexusone/uiforge/internal/server/db"
-	"github.com/plexusone/uiforge/viewer"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
+	_ "github.com/plexusone/dashforge/integration/channel/email"
+	_ "github.com/plexusone/dashforge/integration/channel/slack"
+	_ "github.com/plexusone/dashforge/integration/channel/webhook"
+	_ "github.com/plexusone/dashforge/integration/channel/whatsapp"
+	localAuthz "github.com/plexusone/dashforge/internal/authz"
+	"github.com/plexusone/dashforge/internal/server/api"
+	"github.com/plexusone/dashforge/internal/server/auth"
+	"github.com/plexusone/dashforge/internal/server/db"
+	"github.com/plexusone/dashforge/viewer"
 )
 
 // Config holds server configuration.
@@ -86,11 +86,11 @@ type Config struct {
 
 	// AnalyticsSourceStorePath is the JSON file for persisted analytics source
 	// configs when the metadata database is not configured. Defaults to
-	// .uiforge/analytics-sources.json.
+	// .dashforge/analytics-sources.json.
 	AnalyticsSourceStorePath string
 
 	// QuestionStorePath is the file path for saved question metadata when the
-	// primary UIForge metadata database is not configured.
+	// primary DashForge metadata database is not configured.
 	QuestionStorePath string
 
 	// AI provider settings
@@ -202,7 +202,7 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 		mux:    chi.NewRouter(),
 		db:     database,
 	}
-	humaConfig := huma.DefaultConfig("UIForge API", "0.1.0")
+	humaConfig := huma.DefaultConfig("DashForge API", "0.1.0")
 	humaConfig.OpenAPIPath = "/api/openapi"
 	humaConfig.DocsPath = "/api/docs"
 	humaConfig.SchemasPath = "/api/schemas"
@@ -249,7 +249,7 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 			Secret:             []byte(cfg.JWTSecret),
 			AccessTokenExpiry:  15 * time.Minute,
 			RefreshTokenExpiry: 7 * 24 * time.Hour,
-			Issuer:             "uiforge",
+			Issuer:             "dashforge",
 		})
 		if err != nil {
 			return nil, fmt.Errorf("creating JWT service: %w", err)
@@ -362,12 +362,12 @@ func (s *Server) setupRoutes() {
 	s.mux.Handle("/api/v1/datasources", dsHandler)
 	s.mux.Handle("/api/v1/datasources/*", dsHandler)
 
-	// Analytics catalog API routes. This works even when UIForge's own metadata
+	// Analytics catalog API routes. This works even when DashForge's own metadata
 	// database is not configured, as long as at least one analytics source is.
 	analyticsHandler := api.NewAnalyticsHandler(s.analyticsService, s.logger, s.grokifyQLPolicyProvider)
 	s.mux.Handle("/api/v1/analytics/*", analyticsHandler)
 
-	// Saved question metadata API. This intentionally works without UIForge's
+	// Saved question metadata API. This intentionally works without DashForge's
 	// primary metadata database so local analytics workspaces can persist state.
 	if s.questionHandler != nil {
 		api.RegisterSavedQuestionRoutes(s.api, s.questionHandler)
@@ -415,14 +415,14 @@ func (s *Server) dashboardFilesHandler() http.Handler {
 	fileServer := http.StripPrefix("/dashboards/", http.FileServer(http.Dir(s.config.DashboardDir)))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/dashboards/" {
-			s.handleDashboardIndex(w, r)
+			s.handleDashboardIndex(w)
 			return
 		}
 		fileServer.ServeHTTP(w, r)
 	})
 }
 
-func (s *Server) handleDashboardIndex(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleDashboardIndex(w http.ResponseWriter) {
 	entries, err := os.ReadDir(s.config.DashboardDir)
 	if err != nil {
 		http.Error(w, "dashboard directory unavailable", http.StatusInternalServerError)
@@ -449,8 +449,8 @@ func (s *Server) handleDashboardIndex(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<!doctype html><html><head><meta name=\"viewport\" content=\"width=device-width\"><title>UIForge Dashboards</title>")
-	fmt.Fprint(w, "<style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;margin:32px;line-height:1.4;color:#172033;background:#f7f8fb}main{max-width:840px}h1{font-size:28px;margin:0 0 20px}ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}a{display:block;padding:14px 16px;border:1px solid #d8deea;border-radius:8px;background:#fff;color:#123260;text-decoration:none}a:hover{border-color:#7a9bd8}.file{display:block;color:#667085;font-size:13px;margin-top:4px}</style></head><body><main><h1>UIForge Dashboards</h1>")
+	fmt.Fprint(w, "<!doctype html><html><head><meta name=\"viewport\" content=\"width=device-width\"><title>DashForge Dashboards</title>")
+	fmt.Fprint(w, "<style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;margin:32px;line-height:1.4;color:#172033;background:#f7f8fb}main{max-width:840px}h1{font-size:28px;margin:0 0 20px}ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}a{display:block;padding:14px 16px;border:1px solid #d8deea;border-radius:8px;background:#fff;color:#123260;text-decoration:none}a:hover{border-color:#7a9bd8}.file{display:block;color:#667085;font-size:13px;margin-top:4px}</style></head><body><main><h1>DashForge Dashboards</h1>")
 	if len(dashboards) == 0 {
 		fmt.Fprint(w, "<p>No dashboard JSON files found.</p>")
 	} else {

@@ -1,6 +1,6 @@
-# TRD — UIForge Technical Reference
+# TRD — DashForge Technical Reference
 
-**Initiative:** INIT-UIFORGE-001
+**Initiative:** INIT-DASHFORGE-001
 **Status:** Draft
 **Date:** 2026-07-23
 
@@ -33,15 +33,15 @@ PageSpec / ExperienceSpec (JSON IR)
 
 ## Repository Structure
 
-All work is consolidated in `plexusone/uiforge` as a monorepo. Consumer repos (`agentos`, `agentos-web`) import UIForge packages.
+All work is consolidated in `plexusone/dashforge` as a monorepo. Consumer repos (`agentos`, `agentos-web`) import DashForge packages.
 
-### uiforge/ (post-rename)
+### dashforge/ (post-rename)
 
 ```text
-uiforge/
+dashforge/
 ├── cmd/
-│   ├── uiforge/          # CLI (renamed from uiforge)
-│   └── uiforge-server/   # HTTP server (renamed from uiforge-server)
+│   ├── dashforge/          # CLI (renamed from dashforge)
+│   └── dashforge-server/   # HTTP server (renamed from dashforge-server)
 │
 ├── uispec/               # NEW — canonical UISpec Go types (source of truth)
 │   ├── page.go           # PageSpec: metadata, layout, components, interactions
@@ -110,19 +110,19 @@ uiforge/
 ```text
 agentos-web/
 ├── app/                  # Next.js app router
-│   ├── chat/             # EXISTING — refactor to use UIForge page composition
+│   ├── chat/             # EXISTING — refactor to use DashForge page composition
 │   ├── admin/            # EXISTING
 │   ├── settings/         # EXISTING
 │   └── ...
 ├── components/
-│   ├── chat/             # EXISTING — 28 hand-coded components → migrate to UIForge
+│   ├── chat/             # EXISTING — 28 hand-coded components → migrate to DashForge
 │   └── ...
-├── specs/                # NEW — UIForge PageSpecs for AgentOS
+├── specs/                # NEW — DashForge PageSpecs for AgentOS
 │   ├── agent-workspace.page.json
 │   ├── thread-view.page.json
 │   ├── settings.page.json
 │   └── ...
-└── uiforge/              # NEW — AgentOS-specific UIForge component adapters
+└── dashforge/              # NEW — AgentOS-specific DashForge component adapters
     ├── agentos.agent-selector.tsx
     ├── agentos.run-inspector.tsx
     └── agentos.model-selector.tsx
@@ -204,7 +204,7 @@ type ComponentSpec struct {
 ## Assistant UI Integration
 
 ```text
-UIForge ComponentSpec
+DashForge ComponentSpec
         ↓
 AssistantThread adapter component
         ↓
@@ -213,13 +213,13 @@ AssistantThread adapter component
 AgentOS backend APIs
 ```
 
-Adapter components live in `uiforge/components/assistant/`. They:
+Adapter components live in `dashforge/components/assistant/`. They:
 
-1. Accept UIForge-standard properties and data bindings
+1. Accept DashForge-standard properties and data bindings
 2. Map them to Assistant UI's React primitives and runtime config
 3. Connect to AgentOS via `ExternalStoreRuntime` (AgentOS owns conversation state)
 
-The core UIForge packages (`uispec/`, `registry/`, `runtime/`) never import `@assistant-ui/react`. The dependency flows one way:
+The core DashForge packages (`uispec/`, `registry/`, `runtime/`) never import `@assistant-ui/react`. The dependency flows one way:
 
 ```text
 components/assistant/ → @assistant-ui/react
@@ -245,7 +245,7 @@ Bindings connect components to data sources. Expressions use `${...}` syntax:
 }
 ```
 
-Phase 1 supports static data and simple expression substitution. Phase 2 adds live data source connectors (reusing `datasource/` from UIForge).
+Phase 1 supports static data and simple expression substitution. Phase 2 adds live data source connectors (reusing `datasource/` from DashForge).
 
 ## Interaction Model
 
@@ -290,15 +290,15 @@ Compliance profiles control what's permitted:
 
 ## Module Rename Strategy
 
-The Go module path changes from `github.com/plexusone/uiforge` to `github.com/plexusone/uiforge`. This is a breaking change for importers.
+The Go module path changes from `github.com/plexusone/dashforge` to `github.com/plexusone/dashforge`. This is a breaking change for importers.
 
 Steps:
 
 1. Update `go.mod` module declaration
-2. Rename `cmd/uiforge` → `cmd/uiforge`, `cmd/uiforge-server` → `cmd/uiforge-server`
+2. Rename `cmd/dashforge` → `cmd/dashforge`, `cmd/dashforge-server` → `cmd/dashforge-server`
 3. Update all internal imports
-4. Rename GitHub repo `plexusone/uiforge` → `plexusone/uiforge` (GitHub redirects old URLs)
-5. Tag `v0.1.0` as the first UIForge release
+4. Rename GitHub repo `plexusone/dashforge` → `plexusone/dashforge` (GitHub redirects old URLs)
+5. Tag `v0.1.0` as the first DashForge release
 
 Since the project is early and has few external consumers, the rename is low-risk.
 
@@ -307,7 +307,7 @@ Since the project is early and has few external consumers, the rename is low-ris
 - **Unit tests** — UISpec types, registry validation, expression evaluation, layout resolution. Pure Go, no I/O.
 - **Golden-file tests** — PageSpec JSON → rendered component tree snapshots. Catches unintended IR changes.
 - **Integration tests** — Builder renders PageSpec in headless browser, validates component presence and layout.
-- **Dashboard regression** — existing UIForge test suite runs under the dashboard profile unchanged.
+- **Dashboard regression** — existing DashForge test suite runs under the dashboard profile unchanged.
 - **agentos-web** — existing Playwright tests validate agent workspace renders from PageSpecs.
 
 ## Technology Stack
@@ -316,10 +316,10 @@ Since the project is early and has few external consumers, the rename is low-ris
 |---|---|---|
 | Spec types | Go | Source of truth; `uispec/` package |
 | Schema | JSON Schema (generated) | `invopop/jsonschema` + `schemago` lint |
-| Server | Go + Chi | Existing UIForge server |
-| ORM | Ent (MySQL/Dolt) | Existing UIForge schemas |
-| Renderer | React 19 | UIForge React renderer package |
-| Builder | Vite + React | Existing UIForge builder (evolve later) |
+| Server | Go + Chi | Existing DashForge server |
+| ORM | Ent (MySQL/Dolt) | Existing DashForge schemas |
+| Renderer | React 19 | DashForge React renderer package |
+| Builder | Vite + React | Existing DashForge builder (evolve later) |
 | Conversation | @assistant-ui/react ^0.7 | Used by agentos-web today |
 | Frontend framework | Next.js 16 | agentos-web |
 | Design system | TBD | Start with tokens in `uispec/theme.go`; extract later |

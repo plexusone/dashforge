@@ -83,7 +83,7 @@ interface FieldValueBrowser {
   error: string | null
 }
 
-const STORAGE_KEY = 'uiforge.questions'
+const STORAGE_KEY = 'dashforge.questions'
 
 const visualizationOptions: { id: VisualizationType; label: string; icon: typeof Table }[] = [
   { id: 'table', label: 'Table', icon: Table },
@@ -1542,7 +1542,7 @@ function downloadRows(
   fields: AnalyticsField[],
   rows: Record<string, unknown>[],
 ) {
-  const baseName = sanitizeFilename(title || 'uiforge-results')
+  const baseName = sanitizeFilename(title || 'dashforge-results')
   if (format === 'csv') {
     downloadBlob(
       `${baseName}.csv`,
@@ -1686,7 +1686,7 @@ function sanitizeFilename(value: string) {
       .trim()
       .replace(/[^A-Za-z0-9._-]+/g, '-')
       .replace(/^-+|-+$/g, '')
-      .slice(0, 80) || 'uiforge-results'
+      .slice(0, 80) || 'dashforge-results'
   )
 }
 

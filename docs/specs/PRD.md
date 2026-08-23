@@ -1,22 +1,22 @@
-# PRD — UIForge: Specification-Driven UI Composition Platform
+# PRD — DashForge: Specification-Driven UI Composition Platform
 
-**Initiative:** INIT-UIFORGE-001
+**Initiative:** INIT-DASHFORGE-001
 **Status:** Draft
 **Date:** 2026-07-23
-**Home repo:** github.com/plexusone/uiforge
+**Home repo:** github.com/plexusone/dashforge
 
 ## Problem
 
 PlexusOne's product ecosystem (AgentOS, VisionStudio, OmniDevX, and future SaaS offerings) each need customizable, composable user interfaces — dashboards, agent workspaces, admin consoles, customer portals. Today:
 
-1. **UIForge** exists as a dashboard-only platform (Go IR + Vite builder + viewer), but its scope is too narrow for general application composition.
+1. **DashForge** exists as a dashboard-only platform (Go IR + Vite builder + viewer), but its scope is too narrow for general application composition.
 2. **AgentOS** (`agentos` + `agentos-web`) is building its own Next.js frontend with Assistant UI, but has no shared composition layer — every page is hand-coded React.
 3. There is **no vendor-neutral, specification-driven UI composition platform** in open source that combines declarative JSON IR, a component registry, design-system governance, extension capabilities, and AI generation — the way OpenAPI did for REST APIs.
 4. Multiple products will independently reinvent page composition, layout engines, component registries, and design-system enforcement unless a shared foundation is built now.
 
 ## Vision
 
-UIForge is the **UI composition runtime** for the PlexusOne ecosystem. It provides a single deterministic JSON Intermediate Representation (UISpec) from which dashboards, agent workspaces, enterprise applications, admin consoles, and customer portals are all composed and rendered.
+DashForge is the **UI composition runtime** for the PlexusOne ecosystem. It provides a single deterministic JSON Intermediate Representation (UISpec) from which dashboards, agent workspaces, enterprise applications, admin consoles, and customer portals are all composed and rendered.
 
 ```text
 Visual builder ─┐
@@ -29,28 +29,28 @@ The primary artifact is not React code, but a specification that can be authored
 
 ## Goals
 
-1. **Generalize UIForge** — evolve the existing `dashboardir` package into a broader `UISpec` that supports multiple experience profiles (dashboard, application, agent, portal, embedded) from a single composition engine.
+1. **Generalize DashForge** — evolve the existing `dashboardir` package into a broader `UISpec` that supports multiple experience profiles (dashboard, application, agent, portal, embedded) from a single composition engine.
 2. **Component registry** — every UI element (built-in, extension, or third-party) is registered with a machine-readable manifest (ComponentSpec) describing properties, events, actions, capabilities, layout constraints, and version.
-3. **Assistant UI integration** — wrap Assistant UI's React primitives as registered UIForge components (`assistant.thread`, `assistant.composer`, `assistant.thread-list`, etc.) so agent conversation UIs are composed declaratively, not hand-coded.
-4. **AgentOS as first consumer** — refactor `agentos-web` to use UIForge for page composition, making AgentOS the reference implementation and proving the platform with a real product.
+3. **Assistant UI integration** — wrap Assistant UI's React primitives as registered DashForge components (`assistant.thread`, `assistant.composer`, `assistant.thread-list`, etc.) so agent conversation UIs are composed declaratively, not hand-coded.
+4. **AgentOS as first consumer** — refactor `agentos-web` to use DashForge for page composition, making AgentOS the reference implementation and proving the platform with a real product.
 5. **Design-system governance** — enforce semantic components and approved variants rather than arbitrary CSS, ensuring visual consistency across all products.
 6. **AI-first authoring** — the JSON IR is designed for LLM generation and manipulation. AI never generates React; it generates valid PageSpecs.
 
 ## Non-Goals
 
-- **Replace Assistant UI** — Assistant UI remains the specialized conversation runtime. UIForge composes it; it does not reimplement it.
+- **Replace Assistant UI** — Assistant UI remains the specialized conversation runtime. DashForge composes it; it does not reimplement it.
 - **Multi-runtime renderers now** — React is the initial (and only Phase 1) renderer. Flutter, SwiftUI, terminal renderers are future possibilities, not current scope.
-- **Visual builder in Phase 1** — the builder exists in UIForge today but will be evolved later. Phase 1 focuses on the specification and runtime, not the drag-and-drop editor.
-- **Public open-source launch** — UIForge will be used internally first. Open-source positioning is a future decision.
+- **Visual builder in Phase 1** — the builder exists in DashForge today but will be evolved later. Phase 1 focuses on the specification and runtime, not the drag-and-drop editor.
+- **Public open-source launch** — DashForge will be used internally first. Open-source positioning is a future decision.
 - **Marketplace / third-party extensions** — extension architecture is designed in but not implemented until post-pilot.
 
 ## Repos Affected
 
 | Repository | Role | Changes |
 |---|---|---|
-| `plexusone/uiforge` | Home repo — spec, runtime, components, builder | Rename module from `uiforge`, generalize IR, add component registry, add assistant components |
-| `plexusone/agentos` | Agent platform backend | API endpoints to support UIForge data bindings and page configuration storage |
-| `plexusone/agentos-web` | Agent platform frontend | Refactor from hand-coded pages to UIForge-composed PageSpecs consuming assistant and agent components |
+| `plexusone/dashforge` | Home repo — spec, runtime, components, builder | Rename module from `dashforge`, generalize IR, add component registry, add assistant components |
+| `plexusone/agentos` | Agent platform backend | API endpoints to support DashForge data bindings and page configuration storage |
+| `plexusone/agentos-web` | Agent platform frontend | Refactor from hand-coded pages to DashForge-composed PageSpecs consuming assistant and agent components |
 
 ## Users
 
@@ -62,15 +62,15 @@ The primary artifact is not React code, but a specification that can be authored
 
 | Metric | Target |
 |---|---|
-| AgentOS workspace rendered from PageSpec | Agent workspace, thread view, and settings pages composed from UIForge specs |
-| Dashboard profile parity | Existing UIForge dashboard capabilities preserved under the dashboard profile |
+| AgentOS workspace rendered from PageSpec | Agent workspace, thread view, and settings pages composed from DashForge specs |
+| Dashboard profile parity | Existing DashForge dashboard capabilities preserved under the dashboard profile |
 | Component registry coverage | Core (10+), analytics (5+), and assistant (5+) components registered with full manifests |
 | AI generation | An LLM can produce a valid PageSpec that renders without manual intervention |
 | Zero hand-coded layout in agentos-web | All page layout defined in PageSpecs; React code only in component implementations |
 
 ## Experience Profiles
 
-UIForge supports multiple profiles over the same underlying IR:
+DashForge supports multiple profiles over the same underlying IR:
 
 | Profile | Description | Primary use case |
 |---|---|---|
@@ -84,12 +84,12 @@ UIForge supports multiple profiles over the same underlying IR:
 
 1. **JSON specification is the primary artifact** — visual editor, AI, and source editor all operate on the same canonical IR. Implementation is a renderer, not the source of truth.
 2. **Go structs are the source of truth for the spec** — UISpec types live in Go, schemas are generated with `invopop/jsonschema`, linted with `schemago`, embedded via `//go:embed`.
-3. **Monorepo initially** — spec, runtime, components, builder, and assistant integration all live in `plexusone/uiforge`. Extract packages into separate repos only when independent release boundaries emerge.
+3. **Monorepo initially** — spec, runtime, components, builder, and assistant integration all live in `plexusone/dashforge`. Extract packages into separate repos only when independent release boundaries emerge.
 4. **Profiles, not forks** — dashboard, application, agent, and portal are profiles (predefined sets of permitted layouts, components, and conventions), not separate frameworks.
 5. **Semantic components, not HTML** — the DSL expresses `core.status-card` with `importance: "high"`, never `<div style="background: #0947ff">`.
 6. **Layered capability model** — platform → internal → partner → customer components. The runtime is identical; the available registry differs.
 
-## Existing Assets (UIForge)
+## Existing Assets (DashForge)
 
 The following exist today and form the starting point:
 
@@ -106,8 +106,8 @@ The following exist today and form the starting point:
 
 | Risk | Mitigation |
 |---|---|
-| Scope creep — UIForge tries to be everything | Profiles constrain each use case. Phase 1 focuses on dashboard parity + assistant components only. |
+| Scope creep — DashForge tries to be everything | Profiles constrain each use case. Phase 1 focuses on dashboard parity + assistant components only. |
 | Over-abstraction before validation | AgentOS is the forcing function. Every spec decision must work for a real product before generalization. |
-| UIForge regression | Dashboard profile must pass existing test suite before the rename ships. |
-| Assistant UI coupling | UIForge→Assistant UI is a one-way adapter dependency. Core UIForge never imports Assistant UI. |
-| Go module rename churn | Rename `uiforge` → `uiforge` in one atomic commit with proper `go.mod` module path update. |
+| DashForge regression | Dashboard profile must pass existing test suite before the rename ships. |
+| Assistant UI coupling | DashForge→Assistant UI is a one-way adapter dependency. Core DashForge never imports Assistant UI. |
+| Go module rename churn | Rename `dashforge` → `dashforge` in one atomic commit with proper `go.mod` module path update. |

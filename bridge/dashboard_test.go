@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/plexusone/uiforge/dashboardir"
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/dashboardir"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 func TestDashboardToPageSpec(t *testing.T) {

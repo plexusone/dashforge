@@ -1,27 +1,27 @@
 # PRD — Persistent Analytics Sources — Metabase-Style Multi-Source Catalog with OmniVault
 
-**Initiative:** `INIT-UIFORGE-002`
+**Initiative:** `INIT-DASHFORGE-002`
 **Status:** Draft
-**Home repo:** `github.com/plexusone/uiforge`
+**Home repo:** `github.com/plexusone/dashforge`
 
 ## Problem
 
-UIForge's analytics catalog currently supports exactly one application source, and only when the operator passes `--omniroadmap-dsn` on the command line at startup:
+DashForge's analytics catalog currently supports exactly one application source, and only when the operator passes `--omniroadmap-dsn` on the command line at startup:
 
 ```bash
-uiforge-server serve --address 127.0.0.1:13319 \
+dashforge-server serve --address 127.0.0.1:13319 \
   --omniroadmap-dsn 'root:@tcp(127.0.0.1:13307)/omniroadmap' --enable-ollama
 ```
 
 This has three problems:
 
-1. **Single source.** UIForge is meant to work like Metabase — one dashboard/question tool connected to many datasources at once. The current wiring hard-codes one OmniRoadmap provider.
+1. **Single source.** DashForge is meant to work like Metabase — one dashboard/question tool connected to many datasources at once. The current wiring hard-codes one OmniRoadmap provider.
 2. **Startup-only configuration.** Sources cannot be added, removed, or edited while the server runs. Metabase, Tableau, and Looker all treat datasource management as an in-app admin function.
 3. **Credentials on the command line.** Raw DSNs in shell history and process listings are a credential-hygiene problem, and they cannot be persisted safely as-is.
 
 ## Goals
 
-- Start the server with no per-source flags: `uiforge-server serve --address 127.0.0.1:13319 --enable-ollama`.
+- Start the server with no per-source flags: `dashforge-server serve --address 127.0.0.1:13319 --enable-ollama`.
 - Analytics sources are persisted configuration: id, display name, connector type, secret reference (`dsnRef`), and enabled flag.
 - Sources can be added, edited, tested, and removed at runtime through a CRUD API and a builder UI panel, and survive server restarts.
 - Multiple sources are served as one combined catalog to the Question builder (`/builder/?mode=questions`).
@@ -36,13 +36,13 @@ This has three problems:
 
 ## Users and Experience
 
-**Primary user:** the UIForge operator/analyst running the server locally or on a small team server.
+**Primary user:** the DashForge operator/analyst running the server locally or on a small team server.
 
 Experience walkthrough:
 
 1. Operator starts the server with no source flags.
 2. In the builder's Question workspace, a **Data Sources** panel lists configured sources (empty on first run).
-3. Operator clicks **Add source**, picks connector `omniroadmap`, names it, and enters a secret reference such as `env://UIFORGE_OMNIROADMAP_DSN`.
+3. Operator clicks **Add source**, picks connector `omniroadmap`, names it, and enters a secret reference such as `env://DASHFORGE_OMNIROADMAP_DSN`.
 4. **Test connection** resolves the reference in memory, pings the store, and reports success/failure without echoing the DSN.
 5. On save, the source appears in the catalog; the Question builder's schema browser now shows its datasets and fields.
 6. Restarting the server reconnects all enabled sources automatically.

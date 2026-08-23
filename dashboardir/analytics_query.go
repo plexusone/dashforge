@@ -2,7 +2,7 @@ package dashboardir
 
 // AnalyticsQueryRequest is the neutral request shape for read-only analytical
 // query execution. GrokifyQL providers can implement this over SQL, Ent, Dolt,
-// application APIs, or another backend while keeping UIForge decoupled.
+// application APIs, or another backend while keeping DashForge decoupled.
 type AnalyticsQueryRequest struct {
 	SourceID string         `json:"sourceId"`
 	Query    string         `json:"query"`

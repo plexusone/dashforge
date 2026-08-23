@@ -1,11 +1,11 @@
 # Server Configuration
 
-The UIForge server provides a full-featured backend for dashboard hosting, data queries, and user management.
+The DashForge server provides a full-featured backend for dashboard hosting, data queries, and user management.
 
 ## Starting the Server
 
 ```bash
-./uiforge-server serve [flags]
+./dashforge-server serve [flags]
 ```
 
 ## Configuration Methods
@@ -19,9 +19,9 @@ Configuration can be provided via:
 ### Command-Line Flags
 
 ```bash
-./uiforge-server serve \
+./dashforge-server serve \
   --port 8080 \
-  --database-url "postgres://user:pass@localhost:5432/uiforge" \
+  --database-url "postgres://user:pass@localhost:5432/dashforge" \
   --jwt-secret "your-secret-key" \
   --auto-migrate \
   --enable-rls
@@ -37,15 +37,15 @@ Configuration can be provided via:
 | `--auto-migrate` | `AUTO_MIGRATE` | false | Run database migrations on startup |
 | `--enable-rls` | `ENABLE_RLS` | false | Enable Row Level Security |
 | `--disable-auth` | `DISABLE_AUTH` | false | Disable authentication (dev only) |
-| `--analytics-source-store` | - | `.uiforge/analytics-sources.json` | Analytics source config JSON file when no metadata DB is set |
+| `--analytics-source-store` | - | `.dashforge/analytics-sources.json` | Analytics source config JSON file when no metadata DB is set |
 | `--config` | - | - | Path to YAML config file |
 
 ### Metadata Database — Dolt Locally, Postgres in Cloud
 
-UIForge's metadata database (dashboards, users, saved questions, analytics
+DashForge's metadata database (dashboards, users, saved questions, analytics
 source configs) supports two backends:
 
-- **Dolt (local default)** — `--db-url 'mysql://root@127.0.0.1:13306/uiforge'`
+- **Dolt (local default)** — `--db-url 'mysql://root@127.0.0.1:13306/dashforge'`
   connects over the MySQL wire to a `dolt sql-server`, matching the
   local `dolt sql-server` pattern used across the ecosystem. The target
   database is created automatically if it does not exist. Vanilla MySQL works
@@ -68,13 +68,13 @@ credential policy. One-time setup for a local application source:
 ```bash
 # Connectors are registered by the consuming application binary — the core
 # engine ships none. Example below assumes an app registered "roadmap-app".
-export UIFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
-./uiforge-server serve --address 127.0.0.1:13319
+export DASHFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
+./dashforge-server serve --address 127.0.0.1:13319
 
 curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
   -H 'Content-Type: application/json' \
   -d '{"id":"roadmap-app","name":"Roadmap App","connector":"roadmap-app",
-       "dsnRef":"env://UIFORGE_ROADMAP_APP_DSN","enabled":true}'
+       "dsnRef":"env://DASHFORGE_ROADMAP_APP_DSN","enabled":true}'
 ```
 
 The source persists across restarts; keep exporting the referenced environment
@@ -84,9 +84,9 @@ variable before starting the server.
 
 ```bash
 export PORT=8080
-export DATABASE_URL="postgres://user:pass@localhost:5432/uiforge?sslmode=require"
+export DATABASE_URL="postgres://user:pass@localhost:5432/dashforge?sslmode=require"
 export JWT_SECRET="your-secret-key-at-least-32-characters"
-export BASE_URL="https://uiforge.example.com"
+export BASE_URL="https://dashforge.example.com"
 
 # OAuth providers
 export GITHUB_CLIENT_ID="your-github-client-id"
@@ -95,7 +95,7 @@ export GOOGLE_CLIENT_ID="your-google-client-id"
 export GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 # Run server
-./uiforge-server serve --auto-migrate
+./dashforge-server serve --auto-migrate
 ```
 
 ### Configuration File
@@ -104,9 +104,9 @@ Create `config.yaml`:
 
 ```yaml
 port: 8080
-database_url: postgres://user:pass@localhost:5432/uiforge
+database_url: postgres://user:pass@localhost:5432/dashforge
 jwt_secret: your-secret-key
-base_url: https://uiforge.example.com
+base_url: https://dashforge.example.com
 auto_migrate: true
 enable_rls: true
 
@@ -122,7 +122,7 @@ oauth:
 Run with config file:
 
 ```bash
-./uiforge-server serve --config config.yaml
+./dashforge-server serve --config config.yaml
 ```
 
 ## Database Configuration
@@ -161,7 +161,7 @@ For production, consider running migrations separately:
 
 ```bash
 # Run migrations only
-./uiforge-server migrate --database-url "$DATABASE_URL"
+./dashforge-server migrate --database-url "$DATABASE_URL"
 ```
 
 ## JWT Configuration
@@ -195,14 +195,14 @@ Default token lifetimes:
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
 COPY . .
-RUN go build -o uiforge-server ./cmd/uiforge-server
+RUN go build -o dashforge-server ./cmd/dashforge-server
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /app
-COPY --from=builder /app/uiforge-server .
+COPY --from=builder /app/dashforge-server .
 EXPOSE 8080
-CMD ["./uiforge-server", "serve"]
+CMD ["./dashforge-server", "serve"]
 ```
 
 ### Docker Compose
@@ -210,12 +210,12 @@ CMD ["./uiforge-server", "serve"]
 ```yaml
 version: '3.8'
 services:
-  uiforge:
+  dashforge:
     build: .
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=postgres://uiforge:password@db:5432/uiforge?sslmode=disable
+      - DATABASE_URL=postgres://dashforge:password@db:5432/dashforge?sslmode=disable
       - JWT_SECRET=${JWT_SECRET}
       - AUTO_MIGRATE=true
     depends_on:
@@ -224,9 +224,9 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=uiforge
+      - POSTGRES_USER=dashforge
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=uiforge
+      - POSTGRES_DB=dashforge
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -248,19 +248,19 @@ Use this for load balancer health checks and container orchestration.
 ### Reverse Proxy (nginx)
 
 ```nginx
-upstream uiforge {
+upstream dashforge {
     server 127.0.0.1:8080;
 }
 
 server {
     listen 443 ssl http2;
-    server_name uiforge.example.com;
+    server_name dashforge.example.com;
 
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
 
     location / {
-        proxy_pass http://uiforge;
+        proxy_pass http://dashforge;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

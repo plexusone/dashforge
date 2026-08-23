@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertchannel"
-	"github.com/plexusone/uiforge/ent/integration"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertchannel"
+	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // AlertChannelQuery is the builder for querying AlertChannel entities.

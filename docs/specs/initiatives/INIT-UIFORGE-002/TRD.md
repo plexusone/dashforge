@@ -1,14 +1,14 @@
 # TRD — Persistent Analytics Sources — Metabase-Style Multi-Source Catalog with OmniVault
 
-**Initiative:** `INIT-UIFORGE-002`
+**Initiative:** `INIT-DASHFORGE-002`
 **Status:** Draft
-**Home repo:** `github.com/plexusone/uiforge`
+**Home repo:** `github.com/plexusone/dashforge`
 
 ## Current State
 
 - `internal/server/analytics.Service` holds an immutable `[]CatalogProvider` built once in `newServerInternal` (`internal/server/server.go`); the only provider is `OmniRoadmapProvider`, constructed from `Config.OmniRoadmapDSN`, which comes solely from the `--omniroadmap-dsn` CLI flag.
 - `docs/analytics-catalog.md` already specifies the target model: persisted source metadata with `dsnRef` secret references resolved at runtime via OmniVault, never returning resolved DSNs to the browser.
-- `SavedQuestionHandler` (`internal/server/api/question.go`) establishes the persistence pattern to mirror: metadata DB when configured, JSON file fallback (`.uiforge/questions.json`) otherwise.
+- `SavedQuestionHandler` (`internal/server/api/question.go`) establishes the persistence pattern to mirror: metadata DB when configured, JSON file fallback (`.dashforge/questions.json`) otherwise.
 - The generic `datasource.Manager` / ent `DataSource` path is for raw SQL connections and is out of scope; analytics sources are application-catalog connectors.
 
 ## Design
@@ -23,7 +23,7 @@ type SourceConfig struct {
     ID        string    `json:"id"`        // slug, unique, e.g. "omniroadmap-local"
     Name      string    `json:"name"`      // display name
     Connector string    `json:"connector"` // registry key, e.g. "omniroadmap"
-    DSNRef    string    `json:"dsnRef"`    // secret reference, e.g. env://UIFORGE_OMNIROADMAP_DSN
+    DSNRef    string    `json:"dsnRef"`    // secret reference, e.g. env://DASHFORGE_OMNIROADMAP_DSN
     Enabled   bool      `json:"enabled"`
     CreatedAt time.Time `json:"createdAt"`
     UpdatedAt time.Time `json:"updatedAt"`
@@ -62,7 +62,7 @@ type SourceStore interface {
 ```
 
 - **Ent store** — new ent schema `AnalyticsSource` (fields mirroring `SourceConfig`; `dsn_ref` is a plain string — it is a reference, not a secret). Used when the metadata DB is configured. No organization edge in this pass.
-- **File store** — `.uiforge/analytics-sources.json` (path configurable via `--analytics-source-store`, defaulting alongside the question store). Mutex-guarded read-modify-write, same as `questionFileStore`. Safe on disk because it contains only references.
+- **File store** — `.dashforge/analytics-sources.json` (path configurable via `--analytics-source-store`, defaulting alongside the question store). Mutex-guarded read-modify-write, same as `questionFileStore`. Safe on disk because it contains only references.
 
 Selection logic in `newServerInternal`: ent store if `db != nil`, else file store.
 
@@ -101,7 +101,7 @@ Extend `AnalyticsHandler` (`internal/server/api/analytics.go`):
 | POST | `/api/v1/analytics/sources/test` | Test a candidate config (unsaved) |
 | GET | `/api/v1/analytics/connectors` | List registered connector types |
 
-Responses carry `dsnRef` verbatim (it is a pointer, not a secret) but never any resolved value. Error messages from failed dials are sanitized: connector errors are logged server-side; the API returns a generic failure plus the vault-scheme error class (e.g. "secret not found for env://UIFORGE_OMNIROADMAP_DSN").
+Responses carry `dsnRef` verbatim (it is a pointer, not a secret) but never any resolved value. Error messages from failed dials are sanitized: connector errors are logged server-side; the API returns a generic failure plus the vault-scheme error class (e.g. "secret not found for env://DASHFORGE_OMNIROADMAP_DSN").
 
 ### Server wiring and flag removal
 
@@ -119,7 +119,7 @@ New `components/data-sources/AnalyticsSourcePanel.tsx` in the Question workspace
 
 ## Metadata Database — Dolt Locally, Postgres in Cloud
 
-Decision (2026-08-19): UIForge's local metadata database is **Dolt**, matching
+Decision (2026-08-19): DashForge's local metadata database is **Dolt**, matching
 OmniRoadmap (`:13307`) and VisionStudio (`:13306`); Postgres remains the
 hosted multi-tenant option because RLS (`internal/server/db/rls.go`) is a
 Postgres feature. Ent abstracts the dialect, so both are supported by
@@ -131,7 +131,7 @@ Postgres feature. Ent abstracts the dialect, so both are supported by
 - `postgres://` → existing path, unchanged; required for `--enable-rls`.
 
 Shared Dolt wiring consolidates into `github.com/grokify/godolt` (three
-consumers: OmniRoadmap, VisionStudio, UIForge). godolt v0.2.0 already covers
+consumers: OmniRoadmap, VisionStudio, DashForge). godolt v0.2.0 already covers
 remotes/push/pull/fetch/backup; this initiative adds the server-lifecycle half,
 extracted from `omniroadmap/store/doltstore.go` (itself copied from
 VisionStudio):

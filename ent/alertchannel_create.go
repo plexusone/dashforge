@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertchannel"
-	"github.com/plexusone/uiforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertchannel"
+	"github.com/plexusone/dashforge/ent/integration"
 )
 
 // AlertChannelCreate is the builder for creating a AlertChannel entity.

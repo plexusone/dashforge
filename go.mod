@@ -1,4 +1,4 @@
-module github.com/plexusone/uiforge
+module github.com/plexusone/dashforge
 
 go 1.26.5
 
@@ -15,7 +15,7 @@ require (
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/grokify/godolt v0.3.0
-	github.com/grokify/systemforge v0.8.0
+	github.com/grokify/systemforge v0.9.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/lib/pq v1.12.3
 	github.com/mattn/go-sqlite3 v1.14.50
@@ -34,17 +34,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.57.4 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.6.1 // indirect
-	github.com/clipperhouse/displaywidth v0.11.0 // indirect
-	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
-	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
+	github.com/grokify/goauth v0.24.0 // indirect
 	github.com/grokify/oscompat v0.5.0 // indirect
 	github.com/invopop/jsonschema v0.14.0 // indirect
-	github.com/mattn/go-runewidth v0.0.28 // indirect
-	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
-	github.com/olekukonko/errors v1.3.0 // indirect
-	github.com/olekukonko/ll v0.1.8 // indirect
-	github.com/olekukonko/tablewriter v1.1.4 // indirect
 	github.com/openai/openai-go v1.12.0 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/plexusone/omni-anthropic v0.3.0 // indirect
@@ -267,7 +260,3 @@ require (
 
 // Pin otel versions to be compatible with spicedb v1.49.2
 replace go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0
-
-replace github.com/grokify/systemforge => ../../grokify/systemforge
-
-replace github.com/plexusone/omnillm => ../omnillm

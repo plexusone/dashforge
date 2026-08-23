@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

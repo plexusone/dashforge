@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/analyticssource"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/analyticssource"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // AnalyticsSourceQuery is the builder for querying AnalyticsSource entities.

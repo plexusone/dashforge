@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/plexusone/uiforge/dashboardir"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
 var validateCmd = &cobra.Command{
@@ -16,8 +16,8 @@ var validateCmd = &cobra.Command{
 	Long: `Validate a dashboard JSON file against the DashboardIR schema.
 
 Example:
-  uiforge validate dashboard.json
-  uiforge validate ./dashboards/*.json`,
+  dashforge validate dashboard.json
+  dashforge validate ./dashboards/*.json`,
 	Args: cobra.MinimumNArgs(1),
 	RunE: runValidate,
 }

@@ -4,9 +4,9 @@ export interface ComponentProps {
     instance: ComponentInstance;
     children?: React.ReactNode;
 }
-export type UIForgeComponent = ComponentType<ComponentProps>;
-export declare function registerComponent(type: string, component: UIForgeComponent): void;
-export declare function getComponent(type: string): UIForgeComponent | undefined;
+export type DashForgeComponent = ComponentType<ComponentProps>;
+export declare function registerComponent(type: string, component: DashForgeComponent): void;
+export declare function getComponent(type: string): DashForgeComponent | undefined;
 export declare function hasComponent(type: string): boolean;
 export declare function listComponents(): string[];
 export declare function clearRegistry(): void;

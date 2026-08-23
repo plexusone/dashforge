@@ -6,7 +6,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "uiforge-server",
+	Use:   "dashforge-server",
 	Short: "Dashforge server with database support",
 	Long: `Dashforge Server is a full-featured dashboard server that supports:
 
@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
   - User authentication and permissions
   - Query caching and scheduling
 
-For static-only dashboards, use the 'uiforge' CLI instead.`,
+For static-only dashboards, use the 'dashforge' CLI instead.`,
 }
 
 // Execute runs the root command.

@@ -1,6 +1,6 @@
 # Analytics Catalog
 
-The analytics catalog is UIForge's neutral description of queryable data across application and database sources. It lets UIForge build Metabase/Looker/Tableau-style schema browsers, query builders, dashboards, and AI-assisted reports without hard-coding a specific product domain.
+The analytics catalog is DashForge's neutral description of queryable data across application and database sources. It lets DashForge build Metabase/Looker/Tableau-style schema browsers, query builders, dashboards, and AI-assisted reports without hard-coding a specific product domain.
 
 ## Shape
 
@@ -74,14 +74,14 @@ is a `SourceConfig`:
   "id": "roadmap-app-local",
   "name": "Roadmap App Local",
   "connector": "roadmap-app",
-  "dsnRef": "env://UIFORGE_ROADMAP_APP_DSN",
+  "dsnRef": "env://DASHFORGE_ROADMAP_APP_DSN",
   "enabled": true
 }
 ```
 
-Sources persist in the UIForge metadata database (ent `AnalyticsSource` table)
+Sources persist in the DashForge metadata database (ent `AnalyticsSource` table)
 when `--db-url` is configured, and otherwise in
-`.uiforge/analytics-sources.json` (override with `--analytics-source-store`).
+`.dashforge/analytics-sources.json` (override with `--analytics-source-store`).
 Both stores hold only the `dsnRef` secret reference — validation rejects raw
 DSNs, so credentials can never reach disk or the metadata database.
 
@@ -125,13 +125,13 @@ Planned schemes (register on the same resolver without redesign):
 - **Security-gated deployments**: VaultGuard to enforce posture and provider
   selection before resolving credentials.
 - **Self-contained fallback**: OmniVault's SQL store provider with a
-  UIForge-owned table such as `uiforge_vault_secrets`, and references like
+  DashForge-owned table such as `dashforge_vault_secrets`, and references like
   `sql://analytics-sources/roadmap-app-local`. The SQL store encrypts secret
   payloads before writing rows; keep the encryption key outside that database.
 
 ## Questions
 
-A Question is a saved, read-only analytics query plus display metadata. UIForge
+A Question is a saved, read-only analytics query plus display metadata. DashForge
 uses the term Question for human-authored analytics artifacts, similar to
 Metabase. The query text is still a GrokifyQL query, but Question makes the UI
 clear that the artifact is for reporting and cannot mutate data.
@@ -141,7 +141,7 @@ open in a formatted, syntax-highlighted display mode and expose an explicit edit
 action. This keeps review and editing separate without showing duplicate SQL
 panes.
 
-When a Question is saved, UIForge compiles the GrokifyQL text into metadata:
+When a Question is saved, DashForge compiles the GrokifyQL text into metadata:
 
 - parsed AST
 - fingerprint
@@ -161,7 +161,7 @@ sets remain inspectable without widening the dashboard builder shell.
 ## Field Values
 
 Filterable catalog fields can expose distinct values for query construction.
-UIForge supports two scopes:
+DashForge supports two scopes:
 
 - **All values**: distinct values across the selected dataset.
 - **Current filter**: distinct values under the current query's `WHERE` clause.
@@ -172,7 +172,7 @@ should be applied to field value lookup.
 
 ## Authorization
 
-The catalog is also the schema input for analytics authorization. UIForge derives
+The catalog is also the schema input for analytics authorization. DashForge derives
 GrokifyQL entities from datasets and GrokifyQL fields from catalog fields. In
 SpiceDB mode, those entities and fields are checked through SystemForge before a
 Question is saved or an ad-hoc GrokifyQL query is executed.
@@ -188,4 +188,4 @@ Server mode should expose the combined catalog for all connected sources at:
 GET /api/v1/analytics/catalog
 ```
 
-A UIForge server can combine multiple sources — application connectors registered by the consuming binary alongside PostgreSQL and Dolt databases — into one catalog response.
+A DashForge server can combine multiple sources — application connectors registered by the consuming binary alongside PostgreSQL and Dolt databases — into one catalog response.

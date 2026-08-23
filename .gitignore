@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-uiforge
-uiforge-server
+dashforge
+dashforge-server
 
 # Test binary
 *.test
@@ -44,7 +44,7 @@ tmp/
 IDEATION_CHAT*.md
 
 # Local runtime state (file-backed question and analytics-source stores)
-.uiforge/
+.dashforge/
 
 # Build artifacts
 # Note: builder/dist/ is committed for go:embed (not ignored)

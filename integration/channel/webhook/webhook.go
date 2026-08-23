@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/uiforge/integration/channel"
+	"github.com/plexusone/dashforge/integration/channel"
 )
 
 func init() {
