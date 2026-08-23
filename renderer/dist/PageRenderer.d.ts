@@ -4,14 +4,14 @@ import { PageState } from './state';
 import { InteractionEngine } from './interaction';
 import { DataSourceRegistry } from './datasource';
 import type { DataSourceConnector } from './datasource';
-export interface UIForgeContextValue {
+export interface DashForgeContextValue {
     state: PageState;
     engine: InteractionEngine;
     dataSources: DataSourceRegistry;
     onInteraction?: (componentId: string, event: string, data?: Record<string, unknown>) => void;
 }
-export declare const UIForgeContext: React.Context<UIForgeContextValue | null>;
-export declare function useUIForge(): UIForgeContextValue | null;
+export declare const DashForgeContext: React.Context<DashForgeContextValue | null>;
+export declare function useDashForge(): DashForgeContextValue | null;
 export interface PageRendererProps {
     page: PageSpec;
     className?: string;

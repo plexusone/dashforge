@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/plexusone/uiforge/ent/enttest"
+	"github.com/plexusone/dashforge/ent/enttest"
 )
 
 func newTestEntStore(t *testing.T) SourceStore {

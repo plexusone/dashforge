@@ -17,12 +17,12 @@ import (
 	"time"
 
 	"github.com/grokify/guardsql"
-	"github.com/plexusone/uiforge/dashboardir"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
-// SavedQuestionHandler serves UIForge question metadata. The current
+// SavedQuestionHandler serves DashForge question metadata. The current
 // implementation is file-backed so local server mode can persist questions even
-// when the UIForge metadata DB is not configured.
+// when the DashForge metadata DB is not configured.
 type SavedQuestionHandler struct {
 	store          *questionFileStore
 	logger         *slog.Logger
@@ -149,7 +149,7 @@ type questionFileStore struct {
 
 func newQuestionFileStore(path string) (*questionFileStore, error) {
 	if strings.TrimSpace(path) == "" {
-		path = ".uiforge/questions.json"
+		path = ".dashforge/questions.json"
 	}
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return nil, fmt.Errorf("creating question store directory: %w", err)
@@ -375,5 +375,5 @@ func (s *questionFileStore) writeLocked(questions []dashboardir.SavedQuestion) e
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(s.path, append(data, '\n'), 0o644)
+	return os.WriteFile(s.path, append(data, '\n'), 0o600)
 }

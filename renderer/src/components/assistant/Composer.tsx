@@ -13,23 +13,23 @@ export function AssistantComposer({ instance, children }: ComponentProps): React
 
   return (
     <div
-      data-uiforge-component={instance.id}
-      data-uiforge-type="assistant.composer"
+      data-dashforge-component={instance.id}
+      data-dashforge-type="assistant.composer"
       style={{
-        borderTop: '1px solid var(--uiforge-color-border, #e2e8f0)',
+        borderTop: '1px solid var(--dashforge-color-border, #e2e8f0)',
         padding: '16px',
         ...instance.style,
       }}
     >
       {children ?? (
-        <div data-uiforge-slot="input">
-          <span data-uiforge-placeholder="assistant.composer">
+        <div data-dashforge-slot="input">
+          <span data-dashforge-placeholder="assistant.composer">
             Composer input renders here via @assistant-ui/react Composer primitive
           </span>
         </div>
       )}
       {props.placeholder && (
-        <span data-uiforge-config="placeholder" data-value={props.placeholder} hidden />
+        <span data-dashforge-config="placeholder" data-value={props.placeholder} hidden />
       )}
     </div>
   )

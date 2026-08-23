@@ -1,4 +1,4 @@
-// Package analytics combines queryable-source catalogs for UIForge server mode.
+// Package analytics combines queryable-source catalogs for DashForge server mode.
 package analytics
 
 import (
@@ -8,17 +8,17 @@ import (
 	"log/slog"
 	"sync"
 
+	"github.com/plexusone/dashforge/dashboardir"
 	"github.com/plexusone/omnivault"
-	"github.com/plexusone/uiforge/dashboardir"
 )
 
 // ErrQueryUnsupported is returned when no configured analytics provider can
 // execute query requests yet.
 var ErrQueryUnsupported = errors.New("analytics query execution not configured")
 
-// CatalogProvider supplies one source catalog to UIForge's analytics layer.
+// CatalogProvider supplies one source catalog to DashForge's analytics layer.
 // Application connectors such as OmniRoadmap and VisionStudio should implement
-// this interface without depending on UIForge dashboard storage.
+// this interface without depending on DashForge dashboard storage.
 type CatalogProvider interface {
 	Catalog(ctx context.Context) (dashboardir.AnalyticsCatalog, error)
 	Close() error
@@ -297,16 +297,16 @@ func (s *Service) HasProviders() bool {
 func (s *Service) Catalog(ctx context.Context) (dashboardir.AnalyticsCatalog, error) {
 	if s == nil || !s.HasProviders() {
 		return dashboardir.AnalyticsCatalog{
-			ID:          "uiforge",
-			Name:        "UIForge",
+			ID:          "dashforge",
+			Name:        "DashForge",
 			Description: "No analytics sources configured.",
 			Sources:     []dashboardir.AnalyticsSource{},
 		}, nil
 	}
 
 	out := dashboardir.AnalyticsCatalog{
-		ID:          "uiforge",
-		Name:        "UIForge Analytics",
+		ID:          "dashforge",
+		Name:        "DashForge Analytics",
 		Description: "Combined catalog for connected analytics sources.",
 	}
 	s.mu.RLock()

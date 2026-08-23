@@ -6,15 +6,15 @@ export interface ComponentProps {
   children?: React.ReactNode
 }
 
-export type UIForgeComponent = ComponentType<ComponentProps>
+export type DashForgeComponent = ComponentType<ComponentProps>
 
-const components = new Map<string, UIForgeComponent>()
+const components = new Map<string, DashForgeComponent>()
 
-export function registerComponent(type: string, component: UIForgeComponent): void {
+export function registerComponent(type: string, component: DashForgeComponent): void {
   components.set(type, component)
 }
 
-export function getComponent(type: string): UIForgeComponent | undefined {
+export function getComponent(type: string): DashForgeComponent | undefined {
   return components.get(type)
 }
 

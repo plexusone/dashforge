@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/plexusone/uiforge/ent"
-	"github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/internal/server/db"
+	"github.com/plexusone/dashforge/ent"
+	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/internal/server/db"
 )
 
 // Handler handles API requests.

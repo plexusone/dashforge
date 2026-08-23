@@ -13,11 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertchannel"
-	"github.com/plexusone/uiforge/ent/integration"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertchannel"
+	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // IntegrationQuery is the builder for querying Integration entities.

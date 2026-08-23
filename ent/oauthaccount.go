@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/oauthaccount"
-	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/oauthaccount"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // OAuthAccount is the model entity for the OAuthAccount schema.

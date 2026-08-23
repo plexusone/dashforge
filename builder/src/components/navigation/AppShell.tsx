@@ -17,8 +17,8 @@ import { ThemeToggle } from '../ThemeToggle'
 
 export type AppSection = 'dashboards' | 'questions'
 
-const COLLAPSE_KEY = 'uiforge.nav.collapsed'
-const DASHBOARDS_EXPAND_KEY = 'uiforge.nav.dashboards.expanded'
+const COLLAPSE_KEY = 'dashforge.nav.collapsed'
+const DASHBOARDS_EXPAND_KEY = 'dashforge.nav.dashboards.expanded'
 
 /** How many dashboards the rail lists before deferring to the browse page. */
 const RAIL_DASHBOARD_LIMIT = 10
@@ -128,16 +128,16 @@ export function AppShell({
           <a
             href="/builder/?mode=dashboards"
             className="w-8 h-8 rounded-lg bg-primary-500 text-white flex items-center justify-center font-bold text-sm shrink-0"
-            title="UIForge"
+            title="DashForge"
           >
             UF
           </a>
-          {!collapsed && <span className="font-semibold text-gray-900">UIForge</span>}
+          {!collapsed && <span className="font-semibold text-gray-900">DashForge</span>}
         </div>
 
         <nav
           className="flex-1 min-h-0 overflow-y-auto px-2 py-2 space-y-1"
-          aria-label="UIForge sections"
+          aria-label="DashForge sections"
         >
           {/* Dashboards: link plus in-place expandable list */}
           <div className="flex items-center gap-1">

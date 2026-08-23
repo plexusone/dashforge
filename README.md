@@ -1,4 +1,4 @@
-# UIForge
+# DashForge
 
 [![Go CI][go-ci-svg]][go-ci-url]
 [![Go Lint][go-lint-svg]][go-lint-url]
@@ -8,22 +8,22 @@
 [![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
 
- [go-ci-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
- [go-ci-url]: https://github.com/plexusone/uiforge/actions/workflows/go-ci.yaml
- [go-lint-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
- [go-lint-url]: https://github.com/plexusone/uiforge/actions/workflows/go-lint.yaml
- [go-sast-svg]: https://github.com/plexusone/uiforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
- [go-sast-url]: https://github.com/plexusone/uiforge/actions/workflows/go-sast-codeql.yaml
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/uiforge
- [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/uiforge
+ [go-ci-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml/badge.svg?branch=main
+ [go-ci-url]: https://github.com/plexusone/dashforge/actions/workflows/go-ci.yaml
+ [go-lint-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml/badge.svg?branch=main
+ [go-lint-url]: https://github.com/plexusone/dashforge/actions/workflows/go-lint.yaml
+ [go-sast-svg]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
+ [go-sast-url]: https://github.com/plexusone/dashforge/actions/workflows/go-sast-codeql.yaml
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/dashforge
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/dashforge
  [docs-mkdoc-svg]: https://img.shields.io/badge/Go-dev%20guide-blue.svg
- [docs-mkdoc-url]: https://plexusone.dev/uiforge
+ [docs-mkdoc-url]: https://plexusone.dev/dashforge
  [viz-svg]: https://img.shields.io/badge/Go-visualizaton-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fuiforge
- [loc-svg]: https://tokei.rs/b1/github/plexusone/uiforge
- [repo-url]: https://github.com/plexusone/uiforge
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fdashforge
+ [loc-svg]: https://tokei.rs/b1/github/plexusone/dashforge
+ [repo-url]: https://github.com/plexusone/dashforge
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/plexusone/uiforge/blob/main/LICENSE
+ [license-url]: https://github.com/plexusone/dashforge/blob/main/LICENSE
 
 A JSON-first dashboard framework that starts simple with static hosting (GitHub Pages) and grows into a full Metabase-like analytics platform with an AI-powered visual builder.
 
@@ -37,7 +37,7 @@ A JSON-first dashboard framework that starts simple with static hosting (GitHub 
 - ⚡ **Static or Dynamic** - Start with static file hosting, graduate to PostgreSQL
 - 🗄️ **Multi-Database Support** - Connect to PostgreSQL, MySQL, and more via plugin providers
 - ❓ **Saved Questions** - Metabase-style read-only GrokifyQL questions with formatting, syntax highlighting, field value browsing, CSV/XLSX export, and dashboard reuse
-- 🤖 **Agent-Ready Analytics** - Integrates with OmniAgent marketplace primitives while UIForge owns query, field-value, and dashboard capabilities
+- 🤖 **Agent-Ready Analytics** - Integrates with OmniAgent marketplace primitives while DashForge owns query, field-value, and dashboard capabilities
 - 🔑 **Secret References** - Analytics source credentials should use OmniVault/VaultGuard references instead of raw DSNs in catalog storage, with OmniVault SQL store as the encrypted-in-DB fallback
 - 🏢 **Multi-tenant** - Row Level Security (RLS) for tenant isolation
 - 🔐 **SSO Authentication** - GitHub and Google OAuth support
@@ -70,7 +70,7 @@ The fastest way to create dashboards:
 cd builder && npm install && npm run build && cd ..
 
 # Start the server
-go run ./cmd/uiforge-server serve --port 8080
+go run ./cmd/dashforge-server serve --port 8080
 
 # Open the builder
 open http://localhost:8080/builder/
@@ -81,7 +81,7 @@ open http://localhost:8080/builder/
 Open `viewer/index.html` in a browser with a dashboard URL:
 
 ```bash
-cd uiforge
+cd dashforge
 python3 -m http.server 8080
 # Open http://localhost:8080/viewer/?dashboard=../examples/compliance-dashboard.json
 ```
@@ -92,23 +92,23 @@ The viewer has a light/dark theme toggle (top-right, persisted via `localStorage
 
 ```bash
 # Build the server
-go build -o uiforge-server ./cmd/uiforge-server
+go build -o dashforge-server ./cmd/dashforge-server
 
 # Run with Dolt (local default — connects to a dolt sql-server, creating the
 # database if needed; matches the local dolt sql-server ecosystem pattern)
-./uiforge-server serve --port 8080 --auto-migrate \
-  --db-url 'mysql://root@127.0.0.1:13307/uiforge'
+./dashforge-server serve --port 8080 --auto-migrate \
+  --db-url 'mysql://root@127.0.0.1:13307/dashforge'
 
 # Or with PostgreSQL (required for Row Level Security / --enable-rls)
-export DATABASE_URL="postgres://user:pass@localhost:5432/uiforge?sslmode=disable"
+export DATABASE_URL="postgres://user:pass@localhost:5432/dashforge?sslmode=disable"
 export JWT_SECRET="your-secret-key"
 
-./uiforge-server serve --port 8080 --auto-migrate
+./dashforge-server serve --port 8080 --auto-migrate
 ```
 
 ### Analytics Sources
 
-UIForge connects to multiple analytics sources at once, like Metabase. Sources
+DashForge connects to multiple analytics sources at once, like Metabase. Sources
 are added at runtime — via the **Data sources** panel in the Question builder
 (`/builder/?mode=questions`) or the API — and persist across restarts. Only an
 OmniVault secret reference is stored, never a raw DSN:
@@ -116,14 +116,14 @@ OmniVault secret reference is stored, never a raw DSN:
 ```bash
 # Connectors are registered by the consuming application binary — the core
 # engine ships none. Example below assumes an app registered "roadmap-app".
-export UIFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
-./uiforge-server serve --address 127.0.0.1:13319
+export DASHFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
+./dashforge-server serve --address 127.0.0.1:13319
 
 # One-time: register the source (or use the builder UI)
 curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
   -H 'Content-Type: application/json' \
   -d '{"id":"roadmap-app","name":"Roadmap App","connector":"roadmap-app",
-       "dsnRef":"env://UIFORGE_ROADMAP_APP_DSN","enabled":true}'
+       "dsnRef":"env://DASHFORGE_ROADMAP_APP_DSN","enabled":true}'
 ```
 
 See [Analytics Catalog](docs/analytics-catalog.md) for the catalog model,
@@ -139,7 +139,7 @@ Full documentation is available at [docs/](docs/):
 - [Data Sources](docs/data-sources.md) - Database connections & providers
 - [Analytics Catalog](docs/analytics-catalog.md) - Queryable sources, datasets, fields, and Questions
 - [Analytics Authorization](docs/analytics-authorization.md) - GrokifyQL policy with SystemForge and SpiceDB
-- [Agent Integration](docs/agent-integration.md) - OmniAgent marketplace boundary and UIForge analytics capabilities
+- [Agent Integration](docs/agent-integration.md) - OmniAgent marketplace boundary and DashForge analytics capabilities
 - [Cube.js Integration](docs/cube-integration.md) - Semantic data layer
 - [AI Features](docs/ai-features.md) - LLM-powered dashboard generation
 - [Server Configuration](docs/server-config.md)
@@ -151,18 +151,18 @@ Full documentation is available at [docs/](docs/):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        UIForge                                  │
+│                        DashForge                                  │
 ├─────────────────────────────────────────────────────────────────┤
 │  builder/               Visual dashboard builder (React)        │
 │    ├── src/components/  Canvas, widgets, chart builder          │
 │    ├── src/ai/          AI generation schemas & prompts         │
-│    └── src/api/         UIForge & Cube.js clients               │
+│    └── src/api/         DashForge & Cube.js clients               │
 ├─────────────────────────────────────────────────────────────────┤
 │  cube/                  Cube.js semantic layer                  │
 │    └── model/cubes/     Data models (YAML)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  cmd/uiforge/         Static CLI (validate, convert)            │
-│  cmd/uiforge-server/  Full server with API                      │
+│  cmd/dashforge/         Static CLI (validate, convert)            │
+│  cmd/dashforge-server/  Full server with API                      │
 ├─────────────────────────────────────────────────────────────────┤
 │  dashboardir/           Dashboard JSON schema & types           │
 │  viewer/                Embedded static HTML/JS viewer          │

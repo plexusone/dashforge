@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/plexusone/uiforge/ent/analyticssource"
+	"github.com/plexusone/dashforge/ent/analyticssource"
 )
 
 // AnalyticsSource is the model entity for the AnalyticsSource schema.

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/analyticssource"
+	"github.com/plexusone/dashforge/ent/analyticssource"
 )
 
 // AnalyticsSourceCreate is the builder for creating a AnalyticsSource entity.

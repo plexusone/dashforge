@@ -14,25 +14,25 @@ export function AssistantRunStatus({ instance, children }: ComponentProps): Reac
 
   return (
     <div
-      data-uiforge-component={instance.id}
-      data-uiforge-type="assistant.run-status"
+      data-dashforge-component={instance.id}
+      data-dashforge-type="assistant.run-status"
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
         fontSize: '0.8rem',
-        color: 'var(--uiforge-color-text-secondary, #94a3b8)',
+        color: 'var(--dashforge-color-text-secondary, #94a3b8)',
         ...instance.style,
       }}
     >
       {children ?? (
         <>
-          <span data-uiforge-slot="status-indicator" />
-          <span data-uiforge-slot="status-label">
-            <span data-uiforge-placeholder="run-status">Idle</span>
+          <span data-dashforge-slot="status-indicator" />
+          <span data-dashforge-slot="status-label">
+            <span data-dashforge-placeholder="run-status">Idle</span>
           </span>
-          {props.showElapsed && <span data-uiforge-slot="elapsed" />}
-          {props.showTokenCount && <span data-uiforge-slot="token-count" />}
+          {props.showElapsed && <span data-dashforge-slot="elapsed" />}
+          {props.showTokenCount && <span data-dashforge-slot="token-count" />}
         </>
       )}
     </div>

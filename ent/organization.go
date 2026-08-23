@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/subscription"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/subscription"
 )
 
 // Organization is the model entity for the Organization schema.

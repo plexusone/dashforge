@@ -10,7 +10,7 @@ func TestAnalyticsSourceConfigCredentialReference(t *testing.T) {
 	}{
 		{
 			name: "credential ref wins",
-			cfg: AnalyticsSourceConfig{
+			cfg: AnalyticsSourceConfig{ //nolint:gosec // G101: CredentialRef is a reference locator (sql://...), not a hardcoded credential
 				CredentialRef: "sql://analytics-sources/source",
 				DSNRef:        "env://SOURCE_DSN",
 			},

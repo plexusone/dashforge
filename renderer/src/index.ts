@@ -1,5 +1,5 @@
-export { PageRenderer, UIForgeContext, useUIForge } from './PageRenderer'
-export type { PageRendererProps, UIForgeContextValue } from './PageRenderer'
+export { PageRenderer, DashForgeContext, useDashForge } from './PageRenderer'
+export type { PageRendererProps, DashForgeContextValue } from './PageRenderer'
 
 export {
   registerComponent,
@@ -8,7 +8,7 @@ export {
   listComponents,
   clearRegistry,
 } from './registry'
-export type { ComponentProps, UIForgeComponent } from './registry'
+export type { ComponentProps, DashForgeComponent } from './registry'
 
 export { Layout } from './layouts'
 

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/plexusone/uiforge/pkg/expression"
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/pkg/expression"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 // Connector is a high-level interface for UISpec data bindings.

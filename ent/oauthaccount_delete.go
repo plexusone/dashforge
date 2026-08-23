@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/oauthaccount"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/oauthaccount"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // OAuthAccountDelete is the builder for deleting a OAuthAccount entity.

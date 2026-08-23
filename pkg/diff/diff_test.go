@@ -3,7 +3,7 @@ package diff
 import (
 	"testing"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 func basePage() *uispec.PageSpec {

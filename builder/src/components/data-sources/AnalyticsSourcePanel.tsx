@@ -262,7 +262,7 @@ export function AnalyticsSourcePanel({ onClose, onSourcesChanged }: AnalyticsSou
                 <input
                   value={form.dsnRef}
                   onChange={(e) => setForm({ ...form, dsnRef: e.target.value })}
-                  placeholder="env://UIFORGE_MY_SOURCE_DSN"
+                  placeholder="env://DASHFORGE_MY_SOURCE_DSN"
                   className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm font-mono"
                 />
                 <span className="mt-1 block text-xs text-gray-500">

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/plexusone/uiforge/ent"
-	entanalyticssource "github.com/plexusone/uiforge/ent/analyticssource"
+	"github.com/plexusone/dashforge/ent"
+	entanalyticssource "github.com/plexusone/dashforge/ent/analyticssource"
 )
 
 // sourceEntStore is a metadata-database SourceStore backed by the ent
@@ -14,7 +14,7 @@ type sourceEntStore struct {
 	client *ent.Client
 }
 
-// NewSourceEntStore creates a SourceStore backed by the UIForge metadata
+// NewSourceEntStore creates a SourceStore backed by the DashForge metadata
 // database.
 func NewSourceEntStore(client *ent.Client) (SourceStore, error) {
 	if client == nil {

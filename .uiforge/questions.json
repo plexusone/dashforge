@@ -1,0 +1,238 @@
+[
+  {
+    "id": "question-1787078166113597000",
+    "name": "Initiative Counts 2026H2",
+    "sourceId": "omniroadmap",
+    "datasetId": "initiatives",
+    "dialect": "grokifyql",
+    "query": "SELECT custom.product, count(name)\nFROM initiatives\nWHERE provider = \"aha-studio\" AND workspace_ref = \"SAVIN\"\nGROUP BY custom.product",
+    "compiledQuery": {
+      "version": "grokifyql/v1",
+      "ast": {
+        "Operation": "read",
+        "With": null,
+        "Select": [
+          {
+            "Field": "custom.product",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "",
+            "Star": false,
+            "Aggregate": {
+              "Func": "COUNT",
+              "Field": "name",
+              "Star": false
+            },
+            "Alias": ""
+          }
+        ],
+        "From": "initiatives",
+        "FromQuery": null,
+        "FromAlias": "",
+        "Joins": null,
+        "Where": {
+          "Op": "AND",
+          "Left": {
+            "Field": "provider",
+            "Op": "=",
+            "Values": [
+              {
+                "Type": "string",
+                "Raw": "\"aha-studio\"",
+                "Any": "aha-studio"
+              }
+            ]
+          },
+          "Right": {
+            "Field": "workspace_ref",
+            "Op": "=",
+            "Values": [
+              {
+                "Type": "string",
+                "Raw": "\"SAVIN\"",
+                "Any": "SAVIN"
+              }
+            ]
+          }
+        },
+        "GroupBy": [
+          "custom.product"
+        ],
+        "Having": null,
+        "Prioritize": null,
+        "OrderBy": null,
+        "Limit": -1
+      },
+      "fingerprint": "sha256:61f398ed4c1d534154b9cabce61961cdc7e09ca2d9a159deef931b40887bda46",
+      "datasets": [
+        "initiatives"
+      ],
+      "fields": [
+        "count_name",
+        "custom.product",
+        "name",
+        "provider",
+        "workspace_ref"
+      ],
+      "readOnly": true,
+      "limit": -1
+    },
+    "visualization": {
+      "type": "table"
+    },
+    "createdAt": "2026-08-18T18:36:06.113888Z",
+    "updatedAt": "2026-08-18T18:37:22.937283Z"
+  },
+  {
+    "id": "question-1787035888606",
+    "name": "Platform Initiatives 2026H2",
+    "sourceId": "omniroadmap",
+    "datasetId": "initiatives",
+    "dialect": "grokifyql",
+    "query": "SELECT\n    workspace_ref, name, moscow, rice_score, kano,\n    custom.aha_initiative_rank, custom.product, custom.platform,\n    custom.initiative_tags\nFROM initiatives\nWHERE provider = \"aha-studio\" AND workspace_ref = \"SAVIN\" AND\n    custom.product IN (\"Platform\", \"Market Access\")\nPRIORITIZE BY moscow_rice",
+    "compiledQuery": {
+      "version": "grokifyql/v1",
+      "ast": {
+        "Operation": "read",
+        "With": null,
+        "Select": [
+          {
+            "Field": "workspace_ref",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "name",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "moscow",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "rice_score",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "kano",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "custom.aha_initiative_rank",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "custom.product",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "custom.platform",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          },
+          {
+            "Field": "custom.initiative_tags",
+            "Star": false,
+            "Aggregate": null,
+            "Alias": ""
+          }
+        ],
+        "From": "initiatives",
+        "FromQuery": null,
+        "FromAlias": "",
+        "Joins": null,
+        "Where": {
+          "Op": "AND",
+          "Left": {
+            "Op": "AND",
+            "Left": {
+              "Field": "provider",
+              "Op": "=",
+              "Values": [
+                {
+                  "Type": "string",
+                  "Raw": "\"aha-studio\"",
+                  "Any": "aha-studio"
+                }
+              ]
+            },
+            "Right": {
+              "Field": "workspace_ref",
+              "Op": "=",
+              "Values": [
+                {
+                  "Type": "string",
+                  "Raw": "\"SAVIN\"",
+                  "Any": "SAVIN"
+                }
+              ]
+            }
+          },
+          "Right": {
+            "Field": "custom.product",
+            "Op": "IN",
+            "Values": [
+              {
+                "Type": "string",
+                "Raw": "\"Platform\"",
+                "Any": "Platform"
+              },
+              {
+                "Type": "string",
+                "Raw": "\"Market Access\"",
+                "Any": "Market Access"
+              }
+            ]
+          }
+        },
+        "GroupBy": null,
+        "Having": null,
+        "Prioritize": [
+          "moscow_rice"
+        ],
+        "OrderBy": null,
+        "Limit": -1
+      },
+      "fingerprint": "sha256:dab57afc8c8b6f48e99370f070fad6e4b57d06e6d64f9272a64921e8c679ca75",
+      "datasets": [
+        "initiatives"
+      ],
+      "fields": [
+        "custom.aha_initiative_rank",
+        "custom.initiative_tags",
+        "custom.platform",
+        "custom.product",
+        "kano",
+        "moscow",
+        "name",
+        "provider",
+        "rice_score",
+        "workspace_ref"
+      ],
+      "readOnly": true,
+      "limit": -1
+    },
+    "visualization": {
+      "type": "table"
+    },
+    "createdAt": "2026-08-18T14:40:27.290044Z",
+    "updatedAt": "2026-08-18T15:35:37.045891Z"
+  }
+]

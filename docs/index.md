@@ -1,8 +1,8 @@
-# UIForge
+# DashForge
 
 A JSON-first dashboard framework that starts simple with static hosting and grows into a full Metabase-like analytics platform with an AI-powered visual builder.
 
-## Why UIForge?
+## Why DashForge?
 
 - **Visual Dashboard Builder** - Drag-and-drop editor optimized for both humans and LLM agents
 - **Saved Questions** - Metabase-style GrokifyQL questions that can be run,
@@ -29,7 +29,7 @@ Visual drag-and-drop dashboard creation:
 
 ```bash
 cd builder && npm install && npm run build && cd ..
-./uiforge-server serve --port 8080
+./dashforge-server serve --port 8080
 open http://localhost:8080/builder/
 ```
 
@@ -61,7 +61,7 @@ Full-featured analytics platform with:
 - Optional OmniAgent marketplace integration for reusable analytics agents
 
 ```bash
-./uiforge-server serve --database-url postgres://... --auto-migrate
+./dashforge-server serve --database-url postgres://... --auto-migrate
 ```
 
 ## Quick Links
@@ -70,7 +70,7 @@ Full-featured analytics platform with:
 - [Dashboard Builder](builder.md) - Visual editor guide
 - [Cube.js Integration](cube-integration.md) - Semantic data layer
 - [AI Features](ai-features.md) - LLM-powered generation
-- [Agent Integration](agent-integration.md) - OmniAgent marketplace boundary and UIForge capabilities
+- [Agent Integration](agent-integration.md) - OmniAgent marketplace boundary and DashForge capabilities
 - [Dashboard IR](dashboard-ir.md) - JSON schema reference
 - [Server Configuration](server-config.md) - Running the server
 - [API Reference](api-reference.md) - REST API documentation
@@ -79,11 +79,11 @@ Full-featured analytics platform with:
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                        UIForge                                   │
+│                        DashForge                                   │
 ├──────────────────────────────────────────────────────────────────┤
 │  Builder Mode            │  Static Mode     │  Server Mode       │
 │  ────────────            │  ───────────     │  ───────────       │
-│  /builder/               │  viewer/         │  uiforge-server    │
+│  /builder/               │  viewer/         │  dashforge-server    │
 │  React + TypeScript      │  index.html      │  PostgreSQL + Ent  │
 │  Questions + dashboards  │  JSON files      │  OAuth             │
 │  AI generation           │  GitHub Pages    │  Multi-tenant RLS  │
@@ -96,7 +96,7 @@ Full-featured analytics platform with:
 
 ## AI-First Design
 
-UIForge is designed from the ground up to work seamlessly with LLM agents:
+DashForge is designed from the ground up to work seamlessly with LLM agents:
 
 - **Non-polymorphic JSON** - Dashboard IR uses flat structures without `oneOf`/`anyOf`, making it easy for AI to generate valid configurations
 - **Semantic context** - Cube.js provides business-friendly names like "revenue" and "customer_count" instead of raw column names

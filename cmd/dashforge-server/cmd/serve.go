@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/plexusone/uiforge/internal/server"
+	"github.com/plexusone/dashforge/internal/server"
 )
 
 var serveCmd = &cobra.Command{
@@ -24,8 +24,8 @@ The server provides:
   - Optional authentication
 
 Example:
-  uiforge-server serve --port 8080 --config config.yaml
-  uiforge-server serve --db-url postgres://localhost/analytics`,
+  dashforge-server serve --port 8080 --config config.yaml
+  dashforge-server serve --db-url postgres://localhost/analytics`,
 	RunE: runServe,
 }
 
@@ -38,11 +38,11 @@ func init() {
 	serveCmd.Flags().StringP("config", "c", "", "Config file path")
 	serveCmd.Flags().String("db-url", "", "Database connection URL")
 	serveCmd.Flags().String("dashboards", "examples", "Dashboard directory")
-	serveCmd.Flags().String("question-store", ".uiforge/questions.json", "Saved question metadata JSON file")
+	serveCmd.Flags().String("question-store", ".dashforge/questions.json", "Saved question metadata JSON file")
 	serveCmd.Flags().Bool("no-auth", false, "Disable authentication (development only)")
 	serveCmd.Flags().Bool("auto-migrate", false, "Run database migrations on startup")
 	serveCmd.Flags().Bool("enable-rls", false, "Enable Row Level Security for multi-tenancy")
-	serveCmd.Flags().String("analytics-source-store", "", "Analytics source config JSON file when no metadata DB is set (default .uiforge/analytics-sources.json)")
+	serveCmd.Flags().String("analytics-source-store", "", "Analytics source config JSON file when no metadata DB is set (default .dashforge/analytics-sources.json)")
 	serveCmd.Flags().Bool("enable-ollama", false, "Enable local Ollama as an AI provider")
 	serveCmd.Flags().String("ollama-url", "", "Ollama base URL, e.g. http://localhost:11434")
 }

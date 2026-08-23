@@ -1,8 +1,8 @@
-site_name: UIForge
+site_name: DashForge
 site_description: A JSON-first dashboard framework with AI-powered visual builder
-site_url: https://plexusone.github.io/uiforge
-repo_url: https://github.com/plexusone/uiforge
-repo_name: plexusone/uiforge
+site_url: https://plexusone.github.io/dashforge
+repo_url: https://github.com/plexusone/dashforge
+repo_name: plexusone/dashforge
 
 theme:
   name: material
@@ -67,7 +67,7 @@ nav:
       - Overview: marketplace/overview.md
       - Publishing Templates: marketplace/publishing.md
       - Licensing: marketplace/licensing.md
-  - API Reference: https://pkg.go.dev/github.com/plexusone/uiforge
+  - API Reference: https://pkg.go.dev/github.com/plexusone/dashforge
   - Development: development.md
   - Releases:
       - Changelog: changelog.md
@@ -80,4 +80,4 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/plexusone/uiforge
+      link: https://github.com/plexusone/dashforge

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/plexusone/uiforge/schema/page.schema.json",
+  "$id": "https://github.com/plexusone/dashforge/schema/page.schema.json",
   "$ref": "#/$defs/PageSpec",
   "$defs": {
     "Binding": {
@@ -383,5 +383,5 @@
     }
   },
   "title": "PageSpec",
-  "description": "UIForge page specification — the canonical JSON IR for declarative UI composition"
+  "description": "DashForge page specification — the canonical JSON IR for declarative UI composition"
 }

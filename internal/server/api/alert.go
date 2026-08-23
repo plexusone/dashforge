@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/plexusone/uiforge/ent"
-	entalert "github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertevent"
-	entdashboard "github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/internal/server/db"
+	"github.com/plexusone/dashforge/ent"
+	entalert "github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertevent"
+	entdashboard "github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/internal/server/db"
 )
 
 // AlertHandler handles alert API requests.

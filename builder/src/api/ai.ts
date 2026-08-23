@@ -397,7 +397,7 @@ export async function askQuestionAssistant(
   context: QuestionAssistantContext,
   options?: AIGenerationOptions,
 ): Promise<AIGenerationResult<QuestionAssistantResult>> {
-  const systemPrompt = `You are a GrokifyQL question assistant for UIForge.
+  const systemPrompt = `You are a GrokifyQL question assistant for DashForge.
 
 Help users create and modify read-only GrokifyQL questions for analytics dashboards.
 

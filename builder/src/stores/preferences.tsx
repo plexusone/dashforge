@@ -8,11 +8,11 @@ interface PreferencesContextValue {
   toggleTheme: () => void
 }
 
-const DB_NAME = 'uiforge-config'
+const DB_NAME = 'dashforge-config'
 const DB_VERSION = 1
 const STORE_NAME = 'preferences'
 const THEME_KEY = 'theme'
-const THEME_STORAGE_KEY = 'uiforge.theme'
+const THEME_STORAGE_KEY = 'dashforge.theme'
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null)
 

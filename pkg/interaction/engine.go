@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/plexusone/uiforge/pkg/expression"
-	"github.com/plexusone/uiforge/pkg/state"
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/pkg/expression"
+	"github.com/plexusone/dashforge/pkg/state"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 // ActionHandler executes a single interaction action.

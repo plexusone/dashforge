@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/principal"
-	"github.com/plexusone/uiforge/ent/refreshtoken"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/refreshtoken"
 )
 
 // RefreshToken is the model entity for the RefreshToken schema.

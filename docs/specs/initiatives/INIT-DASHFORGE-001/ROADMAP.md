@@ -1,9 +1,9 @@
-# ROADMAP — DashForge Rename & UIForge Split
+# ROADMAP — DashForge Rename & DashForge Split
 
 **Initiative:** `INIT-DASHFORGE-001`
 **Repository:** `github.com/plexusone/dashforge`
 
-Entry gate: INIT-UIFORGE-002 committed, pushed, and released first (see
+Entry gate: INIT-DASHFORGE-002 committed, pushed, and released first (see
 PLAN.md). `RMI-OMNIROADMAP-011` is a cross-repo RMI created directly in
 VisionStudio (roadmap import assigns a single repository; listed here for
 reference only).
@@ -17,19 +17,19 @@ reference only).
   - Depends on: `RMI-DASHFORGE-001`
 - [ ] `RMI-DASHFORGE-003` Frontend and docs rebrand: builder branding, README, mkdocs, examples
   - Depends on: `RMI-DASHFORGE-002`
-- [ ] `RMI-OMNIROADMAP-011` (repo `github.com/grokify/omniroadmap`) Switch imports and replace directives from plexusone/uiforge to plexusone/dashforge
-- [ ] `RMI-VISIONSTUDIO-552` (repo `github.com/ProductBuildersHQ/visionstudio`) Switch pkg/ir/snapshot.go import and go.mod from plexusone/uiforge to plexusone/dashforge
+- [ ] `RMI-OMNIROADMAP-011` (repo `github.com/grokify/omniroadmap`) Switch imports and replace directives from plexusone/dashforge to plexusone/dashforge
+- [ ] `RMI-VISIONSTUDIO-552` (repo `github.com/ProductBuildersHQ/visionstudio`) Switch pkg/ir/snapshot.go import and go.mod from plexusone/dashforge to plexusone/dashforge
   - Depends on: `RMI-DASHFORGE-002`
 - [ ] `RMI-DASHFORGE-004` Verification gate: ecosystem grep sweep, remotes audit, CI green under new name
   - Depends on: `RMI-DASHFORGE-003`
 
-## Phase 2 — UISpec Boundary & New UIForge Repo
+## Phase 2 — UISpec Boundary & New DashForge Repo
 
-**Theme:** Define the component-platform boundary; reuse the freed uiforge name deliberately
+**Theme:** Define the component-platform boundary; reuse the freed dashforge name deliberately
 
 - [ ] `RMI-DASHFORGE-005` Boundary inventory: classify renderer, ts, UISpec/PageSpec, builder widgets as core vs extract
-- [ ] `RMI-DASHFORGE-006` Create fresh plexusone/uiforge repo seeded with component-platform specs and scaffolding
+- [ ] `RMI-DASHFORGE-006` Create fresh plexusone/dashforge repo seeded with component-platform specs and scaffolding
   - Depends on: `RMI-DASHFORGE-004`
   - Depends on: `RMI-DASHFORGE-005`
-- [ ] `RMI-DASHFORGE-007` First extraction: UISpec/PageSpec types and schema generation into new uiforge; dashforge consumes
+- [ ] `RMI-DASHFORGE-007` First extraction: UISpec/PageSpec types and schema generation into new dashforge; dashforge consumes
   - Depends on: `RMI-DASHFORGE-006`

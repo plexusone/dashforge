@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/plexusone/uiforge/datasource"
+	"github.com/plexusone/dashforge/datasource"
 )
 
 // Connection implements datasource.Connection for MySQL.

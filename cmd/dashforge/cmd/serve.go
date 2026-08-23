@@ -12,7 +12,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/plexusone/uiforge/viewer"
+	"github.com/plexusone/dashforge/viewer"
 )
 
 var serveCmd = &cobra.Command{
@@ -25,9 +25,9 @@ The server serves:
   - Your dashboard files from the specified directory
 
 Example:
-  uiforge serve ./dashboards
-  uiforge serve --port 3000 ./my-project
-  uiforge serve --dashboard my-dashboard.json ./data`,
+  dashforge serve ./dashboards
+  dashforge serve --port 3000 ./my-project
+  dashforge serve --dashboard my-dashboard.json ./data`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: runServe,
 }

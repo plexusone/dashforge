@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	serveranalytics "github.com/plexusone/uiforge/analytics"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
 )
 
 // setupSourceRoutes registers analytics source management endpoints.

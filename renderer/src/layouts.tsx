@@ -27,7 +27,7 @@ export function Layout({ layout, components, renderComponent }: LayoutProps): Re
       )
     default:
       return (
-        <div data-uiforge-error={`unknown layout: ${layout.type}`}>
+        <div data-dashforge-error={`unknown layout: ${layout.type}`}>
           {components.map(renderComponent)}
         </div>
       )
@@ -45,7 +45,7 @@ function GridLayout({ layout, components, renderComponent }: LayoutProps): React
   }
 
   return (
-    <div style={style} data-uiforge-layout="responsive-grid">
+    <div style={style} data-dashforge-layout="responsive-grid">
       {components.map((comp) => {
         const node = renderComponent(comp)
         if (node === null) return null
@@ -57,7 +57,7 @@ function GridLayout({ layout, components, renderComponent }: LayoutProps): React
             }
           : {}
         return (
-          <div key={comp.id} style={cellStyle} data-uiforge-cell={comp.id}>
+          <div key={comp.id} style={cellStyle} data-dashforge-cell={comp.id}>
             {node}
           </div>
         )
@@ -77,12 +77,12 @@ function StackLayout({ layout, components, renderComponent }: LayoutProps): Reac
   }
 
   return (
-    <div style={style} data-uiforge-layout="stack">
+    <div style={style} data-dashforge-layout="stack">
       {components.map((comp) => {
         const node = renderComponent(comp)
         if (node === null) return null
         return (
-          <div key={comp.id} data-uiforge-cell={comp.id}>
+          <div key={comp.id} data-dashforge-cell={comp.id}>
             {node}
           </div>
         )
@@ -110,12 +110,12 @@ function SplitPaneLayout({ layout, renderComponent }: RegionLayoutProps): React.
   }
 
   return (
-    <div style={style} data-uiforge-layout="split-pane">
+    <div style={style} data-dashforge-layout="split-pane">
       {regions.map((region, i) => {
         const size = sizes[i]
         const paneStyle: React.CSSProperties = size ? { flex: `0 0 ${size}` } : { flex: 1 }
         return (
-          <div key={region.name} style={paneStyle} data-uiforge-region={region.name}>
+          <div key={region.name} style={paneStyle} data-dashforge-region={region.name}>
             {region.layout && (
               <Layout layout={region.layout} components={[]} renderComponent={renderComponent} />
             )}
@@ -131,7 +131,7 @@ function TabsLayout({ layout }: RegionLayoutProps): React.ReactElement {
   const [active, setActive] = React.useState(regions[0]?.name ?? '')
 
   return (
-    <div data-uiforge-layout="tabs">
+    <div data-dashforge-layout="tabs">
       <div
         role="tablist"
         style={{ display: 'flex', gap: '4px', borderBottom: '1px solid #e2e8f0' }}
@@ -159,7 +159,7 @@ function TabsLayout({ layout }: RegionLayoutProps): React.ReactElement {
           key={region.name}
           role="tabpanel"
           hidden={region.name !== active}
-          data-uiforge-region={region.name}
+          data-dashforge-region={region.name}
         />
       ))}
     </div>
@@ -185,16 +185,16 @@ function AppShellLayout({ layout, components, renderComponent }: LayoutProps): R
   const slotStyle = (area: string): React.CSSProperties => ({ gridArea: area })
 
   return (
-    <div style={style} data-uiforge-layout="application-shell">
-      {regionMap.has('header') && <div style={slotStyle('header')} data-uiforge-region="header" />}
+    <div style={style} data-dashforge-layout="application-shell">
+      {regionMap.has('header') && <div style={slotStyle('header')} data-dashforge-region="header" />}
       {regionMap.has('sidebar') && (
-        <div style={slotStyle('sidebar')} data-uiforge-region="sidebar" />
+        <div style={slotStyle('sidebar')} data-dashforge-region="sidebar" />
       )}
-      <div style={slotStyle('main')} data-uiforge-region="main">
+      <div style={slotStyle('main')} data-dashforge-region="main">
         {components.map(renderComponent)}
       </div>
-      {regionMap.has('aside') && <div style={slotStyle('aside')} data-uiforge-region="aside" />}
-      {regionMap.has('footer') && <div style={slotStyle('footer')} data-uiforge-region="footer" />}
+      {regionMap.has('aside') && <div style={slotStyle('aside')} data-dashforge-region="aside" />}
+      {regionMap.has('footer') && <div style={slotStyle('footer')} data-dashforge-region="footer" />}
     </div>
   )
 }

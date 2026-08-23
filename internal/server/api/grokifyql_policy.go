@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	"crypto/sha1"
+	"crypto/sha1" //nolint:gosec // G505: non-cryptographic deterministic ID derivation (see analyticsResourceID)
 	"fmt"
 	"strings"
 
@@ -10,10 +10,10 @@ import (
 	"github.com/grokify/guardsql"
 	systemauthz "github.com/grokify/systemforge/authz"
 	"github.com/grokify/systemforge/authzguardsql"
-	serveranalytics "github.com/plexusone/uiforge/analytics"
-	"github.com/plexusone/uiforge/dashboardir"
-	localauthz "github.com/plexusone/uiforge/internal/authz"
-	serverauth "github.com/plexusone/uiforge/internal/server/auth"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
+	"github.com/plexusone/dashforge/dashboardir"
+	localauthz "github.com/plexusone/dashforge/internal/authz"
+	serverauth "github.com/plexusone/dashforge/internal/server/auth"
 )
 
 // GrokifyQLPolicyProvider builds request-scoped GrokifyQL policies.
@@ -27,7 +27,7 @@ func (staticGrokifyQLPolicyProvider) Policy(context.Context, string) (guardsql.P
 	return defaultGrokifyQLPolicy(), nil
 }
 
-// SystemForgeGrokifyQLPolicyProvider converts UIForge analytics metadata into a
+// SystemForgeGrokifyQLPolicyProvider converts DashForge analytics metadata into a
 // GrokifyQL schema, then compiles SystemForge authorization checks into an AST
 // policy. It is intentionally request-scoped because SpiceDB decisions depend on
 // the authenticated principal.
@@ -136,11 +136,11 @@ func (b analyticsResourceBuilder) FieldResource(entity, field string) systemauth
 }
 
 func analyticsResourceID(sourceID, entity, field string) uuid.UUID {
-	key := "uiforge:analytics:" + normalizeResourcePart(sourceID) + ":" + normalizeResourcePart(entity)
+	key := "dashforge:analytics:" + normalizeResourcePart(sourceID) + ":" + normalizeResourcePart(entity)
 	if strings.TrimSpace(field) != "" {
 		key += ":" + normalizeResourcePart(field)
 	}
-	sum := sha1.Sum([]byte(key))
+	sum := sha1.Sum([]byte(key)) //nolint:gosec // G401: deterministic resource-ID fingerprint, not a security primitive; changing the derivation would break persisted authz resource IDs
 	return uuid.NewSHA1(uuid.NameSpaceURL, sum[:])
 }
 

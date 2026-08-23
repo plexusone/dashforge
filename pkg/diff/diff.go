@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 // ChangeType classifies a diff entry.

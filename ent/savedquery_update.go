@@ -13,11 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/predicate"
-	"github.com/plexusone/uiforge/ent/principal"
-	"github.com/plexusone/uiforge/ent/savedquery"
-	"github.com/plexusone/uiforge/ent/schema"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/savedquery"
+	"github.com/plexusone/dashforge/ent/schema"
 )
 
 // SavedQueryUpdate is the builder for updating SavedQuery entities.

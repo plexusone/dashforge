@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/license"
-	"github.com/plexusone/uiforge/ent/listing"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/principal"
+	"github.com/plexusone/dashforge/ent/license"
+	"github.com/plexusone/dashforge/ent/listing"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/principal"
 )
 
 // License is the model entity for the License schema.

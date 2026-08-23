@@ -9,9 +9,9 @@ import (
 	systemauthz "github.com/grokify/systemforge/authz"
 	sessionjwt "github.com/grokify/systemforge/session/jwt"
 	sessionmw "github.com/grokify/systemforge/session/middleware"
-	serveranalytics "github.com/plexusone/uiforge/analytics"
-	"github.com/plexusone/uiforge/dashboardir"
-	localauthz "github.com/plexusone/uiforge/internal/authz"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
+	"github.com/plexusone/dashforge/dashboardir"
+	localauthz "github.com/plexusone/dashforge/internal/authz"
 )
 
 func TestCompileGrokifyQLQuestionDefaultPolicyAllowsNoLimit(t *testing.T) {

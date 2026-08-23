@@ -44,16 +44,16 @@ describe('PageRenderer', () => {
 
   it('renders a grid layout with components', () => {
     const { container } = render(<PageRenderer page={basePage} />)
-    const grid = container.querySelector('[data-uiforge-layout="responsive-grid"]')
+    const grid = container.querySelector('[data-dashforge-layout="responsive-grid"]')
     expect(grid).not.toBeNull()
     expect(grid?.children.length).toBe(2)
   })
 
   it('sets page-level data attributes', () => {
     const { container } = render(<PageRenderer page={basePage} />)
-    const root = container.querySelector('[data-uiforge-page="test-page"]')
+    const root = container.querySelector('[data-dashforge-page="test-page"]')
     expect(root).not.toBeNull()
-    expect(root?.getAttribute('data-uiforge-profile')).toBe('dashboard')
+    expect(root?.getAttribute('data-dashforge-profile')).toBe('dashboard')
   })
 
   it('renders registered components', () => {
@@ -65,7 +65,7 @@ describe('PageRenderer', () => {
   it('shows placeholder for unregistered components', () => {
     clearRegistry()
     const { container } = render(<PageRenderer page={basePage} />)
-    const missing = container.querySelectorAll('[data-uiforge-missing]')
+    const missing = container.querySelectorAll('[data-dashforge-missing]')
     expect(missing.length).toBe(2)
   })
 
@@ -81,7 +81,7 @@ describe('PageRenderer', () => {
       ],
     }
     const { container } = render(<PageRenderer page={page} />)
-    expect(container.querySelector('[data-uiforge-cell="hidden"]')).toBeNull()
+    expect(container.querySelector('[data-dashforge-cell="hidden"]')).toBeNull()
   })
 
   it('applies theme tokens as CSS custom properties', () => {
@@ -90,8 +90,8 @@ describe('PageRenderer', () => {
       theme: { id: 'default', variant: 'dark', tokens: { 'color-primary': '#3b82f6' } },
     }
     const { container } = render(<PageRenderer page={page} />)
-    const root = container.querySelector('[data-uiforge-page]') as HTMLElement
-    expect(root.style.getPropertyValue('--uiforge-color-primary')).toBe('#3b82f6')
+    const root = container.querySelector('[data-dashforge-page]') as HTMLElement
+    expect(root.style.getPropertyValue('--dashforge-color-primary')).toBe('#3b82f6')
   })
 
   it('calls onError when a component throws', () => {
@@ -109,12 +109,12 @@ describe('PageRenderer', () => {
 
     const { container } = render(<PageRenderer page={page} onError={onError} />)
     expect(onError).toHaveBeenCalledWith('bad', expect.any(Error))
-    expect(container.querySelector('[data-uiforge-error="bad"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-error="bad"]')).not.toBeNull()
   })
 
   it('renders grid cell positioning', () => {
     const { container } = render(<PageRenderer page={basePage} />)
-    const cell = container.querySelector('[data-uiforge-cell="card-1"]') as HTMLElement
+    const cell = container.querySelector('[data-dashforge-cell="card-1"]') as HTMLElement
     expect(cell.style.gridColumn).toBe('1 / span 6')
     expect(cell.style.gridRow).toBe('1 / span 1')
   })
@@ -133,7 +133,7 @@ describe('Stack layout', () => {
       components: [{ id: 'a', type: 'core.card', properties: { title: 'A' } }],
     }
     const { container } = render(<PageRenderer page={page} />)
-    const stack = container.querySelector('[data-uiforge-layout="stack"]') as HTMLElement
+    const stack = container.querySelector('[data-dashforge-layout="stack"]') as HTMLElement
     expect(stack.style.flexDirection).toBe('column')
   })
 })
@@ -154,10 +154,10 @@ describe('Application shell layout', () => {
       components: [{ id: 'content', type: 'core.card', properties: { title: 'Content' } }],
     }
     const { container } = render(<PageRenderer page={page} />)
-    const main = container.querySelector('[data-uiforge-region="main"]')
+    const main = container.querySelector('[data-dashforge-region="main"]')
     expect(main).not.toBeNull()
     expect(main?.querySelector('[data-testid="card-content"]')).not.toBeNull()
-    expect(container.querySelector('[data-uiforge-region="header"]')).not.toBeNull()
-    expect(container.querySelector('[data-uiforge-region="sidebar"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-region="header"]')).not.toBeNull()
+    expect(container.querySelector('[data-dashforge-region="sidebar"]')).not.toBeNull()
   })
 })

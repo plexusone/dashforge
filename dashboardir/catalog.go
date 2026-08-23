@@ -61,7 +61,7 @@ type AnalyticsDataset struct {
 }
 
 // AnalyticsField is a queryable field/column. It intentionally carries both
-// database-style and semantic metadata so UIForge can power table builders,
+// database-style and semantic metadata so DashForge can power table builders,
 // chart builders, query linting, and AI-assisted dashboard generation.
 type AnalyticsField struct {
 	ID           string   `json:"id"`

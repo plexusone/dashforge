@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/organization"
 )
 
 // Alert is the model entity for the Alert schema.

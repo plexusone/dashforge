@@ -7,7 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // AlertID applies equality check predicate on the "alert_id" field. It's identical to AlertIDEQ.

@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertchannel"
-	"github.com/plexusone/uiforge/ent/integration"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertchannel"
+	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // AlertChannelUpdate is the builder for updating AlertChannel entities.

@@ -1,6 +1,6 @@
-# CLAUDE.md — uiforge
+# CLAUDE.md — dashforge
 
-UIForge is a specification-driven UI composition platform. JSON specifications (UISpec) are the primary artifact — Go types are the source of truth, React renders them.
+DashForge is a specification-driven UI composition platform. JSON specifications (UISpec) are the primary artifact — Go types are the source of truth, React renders them.
 
 ## Specs
 
@@ -13,7 +13,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 
 ## Stack
 
-- **Go module:** `github.com/plexusone/uiforge` (renaming from `dashforge`)
+- **Go module:** `github.com/plexusone/dashforge` (renaming from `dashforge`)
 - **ORM:** Ent (`entgo.io/ent`) for any persistence needs
 - **CLI:** Cobra (`github.com/spf13/cobra`)
 - **Frontend:** React + TypeScript (in `ts/` and `builder/`)
@@ -23,7 +23,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 
 ## Analytics Notes
 
-- Saved Questions are read-only GrokifyQL artifacts persisted by the UIForge
+- Saved Questions are read-only GrokifyQL artifacts persisted by the DashForge
   backend. Dashboard widgets reference Questions and choose their own
   visualization.
 - The Question builder intentionally separates SQL display and editing:
@@ -34,22 +34,22 @@ Design decisions are documented in `docs/specs/` — read before implementing:
   and fields. Use `dashboardir.AnalyticsCatalog` and
   the public `analytics` package instead of hard-coding application-specific
   assumptions into UI code.
-- Persist analytics source connection metadata in UIForge's metadata DB, but
+- Persist analytics source connection metadata in DashForge's metadata DB, but
   store only secret references (`env://...`, `keyring://...`, `aws-sm://...`,
   etc.). Resolve them at runtime with OmniVault; use VaultGuard when posture and
   provider-selection policy are needed. Never return resolved DSNs/tokens to the
   browser.
 - If a self-contained encrypted-in-DB fallback is needed, use OmniVault's SQL
-  store provider (`sql://...`) with a UIForge-owned table and an encryption key
-  sourced outside that database. Do not create a parallel UIForge-only secret
+  store provider (`sql://...`) with a DashForge-owned table and an encryption key
+  sourced outside that database. Do not create a parallel DashForge-only secret
   interface.
 - Agent marketplace concepts live in `github.com/plexusone/omniagent`, not in
-  UIForge. UIForge should consume OmniAgent marketplace providers and publish
-  app-owned capability names such as `uiforge.query.run`,
-  `uiforge.question.write`, and `uiforge.field_values.read`.
+  DashForge. DashForge should consume OmniAgent marketplace providers and publish
+  app-owned capability names such as `dashforge.query.run`,
+  `dashforge.question.write`, and `dashforge.field_values.read`.
 - GrokifyQL policy is enforced both when saving Questions and when executing
   ad-hoc `/api/v1/analytics/query` requests.
-- In SpiceDB mode, UIForge uses SystemForge as the bridge and maps catalog
+- In SpiceDB mode, DashForge uses SystemForge as the bridge and maps catalog
   datasets/fields to `analytics_dataset` and `analytics_field` resources.
   Keep resource ID generation stable when changing query names.
 
@@ -78,7 +78,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 
 ## PRISM Control
 
-This repo's roadmap items are tracked in [prism-control](https://github.com/ProductBuildersHQ/prism-control). The initiative is **INIT-UIFORGE-001** with 37 RMIs across 6 phases.
+This repo's roadmap items are tracked in [prism-control](https://github.com/ProductBuildersHQ/prism-control). The initiative is **INIT-DASHFORGE-001** with 37 RMIs across 6 phases.
 
 ### Session Protocol
 
@@ -87,7 +87,7 @@ Every Claude Code session that implements work follows this check-in/check-out p
 #### 1. Find work
 
 ```bash
-prismctl work ready --initiative INIT-UIFORGE-001
+prismctl work ready --initiative INIT-DASHFORGE-001
 ```
 
 #### 2. Claim (check out)
@@ -95,13 +95,13 @@ prismctl work ready --initiative INIT-UIFORGE-001
 Claim an RMI before starting. This creates a lease-based assignment:
 
 ```bash
-prismctl work claim RMI-UIFORGE-001 --worker "session-$(date +%s)" --lease-hours 4
+prismctl work claim RMI-DASHFORGE-001 --worker "session-$(date +%s)" --lease-hours 4
 ```
 
 Transition the RMI to in-progress:
 
 ```bash
-prismctl rmi update RMI-UIFORGE-001 --status in_progress
+prismctl rmi update RMI-DASHFORGE-001 --status in_progress
 ```
 
 Renew the lease if work takes longer:
@@ -117,7 +117,7 @@ Work in this repo. Every commit carries the RMI trailer:
 ```text
 feat(uispec): define core PageSpec types
 
-Refs: RMI-UIFORGE-001
+Refs: RMI-DASHFORGE-001
 ```
 
 Trailer rules:
@@ -149,5 +149,5 @@ prismctl work release <assignment-id> \
 
 Some RMIs land in sibling repos (`plexusone/agentos`, `plexusone/agentos-web`). The RMI ID reflects where the code lands, not the initiative home:
 
-- `RMI-UIFORGE-*` — work in this repo
+- `RMI-DASHFORGE-*` — work in this repo
 - `RMI-AGENTOS-*` — work in agentos or agentos-web

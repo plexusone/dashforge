@@ -966,7 +966,7 @@
     // Theme: applied before first render so the initial paint and the
     // toggle's starting label already match (localStorage > OS preference).
     function applyInitialTheme() {
-      const stored = localStorage.getItem('uiforge-viewer-theme');
+      const stored = localStorage.getItem('dashforge-viewer-theme');
       const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
     }
@@ -975,7 +975,7 @@
       const current = document.documentElement.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('uiforge-viewer-theme', next);
+      localStorage.setItem('dashforge-viewer-theme', next);
       if (viewer.dashboard) viewer.render();
     }
 

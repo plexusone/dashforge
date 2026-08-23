@@ -1,4 +1,4 @@
-export { PageRenderer, UIForgeContext, useUIForge } from './PageRenderer';
+export { PageRenderer, DashForgeContext, useDashForge } from './PageRenderer';
 export { registerComponent, getComponent, hasComponent, listComponents, clearRegistry, } from './registry';
 export { Layout } from './layouts';
 export { AssistantThread, AssistantComposer, AssistantThreadList, AssistantToolCall, AssistantRunStatus, registerAssistantComponents, } from './components/assistant';

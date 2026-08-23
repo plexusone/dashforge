@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/ent/dashboardversion"
+	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/dashboardversion"
 )
 
 // DashboardVersion is the model entity for the DashboardVersion schema.

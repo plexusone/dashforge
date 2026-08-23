@@ -110,7 +110,7 @@ func NewAIHandler(cfg AIConfig, logger *slog.Logger) (*AIHandler, error) {
 	}
 
 	ollamaBaseURL := firstNonEmpty(cfg.OllamaBaseURL, os.Getenv("OLLAMA_BASE_URL"), os.Getenv("OLLAMA_HOST"))
-	if cfg.EnableOllama || envBool("UIFORGE_ENABLE_OLLAMA") || ollamaBaseURL != "" {
+	if cfg.EnableOllama || envBool("DASHFORGE_ENABLE_OLLAMA") || ollamaBaseURL != "" {
 		providers = append(providers, omnillm.ProviderConfig{
 			Provider: omnillm.ProviderNameOllama,
 			BaseURL:  ollamaBaseURL,

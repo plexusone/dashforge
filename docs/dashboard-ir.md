@@ -1,6 +1,6 @@
 # Dashboard IR Reference
 
-The Dashboard Intermediate Representation (IR) is the JSON format that defines dashboards in UIForge.
+The Dashboard Intermediate Representation (IR) is the JSON format that defines dashboards in DashForge.
 
 ## Design Principles
 

@@ -12,10 +12,10 @@ export function AssistantToolCall({ instance, children }: ComponentProps): React
 
   return (
     <div
-      data-uiforge-component={instance.id}
-      data-uiforge-type="assistant.tool-call"
+      data-dashforge-component={instance.id}
+      data-dashforge-type="assistant.tool-call"
       style={{
-        border: '1px solid var(--uiforge-color-border, #e2e8f0)',
+        border: '1px solid var(--dashforge-color-border, #e2e8f0)',
         borderRadius: '8px',
         padding: '8px 12px',
         fontSize: '0.85rem',
@@ -25,20 +25,20 @@ export function AssistantToolCall({ instance, children }: ComponentProps): React
       {children ?? (
         <>
           <div
-            data-uiforge-slot="tool-header"
+            data-dashforge-slot="tool-header"
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            <span data-uiforge-placeholder="tool-name">Tool name</span>
-            <span data-uiforge-slot="status-icon" />
+            <span data-dashforge-placeholder="tool-name">Tool name</span>
+            <span data-dashforge-slot="status-icon" />
           </div>
           {props.showArgs !== false && (
-            <div data-uiforge-slot="tool-args" style={{ marginTop: '4px' }}>
-              <span data-uiforge-placeholder="tool-args">Arguments</span>
+            <div data-dashforge-slot="tool-args" style={{ marginTop: '4px' }}>
+              <span data-dashforge-placeholder="tool-args">Arguments</span>
             </div>
           )}
           {props.showResult !== false && (
-            <div data-uiforge-slot="tool-result" style={{ marginTop: '4px' }}>
-              <span data-uiforge-placeholder="tool-result">Result</span>
+            <div data-dashforge-slot="tool-result" style={{ marginTop: '4px' }}>
+              <span data-dashforge-placeholder="tool-result">Result</span>
             </div>
           )}
         </>

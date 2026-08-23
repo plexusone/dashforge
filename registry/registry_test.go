@@ -3,7 +3,7 @@ package registry
 import (
 	"testing"
 
-	"github.com/plexusone/uiforge/uispec"
+	"github.com/plexusone/dashforge/uispec"
 )
 
 func newTestRegistry() *Registry {

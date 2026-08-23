@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/ent/dashboardversion"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/dashboardversion"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // DashboardVersionUpdate is the builder for updating DashboardVersion entities.

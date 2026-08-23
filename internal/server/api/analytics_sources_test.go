@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	serveranalytics "github.com/plexusone/uiforge/analytics"
-	"github.com/plexusone/uiforge/dashboardir"
+	serveranalytics "github.com/plexusone/dashforge/analytics"
+	"github.com/plexusone/dashforge/dashboardir"
 )
 
 type apiFakeProvider struct{ dsn string }
@@ -57,9 +57,9 @@ func newSourcesTestHandler(t *testing.T) *AnalyticsHandler {
 
 func TestAnalyticsSourcesAPI(t *testing.T) {
 	handler := newSourcesTestHandler(t)
-	t.Setenv("UIFORGE_TEST_API_DSN", "dsn-value")
+	t.Setenv("DASHFORGE_TEST_API_DSN", "dsn-value")
 
-	body := `{"id":"demo","name":"Demo","connector":"api-fake","dsnRef":"env://UIFORGE_TEST_API_DSN","enabled":true}`
+	body := `{"id":"demo","name":"Demo","connector":"api-fake","dsnRef":"env://DASHFORGE_TEST_API_DSN","enabled":true}`
 
 	// Create.
 	rec := httptest.NewRecorder()
@@ -86,7 +86,7 @@ func TestAnalyticsSourcesAPI(t *testing.T) {
 	if len(listResp.Sources) != 1 || listResp.Sources[0].Status != "connected" {
 		t.Fatalf("unexpected list response: %+v", listResp)
 	}
-	if listResp.Sources[0].DSNRef != "env://UIFORGE_TEST_API_DSN" {
+	if listResp.Sources[0].DSNRef != "env://DASHFORGE_TEST_API_DSN" {
 		t.Fatalf("expected dsnRef in response, got %+v", listResp.Sources[0])
 	}
 
@@ -134,18 +134,18 @@ func TestAnalyticsSourcesAPI(t *testing.T) {
 
 func TestAnalyticsSourcesAPITest(t *testing.T) {
 	handler := newSourcesTestHandler(t)
-	t.Setenv("UIFORGE_TEST_API_DSN", "dsn-value")
-	t.Setenv("UIFORGE_TEST_API_FAIL", "fail")
+	t.Setenv("DASHFORGE_TEST_API_DSN", "dsn-value")
+	t.Setenv("DASHFORGE_TEST_API_FAIL", "fail")
 
 	rec := httptest.NewRecorder()
-	ok := `{"id":"probe","name":"Probe","connector":"api-fake","dsnRef":"env://UIFORGE_TEST_API_DSN","enabled":true}`
+	ok := `{"id":"probe","name":"Probe","connector":"api-fake","dsnRef":"env://DASHFORGE_TEST_API_DSN","enabled":true}`
 	handler.ServeHTTP(rec, httptest.NewRequest("POST", "/api/v1/analytics/sources/test", strings.NewReader(ok)))
 	if rec.Code != 200 || !strings.Contains(rec.Body.String(), `"ok":true`) {
 		t.Fatalf("test ok: got %d: %s", rec.Code, rec.Body.String())
 	}
 
 	rec = httptest.NewRecorder()
-	bad := `{"id":"probe","name":"Probe","connector":"api-fake","dsnRef":"env://UIFORGE_TEST_API_FAIL","enabled":true}`
+	bad := `{"id":"probe","name":"Probe","connector":"api-fake","dsnRef":"env://DASHFORGE_TEST_API_FAIL","enabled":true}`
 	handler.ServeHTTP(rec, httptest.NewRequest("POST", "/api/v1/analytics/sources/test", strings.NewReader(bad)))
 	if rec.Code != 200 || !strings.Contains(rec.Body.String(), `"ok":false`) {
 		t.Fatalf("test fail: got %d: %s", rec.Code, rec.Body.String())

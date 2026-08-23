@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/publisher"
+	"github.com/plexusone/dashforge/ent/publisher"
 )
 
 // Publisher is the model entity for the Publisher schema.

@@ -1,7 +1,7 @@
-export { PageRenderer, UIForgeContext, useUIForge } from './PageRenderer';
-export type { PageRendererProps, UIForgeContextValue } from './PageRenderer';
+export { PageRenderer, DashForgeContext, useDashForge } from './PageRenderer';
+export type { PageRendererProps, DashForgeContextValue } from './PageRenderer';
 export { registerComponent, getComponent, hasComponent, listComponents, clearRegistry, } from './registry';
-export type { ComponentProps, UIForgeComponent } from './registry';
+export type { ComponentProps, DashForgeComponent } from './registry';
 export { Layout } from './layouts';
 export { AssistantThread, AssistantComposer, AssistantThreadList, AssistantToolCall, AssistantRunStatus, registerAssistantComponents, } from './components/assistant';
 export type { ThreadProps, ComposerProps, ThreadListProps, ToolCallProps, RunStatusProps, RunState, } from './components/assistant';

@@ -12,12 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/plexusone/uiforge/ent/alert"
-	"github.com/plexusone/uiforge/ent/alertevent"
-	"github.com/plexusone/uiforge/ent/dashboard"
-	"github.com/plexusone/uiforge/ent/integration"
-	"github.com/plexusone/uiforge/ent/organization"
-	"github.com/plexusone/uiforge/ent/predicate"
+	"github.com/plexusone/dashforge/ent/alert"
+	"github.com/plexusone/dashforge/ent/alertevent"
+	"github.com/plexusone/dashforge/ent/dashboard"
+	"github.com/plexusone/dashforge/ent/integration"
+	"github.com/plexusone/dashforge/ent/organization"
+	"github.com/plexusone/dashforge/ent/predicate"
 )
 
 // AlertUpdate is the builder for updating Alert entities.

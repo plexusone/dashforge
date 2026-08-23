@@ -8,17 +8,17 @@ import { InteractionEngine } from './interaction'
 import { DataSourceRegistry } from './datasource'
 import type { DataSourceConnector } from './datasource'
 
-export interface UIForgeContextValue {
+export interface DashForgeContextValue {
   state: PageState
   engine: InteractionEngine
   dataSources: DataSourceRegistry
   onInteraction?: (componentId: string, event: string, data?: Record<string, unknown>) => void
 }
 
-export const UIForgeContext = React.createContext<UIForgeContextValue | null>(null)
+export const DashForgeContext = React.createContext<DashForgeContextValue | null>(null)
 
-export function useUIForge(): UIForgeContextValue | null {
-  return React.useContext(UIForgeContext)
+export function useDashForge(): DashForgeContextValue | null {
+  return React.useContext(DashForgeContext)
 }
 
 export interface PageRendererProps {
@@ -40,7 +40,7 @@ export function PageRenderer({
   dataSources: dataSourceConnectors,
   onInteraction,
 }: PageRendererProps): React.ReactElement {
-  const [ctx] = React.useState<UIForgeContextValue>(() => {
+  const [ctx] = React.useState<DashForgeContextValue>(() => {
     const pageState = new PageState()
     if (page.context) {
       pageState.load({ context: page.context })
@@ -84,7 +84,7 @@ export function PageRenderer({
       return (
         <div
           key={instance.id}
-          data-uiforge-missing={instance.type}
+          data-dashforge-missing={instance.type}
           style={{
             padding: '8px',
             border: '1px dashed #cbd5e1',
@@ -108,12 +108,12 @@ export function PageRenderer({
   }
 
   return (
-    <UIForgeContext.Provider value={ctx}>
+    <DashForgeContext.Provider value={ctx}>
       <div
         className={className}
         style={mergedStyle}
-        data-uiforge-page={page.metadata.id}
-        data-uiforge-profile={page.profile}
+        data-dashforge-page={page.metadata.id}
+        data-dashforge-profile={page.profile}
       >
         <Layout
           layout={page.layout}
@@ -121,7 +121,7 @@ export function PageRenderer({
           renderComponent={renderComponent}
         />
       </div>
-    </UIForgeContext.Provider>
+    </DashForgeContext.Provider>
   )
 }
 
@@ -129,7 +129,7 @@ function buildThemeStyle(theme?: ThemeRef): React.CSSProperties {
   if (!theme?.tokens) return {}
   const style: Record<string, string> = {}
   for (const [key, value] of Object.entries(theme.tokens)) {
-    style[`--uiforge-${key}`] = value
+    style[`--dashforge-${key}`] = value
   }
   return style
 }
@@ -159,7 +159,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     if (this.state.error) {
       return (
         <div
-          data-uiforge-error={this.props.componentId}
+          data-dashforge-error={this.props.componentId}
           style={{
             padding: '8px',
             border: '1px solid #ef4444',

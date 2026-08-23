@@ -17,7 +17,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
 	Run: func(_ *cobra.Command, _ []string) {
-		fmt.Printf("uiforge %s\n", Version)
+		fmt.Printf("dashforge %s\n", Version)
 		fmt.Printf("  commit: %s\n", GitCommit)
 		fmt.Printf("  built:  %s\n", BuildDate)
 	},
