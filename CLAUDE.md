@@ -13,11 +13,11 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 
 ## Stack
 
-- **Go module:** `github.com/plexusone/dashforge` (renaming from `dashforge`)
+- **Go module:** `github.com/plexusone/dashforge` — renamed back from `uiforge` in v0.6.0 (the project was `dashforge` through v0.3.0, `uiforge` for v0.4.0–v0.5.0). Old versions stay importable under the path they were tagged with. Initiative/RMI IDs are permanent and keep their era's slug: `INIT-UIFORGE-*`/`RMI-UIFORGE-*` and `INIT-DASHFORGE-*`/`RMI-DASHFORGE-*` both remain valid — never rewrite one into the other.
 - **ORM:** Ent (`entgo.io/ent`) for any persistence needs
 - **CLI:** Cobra (`github.com/spf13/cobra`)
 - **Frontend:** React + TypeScript (in `ts/` and `builder/`)
-- **JSON Schema:** generated from Go types via `invopop/jsonschema`, linted with `schemago`
+- **JSON Schema:** generated from Go types via `invopop/jsonschema`, linted with `schemakit` (formerly schemago/schemalint)
 - **Query safety:** GrokifyQL for saved Questions and analytics queries
 - **Authorization:** SystemForge `authz.Authorizer`, with SpiceDB mode for fine-grained permissions
 
@@ -78,7 +78,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 
 ## PRISM Control
 
-This repo's roadmap items are tracked in [prism-control](https://github.com/ProductBuildersHQ/prism-control). The initiative is **INIT-DASHFORGE-001** with 37 RMIs across 6 phases.
+This repo's roadmap items are tracked in [prism-control](https://github.com/ProductBuildersHQ/prism-control). The initiative is **INIT-UIFORGE-001** with 37 RMIs across 6 phases.
 
 ### Session Protocol
 
@@ -87,7 +87,7 @@ Every Claude Code session that implements work follows this check-in/check-out p
 #### 1. Find work
 
 ```bash
-prismctl work ready --initiative INIT-DASHFORGE-001
+prismctl work ready --initiative INIT-UIFORGE-001
 ```
 
 #### 2. Claim (check out)
@@ -95,13 +95,13 @@ prismctl work ready --initiative INIT-DASHFORGE-001
 Claim an RMI before starting. This creates a lease-based assignment:
 
 ```bash
-prismctl work claim RMI-DASHFORGE-001 --worker "session-$(date +%s)" --lease-hours 4
+prismctl work claim RMI-UIFORGE-001 --worker "session-$(date +%s)" --lease-hours 4
 ```
 
 Transition the RMI to in-progress:
 
 ```bash
-prismctl rmi update RMI-DASHFORGE-001 --status in_progress
+prismctl rmi update RMI-UIFORGE-001 --status in_progress
 ```
 
 Renew the lease if work takes longer:
@@ -117,7 +117,7 @@ Work in this repo. Every commit carries the RMI trailer:
 ```text
 feat(uispec): define core PageSpec types
 
-Refs: RMI-DASHFORGE-001
+Refs: RMI-UIFORGE-001
 ```
 
 Trailer rules:
