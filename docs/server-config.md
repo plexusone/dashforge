@@ -45,9 +45,9 @@ Configuration can be provided via:
 UIForge's metadata database (dashboards, users, saved questions, analytics
 source configs) supports two backends:
 
-- **Dolt (local default)** — `--db-url 'mysql://root@127.0.0.1:13307/uiforge'`
+- **Dolt (local default)** — `--db-url 'mysql://root@127.0.0.1:13306/uiforge'`
   connects over the MySQL wire to a `dolt sql-server`, matching the
-  OmniRoadmap (`:13307`) and VisionStudio (`:13306`) local pattern. The target
+  local `dolt sql-server` pattern used across the ecosystem. The target
   database is created automatically if it does not exist. Vanilla MySQL works
   through the same URL scheme.
 - **PostgreSQL (hosted/multi-tenant)** — `--db-url 'postgres://...'`; required
@@ -58,21 +58,23 @@ saved questions and analytics sources.
 
 ### Analytics Sources
 
-Analytics sources (OmniRoadmap and other application catalogs) are not
+Analytics sources (application catalogs and databases) are not
 configured with flags. They are persisted configuration managed at runtime via
 `/api/v1/analytics/sources` or the builder's **Data sources** panel, storing an
 OmniVault secret reference (`env://VAR_NAME`, `file:///path`) instead of a raw
 DSN. See [Analytics Catalog](analytics-catalog.md) for the management API and
-credential policy. One-time setup for a local OmniRoadmap source:
+credential policy. One-time setup for a local application source:
 
 ```bash
-export UIFORGE_OMNIROADMAP_DSN='root:@tcp(127.0.0.1:13307)/omniroadmap'
+# Connectors are registered by the consuming application binary — the core
+# engine ships none. Example below assumes an app registered "roadmap-app".
+export UIFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
 ./uiforge-server serve --address 127.0.0.1:13319
 
 curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
   -H 'Content-Type: application/json' \
-  -d '{"id":"omniroadmap","name":"OmniRoadmap","connector":"omniroadmap",
-       "dsnRef":"env://UIFORGE_OMNIROADMAP_DSN","enabled":true}'
+  -d '{"id":"roadmap-app","name":"Roadmap App","connector":"roadmap-app",
+       "dsnRef":"env://UIFORGE_ROADMAP_APP_DSN","enabled":true}'
 ```
 
 The source persists across restarts; keep exporting the referenced environment
