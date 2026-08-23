@@ -30,7 +30,7 @@ func (AnalyticsSource) Fields() []ent.Field {
 			NotEmpty(),
 		field.String("connector").
 			NotEmpty().
-			Comment("Connector registry name, e.g. omniroadmap"),
+			Comment("Connector registry name, e.g. roadmap-app"),
 		field.String("dsn_ref").
 			NotEmpty().
 			Comment("OmniVault secret reference (env://..., file://...); never a raw DSN"),

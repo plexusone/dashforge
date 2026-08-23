@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
+	serveranalytics "github.com/plexusone/uiforge/analytics"
 	"github.com/plexusone/uiforge/dashboardir"
-	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 )
 
 type apiFakeProvider struct{ dsn string }

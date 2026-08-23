@@ -5,13 +5,13 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/grokify/grokifyql"
+	"github.com/grokify/guardsql"
 	systemauthz "github.com/grokify/systemforge/authz"
 	sessionjwt "github.com/grokify/systemforge/session/jwt"
 	sessionmw "github.com/grokify/systemforge/session/middleware"
+	serveranalytics "github.com/plexusone/uiforge/analytics"
 	"github.com/plexusone/uiforge/dashboardir"
 	localauthz "github.com/plexusone/uiforge/internal/authz"
-	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 )
 
 func TestCompileGrokifyQLQuestionDefaultPolicyAllowsNoLimit(t *testing.T) {
@@ -21,7 +21,7 @@ func TestCompileGrokifyQLQuestionDefaultPolicyAllowsNoLimit(t *testing.T) {
 }
 
 func TestSystemForgeGrokifyQLPolicyProviderDeniesUnauthorizedField(t *testing.T) {
-	sourceID := "omniroadmap"
+	sourceID := "roadmap-app"
 	provider := SystemForgeGrokifyQLPolicyProvider{
 		Authorizer: mockSystemForgeAuthorizer{allowed: map[string]bool{
 			resourceKey(localauthz.ResourceTypeAnalyticsDataset, analyticsResourceID(sourceID, "items", ""), "read"):   true,
@@ -48,11 +48,11 @@ func TestSystemForgeGrokifyQLPolicyProviderDeniesUnauthorizedField(t *testing.T)
 	if err != nil {
 		t.Fatalf("Policy() error = %v", err)
 	}
-	query, err := grokifyql.Parse("SELECT score FROM items")
+	query, err := guardsql.Parse("SELECT score FROM items")
 	if err != nil {
 		t.Fatalf("Parse() error = %v", err)
 	}
-	if issues := grokifyql.CheckPolicy(query, policy); len(issues) == 0 {
+	if issues := guardsql.CheckPolicy(query, policy); len(issues) == 0 {
 		t.Fatalf("CheckPolicy() issues = 0, want unauthorized score field")
 	}
 }

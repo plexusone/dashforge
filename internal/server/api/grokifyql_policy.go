@@ -7,23 +7,23 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/grokify/grokifyql"
-	"github.com/grokify/grokifyql/authzsystemforge"
+	"github.com/grokify/guardsql"
 	systemauthz "github.com/grokify/systemforge/authz"
+	"github.com/grokify/systemforge/authzguardsql"
+	serveranalytics "github.com/plexusone/uiforge/analytics"
 	"github.com/plexusone/uiforge/dashboardir"
 	localauthz "github.com/plexusone/uiforge/internal/authz"
-	serveranalytics "github.com/plexusone/uiforge/internal/server/analytics"
 	serverauth "github.com/plexusone/uiforge/internal/server/auth"
 )
 
 // GrokifyQLPolicyProvider builds request-scoped GrokifyQL policies.
 type GrokifyQLPolicyProvider interface {
-	Policy(ctx context.Context, sourceID string) (grokifyql.Policy, error)
+	Policy(ctx context.Context, sourceID string) (guardsql.Policy, error)
 }
 
 type staticGrokifyQLPolicyProvider struct{}
 
-func (staticGrokifyQLPolicyProvider) Policy(context.Context, string) (grokifyql.Policy, error) {
+func (staticGrokifyQLPolicyProvider) Policy(context.Context, string) (guardsql.Policy, error) {
 	return defaultGrokifyQLPolicy(), nil
 }
 
@@ -37,20 +37,20 @@ type SystemForgeGrokifyQLPolicyProvider struct {
 }
 
 // Policy implements GrokifyQLPolicyProvider.
-func (p SystemForgeGrokifyQLPolicyProvider) Policy(ctx context.Context, sourceID string) (grokifyql.Policy, error) {
+func (p SystemForgeGrokifyQLPolicyProvider) Policy(ctx context.Context, sourceID string) (guardsql.Policy, error) {
 	principalID := serverauth.PrincipalIDFromContext(ctx)
 	if p.Authorizer == nil || p.Analytics == nil || principalID == uuid.Nil {
 		return defaultGrokifyQLPolicy(), nil
 	}
 	catalog, err := p.Analytics.Catalog(ctx)
 	if err != nil {
-		return grokifyql.Policy{}, err
+		return guardsql.Policy{}, err
 	}
 	schema, err := grokifyQLSchemaForSource(catalog, sourceID)
 	if err != nil {
-		return grokifyql.Policy{}, err
+		return guardsql.Policy{}, err
 	}
-	return authzsystemforge.PolicyBuilder{
+	return authzguardsql.PolicyBuilder{
 		Authorizer:      p.Authorizer,
 		Principal:       systemauthz.NewUserPrincipal(principalID),
 		Schema:          schema,
@@ -67,33 +67,33 @@ const (
 	defaultGrokifyQLMaxInValues = 100
 )
 
-func defaultGrokifyQLPolicy() grokifyql.Policy {
-	return grokifyql.Policy{
-		AllowedOps:  []grokifyql.Operation{grokifyql.OperationRead},
+func defaultGrokifyQLPolicy() guardsql.Policy {
+	return guardsql.Policy{
+		AllowedOps:  []guardsql.Operation{guardsql.OperationRead},
 		MaxDepth:    defaultGrokifyQLMaxDepth,
 		MaxNodes:    defaultGrokifyQLMaxNodes,
 		MaxInValues: defaultGrokifyQLMaxInValues,
 	}
 }
 
-func grokifyQLSchemaForSource(catalog dashboardir.AnalyticsCatalog, sourceID string) (grokifyql.Schema, error) {
+func grokifyQLSchemaForSource(catalog dashboardir.AnalyticsCatalog, sourceID string) (guardsql.Schema, error) {
 	for _, source := range catalog.Sources {
 		if !strings.EqualFold(source.ID, sourceID) {
 			continue
 		}
-		schema := grokifyql.Schema{Entities: map[string]grokifyql.Entity{}}
+		schema := guardsql.Schema{Entities: map[string]guardsql.Entity{}}
 		for _, dataset := range source.Datasets {
 			queryName := strings.TrimSpace(dataset.QueryName)
 			if queryName == "" {
 				queryName = dataset.ID
 			}
-			entity := grokifyql.Entity{Name: queryName, Fields: map[string]grokifyql.Field{}}
+			entity := guardsql.Entity{Name: queryName, Fields: map[string]guardsql.Field{}}
 			for _, field := range dataset.Fields {
 				fieldName := strings.TrimSpace(field.QueryName)
 				if fieldName == "" {
 					fieldName = field.ID
 				}
-				entity.Fields[fieldName] = grokifyql.Field{
+				entity.Fields[fieldName] = guardsql.Field{
 					Name:       fieldName,
 					Type:       grokifyQLFieldType(field.Type),
 					Selectable: field.Selectable,
@@ -105,19 +105,19 @@ func grokifyQLSchemaForSource(catalog dashboardir.AnalyticsCatalog, sourceID str
 		}
 		return schema, nil
 	}
-	return grokifyql.Schema{}, fmt.Errorf("analytics source %q not found", sourceID)
+	return guardsql.Schema{}, fmt.Errorf("analytics source %q not found", sourceID)
 }
 
-func grokifyQLFieldType(fieldType string) grokifyql.FieldType {
+func grokifyQLFieldType(fieldType string) guardsql.FieldType {
 	switch strings.ToLower(strings.TrimSpace(fieldType)) {
 	case dashboardir.AnalyticsFieldTypeNumber:
-		return grokifyql.FieldNumber
+		return guardsql.FieldNumber
 	case dashboardir.AnalyticsFieldTypeBool:
-		return grokifyql.FieldBool
+		return guardsql.FieldBool
 	case dashboardir.AnalyticsFieldTypeDate:
-		return grokifyql.FieldTime
+		return guardsql.FieldTime
 	default:
-		return grokifyql.FieldString
+		return guardsql.FieldString
 	}
 }
 

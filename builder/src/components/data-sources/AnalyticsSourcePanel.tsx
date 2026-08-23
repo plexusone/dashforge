@@ -229,7 +229,7 @@ export function AnalyticsSourcePanel({ onClose, onSourcesChanged }: AnalyticsSou
                   <input
                     value={form.id}
                     onChange={(e) => setForm({ ...form, id: e.target.value })}
-                    placeholder="omniroadmap-local"
+                    placeholder="my-source"
                     className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm"
                   />
                 </label>
@@ -239,7 +239,7 @@ export function AnalyticsSourcePanel({ onClose, onSourcesChanged }: AnalyticsSou
                 <input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="OmniRoadmap Local"
+                  placeholder="My Source"
                   className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm"
                 />
               </label>
@@ -262,7 +262,7 @@ export function AnalyticsSourcePanel({ onClose, onSourcesChanged }: AnalyticsSou
                 <input
                   value={form.dsnRef}
                   onChange={(e) => setForm({ ...form, dsnRef: e.target.value })}
-                  placeholder="env://UIFORGE_OMNIROADMAP_DSN"
+                  placeholder="env://UIFORGE_MY_SOURCE_DSN"
                   className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm font-mono"
                 />
                 <span className="mt-1 block text-xs text-gray-500">

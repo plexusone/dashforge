@@ -19,7 +19,7 @@ import (
 // openMySQL opens a MySQL-wire connection with Ent. This is the path for
 // Dolt (`dolt sql-server`) as UIForge's local metadata database, and works
 // against vanilla MySQL as well. The target database is created if it does
-// not exist, matching the visionstudio/omniroadmap local-Dolt pattern.
+// not exist, matching the ecosystem's local-Dolt pattern.
 func openMySQL(rawURL string) (Database, error) {
 	dsn, err := mysqlURLToDSN(rawURL)
 	if err != nil {
