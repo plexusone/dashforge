@@ -18,6 +18,8 @@ reference only).
 - [ ] `RMI-DASHFORGE-003` Frontend and docs rebrand: builder branding, README, mkdocs, examples
   - Depends on: `RMI-DASHFORGE-002`
 - [ ] `RMI-OMNIROADMAP-011` (repo `github.com/grokify/omniroadmap`) Switch imports and replace directives from plexusone/uiforge to plexusone/dashforge
+- [ ] `RMI-VISIONSTUDIO-552` (repo `github.com/ProductBuildersHQ/visionstudio`) Switch pkg/ir/snapshot.go import and go.mod from plexusone/uiforge to plexusone/dashforge
+  - Depends on: `RMI-DASHFORGE-002`
 - [ ] `RMI-DASHFORGE-004` Verification gate: ecosystem grep sweep, remotes audit, CI green under new name
   - Depends on: `RMI-DASHFORGE-003`
 
