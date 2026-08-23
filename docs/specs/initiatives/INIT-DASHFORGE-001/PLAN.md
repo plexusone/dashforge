@@ -5,10 +5,10 @@
 
 ## Entry Gate (must be true before Phase 1 starts)
 
-1. INIT-DASHFORGE-002's working-tree changes are committed across all four
+1. INIT-UIFORGE-002's working-tree changes are committed across all four
    repos (dashforge, godolt, omniroadmap, visionstudio), pushed, and released
    (godolt v0.3.0 tagged; temporary `replace` directives removed).
-2. INIT-DASHFORGE-002 transitioned to `delivery_complete` or beyond.
+2. INIT-UIFORGE-002 transitioned to `delivery_complete` or beyond.
 3. Disk-space condition that blocked git object writes is resolved.
 
 Rationale: a mass mechanical rename mixed into substantive uncommitted diffs

@@ -3,7 +3,7 @@
 **Initiative:** `INIT-DASHFORGE-001`
 **Repository:** `github.com/plexusone/dashforge`
 
-Entry gate: INIT-DASHFORGE-002 committed, pushed, and released first (see
+Entry gate: INIT-UIFORGE-002 committed, pushed, and released first (see
 PLAN.md). `RMI-OMNIROADMAP-011` is a cross-repo RMI created directly in
 VisionStudio (roadmap import assigns a single repository; listed here for
 reference only).

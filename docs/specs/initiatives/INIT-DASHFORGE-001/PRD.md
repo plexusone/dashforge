@@ -1,7 +1,7 @@
 # PRD — DashForge Rename & DashForge Split — Analytics Platform Reclaims Its Name
 
 **Initiative:** `INIT-DASHFORGE-001`
-**Status:** Draft (blocked on landing INIT-DASHFORGE-002)
+**Status:** Draft (blocked on landing INIT-UIFORGE-002)
 **Home repo:** `github.com/plexusone/dashforge` (today: `github.com/plexusone/dashforge`)
 
 ## Problem
@@ -14,7 +14,7 @@ The repository has drifted from its name twice:
 2. It was renamed to **dashforge** when the work centered on UI widgets, with a
    Salesforce-Lightning-style component-platform vision (UISpec, PageSpec,
    component namespaces — see `docs/specs/{PRD,TRD}.md`).
-3. INIT-DASHFORGE-002 then delivered the original vision anyway: a working
+3. INIT-UIFORGE-002 then delivered the original vision anyway: a working
    analytics platform (multi-source catalog, Questions, dashboards, persistent
    sources with OmniVault, Dolt metadata DB). The internals never fully left
    the old name — the server help text says "Dashforge server", the API client
@@ -44,7 +44,7 @@ product, and the component-platform vision has no home of its own.
 - Completing the extraction of all rendering code into the new dashforge — this
   initiative establishes the boundary and moves the first clean units; deeper
   extraction is follow-on work in the new repo's own roadmap.
-- Renaming historical tracking artifacts: `INIT-DASHFORGE-001/-002` and
+- Renaming historical tracking artifacts: `INIT-UIFORGE-001/-002` and
   `RMI-DASHFORGE-*` IDs remain as historical record.
 
 ## Users and Experience

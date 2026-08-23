@@ -1,7 +1,7 @@
 # TRD — DashForge Rename & DashForge Split
 
 **Initiative:** `INIT-DASHFORGE-001`
-**Status:** Draft (blocked on landing INIT-DASHFORGE-002)
+**Status:** Draft (blocked on landing INIT-UIFORGE-002)
 
 ## Current State
 
@@ -91,14 +91,14 @@ Before the `dashforge` name may be reused:
 - **Redirect reuse trap**: mitigated by the Phase 1 verification gate as a
   hard RMI dependency (see PRD "Sequencing Constraint").
 - **Uncommitted-work collision**: the rename must not begin until
-  INIT-DASHFORGE-002's working-tree changes are committed and released;
+  INIT-UIFORGE-002's working-tree changes are committed and released;
   mixing a mass mechanical rename into substantive diffs makes both
   unreviewable. Enforced as the initiative's entry gate in PLAN.md.
 - **Go module proxy cache**: `proxy.golang.org` retains
   `github.com/plexusone/dashforge` versions; old tags remain fetchable under
   the old path. Acceptable — consumers are in-house and switch in Phase 1;
   no new tags are ever cut under the old path.
-- **prism-control / PRISM tracking**: INIT-DASHFORGE-001 lives in
+- **prism-control / PRISM tracking**: INIT-UIFORGE-001 lives in
   prism-control's records with the old repo name; treated as historical, not
   rewritten.
 

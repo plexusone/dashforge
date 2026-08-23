@@ -1,6 +1,6 @@
 # PRD — DashForge: Specification-Driven UI Composition Platform
 
-**Initiative:** INIT-DASHFORGE-001
+**Initiative:** INIT-UIFORGE-001
 **Status:** Draft
 **Date:** 2026-07-23
 **Home repo:** github.com/plexusone/dashforge

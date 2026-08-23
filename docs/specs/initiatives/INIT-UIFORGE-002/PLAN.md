@@ -1,6 +1,6 @@
 # PLAN — Persistent Analytics Sources — Metabase-Style Multi-Source Catalog with OmniVault
 
-**Initiative:** `INIT-DASHFORGE-002`
+**Initiative:** `INIT-UIFORGE-002`
 **Status:** Draft
 **Home repo:** `github.com/plexusone/dashforge`
 

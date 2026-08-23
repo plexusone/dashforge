@@ -1,6 +1,6 @@
 # TRD — DashForge Technical Reference
 
-**Initiative:** INIT-DASHFORGE-001
+**Initiative:** INIT-UIFORGE-001
 **Status:** Draft
 **Date:** 2026-07-23
 
