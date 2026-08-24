@@ -58,7 +58,7 @@ See TRD Risks: redirect reuse trap (gated), uncommitted-work collision
 
 ## Follow-On
 
-- `INIT-DASHFORGE-002` — DashForge Cloud & workspace sync (per-workspace Dolt
+- `INIT-DASHFORGE-003` — DashForge Cloud & workspace sync (per-workspace Dolt
   remotes via godolt; control plane; hosted server). Deliberately sequenced
   after the rename so cloud never launches under a transitional name.
 - New uiforge repo's own initiative for the component-platform roadmap once

@@ -38,7 +38,7 @@ product, and the component-platform vision has no home of its own.
 
 ## Non-Goals
 
-- DashForge Cloud / workspace sync — follows as `INIT-DASHFORGE-002` after
+- DashForge Cloud / workspace sync — follows as `INIT-DASHFORGE-003` after
   this initiative, precisely so cloud never launches under a name about to
   change.
 - Completing the extraction of all rendering code into the new uiforge — this
