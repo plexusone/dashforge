@@ -7,7 +7,7 @@ connector decoupling); mirror into `ProductBuildersHQ/compass` when that repo ex
 
 ## Context
 
-dashforge (renamed from dashforge) is meant to be a **generic analytics engine** — Metabase/
+dashforge (renamed from uiforge) is meant to be a **generic analytics engine** — Metabase/
 Tableau/Hex-class: catalogs, Questions, dashboards over pluggable data sources. But dashforge
 core currently compiles a specific data source into itself: `internal/server/analytics/
 omniroadmap.go` registers the OmniRoadmap connector from inside the engine, pulling omniroadmap
