@@ -26,6 +26,10 @@ import (
 	_ "github.com/plexusone/dashforge/datasource/providers/mysql"
 	_ "github.com/plexusone/dashforge/datasource/providers/postgres"
 
+	// Register the built-in generic SQL analytics connector (ADR-0002 Tier 1)
+	// so stock dashforge-server can serve any Postgres/MySQL/Dolt/SQLite source.
+	_ "github.com/plexusone/dashforge/connectors/sqlsource"
+
 	// Import channel adapters for registration via init()
 	serveranalytics "github.com/plexusone/dashforge/analytics"
 	_ "github.com/plexusone/dashforge/integration/channel/email"
