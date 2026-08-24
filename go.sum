@@ -52,8 +52,6 @@ github.com/Masterminds/squirrel v1.5.4 h1:uUcX/aBc8O7Fg9kaISIUsHXdKuqehiXAMQTYX8
 github.com/Masterminds/squirrel v1.5.4/go.mod h1:NNaOrjSoIDfDA40n7sr2tPNZRfjzjA400rg+riTZj10=
 github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
 github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
-github.com/OpenRouterTeam/go-sdk v0.7.67 h1:sccR9kyx27MBKg0MqGEB0dlwBRYKtsxtfa7jQvvNJSI=
-github.com/OpenRouterTeam/go-sdk v0.7.67/go.mod h1:8vFtUZ9I2YiDntYbck42wQhrx9DsJN5PHbViaHwTkXc=
 github.com/OpenRouterTeam/go-sdk v0.7.70 h1:23F5ER5OOusmTs9ljA2xuD9Xc8wGphpMepuxMZ7F+z4=
 github.com/OpenRouterTeam/go-sdk v0.7.70/go.mod h1:8vFtUZ9I2YiDntYbck42wQhrx9DsJN5PHbViaHwTkXc=
 github.com/agext/levenshtein v1.2.3 h1:YB2fHEn0UJagG8T1rrWknE3ZQzWM06O8AMAatNn7lmo=
@@ -70,8 +68,6 @@ github.com/authzed/authzed-go v1.10.0 h1:GUPzYFnStk1PIBZOkQzqcYA3iHaOlVYVl1UnHIR
 github.com/authzed/authzed-go v1.10.0/go.mod h1:2DL7pg4iqMltwWOSw+wvbEzAK7uRt3545+bkcGYD8D8=
 github.com/authzed/cel-go v0.20.2 h1:GlmLecGry7Z8HU0k+hmaHHUV05ZHrsFxduXHtIePvck=
 github.com/authzed/cel-go v0.20.2/go.mod h1:pJHVFWbqUHV1J+klQoZubdKswlbxcsbojda3mye9kiU=
-github.com/authzed/cel-go v0.32.0 h1:1IQD9qFvem2DWdy3PyMNqbVJiyNCBUHbh7SjR9JfbPY=
-github.com/authzed/cel-go v0.32.0/go.mod h1:Jp4Wbt+Tbe8kiX6xz5xfIXy56qoqS0uB2R+mYn+MQnU=
 github.com/authzed/consistent v0.2.0 h1:qBUkRycc89rcTu4uX4WrHcLV7OMZunYpChKmLwo++Hc=
 github.com/authzed/consistent v0.2.0/go.mod h1:8F1E3S1tFaxNa1fynw56DW+ZIxdDPjGFok/uKTJuByw=
 github.com/authzed/ctxkey v0.1.0 h1:wtQnpKgjzxF//qotuiR/Toh691lbY2ZFynsQFQ57mrA=
@@ -313,8 +309,6 @@ github.com/grokify/godolt v0.3.0 h1:aFBrRKUXDWe7UME9PH/xT+G/fVfQCNOrDgf2mS9xC9o=
 github.com/grokify/godolt v0.3.0/go.mod h1:NX3DZszMrfksxOKY1fHz3BgJqPOgUmlU6FkX/nhhsZA=
 github.com/grokify/guardsql v0.2.0 h1:zv6PiBVnRWup/fZs/tc19DZ+oAEDwU56wqvmJLSx9BQ=
 github.com/grokify/guardsql v0.2.0/go.mod h1:Lh4YjGwFwfI4Ygy3TKbSmpmFmBkdkolS/U6U0xtPh2I=
-github.com/grokify/mogo v0.74.7 h1:wfN4Ahk65FJ9gWKtwhOgJtW48sh/4vT0nfoFo6QP+TA=
-github.com/grokify/mogo v0.74.7/go.mod h1:fK2N1Fqj4CVOxIUVr4W7Oo6FGfCFJErNl57J2TYjQq0=
 github.com/grokify/mogo v0.74.8 h1:0Qw2PE5ECsVjPimqkvhHTTlwWx+ylztaX1ho47WgCfo=
 github.com/grokify/mogo v0.74.8/go.mod h1:ja5XQFqMYRksrryvkxsMgVptn081BizWOXDA+Y5wlEg=
 github.com/grokify/oscompat v0.5.0 h1:qGUym1Jt+yecBmBM7FnimvuUWLs8VVRCxotpHTzaWH0=
@@ -342,8 +336,6 @@ github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/hashicorp/golang-lru v0.5.4/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
 github.com/hashicorp/golang-lru v1.0.2 h1:dV3g9Z/unq5DpblPpw+Oqcv4dU/1omnb4Ok8iPY6p1c=
 github.com/hashicorp/golang-lru v1.0.2/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
-github.com/hashicorp/hcl v1.0.0 h1:0Anlzjpi4vEasTeNFn2mLJgTSwt0+6sfsiTG8qcWGx4=
-github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
 github.com/hashicorp/hcl/v2 v2.24.0 h1:2QJdZ454DSsYGoaE6QheQZjtKZSUs9Nh2izTWiwQxvE=
 github.com/hashicorp/hcl/v2 v2.24.0/go.mod h1:oGoO1FIQYfn/AgyOhlg9qLC6/nOJPX3qGbkZpYAcqfM=
 github.com/ianlancetaylor/demangle v0.0.0-20230524184225-eabc099b10ab/go.mod h1:gx7rwoVhcfuVKG5uya9Hs3Sxj7EIvldVofAWIUtGouw=
