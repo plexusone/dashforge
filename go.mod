@@ -2,11 +2,25 @@ module github.com/plexusone/dashforge
 
 go 1.26.5
 
-// authzed/spicedb v1.56.0 pins authzed/cel-go v0.20.2 and its
-// pkg/caveats/replacer depends on that version's cel.NewStaticOptimizer
-// signature (1 return value); v0.30.0 changed it to 2 return values,
-// breaking the build. Excluded so `go get -u ./...` can't re-select it.
-exclude github.com/authzed/cel-go v0.30.0
+exclude (
+	// authzed/spicedb v1.56.0 pins authzed/cel-go v0.20.2 and its
+	// pkg/caveats/replacer depends on that version's cel.NewStaticOptimizer
+	// signature (1 return value); newer cel-go returns 2 values, breaking the
+	// build. Go excludes are per-version (not ranges), so every published
+	// version above v0.20.2 must be listed for `go get -u ./...` to hold the
+	// pin — as of 2026-08, that is only v0.32.0 (v0.30.0 was never tagged
+	// there; kept excluded defensively). If `go get -u` starts bumping
+	// authzed/cel-go again, a new version was published: add it here until
+	// spicedb bumps its own cel-go requirement past the break.
+	github.com/authzed/cel-go v0.30.0
+	github.com/authzed/cel-go v0.32.0
+
+	// google/cel-go v0.32.0 declares the vanity module path cel.dev/cel-go,
+	// so fetching it under the github path fails to parse ("module declares
+	// its path as: cel.dev/cel-go"). Excluded to keep `go get -u ./...`
+	// quiet at v0.31.0; same per-version caveat as above for future tags.
+	github.com/google/cel-go v0.32.0
+)
 
 require (
 	entgo.io/ent v0.14.6
@@ -28,7 +42,7 @@ require (
 )
 
 require (
-	github.com/OpenRouterTeam/go-sdk v0.7.67 // indirect
+	github.com/OpenRouterTeam/go-sdk v0.7.70 // indirect
 	github.com/anthropics/anthropic-sdk-go v1.66.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.18 // indirect
 	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.57.4 // indirect
@@ -143,7 +157,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.3.21 // indirect
 	github.com/googleapis/gax-go/v2 v2.24.0 // indirect
 	github.com/grokify/guardsql v0.2.0
-	github.com/grokify/mogo v0.74.7 // indirect
+	github.com/grokify/mogo v0.74.8 // indirect
 	github.com/grokify/sogo v0.15.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.1.0 // indirect
@@ -260,3 +274,4 @@ require (
 
 // Pin otel versions to be compatible with spicedb v1.49.2
 replace go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0
+
