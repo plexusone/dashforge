@@ -149,5 +149,5 @@ prismctl work release <assignment-id> \
 
 Some RMIs land in sibling repos (`plexusone/agentos`, `plexusone/agentos-web`). The RMI ID reflects where the code lands, not the initiative home:
 
-- `RMI-DASHFORGE-*` — work in this repo
+- `RMI-UIFORGE-*` — work in this repo during the uiforge era (INIT-UIFORGE-001); new work here uses `RMI-DASHFORGE-*`
 - `RMI-AGENTOS-*` — work in agentos or agentos-web
