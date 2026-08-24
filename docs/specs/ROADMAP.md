@@ -11,7 +11,7 @@ RMI IDs use the repo slug where the work lands. Cross-repo items are attributed 
 
 | ID | Title | Repo | Type | Required |
 |---|---|---|---|---|
-| RMI-UIFORGE-001 | Rename module dashforge → dashforge | dashforge | refactor | yes |
+| RMI-UIFORGE-001 | Rename module dashforge → uiforge | dashforge | refactor | yes |
 | RMI-UIFORGE-002 | Define UISpec core Go types (PageSpec, ComponentInstance, LayoutSpec) | dashforge | capability | yes |
 | RMI-UIFORGE-003 | Implement component registry with manifest validation | dashforge | capability | yes |
 | RMI-UIFORGE-004 | Define layout primitives (responsive-grid, stack, split-pane, tabs) | dashforge | capability | yes |

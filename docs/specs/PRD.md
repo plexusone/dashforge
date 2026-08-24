@@ -110,4 +110,4 @@ The following exist today and form the starting point:
 | Over-abstraction before validation | AgentOS is the forcing function. Every spec decision must work for a real product before generalization. |
 | DashForge regression | Dashboard profile must pass existing test suite before the rename ships. |
 | Assistant UI coupling | DashForge→Assistant UI is a one-way adapter dependency. Core DashForge never imports Assistant UI. |
-| Go module rename churn | Rename `dashforge` → `dashforge` in one atomic commit with proper `go.mod` module path update. |
+| Go module rename churn | Rename `dashforge` → `uiforge` in one atomic commit with proper `go.mod` module path update. |

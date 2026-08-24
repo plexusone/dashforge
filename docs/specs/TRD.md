@@ -40,8 +40,8 @@ All work is consolidated in `plexusone/dashforge` as a monorepo. Consumer repos 
 ```text
 dashforge/
 ├── cmd/
-│   ├── dashforge/          # CLI (renamed from dashforge)
-│   └── dashforge-server/   # HTTP server (renamed from dashforge-server)
+│   ├── dashforge/          # CLI (was uiforge; originally dashforge)
+│   └── dashforge-server/   # HTTP server (was uiforge-server; originally dashforge-server)
 │
 ├── uispec/               # NEW — canonical UISpec Go types (source of truth)
 │   ├── page.go           # PageSpec: metadata, layout, components, interactions

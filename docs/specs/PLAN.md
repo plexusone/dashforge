@@ -23,7 +23,7 @@
 
 **Work:**
 
-1. **Module rename** — `dashforge` → `dashforge` in `go.mod`, all internal imports, CLI commands, and GitHub repo name.
+1. **Module rename** — `dashforge` → `uiforge` in `go.mod`, all internal imports, CLI commands, and GitHub repo name.
 2. **UISpec Go types** — `uispec/` package with `PageSpec`, `ComponentInstance`, `LayoutSpec`, `ThemeRef`, `Binding`, `Interaction`, `VisibilityRule`, `Profile`.
 3. **Component registry** — `registry/` package with `ComponentSpec` manifests, in-memory store, validation (verify a PageSpec references only registered components with valid properties).
 4. **Layout primitives** — `responsive-grid`, `stack`, `split-pane`, `tabs` layout types in `uispec/layout.go`.
