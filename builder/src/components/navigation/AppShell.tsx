@@ -130,7 +130,7 @@ export function AppShell({
             className="w-8 h-8 rounded-lg bg-primary-500 text-white flex items-center justify-center font-bold text-sm shrink-0"
             title="DashForge"
           >
-            UF
+            DF
           </a>
           {!collapsed && <span className="font-semibold text-gray-900">DashForge</span>}
         </div>
