@@ -1534,7 +1534,7 @@
 <p><strong>Goal:</strong> Establish the UISpec type system and component registry as the new foundation, while preserving DashForge compatibility.</p>
 <p><strong>Work:</strong></p>
 <ol>
-<li><strong>Module rename</strong> — <code>dashforge</code> → <code>dashforge</code> in <code>go.mod</code>, all internal imports, CLI commands, and GitHub repo name.</li>
+<li><strong>Module rename</strong> — <code>dashforge</code> → <code>uiforge</code> in <code>go.mod</code>, all internal imports, CLI commands, and GitHub repo name.</li>
 <li><strong>UISpec Go types</strong> — <code>uispec/</code> package with <code>PageSpec</code>, <code>ComponentInstance</code>, <code>LayoutSpec</code>, <code>ThemeRef</code>, <code>Binding</code>, <code>Interaction</code>, <code>VisibilityRule</code>, <code>Profile</code>.</li>
 <li><strong>Component registry</strong> — <code>registry/</code> package with <code>ComponentSpec</code> manifests, in-memory store, validation (verify a PageSpec references only registered components with valid properties).</li>
 <li><strong>Layout primitives</strong> — <code>responsive-grid</code>, <code>stack</code>, <code>split-pane</code>, <code>tabs</code> layout types in <code>uispec/layout.go</code>.</li>

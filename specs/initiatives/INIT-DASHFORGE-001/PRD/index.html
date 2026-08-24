@@ -23,7 +23,7 @@
     
     
       
-        <title>PRD — DashForge Rename & DashForge Split — Analytics Platform Reclaims Its Name - DashForge</title>
+        <title>PRD — DashForge Rename & UIForge Split — Analytics Platform Reclaims Its Name - DashForge</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prd-dashforge-rename-dashforge-split-analytics-platform-reclaims-its-name" class="md-skip">
+        <a href="#prd-dashforge-rename-uiforge-split-analytics-platform-reclaims-its-name" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PRD — DashForge Rename &amp; DashForge Split — Analytics Platform Reclaims Its Name
+              PRD — DashForge Rename &amp; UIForge Split — Analytics Platform Reclaims Its Name
             
           </span>
         </div>
@@ -1454,17 +1454,17 @@
   
 
 
-<h1 id="prd-dashforge-rename-dashforge-split-analytics-platform-reclaims-its-name">PRD — DashForge Rename &amp; DashForge Split — Analytics Platform Reclaims Its Name<a class="headerlink" href="#prd-dashforge-rename-dashforge-split-analytics-platform-reclaims-its-name" title="Permanent link">&para;</a></h1>
+<h1 id="prd-dashforge-rename-uiforge-split-analytics-platform-reclaims-its-name">PRD — DashForge Rename &amp; UIForge Split — Analytics Platform Reclaims Its Name<a class="headerlink" href="#prd-dashforge-rename-uiforge-split-analytics-platform-reclaims-its-name" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-DASHFORGE-001</code>
 <strong>Status:</strong> Draft (blocked on landing INIT-UIFORGE-002)
-<strong>Home repo:</strong> <code>github.com/plexusone/dashforge</code> (today: <code>github.com/plexusone/dashforge</code>)</p>
+<strong>Home repo:</strong> <code>github.com/plexusone/dashforge</code> (formerly <code>github.com/plexusone/uiforge</code>)</p>
 <h2 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h2>
 <p>The repository has drifted from its name twice:</p>
 <ol>
 <li>It began as <strong>dashforge</strong> — "a JSON-first dashboard framework that … grows
    into a full Metabase-like analytics platform" (still the live GitHub repo
    description).</li>
-<li>It was renamed to <strong>dashforge</strong> when the work centered on UI widgets, with a
+<li>It was renamed to <strong>uiforge</strong> when the work centered on UI widgets, with a
    Salesforce-Lightning-style component-platform vision (UISpec, PageSpec,
    component namespaces — see <code>docs/specs/{PRD,TRD}.md</code>).</li>
 <li>INIT-UIFORGE-002 then delivered the original vision anyway: a working
@@ -1480,9 +1480,9 @@ product, and the component-platform vision has no home of its own.</p>
 <li><strong>Rename the repo back to <code>dashforge</code></strong> — GitHub rename (reversing the
   earlier rename; the <code>dashforge</code> redirect alias already points here), Go
   module path, binaries, frontend branding, docs, and every consumer import.</li>
-<li><strong>Create a new <code>dashforge</code> repo</strong> for the UI-customization platform: UISpec
+<li><strong>Create a new <code>uiforge</code> repo</strong> for the UI-customization platform: UISpec
   type system, PageSpec, renderer, component namespaces — seeded from the
-  original DashForge specs, populated by incremental extraction (not a bulk
+  original UIForge specs, populated by incremental extraction (not a bulk
   move of entangled code).</li>
 <li><strong>Break nothing in the ecosystem</strong>: omniroadmap (which imports this module),
   VisionStudio registry/RMI tracking, org docs, CI, and local clones all
@@ -1493,11 +1493,11 @@ product, and the component-platform vision has no home of its own.</p>
 <li>DashForge Cloud / workspace sync — follows as <code>INIT-DASHFORGE-002</code> after
   this initiative, precisely so cloud never launches under a name about to
   change.</li>
-<li>Completing the extraction of all rendering code into the new dashforge — this
+<li>Completing the extraction of all rendering code into the new uiforge — this
   initiative establishes the boundary and moves the first clean units; deeper
   extraction is follow-on work in the new repo's own roadmap.</li>
 <li>Renaming historical tracking artifacts: <code>INIT-UIFORGE-001/-002</code> and
-  <code>RMI-DASHFORGE-*</code> IDs remain as historical record.</li>
+  <code>RMI-UIFORGE-*</code> IDs remain as historical record.</li>
 </ul>
 <h2 id="users-and-experience">Users and Experience<a class="headerlink" href="#users-and-experience" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1505,12 +1505,12 @@ product, and the component-platform vision has no home of its own.</p>
   README and docs describe an analytics platform named DashForge.</li>
 <li><strong>Ecosystem developers</strong>: <code>import "github.com/plexusone/dashforge/..."</code>;
   the old module path disappears in one coordinated sweep, not gradually.</li>
-<li><strong>UI-platform developers</strong>: a fresh <code>plexusone/dashforge</code> whose README/specs
+<li><strong>UI-platform developers</strong>: a fresh <code>plexusone/uiforge</code> whose README/specs
   describe the component platform, without analytics code tangled in.</li>
 </ul>
 <h2 id="sequencing-constraint-one-way-door">Sequencing Constraint (one-way door)<a class="headerlink" href="#sequencing-constraint-one-way-door" title="Permanent link">&para;</a></h2>
-<p>GitHub's rename redirect (<code>dashforge</code> → <code>dashforge</code>) dies the moment a new repo
-named <code>dashforge</code> is created. Any stale remote, CI reference, or <code>go get</code> would
+<p>GitHub's rename redirect (<code>uiforge</code> → <code>dashforge</code>) dies the moment a new repo
+named <code>uiforge</code> is created. Any stale remote, CI reference, or <code>go get</code> would
 then silently resolve to the <strong>new, different</strong> repo. Therefore: rename →
 update every reference → verify nothing still resolves through the redirect →
 only then create the new dashforge repo. This ordering is enforced as RMI
@@ -1520,8 +1520,8 @@ dependencies, not convention.</p>
 <li><code>github.com/plexusone/dashforge</code> is the canonical repo; module path, binary
   names (<code>dashforge-server</code>, <code>dashforge</code>), and builder/docs branding match.</li>
 <li>omniroadmap and all local consumers build against the new path with no
-  <code>dashforge</code> references to the analytics code remaining (verified by sweep).</li>
-<li>New <code>plexusone/dashforge</code> exists with the component-platform specs and the
+  <code>uiforge</code> references to the analytics code remaining (verified by sweep).</li>
+<li>New <code>plexusone/uiforge</code> exists with the component-platform specs and the
   first extracted UISpec units; dashforge consumes it as a dependency.</li>
 <li>VisionStudio registry reflects the rename; new work logs as
   <code>RMI-DASHFORGE-*</code>.</li>

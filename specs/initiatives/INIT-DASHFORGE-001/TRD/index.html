@@ -23,7 +23,7 @@
     
     
       
-        <title>TRD — DashForge Rename & DashForge Split - DashForge</title>
+        <title>TRD — DashForge Rename & UIForge Split - DashForge</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#trd-dashforge-rename-dashforge-split" class="md-skip">
+        <a href="#trd-dashforge-rename-uiforge-split" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              TRD — DashForge Rename &amp; DashForge Split
+              TRD — DashForge Rename &amp; UIForge Split
             
           </span>
         </div>
@@ -1414,10 +1414,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#dashforge-split-phase-2" class="md-nav__link">
+  <a href="#uiforge-split-phase-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DashForge split (Phase 2)
+        UIForge split (Phase 2)
       
     </span>
   </a>
@@ -1482,18 +1482,18 @@
   
 
 
-<h1 id="trd-dashforge-rename-dashforge-split">TRD — DashForge Rename &amp; DashForge Split<a class="headerlink" href="#trd-dashforge-rename-dashforge-split" title="Permanent link">&para;</a></h1>
+<h1 id="trd-dashforge-rename-uiforge-split">TRD — DashForge Rename &amp; UIForge Split<a class="headerlink" href="#trd-dashforge-rename-uiforge-split" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-DASHFORGE-001</code>
 <strong>Status:</strong> Draft (blocked on landing INIT-UIFORGE-002)</p>
 <h2 id="current-state">Current State<a class="headerlink" href="#current-state" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Repo <code>github.com/plexusone/dashforge</code>; GitHub redirect alias
+<li>Repo <code>github.com/plexusone/uiforge</code>; GitHub redirect alias
   <code>github.com/plexusone/dashforge</code> → this repo (verified: <code>gh repo view
-  plexusone/dashforge</code> returns <code>"name": "dashforge"</code>). The redirect is the
-  artifact of the original dashforge→dashforge rename and is load-bearing for
-  the plan: renaming back reverses it, and the freed <code>dashforge</code> name can be
+  plexusone/dashforge</code> returns <code>"name": "uiforge"</code>). The redirect is the
+  artifact of the original dashforge→uiforge rename and is load-bearing for
+  the plan: renaming back reverses it, and the freed <code>uiforge</code> name can be
   reused — but only after the redirect is provably unused.</li>
-<li>Go module <code>github.com/plexusone/dashforge</code>, v0 (no major-version path suffix
+<li>Go module <code>github.com/plexusone/uiforge</code>, v0 (no major-version path suffix
   to manage; the path change is still breaking for consumers).</li>
 <li>Known consumers importing the module: <code>grokify/omniroadmap</code> (via local
   <code>replace</code>). VisionStudio registers the repo; org CLAUDE.md files and
@@ -1509,17 +1509,17 @@
 <h2 id="design">Design<a class="headerlink" href="#design" title="Permanent link">&para;</a></h2>
 <h3 id="rename-mechanics-phase-1">Rename mechanics (Phase 1)<a class="headerlink" href="#rename-mechanics-phase-1" title="Permanent link">&para;</a></h3>
 <ol>
-<li><strong>GitHub</strong>: <code>gh repo rename dashforge</code> on <code>plexusone/dashforge</code>. History,
-   issues, stars carry over; <code>dashforge</code> becomes the redirect.</li>
+<li><strong>GitHub</strong>: <code>gh repo rename dashforge</code> on <code>plexusone/uiforge</code>. History,
+   issues, stars carry over; <code>uiforge</code> becomes the redirect.</li>
 <li><strong>Local</strong>: move checkout to <code>~/go/src/github.com/plexusone/dashforge</code>,
    update <code>origin</code>; update VisionStudio registry path for
    <code>github.com/plexusone/dashforge</code> and retire the old registry entry.</li>
 <li><strong>Module path</strong>: <code>go.mod</code> module → <code>github.com/plexusone/dashforge</code>; every
    in-repo import rewritten (mechanical <code>gofmt -r</code> / sed sweep + build).</li>
-<li><strong>Binaries</strong>: <code>cmd/dashforge-server</code> → <code>cmd/dashforge-server</code>,
-   <code>cmd/dashforge</code> → <code>cmd/dashforge</code>. Cobra <code>Use</code>/help text, <code>.gitignore</code>
-   entries (fixing the over-broad <code>dashforge-server</code> pattern that currently
-   matches <code>cmd/dashforge-server/</code>), embed paths.</li>
+<li><strong>Binaries</strong>: <code>cmd/uiforge-server</code> → <code>cmd/dashforge-server</code>,
+   <code>cmd/uiforge</code> → <code>cmd/dashforge</code>. Cobra <code>Use</code>/help text, <code>.gitignore</code>
+   entries (fixing the over-broad <code>uiforge-server</code> pattern that currently
+   matches <code>cmd/uiforge-server/</code>), embed paths.</li>
 <li><strong>Frontend/docs</strong>: builder package name, UF logo mark → DF, UI strings,
    README, mkdocs, <code>examples/</code>. <code>dashforge.ts</code> and <code>DashforgeApiError</code> are
    already correctly named.</li>
@@ -1528,9 +1528,9 @@
    (<code>plexusone/.github/CLAUDE.md</code>, ecosystem references).</li>
 </ol>
 <h3 id="verification-gate-phase-1-exit">Verification gate (Phase 1 exit)<a class="headerlink" href="#verification-gate-phase-1-exit" title="Permanent link">&para;</a></h3>
-<p>Before the <code>dashforge</code> name may be reused:</p>
+<p>Before the <code>uiforge</code> name may be reused:</p>
 <ul>
-<li><code>grep -r "plexusone/dashforge"</code> across <code>~/go/src/github.com</code> returns only
+<li><code>grep -r "plexusone/uiforge"</code> across <code>~/go/src/github.com</code> returns only
   historical documents (specs, changelogs) — no <code>go.mod</code>, import, CI, remote,
   or registry references.</li>
 <li><code>git remote -v</code> in the renamed checkout and all consumers points at
@@ -1538,21 +1538,21 @@
 <li>CI green on the renamed repo (the shared <code>go-ci.yaml</code> workflow re-run under
   the new name).</li>
 </ul>
-<h3 id="dashforge-split-phase-2">DashForge split (Phase 2)<a class="headerlink" href="#dashforge-split-phase-2" title="Permanent link">&para;</a></h3>
+<h3 id="uiforge-split-phase-2">UIForge split (Phase 2)<a class="headerlink" href="#uiforge-split-phase-2" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Boundary inventory</strong> (doc, in dashforge): classify each candidate —
    <code>renderer/</code>, <code>ts/</code>, UISpec/PageSpec types, builder widget components —
-   as <em>dashforge-core</em> (analytics-specific rendering) or <em>dashforge-extract</em>
+   as <em>dashforge-core</em> (analytics-specific rendering) or <em>uiforge-extract</em>
    (generic UI composition). Decision recorded per package with its
-   dependency direction; the invariant is dashforge → dashforge, never the
+   dependency direction; the invariant is dashforge → uiforge, never the
    reverse.</li>
-<li><strong>New repo</strong>: create <code>plexusone/dashforge</code> fresh (this deliberately retires
+<li><strong>New repo</strong>: create <code>plexusone/uiforge</code> fresh (this deliberately retires
    the redirect — hence the Phase 1 gate). Seed with the component-platform
-   PRD/TRD (adapted from the original DashForge specs), module
-   <code>github.com/plexusone/dashforge</code>, standard plexusone scaffolding (CI, lint,
+   PRD/TRD (adapted from the original UIForge specs), module
+   <code>github.com/plexusone/uiforge</code>, standard plexusone scaffolding (CI, lint,
    CLAUDE.md).</li>
 <li><strong>First extraction</strong>: move the cleanest UISpec units (types + schema
-   generation first, renderer pieces as they untangle) into dashforge;
+   generation first, renderer pieces as they untangle) into uiforge;
    dashforge consumes them as a normal dependency. Incremental by design — a
    bulk move would relocate the entanglement rather than resolve it.</li>
 </ol>
@@ -1560,8 +1560,8 @@
 <ul>
 <li>VisionStudio: <code>github.com/plexusone/dashforge</code> registered (done at
   initiative creation); after the rename, the old
-  <code>github.com/plexusone/dashforge</code> registry entry is repointed/archived, and —
-  once the new dashforge repo exists — re-registered at the new local path for
+  <code>github.com/plexusone/uiforge</code> registry entry is repointed/archived, and —
+  once the new uiforge repo exists — re-registered at the new local path for
   the component platform. New RMIs use <code>RMI-DASHFORGE-*</code> (and later
   <code>RMI-DASHFORGE-*</code> numbering continues from 054 for the new repo's work).</li>
 <li>Historical <code>INIT-DASHFORGE-*</code> / <code>RMI-DASHFORGE-*</code> records are immutable.</li>
@@ -1575,7 +1575,7 @@
   mixing a mass mechanical rename into substantive diffs makes both
   unreviewable. Enforced as the initiative's entry gate in PLAN.md.</li>
 <li><strong>Go module proxy cache</strong>: <code>proxy.golang.org</code> retains
-  <code>github.com/plexusone/dashforge</code> versions; old tags remain fetchable under
+  <code>github.com/plexusone/uiforge</code> versions; old tags remain fetchable under
   the old path. Acceptable — consumers are in-house and switch in Phase 1;
   no new tags are ever cut under the old path.</li>
 <li><strong>prism-control / PRISM tracking</strong>: INIT-UIFORGE-001 lives in
@@ -1587,7 +1587,7 @@
 <li>Rename phases: <code>go build ./... &amp;&amp; go test ./...</code> in dashforge and every
   consumer after each mechanical step; builder <code>typecheck</code>/<code>lint</code>/<code>build</code>;
   the Phase 1 grep-sweep gate.</li>
-<li>Split phase: new dashforge repo carries its own unit tests from the first
+<li>Split phase: new uiforge repo carries its own unit tests from the first
   extracted package; dashforge CI proves consumption of the extracted units.</li>
 </ul>
 
