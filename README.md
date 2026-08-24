@@ -151,18 +151,18 @@ Full documentation is available at [docs/](docs/):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        DashForge                                  │
+│                        DashForge                                │
 ├─────────────────────────────────────────────────────────────────┤
 │  builder/               Visual dashboard builder (React)        │
 │    ├── src/components/  Canvas, widgets, chart builder          │
 │    ├── src/ai/          AI generation schemas & prompts         │
-│    └── src/api/         DashForge & Cube.js clients               │
+│    └── src/api/         DashForge & Cube.js clients             │
 ├─────────────────────────────────────────────────────────────────┤
 │  cube/                  Cube.js semantic layer                  │
 │    └── model/cubes/     Data models (YAML)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  cmd/dashforge/         Static CLI (validate, convert)            │
-│  cmd/dashforge-server/  Full server with API                      │
+│  cmd/dashforge/         Static CLI (validate, convert)          │
+│  cmd/dashforge-server/  Full server with API                    │
 ├─────────────────────────────────────────────────────────────────┤
 │  dashboardir/           Dashboard JSON schema & types           │
 │  viewer/                Embedded static HTML/JS viewer          │
