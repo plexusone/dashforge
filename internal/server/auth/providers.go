@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	cfoauth "github.com/grokify/systemforge/identity/oauthclient"
+	cfoauth "github.com/plexusone/systemforge/identity/oauthclient"
 )
 
 // OAuthUser represents normalized user info from any OAuth provider.

@@ -17,10 +17,10 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humachi"
 	"github.com/go-chi/chi/v5"
-	"github.com/grokify/systemforge/authz"
-	"github.com/grokify/systemforge/authz/spicedb"
 	"github.com/plexusone/dashforge/builder"
 	"github.com/plexusone/dashforge/datasource"
+	"github.com/plexusone/systemforge/authz"
+	"github.com/plexusone/systemforge/authz/spicedb"
 
 	// Import providers for registration via init()
 	_ "github.com/plexusone/dashforge/datasource/providers/mysql"

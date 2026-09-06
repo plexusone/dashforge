@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	cfjwt "github.com/grokify/systemforge/session/jwt"
-	cfmw "github.com/grokify/systemforge/session/middleware"
+	cfjwt "github.com/plexusone/systemforge/session/jwt"
+	cfmw "github.com/plexusone/systemforge/session/middleware"
 )
 
 // Re-export SystemForge JWT types for convenience.

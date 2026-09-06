@@ -8,12 +8,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/grokify/guardsql"
-	systemauthz "github.com/grokify/systemforge/authz"
-	"github.com/grokify/systemforge/authzguardsql"
 	serveranalytics "github.com/plexusone/dashforge/analytics"
 	"github.com/plexusone/dashforge/dashboardir"
 	localauthz "github.com/plexusone/dashforge/internal/authz"
 	serverauth "github.com/plexusone/dashforge/internal/server/auth"
+	systemauthz "github.com/plexusone/systemforge/authz"
+	"github.com/plexusone/systemforge/authzguardsql"
 )
 
 // GrokifyQLPolicyProvider builds request-scoped GrokifyQL policies.

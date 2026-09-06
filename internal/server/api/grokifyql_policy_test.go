@@ -6,12 +6,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/grokify/guardsql"
-	systemauthz "github.com/grokify/systemforge/authz"
-	sessionjwt "github.com/grokify/systemforge/session/jwt"
-	sessionmw "github.com/grokify/systemforge/session/middleware"
 	serveranalytics "github.com/plexusone/dashforge/analytics"
 	"github.com/plexusone/dashforge/dashboardir"
 	localauthz "github.com/plexusone/dashforge/internal/authz"
+	systemauthz "github.com/plexusone/systemforge/authz"
+	sessionjwt "github.com/plexusone/systemforge/session/jwt"
+	sessionmw "github.com/plexusone/systemforge/session/middleware"
 )
 
 func TestCompileGrokifyQLQuestionDefaultPolicyAllowsNoLimit(t *testing.T) {

@@ -5,12 +5,12 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"github.com/grokify/systemforge/authz"
-	"github.com/grokify/systemforge/authz/simple"
-	"github.com/grokify/systemforge/authz/spicedb"
 	"github.com/plexusone/dashforge/ent"
 	"github.com/plexusone/dashforge/ent/human"
 	"github.com/plexusone/dashforge/ent/principalmembership"
+	"github.com/plexusone/systemforge/authz"
+	"github.com/plexusone/systemforge/authz/simple"
+	"github.com/plexusone/systemforge/authz/spicedb"
 )
 
 // Mode specifies the authorization backend.
