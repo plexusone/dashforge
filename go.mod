@@ -26,7 +26,7 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/danielgtaylor/huma/v2 v2.39.1
 	github.com/go-chi/chi/v5 v5.3.2
-	github.com/go-sql-driver/mysql v1.10.0
+	github.com/go-sql-driver/mysql v1.10.1
 	github.com/google/uuid v1.6.0
 	github.com/grokify/godolt v0.3.0
 	github.com/grokify/systemforge v0.9.0
