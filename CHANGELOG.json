@@ -9,6 +9,55 @@
   ],
   "releases": [
     {
+      "version": "v0.7.0",
+      "date": "2026-09-07",
+      "commit": "af60924",
+      "highlights": [
+        {
+          "description": "Generic Tier-1 SQL connector (`sql`): any PostgreSQL, MySQL/Dolt, or SQLite database becomes a queryable analytics source through configuration alone, via `INFORMATION_SCHEMA`/`PRAGMA` introspection"
+        },
+        {
+          "description": "ADR-0002 connector extensibility: a four-tier model for connecting DashForge to sources it doesn't own without reintroducing domain dependencies into the engine"
+        }
+      ],
+      "added": [
+        {
+          "description": "`connectors/sqlsource`: the built-in `sql` connector, registered by stock `dashforge-server`; read-only single-`SELECT` query execution",
+          "commit": "af60924"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "Updated `systemforge` imports (authz/multiapp/session call sites) to `github.com/plexusone/systemforge` and bumped to v0.10.0; also fixed the `authzed/cel-go` exclude so `spicedb` v1.56.1's `caveats/replacer` resolves the two-return-value `cel.NewStaticOptimizer` signature it now expects",
+          "commit": "aa5bd72"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "ADR-0002: connector extensibility tiers",
+          "commit": "f7abf5f"
+        },
+        {
+          "description": "INIT-DASHFORGE-002 connector extensibility specs (PRD/TRD/PLAN/ROADMAP); cloud/workspace-sync renumbered to INIT-DASHFORGE-003",
+          "commit": "9f5f24d"
+        },
+        {
+          "description": "ADR-0004: DashForge embedding contract (embed the UI, not the tables)",
+          "commit": "0907537"
+        },
+        {
+          "description": "ADR-0003/0005 tombstones for decisions relocated to compass ADR-0001/0002",
+          "commit": "5c9e220"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Bump `github.com/go-sql-driver/mysql` from 1.10.0 to 1.10.1",
+          "commit": "8b6f77d"
+        }
+      ]
+    },
+    {
       "version": "v0.6.0",
       "date": "2026-08-23",
       "commit": "3e3d81c",

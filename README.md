@@ -35,7 +35,7 @@ A JSON-first dashboard framework that starts simple with static hosting (GitHub 
 - 📄 **JSON Dashboard IR** - Non-polymorphic, AI-friendly dashboard definitions
 - 🔗 **Cube.js Semantic Layer** - Business-friendly queries with pre-built relationships
 - ⚡ **Static or Dynamic** - Start with static file hosting, graduate to PostgreSQL
-- 🗄️ **Multi-Database Support** - Connect to PostgreSQL, MySQL, and more via plugin providers
+- 🗄️ **Multi-Database Support** - Connect any PostgreSQL, MySQL/Dolt, or SQLite database through configuration alone via the built-in generic `sql` connector, or register custom plugin providers for application-specific stores
 - ❓ **Saved Questions** - Metabase-style read-only GrokifyQL questions with formatting, syntax highlighting, field value browsing, CSV/XLSX export, and dashboard reuse
 - 🤖 **Agent-Ready Analytics** - Integrates with OmniAgent marketplace primitives while DashForge owns query, field-value, and dashboard capabilities
 - 🔑 **Secret References** - Analytics source credentials should use OmniVault/VaultGuard references instead of raw DSNs in catalog storage, with OmniVault SQL store as the encrypted-in-DB fallback
@@ -114,16 +114,18 @@ are added at runtime — via the **Data sources** panel in the Question builder
 OmniVault secret reference is stored, never a raw DSN:
 
 ```bash
-# Connectors are registered by the consuming application binary — the core
-# engine ships none. Example below assumes an app registered "roadmap-app".
-export DASHFORGE_ROADMAP_APP_DSN='root:@tcp(127.0.0.1:13307)/roadmapdb'
+# The core engine ships one built-in connector, "sql" — any Postgres,
+# MySQL/Dolt, or SQLite database becomes a source through configuration
+# alone. Additional connectors (like "roadmap-app" below) are registered by
+# the consuming application binary.
+export DASHFORGE_WAREHOUSE_DSN='root:@tcp(127.0.0.1:13307)/warehouse'
 ./dashforge-server serve --address 127.0.0.1:13319
 
 # One-time: register the source (or use the builder UI)
 curl -X POST http://127.0.0.1:13319/api/v1/analytics/sources \
   -H 'Content-Type: application/json' \
-  -d '{"id":"roadmap-app","name":"Roadmap App","connector":"roadmap-app",
-       "dsnRef":"env://DASHFORGE_ROADMAP_APP_DSN","enabled":true}'
+  -d '{"id":"warehouse","name":"Warehouse","connector":"sql",
+       "dsnRef":"env://DASHFORGE_WAREHOUSE_DSN","enabled":true}'
 ```
 
 See [Analytics Catalog](docs/analytics-catalog.md) for the catalog model,

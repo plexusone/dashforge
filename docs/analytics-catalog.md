@@ -102,9 +102,41 @@ server startup; a source that fails to connect surfaces as status `error`
 without preventing startup.
 
 Connectors are registered in the public `analytics` package via
-`RegisterConnector`. The engine core ships no connectors — consuming
-application binaries register their own (e.g. a roadmap product registering
-its store as a source) and additional connectors register the same way.
+`RegisterConnector`. The engine core ships one built-in connector — `sql`,
+the generic Tier-1 connector (see below) — and consuming application binaries
+register their own for application-specific stores (e.g. a roadmap product
+registering its store as a source); additional connectors register the same
+way.
+
+### The Built-In `sql` Connector
+
+Any PostgreSQL, MySQL/Dolt, or SQLite database becomes a queryable analytics
+source through configuration alone — no code required. The connector opens
+the `dsnRef`-resolved DSN, selects a dialect from its form, and introspects
+the schema (`INFORMATION_SCHEMA` for Postgres/MySQL, `sqlite_master` +
+`PRAGMA` for SQLite) to build the catalog, mapping native column types to
+`number`/`date`/`dimension` field roles.
+
+```json
+{
+  "id": "warehouse",
+  "name": "Warehouse",
+  "connector": "sql",
+  "dsnRef": "env://DASHFORGE_WAREHOUSE_DSN",
+  "enabled": true
+}
+```
+
+The dialect is selected from the resolved DSN's form:
+
+| DSN form | Dialect |
+|----------|---------|
+| `postgres://...`, `postgresql://...` | PostgreSQL |
+| `mysql://...`, a go-sql-driver DSN (`user:pass@tcp(host:port)/db`) | MySQL / Dolt |
+| `sqlite://...`, `file:...`, or a path ending in `.db`/`.sqlite` | SQLite |
+
+Query execution is read-only: a single leading `SELECT` statement, scanned
+directly into catalog rows.
 
 ## Source Credentials
 
