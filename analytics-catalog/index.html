@@ -706,6 +706,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Managing Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-built-in-sql-connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Built-In sql Connector
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1324,6 +1341,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../releases/v0.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../releases/v0.6.0/" class="md-nav__link">
         
   
@@ -1560,6 +1605,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Managing Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-built-in-sql-connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Built-In sql Connector
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1758,9 +1820,51 @@ DSNs, so credentials can never reach disk or the metadata database.</p>
 server startup; a source that fails to connect surfaces as status <code>error</code>
 without preventing startup.</p>
 <p>Connectors are registered in the public <code>analytics</code> package via
-<code>RegisterConnector</code>. The engine core ships no connectors — consuming
-application binaries register their own (e.g. a roadmap product registering
-its store as a source) and additional connectors register the same way.</p>
+<code>RegisterConnector</code>. The engine core ships one built-in connector — <code>sql</code>,
+the generic Tier-1 connector (see below) — and consuming application binaries
+register their own for application-specific stores (e.g. a roadmap product
+registering its store as a source); additional connectors register the same
+way.</p>
+<h3 id="the-built-in-sql-connector">The Built-In <code>sql</code> Connector<a class="headerlink" href="#the-built-in-sql-connector" title="Permanent link">&para;</a></h3>
+<p>Any PostgreSQL, MySQL/Dolt, or SQLite database becomes a queryable analytics
+source through configuration alone — no code required. The connector opens
+the <code>dsnRef</code>-resolved DSN, selects a dialect from its form, and introspects
+the schema (<code>INFORMATION_SCHEMA</code> for Postgres/MySQL, <code>sqlite_master</code> +
+<code>PRAGMA</code> for SQLite) to build the catalog, mapping native column types to
+<code>number</code>/<code>date</code>/<code>dimension</code> field roles.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;warehouse&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Warehouse&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&quot;connector&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sql&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&quot;dsnRef&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;env://DASHFORGE_WAREHOUSE_DSN&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>The dialect is selected from the resolved DSN's form:</p>
+<table>
+<thead>
+<tr>
+<th>DSN form</th>
+<th>Dialect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres://...</code>, <code>postgresql://...</code></td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td><code>mysql://...</code>, a go-sql-driver DSN (<code>user:pass@tcp(host:port)/db</code>)</td>
+<td>MySQL / Dolt</td>
+</tr>
+<tr>
+<td><code>sqlite://...</code>, <code>file:...</code>, or a path ending in <code>.db</code>/<code>.sqlite</code></td>
+<td>SQLite</td>
+</tr>
+</tbody>
+</table>
+<p>Query execution is read-only: a single leading <code>SELECT</code> statement, scanned
+directly into catalog rows.</p>
 <h2 id="source-credentials">Source Credentials<a class="headerlink" href="#source-credentials" title="Permanent link">&para;</a></h2>
 <p><code>dsnRef</code> is an OmniVault secret reference resolved in memory at connect time.
 The resolved DSN is never persisted, logged, returned by the API, or sent to
@@ -1825,7 +1929,7 @@ Question is saved or an ad-hoc GrokifyQL query is executed.</p>
 resource model and permission mapping.</p>
 <h2 id="generic-endpoint">Generic Endpoint<a class="headerlink" href="#generic-endpoint" title="Permanent link">&para;</a></h2>
 <p>Server mode should expose the combined catalog for all connected sources at:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">GET /api/v1/analytics/catalog</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">GET /api/v1/analytics/catalog</span>
 </code></pre></div>
 <p>A DashForge server can combine multiple sources — application connectors registered by the consuming binary alongside PostgreSQL and Dolt databases — into one catalog response.</p>
 
