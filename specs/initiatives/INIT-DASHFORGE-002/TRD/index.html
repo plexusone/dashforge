@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/dashforge/specs/initiatives/INIT-DASHFORGE-001/PLAN/">
+        <link rel="canonical" href="https://plexusone.github.io/dashforge/specs/initiatives/INIT-DASHFORGE-002/TRD/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>PLAN — DashForge Rename & UIForge Split - DashForge</title>
+        <title>TRD — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract - DashForge</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#plan-dashforge-rename-uiforge-split" class="md-skip">
+        <a href="#trd-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PLAN — DashForge Rename &amp; UIForge Split
+              TRD — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract
             
           </span>
         </div>
@@ -1369,10 +1369,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#entry-gate-must-be-true-before-phase-1-starts" class="md-nav__link">
+  <a href="#current-state" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entry Gate (must be true before Phase 1 starts)
+        Current State
       
     </span>
   </a>
@@ -1380,22 +1380,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#build-order" class="md-nav__link">
+  <a href="#design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Build Order
+        Design
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build Order">
+    <nav class="md-nav" aria-label="Design">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#phase-1-rename-to-dashforge" class="md-nav__link">
+  <a href="#tier-1-generic-sql-connector-engine-core" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 1 — Rename to DashForge
+        Tier 1 — generic sql connector (engine core)
       
     </span>
   </a>
@@ -1403,10 +1403,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#phase-2-uispec-boundary-new-uiforge-repo" class="md-nav__link">
+  <a href="#tier-3-dashforgespec-package-the-analytics-provider-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 2 — UISpec Boundary &amp; New UIForge Repo
+        Tier 3 — dashforgespec package (the Analytics Provider contract)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-3-generic-http-connector-engine-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 3 — generic http connector (engine core)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-provider-omniroadmap-cross-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference provider — omniroadmap (cross-repo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-4-metadata-table-convention-backlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 4 — metadata-table convention (backlog)
       
     </span>
   </a>
@@ -1419,10 +1452,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#risks-and-mitigations" class="md-nav__link">
+  <a href="#security-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Risks and Mitigations
+        Security Considerations
       
     </span>
   </a>
@@ -1430,10 +1463,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#follow-on" class="md-nav__link">
+  <a href="#testing-strategy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Follow-On
+        Testing Strategy
       
     </span>
   </a>
@@ -1460,63 +1493,108 @@
   
 
 
-<h1 id="plan-dashforge-rename-uiforge-split">PLAN — DashForge Rename &amp; UIForge Split<a class="headerlink" href="#plan-dashforge-rename-uiforge-split" title="Permanent link">&para;</a></h1>
-<p><strong>Initiative:</strong> <code>INIT-DASHFORGE-001</code>
+<h1 id="trd-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract">TRD — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract<a class="headerlink" href="#trd-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract" title="Permanent link">&para;</a></h1>
+<p><strong>Initiative:</strong> <code>INIT-DASHFORGE-002</code>
 <strong>Status:</strong> Draft</p>
-<h2 id="entry-gate-must-be-true-before-phase-1-starts">Entry Gate (must be true before Phase 1 starts)<a class="headerlink" href="#entry-gate-must-be-true-before-phase-1-starts" title="Permanent link">&para;</a></h2>
-<ol>
-<li>INIT-UIFORGE-002's working-tree changes are committed across all four
-   repos (uiforge — now this repo, godolt, omniroadmap, visionstudio), pushed, and released
-   (godolt v0.3.0 tagged; temporary <code>replace</code> directives removed).</li>
-<li>INIT-UIFORGE-002 transitioned to <code>delivery_complete</code> or beyond.</li>
-<li>Disk-space condition that blocked git object writes is resolved.</li>
-</ol>
-<p>Rationale: a mass mechanical rename mixed into substantive uncommitted diffs
-makes both unreviewable; and the rename touches the same files the pending
-commits do.</p>
-<h2 id="build-order">Build Order<a class="headerlink" href="#build-order" title="Permanent link">&para;</a></h2>
-<h3 id="phase-1-rename-to-dashforge">Phase 1 — Rename to DashForge<a class="headerlink" href="#phase-1-rename-to-dashforge" title="Permanent link">&para;</a></h3>
-<ol>
-<li>GitHub rename <code>plexusone/uiforge</code> → <code>plexusone/dashforge</code>; move local
-   checkout to <code>~/go/src/github.com/plexusone/dashforge</code>; update remotes and
-   the VisionStudio registry (repoint/retire old entry, fix new entry's
-   path).</li>
-<li>Module path rewrite (<code>go.mod</code> + all imports), binary renames
-   (<code>cmd/dashforge-server</code>, <code>cmd/dashforge</code>), <code>.gitignore</code> fix, help text.</li>
-<li>Frontend and docs rebrand: builder package/branding (UF → DF mark), README,
-   mkdocs, examples.</li>
-<li>Consumers: omniroadmap imports/replace → dashforge (cross-repo
-   <code>RMI-OMNIROADMAP-011</code>); org docs sweep.</li>
-<li><strong>Verification gate</strong>: ecosystem-wide grep sweep (no live
-   <code>plexusone/uiforge</code> references outside historical docs), remotes checked,
-   CI green under the new name.</li>
-</ol>
-<p><strong>Exit criteria:</strong> <code>dashforge-server serve</code> works identically; all consumers
-build; gate checklist recorded in the RMI's handoff notes.</p>
-<h3 id="phase-2-uispec-boundary-new-uiforge-repo">Phase 2 — UISpec Boundary &amp; New UIForge Repo<a class="headerlink" href="#phase-2-uispec-boundary-new-uiforge-repo" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Boundary inventory doc: per-package classification (dashforge-core vs
-   uiforge-extract) with dependency directions.</li>
-<li>Create fresh <code>plexusone/uiforge</code> (retires the redirect — depends on the
-   Phase 1 gate) seeded with component-platform PRD/TRD and standard
-   scaffolding.</li>
-<li>First extraction: UISpec/PageSpec types + schema generation into the new
-   uiforge; dashforge consumes as a dependency. Further extraction items are
-   logged in the new repo's own roadmap as they are sized.</li>
-</ol>
-<p><strong>Exit criteria:</strong> new uiforge builds and tests standalone; dashforge imports
-at least one extracted package; boundary doc merged in both repos.</p>
-<h2 id="risks-and-mitigations">Risks and Mitigations<a class="headerlink" href="#risks-and-mitigations" title="Permanent link">&para;</a></h2>
-<p>See TRD Risks: redirect reuse trap (gated), uncommitted-work collision
-(entry gate), module proxy residue (accepted), historical tracking IDs
-(immutable by policy).</p>
-<h2 id="follow-on">Follow-On<a class="headerlink" href="#follow-on" title="Permanent link">&para;</a></h2>
+<h2 id="current-state">Current State<a class="headerlink" href="#current-state" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>INIT-DASHFORGE-003</code> — DashForge Cloud &amp; workspace sync (per-workspace Dolt
-  remotes via godolt; control plane; hosted server). Deliberately sequenced
-  after the rename so cloud never launches under a transitional name.</li>
-<li>New uiforge repo's own initiative for the component-platform roadmap once
-  the boundary doc lands.</li>
+<li><code>analytics.RegisterConnector(name, factory)</code> is the compile-time registry;
+  <code>SourceConfig</code> persistence, OmniVault dsnRef resolution, catalog
+  re-tagging, and the sources CRUD/UI all exist and are connector-agnostic.</li>
+<li><code>dashboardir</code> holds the neutral analytics types (<code>AnalyticsCatalog</code>,
+  <code>AnalyticsQueryRequest</code>, <code>AnalyticsQueryResult</code>) — explicitly the
+  consumer-facing interface for outside consumers (informal: plain structs,
+  camelCase JSON tags, no Go interfaces).</li>
+<li><code>datasource/</code> contains legacy SQL providers (postgres, mysql) with their
+  own manager/executor, used for dashboard-scoped bindings — never wired
+  into the analytics catalog.</li>
+<li>Tier 2 reference exists: <code>omniroadmap/dashforgeconnector</code>.</li>
+</ul>
+<h2 id="design">Design<a class="headerlink" href="#design" title="Permanent link">&para;</a></h2>
+<h3 id="tier-1-generic-sql-connector-engine-core">Tier 1 — generic <code>sql</code> connector (engine core)<a class="headerlink" href="#tier-1-generic-sql-connector-engine-core" title="Permanent link">&para;</a></h3>
+<p>A built-in connector registered as <code>"sql"</code>:</p>
+<ul>
+<li><strong>Dial:</strong> the resolved DSN selects the driver by scheme/form (reuse the
+  <code>mysql://</code>/<code>postgres://</code> handling patterns from <code>internal/server/db</code>).</li>
+<li><strong>Catalog:</strong> introspect <code>INFORMATION_SCHEMA</code> (tables → datasets, columns →
+  fields with type mapping to <code>dashboardir</code> field types; <code>filterable</code>/
+  <code>sortable</code>/<code>selectable</code> true by default). Dataset <code>queryName</code> = table name.</li>
+<li><strong>Query:</strong> dialect <code>"sql"</code> — single-statement, read-only enforcement
+  (statement-type allowlist: SELECT only), server-side LIMIT clamp using the
+  engine's existing max-rows discipline, parameter passthrough. GrokifyQL
+  over SQL sources is <em>not</em> in scope for this initiative (a GrokifyQL→SQL
+  compiler is future work; the existing GrokifyQL policy path applies only
+  to dialects that declare it).</li>
+<li><strong>Unification:</strong> <code>datasource/</code> providers' connection handling is folded
+  into (or reused by) this connector so there is one SQL connection layer;
+  the dashboard-scoped <code>DataSource</code> feature keeps its API surface but stops
+  duplicating pooling/dial logic.</li>
+</ul>
+<h3 id="tier-3-dashforgespec-package-the-analytics-provider-contract">Tier 3 — <code>dashforgespec</code> package (the Analytics Provider contract)<a class="headerlink" href="#tier-3-dashforgespec-package-the-analytics-provider-contract" title="Permanent link">&para;</a></h3>
+<p>Location: <code>dashforgespec/</code> at the repo root.</p>
+<p><strong>Dependency rule (enforced by a test):</strong> imports limited to
+<code>github.com/plexusone/dashforge/dashboardir</code> and the standard library.
+<code>dashboardir</code> is the wire format — no parallel type set, no mapping layer.
+Extraction unit is dashforgespec + dashboardir together; a future
+<code>dashforge-spec</code> repo move is an import-path change only. Schema generation
+lives in <code>dashforgespec/gen/</code> behind <code>//go:build ignore</code> with a same-dir
+<code>tools.go</code> (per org convention) so generator deps (invopop/jsonschema) never
+become package deps.</p>
+<p>Contents:</p>
+<ul>
+<li><code>contract.go</code> — endpoint constants (<code>/catalog</code>, <code>/query</code>), the version
+  constant, auth header name; <code>ErrorEnvelope{Code, Message}</code>; a
+  <code>ProviderInfo{Name, ContractVersion}</code> handshake type returned in the
+  catalog response envelope.</li>
+<li><code>client.go</code> — a small Go client (stdlib <code>net/http</code>) implementing
+  <code>Catalog(ctx)</code> / <code>Query(ctx, req)</code> against a base URL + bearer token.
+  This is what the engine's <code>http</code> connector uses, and providers can use it
+  in their own tests.</li>
+<li><code>conformance/</code> — a provider test-kit: given a base URL, exercises catalog
+  shape, query round-trip, read-only rejection, and error-envelope format.</li>
+<li><code>schema/</code> — generated JSON Schemas for the wire types (dashboardir types +
+  envelope), <code>//go:embed</code>-ed, schemakit-linted with <code>--property-case
+  camelCase</code> (API/document surface per org convention).</li>
+<li><code>SPEC.md</code> — the normative document: endpoints, auth (bearer token; secret
+  handled DashForge-side as a dsnRef-style reference), versioning
+  (<code>ContractVersion</code> in the handshake; additive-only within a major),
+  read-only semantics, limits, and error model.</li>
+</ul>
+<h3 id="tier-3-generic-http-connector-engine-core">Tier 3 — generic <code>http</code> connector (engine core)<a class="headerlink" href="#tier-3-generic-http-connector-engine-core" title="Permanent link">&para;</a></h3>
+<p>Registered as <code>"http"</code>. Factory input (the resolved "DSN") is the provider
+base URL, optionally with an embedded bearer-token reference resolved like
+any dsnRef. Delegates to <code>dashforgespec.Client</code>; <code>Catalog</code>/<code>Query</code> pass
+<code>dashboardir</code> types straight through. Timeouts, response-size caps, and
+sanitized errors follow the engine's existing connector discipline.</p>
+<h3 id="reference-provider-omniroadmap-cross-repo">Reference provider — omniroadmap (cross-repo)<a class="headerlink" href="#reference-provider-omniroadmap-cross-repo" title="Permanent link">&para;</a></h3>
+<p>omniroadmap mounts the contract (its existing <code>analyticscatalog</code>/
+<code>analyticsquery</code> behind <code>/catalog</code> + <code>/query</code>, using
+<code>dashforgespec/conformance</code> in tests). Once serving, stock
+<code>dashforge-server</code> + an <code>http</code> source replaces the composing-binary
+requirement; <code>cmd/omniroadmap-server</code> stays as an optimization.</p>
+<h3 id="tier-4-metadata-table-convention-backlog">Tier 4 — metadata-table convention (backlog)<a class="headerlink" href="#tier-4-metadata-table-convention-backlog" title="Permanent link">&para;</a></h3>
+<p>Agreed tables/views (<code>dashforge_datasets</code>, <code>dashforge_fields</code>) that the
+<code>sql</code> connector prefers over raw introspection. Specified in <code>SPEC.md</code> as an
+appendix when implemented.</p>
+<h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>sql</code> connector: read-only statement allowlist, LIMIT clamp, no
+  multi-statement, sanitized driver errors (existing discipline).</li>
+<li><code>http</code> connector: outbound only, TLS-by-default guidance in SPEC.md,
+  bearer secrets as OmniVault references, response-size and time bounds.</li>
+<li>Authorization mapping is transport-independent — SpiceDB resources key off
+  the catalog, not the connector.</li>
+</ul>
+<h2 id="testing-strategy">Testing Strategy<a class="headerlink" href="#testing-strategy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>dashforgespec: dependency-rule test (parse imports of the package and fail
+  on anything outside dashboardir/stdlib); schema-generation golden test;
+  client round-trip against <code>httptest</code> servers; conformance kit self-test.</li>
+<li>sql connector: introspection + query against throwaway Dolt (godolt
+  harness pattern, skip-if-absent) and sqlite/postgres where available.</li>
+<li>http connector: engine-level test with an <code>httptest</code> provider implementing
+  the contract; end-to-end: sources CRUD → catalog merge → query.</li>
+<li>omniroadmap provider: conformance kit in its own CI.</li>
 </ul>
 
 

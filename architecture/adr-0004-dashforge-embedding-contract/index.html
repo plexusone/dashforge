@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/dashforge/specs/initiatives/INIT-DASHFORGE-001/PLAN/">
+        <link rel="canonical" href="https://plexusone.github.io/dashforge/architecture/adr-0004-dashforge-embedding-contract/">
       
       
       
@@ -18,19 +18,19 @@
         
       
       
-      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>PLAN — DashForge Rename & UIForge Split - DashForge</title>
+        <title>ADR-0004: DashForge Embedding Contract — Embed the UI, Not the Tables - DashForge</title>
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +51,7 @@
     
       <link rel="stylesheet" href="https://plexusone.dev/css/plexusone-mkdocs.css">
     
-    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#plan-dashforge-rename-uiforge-split" class="md-skip">
+        <a href="#adr-0004-dashforge-embedding-contract-embed-the-ui-not-the-tables" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../../.." title="DashForge" class="md-header__button md-logo" aria-label="DashForge" data-md-component="logo">
+    <a href="../.." title="DashForge" class="md-header__button md-logo" aria-label="DashForge" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PLAN — DashForge Rename &amp; UIForge Split
+              ADR-0004: DashForge Embedding Contract — Embed the UI, Not the Tables
             
           </span>
         </div>
@@ -234,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../../.." title="DashForge" class="md-nav__button md-logo" aria-label="DashForge" data-md-component="logo">
+    <a href="../.." title="DashForge" class="md-nav__button md-logo" aria-label="DashForge" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -264,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -291,7 +291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../getting-started/" class="md-nav__link">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   
@@ -372,7 +372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../builder/" class="md-nav__link">
+      <a href="../../builder/" class="md-nav__link">
         
   
   
@@ -400,7 +400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../cube-integration/" class="md-nav__link">
+      <a href="../../cube-integration/" class="md-nav__link">
         
   
   
@@ -428,7 +428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../ai-features/" class="md-nav__link">
+      <a href="../../ai-features/" class="md-nav__link">
         
   
   
@@ -517,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../dashboard-ir/" class="md-nav__link">
+      <a href="../../dashboard-ir/" class="md-nav__link">
         
   
   
@@ -545,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../widgets/" class="md-nav__link">
+      <a href="../../widgets/" class="md-nav__link">
         
   
   
@@ -573,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../data-sources/" class="md-nav__link">
+      <a href="../../data-sources/" class="md-nav__link">
         
   
   
@@ -601,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../analytics-catalog/" class="md-nav__link">
+      <a href="../../analytics-catalog/" class="md-nav__link">
         
   
   
@@ -629,7 +629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../analytics-authorization/" class="md-nav__link">
+      <a href="../../analytics-authorization/" class="md-nav__link">
         
   
   
@@ -657,7 +657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../agent-integration/" class="md-nav__link">
+      <a href="../../agent-integration/" class="md-nav__link">
         
   
   
@@ -685,7 +685,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../transforms/" class="md-nav__link">
+      <a href="../../transforms/" class="md-nav__link">
         
   
   
@@ -774,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../server-config/" class="md-nav__link">
+      <a href="../../server-config/" class="md-nav__link">
         
   
   
@@ -802,7 +802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../authentication/" class="md-nav__link">
+      <a href="../../authentication/" class="md-nav__link">
         
   
   
@@ -830,7 +830,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../authorization/" class="md-nav__link">
+      <a href="../../authorization/" class="md-nav__link">
         
   
   
@@ -858,7 +858,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../multi-tenancy/" class="md-nav__link">
+      <a href="../../multi-tenancy/" class="md-nav__link">
         
   
   
@@ -947,7 +947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../marketplace/overview/" class="md-nav__link">
+      <a href="../../marketplace/overview/" class="md-nav__link">
         
   
   
@@ -975,7 +975,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../marketplace/publishing/" class="md-nav__link">
+      <a href="../../marketplace/publishing/" class="md-nav__link">
         
   
   
@@ -1003,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../marketplace/licensing/" class="md-nav__link">
+      <a href="../../marketplace/licensing/" class="md-nav__link">
         
   
   
@@ -1065,7 +1065,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../development/" class="md-nav__link">
+      <a href="../../development/" class="md-nav__link">
         
   
   
@@ -1146,7 +1146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   
@@ -1174,7 +1174,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.6.0/" class="md-nav__link">
+      <a href="../../releases/v0.6.0/" class="md-nav__link">
         
   
   
@@ -1202,7 +1202,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.5.0/" class="md-nav__link">
+      <a href="../../releases/v0.5.0/" class="md-nav__link">
         
   
   
@@ -1230,7 +1230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.4.0/" class="md-nav__link">
+      <a href="../../releases/v0.4.0/" class="md-nav__link">
         
   
   
@@ -1258,7 +1258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.3.0/" class="md-nav__link">
+      <a href="../../releases/v0.3.0/" class="md-nav__link">
         
   
   
@@ -1286,7 +1286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.2.0/" class="md-nav__link">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
         
   
   
@@ -1314,7 +1314,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../releases/v0.1.0/" class="md-nav__link">
+      <a href="../../releases/v0.1.0/" class="md-nav__link">
         
   
   
@@ -1369,10 +1369,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#entry-gate-must-be-true-before-phase-1-starts" class="md-nav__link">
+  <a href="#context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entry Gate (must be true before Phase 1 starts)
+        Context
       
     </span>
   </a>
@@ -1380,22 +1380,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#build-order" class="md-nav__link">
+  <a href="#decision" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Build Order
+        Decision
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build Order">
+    <nav class="md-nav" aria-label="Decision">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#phase-1-rename-to-dashforge" class="md-nav__link">
+  <a href="#contract-1-data-in-the-connector-api-adr-0002" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 1 — Rename to DashForge
+        Contract 1 — data in: the connector API (ADR-0002)
       
     </span>
   </a>
@@ -1403,10 +1403,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#phase-2-uispec-boundary-new-uiforge-repo" class="md-nav__link">
+  <a href="#contract-2-metadata-out-the-storage-interface" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 2 — UISpec Boundary &amp; New UIForge Repo
+        Contract 2 — metadata out: the storage interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-schema-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment ≠ schema ownership
       
     </span>
   </a>
@@ -1419,10 +1430,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#risks-and-mitigations" class="md-nav__link">
+  <a href="#consequences" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Risks and Mitigations
+        Consequences
       
     </span>
   </a>
@@ -1430,10 +1441,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#follow-on" class="md-nav__link">
+  <a href="#related" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Follow-On
+        Related
       
     </span>
   </a>
@@ -1460,63 +1471,93 @@
   
 
 
-<h1 id="plan-dashforge-rename-uiforge-split">PLAN — DashForge Rename &amp; UIForge Split<a class="headerlink" href="#plan-dashforge-rename-uiforge-split" title="Permanent link">&para;</a></h1>
-<p><strong>Initiative:</strong> <code>INIT-DASHFORGE-001</code>
-<strong>Status:</strong> Draft</p>
-<h2 id="entry-gate-must-be-true-before-phase-1-starts">Entry Gate (must be true before Phase 1 starts)<a class="headerlink" href="#entry-gate-must-be-true-before-phase-1-starts" title="Permanent link">&para;</a></h2>
-<ol>
-<li>INIT-UIFORGE-002's working-tree changes are committed across all four
-   repos (uiforge — now this repo, godolt, omniroadmap, visionstudio), pushed, and released
-   (godolt v0.3.0 tagged; temporary <code>replace</code> directives removed).</li>
-<li>INIT-UIFORGE-002 transitioned to <code>delivery_complete</code> or beyond.</li>
-<li>Disk-space condition that blocked git object writes is resolved.</li>
-</ol>
-<p>Rationale: a mass mechanical rename mixed into substantive uncommitted diffs
-makes both unreviewable; and the rename touches the same files the pending
-commits do.</p>
-<h2 id="build-order">Build Order<a class="headerlink" href="#build-order" title="Permanent link">&para;</a></h2>
-<h3 id="phase-1-rename-to-dashforge">Phase 1 — Rename to DashForge<a class="headerlink" href="#phase-1-rename-to-dashforge" title="Permanent link">&para;</a></h3>
-<ol>
-<li>GitHub rename <code>plexusone/uiforge</code> → <code>plexusone/dashforge</code>; move local
-   checkout to <code>~/go/src/github.com/plexusone/dashforge</code>; update remotes and
-   the VisionStudio registry (repoint/retire old entry, fix new entry's
-   path).</li>
-<li>Module path rewrite (<code>go.mod</code> + all imports), binary renames
-   (<code>cmd/dashforge-server</code>, <code>cmd/dashforge</code>), <code>.gitignore</code> fix, help text.</li>
-<li>Frontend and docs rebrand: builder package/branding (UF → DF mark), README,
-   mkdocs, examples.</li>
-<li>Consumers: omniroadmap imports/replace → dashforge (cross-repo
-   <code>RMI-OMNIROADMAP-011</code>); org docs sweep.</li>
-<li><strong>Verification gate</strong>: ecosystem-wide grep sweep (no live
-   <code>plexusone/uiforge</code> references outside historical docs), remotes checked,
-   CI green under the new name.</li>
-</ol>
-<p><strong>Exit criteria:</strong> <code>dashforge-server serve</code> works identically; all consumers
-build; gate checklist recorded in the RMI's handoff notes.</p>
-<h3 id="phase-2-uispec-boundary-new-uiforge-repo">Phase 2 — UISpec Boundary &amp; New UIForge Repo<a class="headerlink" href="#phase-2-uispec-boundary-new-uiforge-repo" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Boundary inventory doc: per-package classification (dashforge-core vs
-   uiforge-extract) with dependency directions.</li>
-<li>Create fresh <code>plexusone/uiforge</code> (retires the redirect — depends on the
-   Phase 1 gate) seeded with component-platform PRD/TRD and standard
-   scaffolding.</li>
-<li>First extraction: UISpec/PageSpec types + schema generation into the new
-   uiforge; dashforge consumes as a dependency. Further extraction items are
-   logged in the new repo's own roadmap as they are sized.</li>
-</ol>
-<p><strong>Exit criteria:</strong> new uiforge builds and tests standalone; dashforge imports
-at least one extracted package; boundary doc merged in both repos.</p>
-<h2 id="risks-and-mitigations">Risks and Mitigations<a class="headerlink" href="#risks-and-mitigations" title="Permanent link">&para;</a></h2>
-<p>See TRD Risks: redirect reuse trap (gated), uncommitted-work collision
-(entry gate), module proxy residue (accepted), historical tracking IDs
-(immutable by policy).</p>
-<h2 id="follow-on">Follow-On<a class="headerlink" href="#follow-on" title="Permanent link">&para;</a></h2>
+<h1 id="adr-0004-dashforge-embedding-contract-embed-the-ui-not-the-tables">ADR-0004: DashForge Embedding Contract — Embed the UI, Not the Tables<a class="headerlink" href="#adr-0004-dashforge-embedding-contract-embed-the-ui-not-the-tables" title="Permanent link">&para;</a></h1>
+<p><strong>Status:</strong> Accepted — 2026-08-24
+<strong>Scope:</strong> dashforge engine, compass (embedding host), any OEM/embedded host
+<strong>Builds on:</strong> ADR-0001 (domain-free engine), ADR-0002 (connector tiers), compass ADR-0001 (compass owns the store)</p>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
+<p>DashForge has two use cases:</p>
 <ul>
-<li><code>INIT-DASHFORGE-003</code> — DashForge Cloud &amp; workspace sync (per-workspace Dolt
-  remotes via godolt; control plane; hosted server). Deliberately sequenced
-  after the rename so cloud never launches under a transitional name.</li>
-<li>New uiforge repo's own initiative for the component-platform roadmap once
-  the boundary doc lands.</li>
+<li><strong>Standalone, arms-length</strong> — a Metabase/Looker/Tableau-style end-user app
+  that connects to independent data sources.</li>
+<li><strong>Embedded / OEM</strong> — a GoodData-style engine embedded inside another product,
+  giving that product customizable analytics.</li>
+</ul>
+<p>For our own use we want the <strong>embedded</strong> case: compass embeds DashForge so
+compass gets customizable analytics over its prioritization/portfolio data.
+Per compass ADR-0001, compass owns the single DoltDB. The risk in embedding is that the
+host stops treating DashForge as an engine with seams and starts treating it as
+a pile of tables — reaching directly into DashForge's dashboard/question schema.
+That fuses the two products: DashForge can no longer version, upgrade, or ship
+standalone independently, and the OEM story collapses.</p>
+<p>The requirement, stated plainly: <strong>the integration between dashforge and compass
+must be via integration points even when the dashforge UI is embedded in
+compass.</strong> Embedding the UI is a rendering detail; it must not merge the data
+ownership.</p>
+<h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
+<p>DashForge is embedded through <strong>two contracts and nothing else</strong> — never through
+shared schema. Owning the <em>deployment</em> (one DoltDB, one process) does not mean
+owning DashForge's <em>schema</em>.</p>
+<h3 id="contract-1-data-in-the-connector-api-adr-0002">Contract 1 — data in: the connector API (ADR-0002)<a class="headerlink" href="#contract-1-data-in-the-connector-api-adr-0002" title="Permanent link">&para;</a></h3>
+<p>The host exposes its data to DashForge as an analytics <strong>source</strong>, through the
+same connector mechanism every other source uses:</p>
+<ul>
+<li>compass registers a <strong>compass connector</strong> (compass ADR-0001) — Tier 2 in-process, or
+  Tier 3 over the published HTTP contract — surfacing canonical initiatives plus
+  scores/portfolio as a <code>dashboardir.AnalyticsCatalog</code>.</li>
+<li>DashForge reads it exactly as it reads any source. No special "embedded" data
+  path; the embedded host is just a connector.</li>
+</ul>
+<h3 id="contract-2-metadata-out-the-storage-interface">Contract 2 — metadata out: the storage interface<a class="headerlink" href="#contract-2-metadata-out-the-storage-interface" title="Permanent link">&para;</a></h3>
+<p>DashForge's analytics <strong>metadata</strong> — saved dashboards, saved Questions, the
+data-source registry, chart specs — is reached through a <strong>storage interface</strong>,
+not shared tables:</p>
+<ul>
+<li>DashForge defines a metadata-store abstraction (save/load dashboards,
+  Questions, source configs).</li>
+<li><strong>Standalone</strong>: a default DoltDB-backed implementation → DashForge is a
+  self-contained Metabase.</li>
+<li><strong>Embedded in compass</strong>: compass either supplies its own implementation of the
+  interface, or points DashForge's default implementation at compass's Dolt
+  server as a <strong>separate database</strong>. Either way, compass never reads or writes
+  DashForge's schema directly.</li>
+</ul>
+<p>This mirrors the seams already in the codebase — the connector registry
+(ADR-0002) and the OmniVault <code>dsnRef</code> resolver: an interface with a default
+implementation, overridable by the host. It is the same move applied to
+persistence.</p>
+<h3 id="deployment-schema-ownership">Deployment ≠ schema ownership<a class="headerlink" href="#deployment-schema-ownership" title="Permanent link">&para;</a></h3>
+<p>Logical ownership and physical instances are separate concerns. Dolt serves
+multiple databases per server, so the embedded compass product can run <strong>one
+Dolt server</strong> hosting separate databases — e.g. <code>compass</code> (canonical +
+prioritization, compass ADR-0001) and <code>dashforge_meta</code> (DashForge's metadata store) —
+with distinct schemas and owners but a single process to operate. Three logical
+stores do not imply three deployments.</p>
+<h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>The same DashForge binary/library serves both use cases</strong> with no fork: the
+  standalone app and the embedded engine differ only in which connector is
+  registered and which storage implementation is bound.</li>
+<li><strong>DashForge keeps independent versioning and upgrades</strong> when embedded, because
+  compass depends on its interfaces, not its schema.</li>
+<li><strong>New work: the metadata storage interface.</strong> Today DashForge persists
+  dashboards/Questions/source configs directly (<code>.dashforge/*.json</code> or its ent
+  metadata DB). That direct persistence must be factored behind the storage
+  interface so a host can substitute or redirect it. This is the primary
+  implementation cost of this ADR.</li>
+<li><strong>Credentials stay OmniVault references</strong> across the seam (ADR-0002); the host
+  supplies secret references, never resolved DSNs, and DashForge never returns
+  resolved DSNs/tokens to the browser.</li>
+<li><strong>Authorization stays catalog-keyed</strong> (ADR-0002): dataset/field → SpiceDB
+  resource mapping keys off the catalog, so it is unaffected by whether the
+  catalog arrived from a standalone source or an embedding host.</li>
+</ul>
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<ul>
+<li>ADR-0001 — domain-free engine.</li>
+<li>ADR-0002 — connector tiers; Contract 1 is that mechanism.</li>
+<li>compass ADR-0001 — compass owns the single DoltDB; the connector target and the
+  embedding host are compass.</li>
 </ul>
 
 
@@ -1589,10 +1630,10 @@ at least one extracted package; boundary doc merged in both repos.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

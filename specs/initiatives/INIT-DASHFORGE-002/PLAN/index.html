@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/dashforge/specs/initiatives/INIT-DASHFORGE-001/PLAN/">
+        <link rel="canonical" href="https://plexusone.github.io/dashforge/specs/initiatives/INIT-DASHFORGE-002/PLAN/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>PLAN — DashForge Rename & UIForge Split - DashForge</title>
+        <title>PLAN — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract - DashForge</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#plan-dashforge-rename-uiforge-split" class="md-skip">
+        <a href="#plan-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PLAN — DashForge Rename &amp; UIForge Split
+              PLAN — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract
             
           </span>
         </div>
@@ -1369,17 +1369,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#entry-gate-must-be-true-before-phase-1-starts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Entry Gate (must be true before Phase 1 starts)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#build-order" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1392,10 +1381,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#phase-1-rename-to-dashforge" class="md-nav__link">
+  <a href="#phase-1-tier-1-generic-sql-connector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 1 — Rename to DashForge
+        Phase 1 — Tier 1: generic sql connector
       
     </span>
   </a>
@@ -1403,10 +1392,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#phase-2-uispec-boundary-new-uiforge-repo" class="md-nav__link">
+  <a href="#phase-2-tier-3-dashforgespec-http-connector-reference-provider" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 2 — UISpec Boundary &amp; New UIForge Repo
+        Phase 2 — Tier 3: dashforgespec + http connector + reference provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-tier-4-backlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — Tier 4 (backlog)
       
     </span>
   </a>
@@ -1460,63 +1460,60 @@
   
 
 
-<h1 id="plan-dashforge-rename-uiforge-split">PLAN — DashForge Rename &amp; UIForge Split<a class="headerlink" href="#plan-dashforge-rename-uiforge-split" title="Permanent link">&para;</a></h1>
-<p><strong>Initiative:</strong> <code>INIT-DASHFORGE-001</code>
+<h1 id="plan-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract">PLAN — Connector Extensibility — Protocol Drivers and the Analytics Provider Contract<a class="headerlink" href="#plan-connector-extensibility-protocol-drivers-and-the-analytics-provider-contract" title="Permanent link">&para;</a></h1>
+<p><strong>Initiative:</strong> <code>INIT-DASHFORGE-002</code>
 <strong>Status:</strong> Draft</p>
-<h2 id="entry-gate-must-be-true-before-phase-1-starts">Entry Gate (must be true before Phase 1 starts)<a class="headerlink" href="#entry-gate-must-be-true-before-phase-1-starts" title="Permanent link">&para;</a></h2>
-<ol>
-<li>INIT-UIFORGE-002's working-tree changes are committed across all four
-   repos (uiforge — now this repo, godolt, omniroadmap, visionstudio), pushed, and released
-   (godolt v0.3.0 tagged; temporary <code>replace</code> directives removed).</li>
-<li>INIT-UIFORGE-002 transitioned to <code>delivery_complete</code> or beyond.</li>
-<li>Disk-space condition that blocked git object writes is resolved.</li>
-</ol>
-<p>Rationale: a mass mechanical rename mixed into substantive uncommitted diffs
-makes both unreviewable; and the rename touches the same files the pending
-commits do.</p>
 <h2 id="build-order">Build Order<a class="headerlink" href="#build-order" title="Permanent link">&para;</a></h2>
-<h3 id="phase-1-rename-to-dashforge">Phase 1 — Rename to DashForge<a class="headerlink" href="#phase-1-rename-to-dashforge" title="Permanent link">&para;</a></h3>
+<h3 id="phase-1-tier-1-generic-sql-connector">Phase 1 — Tier 1: generic <code>sql</code> connector<a class="headerlink" href="#phase-1-tier-1-generic-sql-connector" title="Permanent link">&para;</a></h3>
 <ol>
-<li>GitHub rename <code>plexusone/uiforge</code> → <code>plexusone/dashforge</code>; move local
-   checkout to <code>~/go/src/github.com/plexusone/dashforge</code>; update remotes and
-   the VisionStudio registry (repoint/retire old entry, fix new entry's
-   path).</li>
-<li>Module path rewrite (<code>go.mod</code> + all imports), binary renames
-   (<code>cmd/dashforge-server</code>, <code>cmd/dashforge</code>), <code>.gitignore</code> fix, help text.</li>
-<li>Frontend and docs rebrand: builder package/branding (UF → DF mark), README,
-   mkdocs, examples.</li>
-<li>Consumers: omniroadmap imports/replace → dashforge (cross-repo
-   <code>RMI-OMNIROADMAP-011</code>); org docs sweep.</li>
-<li><strong>Verification gate</strong>: ecosystem-wide grep sweep (no live
-   <code>plexusone/uiforge</code> references outside historical docs), remotes checked,
-   CI green under the new name.</li>
+<li><code>sql</code> connector core: driver selection from resolved DSN, catalog via
+   <code>INFORMATION_SCHEMA</code> introspection (Dolt/MySQL + Postgres), registered as
+   <code>"sql"</code> in the engine.</li>
+<li>Query path: dialect <code>"sql"</code> execution with read-only allowlist, LIMIT
+   clamp, sanitized errors.</li>
+<li>Unify with the legacy <code>datasource/</code> providers: one connection layer, the
+   dashboard-scoped feature preserved.</li>
 </ol>
-<p><strong>Exit criteria:</strong> <code>dashforge-server serve</code> works identically; all consumers
-build; gate checklist recorded in the RMI's handoff notes.</p>
-<h3 id="phase-2-uispec-boundary-new-uiforge-repo">Phase 2 — UISpec Boundary &amp; New UIForge Repo<a class="headerlink" href="#phase-2-uispec-boundary-new-uiforge-repo" title="Permanent link">&para;</a></h3>
+<p><strong>Exit criteria:</strong> a Dolt database added purely via source configuration is
+browsable in the schema browser and queryable end-to-end; engine tests green
+against a throwaway dolt sql-server.</p>
+<h3 id="phase-2-tier-3-dashforgespec-http-connector-reference-provider">Phase 2 — Tier 3: <code>dashforgespec</code> + <code>http</code> connector + reference provider<a class="headerlink" href="#phase-2-tier-3-dashforgespec-http-connector-reference-provider" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Boundary inventory doc: per-package classification (dashforge-core vs
-   uiforge-extract) with dependency directions.</li>
-<li>Create fresh <code>plexusone/uiforge</code> (retires the redirect — depends on the
-   Phase 1 gate) seeded with component-platform PRD/TRD and standard
-   scaffolding.</li>
-<li>First extraction: UISpec/PageSpec types + schema generation into the new
-   uiforge; dashforge consumes as a dependency. Further extraction items are
-   logged in the new repo's own roadmap as they are sized.</li>
+<li><code>dashforgespec</code> package: contract/envelope/handshake types, Go client,
+   JSON Schema generation (<code>gen/</code> + <code>tools.go</code>), <code>SPEC.md</code>, and the
+   dependency-rule test (imports ⊆ {dashboardir, stdlib}).</li>
+<li><code>conformance/</code> provider test-kit.</li>
+<li>Generic <code>http</code> connector in the engine, delegating to
+   <code>dashforgespec.Client</code>.</li>
+<li>Cross-repo: omniroadmap serves <code>/catalog</code> + <code>/query</code>, passing the
+   conformance kit; verify stock <code>dashforge-server</code> + an <code>http</code> source
+   replaces the composing binary.</li>
 </ol>
-<p><strong>Exit criteria:</strong> new uiforge builds and tests standalone; dashforge imports
-at least one extracted package; boundary doc merged in both repos.</p>
+<p><strong>Exit criteria:</strong> PRD success criteria for Tier 3; schemas schemakit-lint
+clean; conformance kit green against omniroadmap.</p>
+<h3 id="phase-3-tier-4-backlog">Phase 3 — Tier 4 (backlog)<a class="headerlink" href="#phase-3-tier-4-backlog" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Metadata-table convention as a <code>SPEC.md</code> appendix + <code>sql</code>-connector
+   preference logic. Scheduled only when a SQL-only app needs it.</li>
+</ol>
 <h2 id="risks-and-mitigations">Risks and Mitigations<a class="headerlink" href="#risks-and-mitigations" title="Permanent link">&para;</a></h2>
-<p>See TRD Risks: redirect reuse trap (gated), uncommitted-work collision
-(entry gate), module proxy residue (accepted), historical tracking IDs
-(immutable by policy).</p>
+<ul>
+<li><strong>Spec churn after extraction</strong> — mitigated by the dependency rule + a
+  <code>ContractVersion</code> handshake from day one; additive-only within a major.</li>
+<li><strong>Raw-SQL safety on Tier 1</strong> — statement allowlist and clamps from the
+  first commit; no GrokifyQL→SQL compilation promised in this initiative.</li>
+<li><strong>Double SQL stacks</strong> (datasource/ vs sql connector) — unification is an
+  explicit RMI, not an afterthought.</li>
+<li><strong>Parallel-session collisions</strong> (active repo) — each RMI lands as its own
+  scoped commit set; check tree state before starting.</li>
+</ul>
 <h2 id="follow-on">Follow-On<a class="headerlink" href="#follow-on" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>INIT-DASHFORGE-003</code> — DashForge Cloud &amp; workspace sync (per-workspace Dolt
-  remotes via godolt; control plane; hosted server). Deliberately sequenced
-  after the rename so cloud never launches under a transitional name.</li>
-<li>New uiforge repo's own initiative for the component-platform roadmap once
-  the boundary doc lands.</li>
+<li><code>INIT-DASHFORGE-003</code> — DashForge Cloud &amp; workspace sync (renumbered from
+  -002); consumes Tier 3 for hosted-to-customer-provider connectivity.</li>
+<li>Extraction of dashforgespec (+ dashboardir) to a standalone spec repo when
+  a third-party implementer appears.</li>
+<li>GrokifyQL→SQL compilation for Tier 1 sources.</li>
 </ul>
 
 
