@@ -3,7 +3,6 @@ module github.com/plexusone/dashforge
 go 1.26.6
 
 exclude (
-
 	// KimMachineGun/automemlimit v1.0.0 removed memlimit.SetGoMemLimitWithOpts,
 	// breaking the build of jzelinskie/cobrautil/v2/cobraproclimits (pinned to
 	// an unreleased pseudo-version that still calls it). `go get -u ./...`
@@ -35,7 +34,7 @@ require (
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/google/uuid v1.6.0
 	github.com/grokify/godolt v0.3.0
-	github.com/jackc/pgx/v5 v5.10.0
+	github.com/jackc/pgx/v5 v5.11.0
 	github.com/lib/pq v1.12.3
 	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/plexusone/omnillm v0.17.0
