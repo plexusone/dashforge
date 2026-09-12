@@ -3,7 +3,6 @@ module github.com/plexusone/dashforge
 go 1.26.6
 
 exclude (
-
 	// KimMachineGun/automemlimit v1.0.0 removed memlimit.SetGoMemLimitWithOpts,
 	// breaking the build of jzelinskie/cobrautil/v2/cobraproclimits (pinned to
 	// an unreleased pseudo-version that still calls it). `go get -u ./...`
@@ -43,7 +42,7 @@ require (
 	github.com/plexusone/omnivault v0.5.0
 	github.com/plexusone/systemforge v0.10.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/oauth2 v0.36.0
+	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
