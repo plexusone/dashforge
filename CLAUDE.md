@@ -1,6 +1,6 @@
 # CLAUDE.md — dashforge
 
-DashForge is a specification-driven UI composition platform. JSON specifications (UISpec) are the primary artifact — Go types are the source of truth, React renders them.
+DashForge is a dashboards and analytics application built on UIForge (`github.com/plexusone/uiforge`), the specification-driven UI composition platform extracted from this repo. UISpec types, the component registry, and the runtime engines are consumed from uiforge; this repo owns the dashboard IR, analytics engine, server, and builder UI.
 
 ## Specs
 
@@ -16,7 +16,7 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 - **Go module:** `github.com/plexusone/dashforge` — renamed back from `uiforge` in v0.6.0 (the project was `dashforge` through v0.3.0, `uiforge` for v0.4.0–v0.5.0). Old versions stay importable under the path they were tagged with. Initiative/RMI IDs are permanent and keep their era's slug: `INIT-UIFORGE-*`/`RMI-UIFORGE-*` and `INIT-DASHFORGE-*`/`RMI-DASHFORGE-*` both remain valid — never rewrite one into the other.
 - **ORM:** Ent (`entgo.io/ent`) for any persistence needs
 - **CLI:** Cobra (`github.com/spf13/cobra`)
-- **Frontend:** React + TypeScript (in `ts/` and `builder/`)
+- **Frontend:** React + TypeScript (in `builder/`); PageSpec rendering via the npm packages `@plexusone/uiforge-renderer` / `@plexusone/uiforge-renderer-lit`
 - **JSON Schema:** generated from Go types via `invopop/jsonschema`, linted with `schemakit` (formerly schemago/schemalint)
 - **Query safety:** GrokifyQL for saved Questions and analytics queries
 - **Authorization:** SystemForge `authz.Authorizer`, with SpiceDB mode for fine-grained permissions
@@ -58,13 +58,12 @@ Design decisions are documented in `docs/specs/` — read before implementing:
 - **`cube/` has no lint/typecheck/format tooling, by design.** It's a thin
   Cube.js semantic-layer service directory (`@cubejs-backend/*` deps only,
   `build` script is a no-op echo) — it was never meant to be a
-  typechecked/linted TS app like `builder/` or `renderer/`. `atrelease
+  typechecked/linted TS app like `builder/`. `atrelease
   release`'s validation auto-detects it as a TS project anyway (it has
   `.ts` files) and fails on missing eslint config / no `tsc`. This is a
   false positive, not real debt — don't add tooling to `cube/` to silence
   it; run `atrelease release <version> --skip-checks` instead (after
-  manually verifying `go build`/`go test`/`golangci-lint`/`builder/` and
-  `renderer/`'s own lint+format are actually clean).
+  manually verifying `go build`/`go test`/`golangci-lint`/`builder/` are actually clean).
 - **CI can't run a newer Go patch than what it cached.** The shared
   `plexusone/.github` reusable `go-ci.yaml` (`actions/setup-go@v7`)
   resolves `go-version: "1.26.x"` to whatever patch it last cached and

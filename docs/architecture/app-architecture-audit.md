@@ -40,6 +40,8 @@ package** and no `compose.Feature` seam yet.
 
 ## Package → target mapping
 
+> **Superseded in part by the uiforge extraction (RMI-DASHFORGE-007):** `uispec/`, `registry/`, `pkg/{diff,expression,interaction,state}/`, the page/component halves of `schema/`, and the TS `renderer/` now live in `github.com/plexusone/uiforge`, consumed as a module dependency (v0.1.0+). Rows below describing those packages are historical. `bridge/` remains in-repo as the DashboardIR → UISpec adapter, and `schema/` retains only the dashboard schema.
+
 | Current package | Target | Slug | Justification |
 | --- | --- | --- | --- |
 | `uispec/` | **Public library (IR)** — keep at module root | — | Canonical UISpec JSON type system (`PageSpec`, `ComponentInstance`, layout, theme, bindings). The product's public SDK surface; imported by `renderer`, `builder`, `bridge`, and external consumers. Shared domain vocabulary, not a vertical. |
@@ -164,7 +166,7 @@ DTO pass first.
 - `internal/server/middleware/` → `internal/platform/http`
 - `internal/authz/` → `internal/foundation/authz`
 - `internal/server/auth/` → `internal/foundation/authn`
-- `pkg/*`, `schema/`, `viewer/`, `builder/`, `uispec/`, `registry/` stay put.
+- `schema/` (dashboard-only), `viewer/`, `builder/` stay put. (`pkg/*`, `uispec/`, `registry/` have moved to uiforge.)
 
 **Tangled (higher risk, sequence carefully):**
 
