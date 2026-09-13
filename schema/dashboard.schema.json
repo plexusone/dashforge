@@ -307,6 +307,12 @@
         "dataSourceId": {
           "type": "string"
         },
+        "questionId": {
+          "type": "string"
+        },
+        "visualization": {
+          "type": "object"
+        },
         "transform": {
           "items": {
             "$ref": "#/$defs/Transform"

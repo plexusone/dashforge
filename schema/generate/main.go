@@ -12,8 +12,6 @@ import (
 	"github.com/invopop/jsonschema"
 
 	"github.com/plexusone/dashforge/dashboardir"
-	"github.com/plexusone/dashforge/registry"
-	"github.com/plexusone/dashforge/uispec"
 )
 
 type schemaTarget struct {
@@ -32,20 +30,6 @@ func main() {
 			Title:       "Dashboard",
 			Description: "DashForge dashboard definition (DashboardIR)",
 			OutputFile:  "schema/dashboard.schema.json",
-		},
-		{
-			Type:        &uispec.PageSpec{},
-			ID:          "https://github.com/plexusone/dashforge/schema/page.schema.json",
-			Title:       "PageSpec",
-			Description: "DashForge page specification — the canonical JSON IR for declarative UI composition",
-			OutputFile:  "schema/page.schema.json",
-		},
-		{
-			Type:        &registry.ComponentSpec{},
-			ID:          "https://github.com/plexusone/dashforge/schema/component.schema.json",
-			Title:       "ComponentSpec",
-			Description: "DashForge component manifest — describes a registered component's interface",
-			OutputFile:  "schema/component.schema.json",
 		},
 	}
 
