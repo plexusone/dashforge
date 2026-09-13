@@ -469,6 +469,8 @@ github.com/plexusone/omnivault v0.5.0 h1:7oZwP1KNS+XQ1ksoZoKnLS9PV0TQ93b5NEuxO0T
 github.com/plexusone/omnivault v0.5.0/go.mod h1:LQNyI6gTygb3ht4yLhLpHIdcOVALOTGnaO1oJn6+2KE=
 github.com/plexusone/systemforge v0.10.0 h1:vZQUxSzKDF+lT1oTE28VzZKqherD8CYd7VQ2aUKuC3Q=
 github.com/plexusone/systemforge v0.10.0/go.mod h1:PEwk4W/8iZyfeNAwk/ynHPE7ksZ1s2rPKOQhZTmUZWM=
+github.com/plexusone/uiforge v0.1.0 h1:dcGbDSDm/o74YkeTqO6YfYP+oaYyvVgqjJL2uuBAFCk=
+github.com/plexusone/uiforge v0.1.0/go.mod h1:XZdNUzvfhU23FNlHvlkUYTfDsDVjuERX7pUYsNYvXB8=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 h1:o4JXh1EVt9k/+g42oCprj/FisM4qX9L3sZB3upGN2ZU=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55/go.mod h1:OmDBASR4679mdNQnz2pUhc2G8CO2JrUAVFDRBDP/hJE=

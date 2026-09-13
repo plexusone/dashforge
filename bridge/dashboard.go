@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/plexusone/dashforge/dashboardir"
-	"github.com/plexusone/dashforge/uispec"
+	"github.com/plexusone/uiforge/uispec"
 )
 
 // DashboardToPageSpec converts a DashboardIR Dashboard to a UISpec PageSpec

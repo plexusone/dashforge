@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/plexusone/dashforge/dashboardir"
-	"github.com/plexusone/dashforge/uispec"
+	"github.com/plexusone/uiforge/uispec"
 )
 
 func TestDashboardToPageSpec(t *testing.T) {

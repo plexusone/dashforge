@@ -46,6 +46,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
+require github.com/plexusone/uiforge v0.1.0
+
 require (
 	ariga.io/atlas v1.3.0 // indirect
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.12-20260825204119-511051f7f437.2 // indirect
