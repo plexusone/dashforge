@@ -759,7 +759,7 @@ var (
 		{Name: "capabilities", Type: field.TypeJSON, Nullable: true},
 		{Name: "allowed_scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "core_control_principal_id", Type: field.TypeUUID, Unique: true, Nullable: true},
+		{Name: "sf_principal_id", Type: field.TypeUUID, Unique: true, Nullable: true},
 		{Name: "organization_id", Type: field.TypeUUID, Nullable: true},
 	}
 	// PrincipalsTable holds the schema information for the "principals" table.
@@ -787,7 +787,7 @@ var (
 				Columns: []*schema.Column{PrincipalsColumns[11]},
 			},
 			{
-				Name:    "principal_core_control_principal_id",
+				Name:    "principal_sf_principal_id",
 				Unique:  false,
 				Columns: []*schema.Column{PrincipalsColumns[10]},
 			},
@@ -1124,7 +1124,7 @@ var (
 		{Name: "password_hash", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_url", Type: field.TypeString, Nullable: true},
 		{Name: "is_platform_admin", Type: field.TypeBool, Default: false},
-		{Name: "core_control_principal_id", Type: field.TypeUUID, Unique: true, Nullable: true},
+		{Name: "sf_principal_id", Type: field.TypeUUID, Unique: true, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
@@ -1147,7 +1147,7 @@ var (
 				Columns: []*schema.Column{UsersColumns[7]},
 			},
 			{
-				Name:    "user_core_control_principal_id",
+				Name:    "user_sf_principal_id",
 				Unique:  false,
 				Columns: []*schema.Column{UsersColumns[6]},
 			},

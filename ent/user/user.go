@@ -25,8 +25,8 @@ const (
 	FieldAvatarURL = "avatar_url"
 	// FieldIsPlatformAdmin holds the string denoting the is_platform_admin field in the database.
 	FieldIsPlatformAdmin = "is_platform_admin"
-	// FieldCoreControlPrincipalID holds the string denoting the core_control_principal_id field in the database.
-	FieldCoreControlPrincipalID = "core_control_principal_id"
+	// FieldSfPrincipalID holds the string denoting the sf_principal_id field in the database.
+	FieldSfPrincipalID = "sf_principal_id"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
 	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
@@ -56,7 +56,7 @@ var Columns = []string{
 	FieldPasswordHash,
 	FieldAvatarURL,
 	FieldIsPlatformAdmin,
-	FieldCoreControlPrincipalID,
+	FieldSfPrincipalID,
 	FieldActive,
 	FieldLastLoginAt,
 	FieldCreatedAt,
@@ -123,9 +123,9 @@ func ByIsPlatformAdmin(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsPlatformAdmin, opts...).ToFunc()
 }
 
-// ByCoreControlPrincipalID orders the results by the core_control_principal_id field.
-func ByCoreControlPrincipalID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCoreControlPrincipalID, opts...).ToFunc()
+// BySfPrincipalID orders the results by the sf_principal_id field.
+func BySfPrincipalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSfPrincipalID, opts...).ToFunc()
 }
 
 // ByActive orders the results by the active field.

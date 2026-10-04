@@ -28,8 +28,8 @@ type User struct {
 	AvatarURL string `json:"avatar_url,omitempty"`
 	// Cross-org admin access
 	IsPlatformAdmin bool `json:"is_platform_admin,omitempty"`
-	// CoreControl Principal ID for SSO
-	CoreControlPrincipalID *uuid.UUID `json:"core_control_principal_id,omitempty"`
+	// SystemAuth Principal ID for SSO
+	SfPrincipalID *uuid.UUID `json:"sf_principal_id,omitempty"`
 	// Active holds the value of the "active" field.
 	Active bool `json:"active,omitempty"`
 	// LastLoginAt holds the value of the "last_login_at" field.
@@ -67,7 +67,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldCoreControlPrincipalID:
+		case user.FieldSfPrincipalID:
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case user.FieldIsPlatformAdmin, user.FieldActive:
 			values[i] = new(sql.NullBool)
@@ -128,12 +128,12 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IsPlatformAdmin = value.Bool
 			}
-		case user.FieldCoreControlPrincipalID:
+		case user.FieldSfPrincipalID:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field core_control_principal_id", values[i])
+				return fmt.Errorf("unexpected type %T for field sf_principal_id", values[i])
 			} else if value.Valid {
-				_m.CoreControlPrincipalID = new(uuid.UUID)
-				*_m.CoreControlPrincipalID = *value.S.(*uuid.UUID)
+				_m.SfPrincipalID = new(uuid.UUID)
+				*_m.SfPrincipalID = *value.S.(*uuid.UUID)
 			}
 		case user.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -215,8 +215,8 @@ func (_m *User) String() string {
 	builder.WriteString("is_platform_admin=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsPlatformAdmin))
 	builder.WriteString(", ")
-	if v := _m.CoreControlPrincipalID; v != nil {
-		builder.WriteString("core_control_principal_id=")
+	if v := _m.SfPrincipalID; v != nil {
+		builder.WriteString("sf_principal_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

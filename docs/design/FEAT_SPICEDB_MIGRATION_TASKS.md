@@ -14,7 +14,7 @@ DashForge currently uses a simple role hierarchy in `auth.go` plus PostgreSQL RL
 
 ## Current Architecture
 
-**Authentication**: JWT + OAuth (GitHub, Google, CoreControl)
+**Authentication**: JWT + OAuth (GitHub, Google, SystemAuth)
 **Authorization**: Simple role hierarchy (admin > editor > viewer)
 **Data Isolation**: PostgreSQL RLS via `internal/server/db/rls.go`
 

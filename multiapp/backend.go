@@ -168,21 +168,21 @@ func (b *Backend) setupDatabase(ctx context.Context) error {
 // loadConfigFromEnv loads configuration from environment variables.
 func (b *Backend) loadConfigFromEnv() *server.Config {
 	return &server.Config{
-		JWTSecret:               os.Getenv("JWT_SECRET"),
-		BaseURL:                 os.Getenv("BASE_URL"),
-		GitHubClientID:          os.Getenv("GITHUB_CLIENT_ID"),
-		GitHubClientSecret:      os.Getenv("GITHUB_CLIENT_SECRET"),
-		GoogleClientID:          os.Getenv("GOOGLE_CLIENT_ID"),
-		GoogleClientSecret:      os.Getenv("GOOGLE_CLIENT_SECRET"),
-		CoreControlURL:          os.Getenv("CORECONTROL_URL"),
-		CoreControlClientID:     os.Getenv("CORECONTROL_CLIENT_ID"),
-		CoreControlClientSecret: os.Getenv("CORECONTROL_CLIENT_SECRET"),
-		CoreControlCallbackURL:  os.Getenv("CORECONTROL_CALLBACK_URL"),
-		AuthZMode:               os.Getenv("AUTHZ_MODE"),
-		SpiceDBEndpoint:         os.Getenv("SPICEDB_ENDPOINT"),
-		SpiceDBToken:            os.Getenv("SPICEDB_TOKEN"),
-		SpiceDBInsecure:         os.Getenv("SPICEDB_INSECURE") == "true",
-		DashboardDir:            os.Getenv("DASHBOARD_DIR"),
+		JWTSecret:              os.Getenv("JWT_SECRET"),
+		BaseURL:                os.Getenv("BASE_URL"),
+		GitHubClientID:         os.Getenv("GITHUB_CLIENT_ID"),
+		GitHubClientSecret:     os.Getenv("GITHUB_CLIENT_SECRET"),
+		GoogleClientID:         os.Getenv("GOOGLE_CLIENT_ID"),
+		GoogleClientSecret:     os.Getenv("GOOGLE_CLIENT_SECRET"),
+		SystemAuthURL:          os.Getenv("SYSTEMAUTH_URL"),
+		SystemAuthClientID:     os.Getenv("SYSTEMAUTH_CLIENT_ID"),
+		SystemAuthClientSecret: os.Getenv("SYSTEMAUTH_CLIENT_SECRET"),
+		SystemAuthCallbackURL:  os.Getenv("SYSTEMAUTH_CALLBACK_URL"),
+		AuthZMode:              os.Getenv("AUTHZ_MODE"),
+		SpiceDBEndpoint:        os.Getenv("SPICEDB_ENDPOINT"),
+		SpiceDBToken:           os.Getenv("SPICEDB_TOKEN"),
+		SpiceDBInsecure:        os.Getenv("SPICEDB_INSECURE") == "true",
+		DashboardDir:           os.Getenv("DASHBOARD_DIR"),
 	}
 }
 

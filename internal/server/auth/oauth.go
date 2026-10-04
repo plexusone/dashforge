@@ -21,15 +21,15 @@ import (
 
 // OAuthConfig holds OAuth provider configurations.
 type OAuthConfig struct {
-	GitHub      *oauth2.Config
-	Google      *oauth2.Config
-	CoreControl *CoreControlConfig
+	GitHub     *oauth2.Config
+	Google     *oauth2.Config
+	SystemAuth *SystemAuthConfig
 }
 
-// CoreControlConfig holds CoreControl (CoreAuth) OAuth configuration.
-type CoreControlConfig struct {
+// SystemAuthConfig holds SystemAuth OAuth configuration.
+type SystemAuthConfig struct {
 	OAuth2 *oauth2.Config
-	URL    string   // Base URL of CoreControl server
+	URL    string   // Base URL of SystemAuth server
 	Scopes []string // OAuth scopes to request
 }
 
@@ -66,9 +66,9 @@ func (h *OAuthHandler) setupRoutes() {
 	h.mux.HandleFunc("GET /api/v1/auth/google", h.handleGoogleLogin)
 	h.mux.HandleFunc("GET /api/v1/auth/google/callback", h.handleGoogleCallback)
 
-	// CoreControl OAuth
-	h.mux.HandleFunc("GET /api/v1/auth/corecontrol", h.handleCoreControlLogin)
-	h.mux.HandleFunc("GET /api/v1/auth/corecontrol/callback", h.handleCoreControlCallback)
+	// SystemAuth OAuth
+	h.mux.HandleFunc("GET /api/v1/auth/systemauth", h.handleSystemAuthLogin)
+	h.mux.HandleFunc("GET /api/v1/auth/systemauth/callback", h.handleSystemAuthCallback)
 
 	// Token endpoints
 	h.mux.HandleFunc("POST /api/v1/auth/refresh", h.handleRefreshToken)
@@ -211,11 +211,11 @@ func (h *OAuthHandler) handleOAuthCallback(w http.ResponseWriter, r *http.Reques
 	h.completeOAuthLogin(w, r, oauthUser, strings.ToLower(providerName))
 }
 
-// CoreControl OAuth handlers
+// SystemAuth OAuth handlers
 
-func (h *OAuthHandler) handleCoreControlLogin(w http.ResponseWriter, r *http.Request) {
-	if h.config.CoreControl == nil {
-		http.Error(w, "CoreControl OAuth not configured", http.StatusNotImplemented)
+func (h *OAuthHandler) handleSystemAuthLogin(w http.ResponseWriter, r *http.Request) {
+	if h.config.SystemAuth == nil {
+		http.Error(w, "SystemAuth OAuth not configured", http.StatusNotImplemented)
 		return
 	}
 
@@ -238,13 +238,13 @@ func (h *OAuthHandler) handleCoreControlLogin(w http.ResponseWriter, r *http.Req
 		MaxAge:   600,
 	})
 
-	url := h.config.CoreControl.OAuth2.AuthCodeURL(state)
+	url := h.config.SystemAuth.OAuth2.AuthCodeURL(state)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-func (h *OAuthHandler) handleCoreControlCallback(w http.ResponseWriter, r *http.Request) {
-	if h.config.CoreControl == nil {
-		http.Error(w, "CoreControl OAuth not configured", http.StatusNotImplemented)
+func (h *OAuthHandler) handleSystemAuthCallback(w http.ResponseWriter, r *http.Request) {
+	if h.config.SystemAuth == nil {
+		http.Error(w, "SystemAuth OAuth not configured", http.StatusNotImplemented)
 		return
 	}
 
@@ -266,7 +266,7 @@ func (h *OAuthHandler) handleCoreControlCallback(w http.ResponseWriter, r *http.
 
 	// Check for error
 	if errParam := r.URL.Query().Get("error"); errParam != "" {
-		h.logger.Warn("OAuth error from CoreControl",
+		h.logger.Warn("OAuth error from SystemAuth",
 			"error", errParam,
 			"description", r.URL.Query().Get("error_description"))
 		http.Error(w, "Authentication failed: "+errParam, http.StatusUnauthorized)
@@ -280,27 +280,27 @@ func (h *OAuthHandler) handleCoreControlCallback(w http.ResponseWriter, r *http.
 	}
 
 	// Exchange code for token
-	token, err := h.config.CoreControl.OAuth2.Exchange(r.Context(), code)
+	token, err := h.config.SystemAuth.OAuth2.Exchange(r.Context(), code)
 	if err != nil {
 		h.logger.Error("failed to exchange code", "error", err)
 		http.Error(w, "Failed to exchange authorization code", http.StatusInternalServerError)
 		return
 	}
 
-	// Fetch user info from CoreControl
-	userInfo, err := h.fetchCoreControlUserInfo(r.Context(), token.AccessToken)
+	// Fetch user info from SystemAuth
+	userInfo, err := h.fetchSystemAuthUserInfo(r.Context(), token.AccessToken)
 	if err != nil {
-		h.logger.Error("failed to fetch CoreControl user info", "error", err)
-		http.Error(w, "Failed to get user info from CoreControl", http.StatusInternalServerError)
+		h.logger.Error("failed to fetch SystemAuth user info", "error", err)
+		http.Error(w, "Failed to get user info from SystemAuth", http.StatusInternalServerError)
 		return
 	}
 
-	// Handle CoreControl-specific user creation/linking
-	h.completeCoreControlLogin(w, r, userInfo, token.AccessToken)
+	// Handle SystemAuth-specific user creation/linking
+	h.completeSystemAuthLogin(w, r, userInfo, token.AccessToken)
 }
 
-// CoreControlUserInfo represents user info from CoreControl's userinfo endpoint.
-type CoreControlUserInfo struct {
+// SystemAuthUserInfo represents user info from SystemAuth's userinfo endpoint.
+type SystemAuthUserInfo struct {
 	Sub               string `json:"sub"` // Principal ID (UUID)
 	Email             string `json:"email"`
 	EmailVerified     bool   `json:"email_verified"`
@@ -309,8 +309,8 @@ type CoreControlUserInfo struct {
 	Picture           string `json:"picture"`
 }
 
-func (h *OAuthHandler) fetchCoreControlUserInfo(ctx context.Context, accessToken string) (*CoreControlUserInfo, error) {
-	userInfoURL := h.config.CoreControl.URL + "/oauth/userinfo"
+func (h *OAuthHandler) fetchSystemAuthUserInfo(ctx context.Context, accessToken string) (*SystemAuthUserInfo, error) {
+	userInfoURL := h.config.SystemAuth.URL + "/oauth/userinfo"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", userInfoURL, nil)
 	if err != nil {
@@ -330,7 +330,7 @@ func (h *OAuthHandler) fetchCoreControlUserInfo(ctx context.Context, accessToken
 		return nil, fmt.Errorf("userinfo request failed with status %d", resp.StatusCode)
 	}
 
-	var userInfo CoreControlUserInfo
+	var userInfo SystemAuthUserInfo
 	if err := json.NewDecoder(resp.Body).Decode(&userInfo); err != nil {
 		return nil, err
 	}
@@ -338,7 +338,7 @@ func (h *OAuthHandler) fetchCoreControlUserInfo(ctx context.Context, accessToken
 	return &userInfo, nil
 }
 
-func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.Request, userInfo *CoreControlUserInfo, _ string) {
+func (h *OAuthHandler) completeSystemAuthLogin(w http.ResponseWriter, r *http.Request, userInfo *SystemAuthUserInfo, _ string) {
 	ctx := r.Context()
 
 	if userInfo.Email == "" {
@@ -346,8 +346,8 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// Find or create principal via CoreControl principal ID
-	p, hum, err := h.findOrCreatePrincipalViaCoreControl(ctx, userInfo)
+	// Find or create principal via SystemAuth principal ID
+	p, hum, err := h.findOrCreatePrincipalViaSystemAuth(ctx, userInfo)
 	if err != nil {
 		h.logger.Error("failed to find/create principal", "error", err, "email", userInfo.Email)
 		http.Error(w, "Failed to create user account", http.StatusInternalServerError)
@@ -386,16 +386,16 @@ func (h *OAuthHandler) completeCoreControlLogin(w http.ResponseWriter, r *http.R
 	}
 }
 
-func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, userInfo *CoreControlUserInfo) (*ent.Principal, *ent.Human, error) {
-	// Parse the CoreControl principal ID from sub claim
-	coreControlPrincipalID, err := parseUUID(userInfo.Sub)
+func (h *OAuthHandler) findOrCreatePrincipalViaSystemAuth(ctx context.Context, userInfo *SystemAuthUserInfo) (*ent.Principal, *ent.Human, error) {
+	// Parse the SystemAuth principal ID from sub claim
+	sfPrincipalID, err := parseUUID(userInfo.Sub)
 	if err != nil {
 		return nil, nil, fmt.Errorf("invalid principal ID: %w", err)
 	}
 
-	// Try to find existing principal by CoreControl principal ID
+	// Try to find existing principal by SystemAuth principal ID
 	p, err := h.client.Principal.Query().
-		Where(principal.CoreControlPrincipalIDEQ(*coreControlPrincipalID)).
+		Where(principal.SfPrincipalIDEQ(*sfPrincipalID)).
 		WithHuman().
 		Only(ctx)
 
@@ -428,10 +428,10 @@ func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, 
 	}
 
 	if !ent.IsNotFound(err) {
-		return nil, nil, fmt.Errorf("querying principal by CoreControl ID: %w", err)
+		return nil, nil, fmt.Errorf("querying principal by SystemAuth ID: %w", err)
 	}
 
-	// No principal found by CoreControl ID - check if human exists by email (for account linking)
+	// No principal found by SystemAuth ID - check if human exists by email (for account linking)
 	if userInfo.Email != "" {
 		hum, err := h.client.Human.Query().
 			Where(human.EmailEQ(userInfo.Email)).
@@ -439,15 +439,15 @@ func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, 
 			Only(ctx)
 
 		if err == nil {
-			// Human exists with this email - link principal to CoreControl
+			// Human exists with this email - link principal to SystemAuth
 			p := hum.Edges.Principal
 			p, err = h.client.Principal.UpdateOneID(p.ID).
-				SetCoreControlPrincipalID(*coreControlPrincipalID).
+				SetSfPrincipalID(*sfPrincipalID).
 				Save(ctx)
 			if err != nil {
-				return nil, nil, fmt.Errorf("linking principal to CoreControl: %w", err)
+				return nil, nil, fmt.Errorf("linking principal to SystemAuth: %w", err)
 			}
-			h.logger.Info("linked existing principal to CoreControl", "principal_id", p.ID, "core_control_id", coreControlPrincipalID)
+			h.logger.Info("linked existing principal to SystemAuth", "principal_id", p.ID, "sf_principal_id", sfPrincipalID)
 			return p, hum, nil
 		}
 
@@ -456,7 +456,7 @@ func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, 
 		}
 	}
 
-	// Create new Principal + Human with CoreControl principal ID
+	// Create new Principal + Human with SystemAuth principal ID
 	name := userInfo.Name
 	if name == "" {
 		name = userInfo.Email
@@ -467,7 +467,7 @@ func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, 
 		SetType(principal.TypeHuman).
 		SetIdentifier(userInfo.Email).
 		SetDisplayName(name).
-		SetCoreControlPrincipalID(*coreControlPrincipalID).
+		SetSfPrincipalID(*sfPrincipalID).
 		SetActive(true).
 		Save(ctx)
 	if err != nil {
@@ -487,10 +487,10 @@ func (h *OAuthHandler) findOrCreatePrincipalViaCoreControl(ctx context.Context, 
 		return nil, nil, fmt.Errorf("creating human: %w", err)
 	}
 
-	h.logger.Info("created new principal via CoreControl",
+	h.logger.Info("created new principal via SystemAuth",
 		"principal_id", p.ID,
 		"email", userInfo.Email,
-		"core_control_id", coreControlPrincipalID)
+		"sf_principal_id", sfPrincipalID)
 
 	return p, hum, nil
 }
@@ -681,16 +681,16 @@ func (h *OAuthHandler) handleMe(w http.ResponseWriter, r *http.Request) {
 
 // OAuthProviderConfig holds all OAuth provider settings.
 type OAuthProviderConfig struct {
-	GitHubClientID          string
-	GitHubClientSecret      string
-	GoogleClientID          string
-	GoogleClientSecret      string
-	CoreControlURL          string
-	CoreControlClientID     string
-	CoreControlClientSecret string
-	CoreControlCallbackURL  string
-	CoreControlScopes       []string
-	BaseURL                 string
+	GitHubClientID         string
+	GitHubClientSecret     string
+	GoogleClientID         string
+	GoogleClientSecret     string
+	SystemAuthURL          string
+	SystemAuthClientID     string
+	SystemAuthClientSecret string
+	SystemAuthCallbackURL  string
+	SystemAuthScopes       []string
+	BaseURL                string
 }
 
 // NewOAuthConfig creates OAuth configurations from provider config.
@@ -721,25 +721,25 @@ func NewOAuthConfig(pc OAuthProviderConfig) OAuthConfig {
 		}
 	}
 
-	if pc.CoreControlURL != "" && pc.CoreControlClientID != "" && pc.CoreControlClientSecret != "" {
-		scopes := pc.CoreControlScopes
+	if pc.SystemAuthURL != "" && pc.SystemAuthClientID != "" && pc.SystemAuthClientSecret != "" {
+		scopes := pc.SystemAuthScopes
 		if len(scopes) == 0 {
 			scopes = []string{"openid", "profile", "email"}
 		}
-		callbackURL := pc.CoreControlCallbackURL
+		callbackURL := pc.SystemAuthCallbackURL
 		if callbackURL == "" {
-			callbackURL = pc.BaseURL + "/api/v1/auth/corecontrol/callback"
+			callbackURL = pc.BaseURL + "/api/v1/auth/systemauth/callback"
 		}
-		cfg.CoreControl = &CoreControlConfig{
-			URL:    pc.CoreControlURL,
+		cfg.SystemAuth = &SystemAuthConfig{
+			URL:    pc.SystemAuthURL,
 			Scopes: scopes,
 			OAuth2: &oauth2.Config{
-				ClientID:     pc.CoreControlClientID,
-				ClientSecret: pc.CoreControlClientSecret,
+				ClientID:     pc.SystemAuthClientID,
+				ClientSecret: pc.SystemAuthClientSecret,
 				RedirectURL:  callbackURL,
 				Endpoint: oauth2.Endpoint{
-					AuthURL:  pc.CoreControlURL + "/oauth/authorize",
-					TokenURL: pc.CoreControlURL + "/oauth/token",
+					AuthURL:  pc.SystemAuthURL + "/oauth/authorize",
+					TokenURL: pc.SystemAuthURL + "/oauth/token",
 				},
 				Scopes: scopes,
 			},

@@ -81,9 +81,9 @@ func IsPlatformAdmin(v bool) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldIsPlatformAdmin, v))
 }
 
-// CoreControlPrincipalID applies equality check predicate on the "core_control_principal_id" field. It's identical to CoreControlPrincipalIDEQ.
-func CoreControlPrincipalID(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCoreControlPrincipalID, v))
+// SfPrincipalID applies equality check predicate on the "sf_principal_id" field. It's identical to SfPrincipalIDEQ.
+func SfPrincipalID(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSfPrincipalID, v))
 }
 
 // Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
@@ -406,54 +406,54 @@ func IsPlatformAdminNEQ(v bool) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldIsPlatformAdmin, v))
 }
 
-// CoreControlPrincipalIDEQ applies the EQ predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDEQ(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDEQ applies the EQ predicate on the "sf_principal_id" field.
+func SfPrincipalIDEQ(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDNEQ applies the NEQ predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDNEQ(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDNEQ applies the NEQ predicate on the "sf_principal_id" field.
+func SfPrincipalIDNEQ(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDIn applies the In predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDIn(vs ...uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldIn(FieldCoreControlPrincipalID, vs...))
+// SfPrincipalIDIn applies the In predicate on the "sf_principal_id" field.
+func SfPrincipalIDIn(vs ...uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSfPrincipalID, vs...))
 }
 
-// CoreControlPrincipalIDNotIn applies the NotIn predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDNotIn(vs ...uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldCoreControlPrincipalID, vs...))
+// SfPrincipalIDNotIn applies the NotIn predicate on the "sf_principal_id" field.
+func SfPrincipalIDNotIn(vs ...uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSfPrincipalID, vs...))
 }
 
-// CoreControlPrincipalIDGT applies the GT predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDGT(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldGT(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDGT applies the GT predicate on the "sf_principal_id" field.
+func SfPrincipalIDGT(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDGTE applies the GTE predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDGTE(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDGTE applies the GTE predicate on the "sf_principal_id" field.
+func SfPrincipalIDGTE(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDLT applies the LT predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDLT(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldLT(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDLT applies the LT predicate on the "sf_principal_id" field.
+func SfPrincipalIDLT(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDLTE applies the LTE predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDLTE(v uuid.UUID) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldCoreControlPrincipalID, v))
+// SfPrincipalIDLTE applies the LTE predicate on the "sf_principal_id" field.
+func SfPrincipalIDLTE(v uuid.UUID) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSfPrincipalID, v))
 }
 
-// CoreControlPrincipalIDIsNil applies the IsNil predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldCoreControlPrincipalID))
+// SfPrincipalIDIsNil applies the IsNil predicate on the "sf_principal_id" field.
+func SfPrincipalIDIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldSfPrincipalID))
 }
 
-// CoreControlPrincipalIDNotNil applies the NotNil predicate on the "core_control_principal_id" field.
-func CoreControlPrincipalIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldCoreControlPrincipalID))
+// SfPrincipalIDNotNil applies the NotNil predicate on the "sf_principal_id" field.
+func SfPrincipalIDNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldSfPrincipalID))
 }
 
 // ActiveEQ applies the EQ predicate on the "active" field.

@@ -118,23 +118,23 @@ func (_u *UserUpdate) SetNillableIsPlatformAdmin(v *bool) *UserUpdate {
 	return _u
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_u *UserUpdate) SetCoreControlPrincipalID(v uuid.UUID) *UserUpdate {
-	_u.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_u *UserUpdate) SetSfPrincipalID(v uuid.UUID) *UserUpdate {
+	_u.mutation.SetSfPrincipalID(v)
 	return _u
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableCoreControlPrincipalID(v *uuid.UUID) *UserUpdate {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableSfPrincipalID(v *uuid.UUID) *UserUpdate {
 	if v != nil {
-		_u.SetCoreControlPrincipalID(*v)
+		_u.SetSfPrincipalID(*v)
 	}
 	return _u
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (_u *UserUpdate) ClearCoreControlPrincipalID() *UserUpdate {
-	_u.mutation.ClearCoreControlPrincipalID()
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (_u *UserUpdate) ClearSfPrincipalID() *UserUpdate {
+	_u.mutation.ClearSfPrincipalID()
 	return _u
 }
 
@@ -301,11 +301,11 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.IsPlatformAdmin(); ok {
 		_spec.SetField(user.FieldIsPlatformAdmin, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(user.FieldCoreControlPrincipalID, field.TypeUUID, value)
+	if value, ok := _u.mutation.SfPrincipalID(); ok {
+		_spec.SetField(user.FieldSfPrincipalID, field.TypeUUID, value)
 	}
-	if _u.mutation.CoreControlPrincipalIDCleared() {
-		_spec.ClearField(user.FieldCoreControlPrincipalID, field.TypeUUID)
+	if _u.mutation.SfPrincipalIDCleared() {
+		_spec.ClearField(user.FieldSfPrincipalID, field.TypeUUID)
 	}
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(user.FieldActive, field.TypeBool, value)
@@ -472,23 +472,23 @@ func (_u *UserUpdateOne) SetNillableIsPlatformAdmin(v *bool) *UserUpdateOne {
 	return _u
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_u *UserUpdateOne) SetCoreControlPrincipalID(v uuid.UUID) *UserUpdateOne {
-	_u.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_u *UserUpdateOne) SetSfPrincipalID(v uuid.UUID) *UserUpdateOne {
+	_u.mutation.SetSfPrincipalID(v)
 	return _u
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableCoreControlPrincipalID(v *uuid.UUID) *UserUpdateOne {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableSfPrincipalID(v *uuid.UUID) *UserUpdateOne {
 	if v != nil {
-		_u.SetCoreControlPrincipalID(*v)
+		_u.SetSfPrincipalID(*v)
 	}
 	return _u
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (_u *UserUpdateOne) ClearCoreControlPrincipalID() *UserUpdateOne {
-	_u.mutation.ClearCoreControlPrincipalID()
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (_u *UserUpdateOne) ClearSfPrincipalID() *UserUpdateOne {
+	_u.mutation.ClearSfPrincipalID()
 	return _u
 }
 
@@ -685,11 +685,11 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if value, ok := _u.mutation.IsPlatformAdmin(); ok {
 		_spec.SetField(user.FieldIsPlatformAdmin, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(user.FieldCoreControlPrincipalID, field.TypeUUID, value)
+	if value, ok := _u.mutation.SfPrincipalID(); ok {
+		_spec.SetField(user.FieldSfPrincipalID, field.TypeUUID, value)
 	}
-	if _u.mutation.CoreControlPrincipalIDCleared() {
-		_spec.ClearField(user.FieldCoreControlPrincipalID, field.TypeUUID)
+	if _u.mutation.SfPrincipalIDCleared() {
+		_spec.ClearField(user.FieldSfPrincipalID, field.TypeUUID)
 	}
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(user.FieldActive, field.TypeBool, value)

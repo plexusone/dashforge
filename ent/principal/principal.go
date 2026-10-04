@@ -36,8 +36,8 @@ const (
 	FieldAllowedScopes = "allowed_scopes"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
-	// FieldCoreControlPrincipalID holds the string denoting the core_control_principal_id field in the database.
-	FieldCoreControlPrincipalID = "core_control_principal_id"
+	// FieldSfPrincipalID holds the string denoting the sf_principal_id field in the database.
+	FieldSfPrincipalID = "sf_principal_id"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeHuman holds the string denoting the human edge name in mutations.
@@ -154,7 +154,7 @@ var Columns = []string{
 	FieldCapabilities,
 	FieldAllowedScopes,
 	FieldMetadata,
-	FieldCoreControlPrincipalID,
+	FieldSfPrincipalID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -252,9 +252,9 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
-// ByCoreControlPrincipalID orders the results by the core_control_principal_id field.
-func ByCoreControlPrincipalID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCoreControlPrincipalID, opts...).ToFunc()
+// BySfPrincipalID orders the results by the sf_principal_id field.
+func BySfPrincipalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSfPrincipalID, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

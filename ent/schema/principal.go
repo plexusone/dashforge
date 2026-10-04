@@ -24,7 +24,7 @@ func (Principal) Mixin() []ent.Mixin {
 
 // Fields of the Principal.
 // PrincipalMixin provides: id, type, identifier, display_name, organization_id,
-// active, capabilities, allowed_scopes, metadata, core_control_principal_id, timestamps.
+// active, capabilities, allowed_scopes, metadata, sf_principal_id, timestamps.
 func (Principal) Fields() []ent.Field {
 	// All core fields provided by PrincipalMixin
 	return nil
@@ -79,7 +79,7 @@ func (Principal) Edges() []ent.Edge {
 }
 
 // Indexes of the Principal.
-// PrincipalMixin provides: type+identifier (unique), organization_id, core_control_principal_id, active.
+// PrincipalMixin provides: type+identifier (unique), organization_id, sf_principal_id, active.
 func (Principal) Indexes() []ent.Index {
 	// Additional app-specific indexes
 	return []ent.Index{

@@ -35,11 +35,11 @@ func (User) Fields() []ent.Field {
 		field.Bool("is_platform_admin").
 			Default(false).
 			Comment("Cross-org admin access"),
-		field.UUID("core_control_principal_id", uuid.UUID{}).
+		field.UUID("sf_principal_id", uuid.UUID{}).
 			Optional().
 			Nillable().
 			Unique().
-			Comment("CoreControl Principal ID for SSO"),
+			Comment("SystemAuth Principal ID for SSO"),
 		field.Bool("active").
 			Default(true),
 		field.Time("last_login_at").
@@ -68,6 +68,6 @@ func (User) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("email").Unique(),
 		index.Fields("active"),
-		index.Fields("core_control_principal_id"),
+		index.Fields("sf_principal_id"),
 	}
 }

@@ -84,16 +84,16 @@ func (_c *UserCreate) SetNillableIsPlatformAdmin(v *bool) *UserCreate {
 	return _c
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_c *UserCreate) SetCoreControlPrincipalID(v uuid.UUID) *UserCreate {
-	_c.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_c *UserCreate) SetSfPrincipalID(v uuid.UUID) *UserCreate {
+	_c.mutation.SetSfPrincipalID(v)
 	return _c
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_c *UserCreate) SetNillableCoreControlPrincipalID(v *uuid.UUID) *UserCreate {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_c *UserCreate) SetNillableSfPrincipalID(v *uuid.UUID) *UserCreate {
 	if v != nil {
-		_c.SetCoreControlPrincipalID(*v)
+		_c.SetSfPrincipalID(*v)
 	}
 	return _c
 }
@@ -317,9 +317,9 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldIsPlatformAdmin, field.TypeBool, value)
 		_node.IsPlatformAdmin = value
 	}
-	if value, ok := _c.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(user.FieldCoreControlPrincipalID, field.TypeUUID, value)
-		_node.CoreControlPrincipalID = &value
+	if value, ok := _c.mutation.SfPrincipalID(); ok {
+		_spec.SetField(user.FieldSfPrincipalID, field.TypeUUID, value)
+		_node.SfPrincipalID = &value
 	}
 	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(user.FieldActive, field.TypeBool, value)

@@ -81,12 +81,12 @@ type Config struct {
 	GoogleClientID     string
 	GoogleClientSecret string
 
-	// CoreControl (CoreAuth) settings
-	CoreControlURL          string
-	CoreControlClientID     string
-	CoreControlClientSecret string
-	CoreControlCallbackURL  string
-	CoreControlScopes       []string
+	// SystemAuth settings
+	SystemAuthURL          string
+	SystemAuthClientID     string
+	SystemAuthClientSecret string
+	SystemAuthCallbackURL  string
+	SystemAuthScopes       []string
 
 	// AnalyticsSourceStorePath is the JSON file for persisted analytics source
 	// configs when the metadata database is not configured. Defaults to
@@ -263,16 +263,16 @@ func newServerInternal(cfg Config, logger *slog.Logger, database db.Database) (*
 		// Initialize OAuth handler if we have an Ent client
 		if s.db != nil {
 			oauthCfg := auth.NewOAuthConfig(auth.OAuthProviderConfig{
-				GitHubClientID:          cfg.GitHubClientID,
-				GitHubClientSecret:      cfg.GitHubClientSecret,
-				GoogleClientID:          cfg.GoogleClientID,
-				GoogleClientSecret:      cfg.GoogleClientSecret,
-				CoreControlURL:          cfg.CoreControlURL,
-				CoreControlClientID:     cfg.CoreControlClientID,
-				CoreControlClientSecret: cfg.CoreControlClientSecret,
-				CoreControlCallbackURL:  cfg.CoreControlCallbackURL,
-				CoreControlScopes:       cfg.CoreControlScopes,
-				BaseURL:                 cfg.BaseURL,
+				GitHubClientID:         cfg.GitHubClientID,
+				GitHubClientSecret:     cfg.GitHubClientSecret,
+				GoogleClientID:         cfg.GoogleClientID,
+				GoogleClientSecret:     cfg.GoogleClientSecret,
+				SystemAuthURL:          cfg.SystemAuthURL,
+				SystemAuthClientID:     cfg.SystemAuthClientID,
+				SystemAuthClientSecret: cfg.SystemAuthClientSecret,
+				SystemAuthCallbackURL:  cfg.SystemAuthCallbackURL,
+				SystemAuthScopes:       cfg.SystemAuthScopes,
+				BaseURL:                cfg.BaseURL,
 			})
 			s.oauthHandler = auth.NewOAuthHandler(oauthCfg, jwtSvc, s.db.Client(), logger, cfg.BaseURL)
 		}
@@ -542,9 +542,9 @@ func (s *Server) ListenAndServe() error {
 		fmt.Printf("  Database:   %s (connected)\n", s.db.Type())
 	}
 	if s.oauthHandler != nil {
-		fmt.Printf("  Auth:       OAuth enabled (GitHub: %t, Google: %t, CoreControl: %t)\n",
+		fmt.Printf("  Auth:       OAuth enabled (GitHub: %t, Google: %t, SystemAuth: %t)\n",
 			s.config.GitHubClientID != "", s.config.GoogleClientID != "",
-			s.config.CoreControlClientID != "")
+			s.config.SystemAuthClientID != "")
 	}
 	if s.aiHandler != nil && s.aiHandler.Configured() {
 		fmt.Printf("  AI:         Enabled\n")

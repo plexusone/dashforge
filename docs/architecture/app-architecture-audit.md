@@ -58,7 +58,7 @@ package** and no `compose.Feature` seam yet.
 | `multiapp/` | **Replace** with public `app/` | — | `Backend` already implements SystemForge's `multiapp.AppBackend` (`Slug()="dashforge"`, `Routes(deps)`, lifecycle). This is the raw material for `app.New` implementing `compose.Feature`; the canonical app slug `dashforge` is already established here. |
 | `ent/` | `internal/platform/db` (shared client) — **spans layers** | — | Single generated ORM package/client covering foundation entities (principal, organization, membership, human, oauth_account, refresh_token, user) **and** feature entities (dashboard*, saved_query, analytics_source, datasource, alert*, integration, marketplace: license/listing/publisher/seat_assignment/subscription). Cannot be split cleanly along layer lines (see risks). |
 | `internal/authz/` | `internal/foundation/authz` | — | SpiceDB-backed authorization `Service`, modes, schema. Foundation layer (shared system of record). |
-| `internal/server/auth/` | `internal/foundation/authn` (+ sessions) | — | JWT service + OAuth handler (GitHub/Google/CoreControl). Identity/authn → foundation. |
+| `internal/server/auth/` | `internal/foundation/authn` (+ sessions) | — | JWT service + OAuth handler (GitHub/Google/SystemAuth). Identity/authn → foundation. |
 | `internal/server/db/` | `internal/platform/db` | — | `Database` interface + `Open`. Reusable infra. |
 | `internal/server/config/` | `internal/platform/config` | — | Config loading. Reusable infra. |
 | `internal/server/middleware/` | `internal/platform/http` (middleware) | — | Cross-cutting HTTP middleware. |

@@ -17067,7 +17067,7 @@ type PrincipalMutation struct {
 	allowed_scopes               *[]string
 	appendallowed_scopes         []string
 	metadata                     *map[string]interface{}
-	core_control_principal_id    *uuid.UUID
+	sf_principal_id              *uuid.UUID
 	clearedFields                map[string]struct{}
 	organization                 *uuid.UUID
 	clearedorganization          bool
@@ -17653,53 +17653,53 @@ func (m *PrincipalMutation) ResetMetadata() {
 	delete(m.clearedFields, principal.FieldMetadata)
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (m *PrincipalMutation) SetCoreControlPrincipalID(u uuid.UUID) {
-	m.core_control_principal_id = &u
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (m *PrincipalMutation) SetSfPrincipalID(u uuid.UUID) {
+	m.sf_principal_id = &u
 }
 
-// CoreControlPrincipalID returns the value of the "core_control_principal_id" field in the mutation.
-func (m *PrincipalMutation) CoreControlPrincipalID() (r uuid.UUID, exists bool) {
-	v := m.core_control_principal_id
+// SfPrincipalID returns the value of the "sf_principal_id" field in the mutation.
+func (m *PrincipalMutation) SfPrincipalID() (r uuid.UUID, exists bool) {
+	v := m.sf_principal_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCoreControlPrincipalID returns the old "core_control_principal_id" field's value of the Principal entity.
+// OldSfPrincipalID returns the old "sf_principal_id" field's value of the Principal entity.
 // If the Principal object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PrincipalMutation) OldCoreControlPrincipalID(ctx context.Context) (v *uuid.UUID, err error) {
+func (m *PrincipalMutation) OldSfPrincipalID(ctx context.Context) (v *uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCoreControlPrincipalID is only allowed on UpdateOne operations")
+		return v, errors.New("OldSfPrincipalID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCoreControlPrincipalID requires an ID field in the mutation")
+		return v, errors.New("OldSfPrincipalID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCoreControlPrincipalID: %w", err)
+		return v, fmt.Errorf("querying old value for OldSfPrincipalID: %w", err)
 	}
-	return oldValue.CoreControlPrincipalID, nil
+	return oldValue.SfPrincipalID, nil
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (m *PrincipalMutation) ClearCoreControlPrincipalID() {
-	m.core_control_principal_id = nil
-	m.clearedFields[principal.FieldCoreControlPrincipalID] = struct{}{}
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (m *PrincipalMutation) ClearSfPrincipalID() {
+	m.sf_principal_id = nil
+	m.clearedFields[principal.FieldSfPrincipalID] = struct{}{}
 }
 
-// CoreControlPrincipalIDCleared returns if the "core_control_principal_id" field was cleared in this mutation.
-func (m *PrincipalMutation) CoreControlPrincipalIDCleared() bool {
-	_, ok := m.clearedFields[principal.FieldCoreControlPrincipalID]
+// SfPrincipalIDCleared returns if the "sf_principal_id" field was cleared in this mutation.
+func (m *PrincipalMutation) SfPrincipalIDCleared() bool {
+	_, ok := m.clearedFields[principal.FieldSfPrincipalID]
 	return ok
 }
 
-// ResetCoreControlPrincipalID resets all changes to the "core_control_principal_id" field.
-func (m *PrincipalMutation) ResetCoreControlPrincipalID() {
-	m.core_control_principal_id = nil
-	delete(m.clearedFields, principal.FieldCoreControlPrincipalID)
+// ResetSfPrincipalID resets all changes to the "sf_principal_id" field.
+func (m *PrincipalMutation) ResetSfPrincipalID() {
+	m.sf_principal_id = nil
+	delete(m.clearedFields, principal.FieldSfPrincipalID)
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
@@ -18319,8 +18319,8 @@ func (m *PrincipalMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, principal.FieldMetadata)
 	}
-	if m.core_control_principal_id != nil {
-		fields = append(fields, principal.FieldCoreControlPrincipalID)
+	if m.sf_principal_id != nil {
+		fields = append(fields, principal.FieldSfPrincipalID)
 	}
 	return fields
 }
@@ -18350,8 +18350,8 @@ func (m *PrincipalMutation) Field(name string) (ent.Value, bool) {
 		return m.AllowedScopes()
 	case principal.FieldMetadata:
 		return m.Metadata()
-	case principal.FieldCoreControlPrincipalID:
-		return m.CoreControlPrincipalID()
+	case principal.FieldSfPrincipalID:
+		return m.SfPrincipalID()
 	}
 	return nil, false
 }
@@ -18381,8 +18381,8 @@ func (m *PrincipalMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldAllowedScopes(ctx)
 	case principal.FieldMetadata:
 		return m.OldMetadata(ctx)
-	case principal.FieldCoreControlPrincipalID:
-		return m.OldCoreControlPrincipalID(ctx)
+	case principal.FieldSfPrincipalID:
+		return m.OldSfPrincipalID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Principal field %s", name)
 }
@@ -18462,12 +18462,12 @@ func (m *PrincipalMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
-	case principal.FieldCoreControlPrincipalID:
+	case principal.FieldSfPrincipalID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCoreControlPrincipalID(v)
+		m.SetSfPrincipalID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Principal field %s", name)
@@ -18511,8 +18511,8 @@ func (m *PrincipalMutation) ClearedFields() []string {
 	if m.FieldCleared(principal.FieldMetadata) {
 		fields = append(fields, principal.FieldMetadata)
 	}
-	if m.FieldCleared(principal.FieldCoreControlPrincipalID) {
-		fields = append(fields, principal.FieldCoreControlPrincipalID)
+	if m.FieldCleared(principal.FieldSfPrincipalID) {
+		fields = append(fields, principal.FieldSfPrincipalID)
 	}
 	return fields
 }
@@ -18540,8 +18540,8 @@ func (m *PrincipalMutation) ClearField(name string) error {
 	case principal.FieldMetadata:
 		m.ClearMetadata()
 		return nil
-	case principal.FieldCoreControlPrincipalID:
-		m.ClearCoreControlPrincipalID()
+	case principal.FieldSfPrincipalID:
+		m.ClearSfPrincipalID()
 		return nil
 	}
 	return fmt.Errorf("unknown Principal nullable field %s", name)
@@ -18581,8 +18581,8 @@ func (m *PrincipalMutation) ResetField(name string) error {
 	case principal.FieldMetadata:
 		m.ResetMetadata()
 		return nil
-	case principal.FieldCoreControlPrincipalID:
-		m.ResetCoreControlPrincipalID()
+	case principal.FieldSfPrincipalID:
+		m.ResetSfPrincipalID()
 		return nil
 	}
 	return fmt.Errorf("unknown Principal field %s", name)
@@ -25558,26 +25558,26 @@ func (m *SubscriptionMutation) ResetEdge(name string) error {
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op                        Op
-	typ                       string
-	id                        *uuid.UUID
-	email                     *string
-	name                      *string
-	password_hash             *string
-	avatar_url                *string
-	is_platform_admin         *bool
-	core_control_principal_id *uuid.UUID
-	active                    *bool
-	last_login_at             *time.Time
-	created_at                *time.Time
-	updated_at                *time.Time
-	clearedFields             map[string]struct{}
-	memberships               map[uuid.UUID]struct{}
-	removedmemberships        map[uuid.UUID]struct{}
-	clearedmemberships        bool
-	done                      bool
-	oldValue                  func(context.Context) (*User, error)
-	predicates                []predicate.User
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	email              *string
+	name               *string
+	password_hash      *string
+	avatar_url         *string
+	is_platform_admin  *bool
+	sf_principal_id    *uuid.UUID
+	active             *bool
+	last_login_at      *time.Time
+	created_at         *time.Time
+	updated_at         *time.Time
+	clearedFields      map[string]struct{}
+	memberships        map[uuid.UUID]struct{}
+	removedmemberships map[uuid.UUID]struct{}
+	clearedmemberships bool
+	done               bool
+	oldValue           func(context.Context) (*User, error)
+	predicates         []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -25903,53 +25903,53 @@ func (m *UserMutation) ResetIsPlatformAdmin() {
 	m.is_platform_admin = nil
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (m *UserMutation) SetCoreControlPrincipalID(u uuid.UUID) {
-	m.core_control_principal_id = &u
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (m *UserMutation) SetSfPrincipalID(u uuid.UUID) {
+	m.sf_principal_id = &u
 }
 
-// CoreControlPrincipalID returns the value of the "core_control_principal_id" field in the mutation.
-func (m *UserMutation) CoreControlPrincipalID() (r uuid.UUID, exists bool) {
-	v := m.core_control_principal_id
+// SfPrincipalID returns the value of the "sf_principal_id" field in the mutation.
+func (m *UserMutation) SfPrincipalID() (r uuid.UUID, exists bool) {
+	v := m.sf_principal_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCoreControlPrincipalID returns the old "core_control_principal_id" field's value of the User entity.
+// OldSfPrincipalID returns the old "sf_principal_id" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldCoreControlPrincipalID(ctx context.Context) (v *uuid.UUID, err error) {
+func (m *UserMutation) OldSfPrincipalID(ctx context.Context) (v *uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCoreControlPrincipalID is only allowed on UpdateOne operations")
+		return v, errors.New("OldSfPrincipalID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCoreControlPrincipalID requires an ID field in the mutation")
+		return v, errors.New("OldSfPrincipalID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCoreControlPrincipalID: %w", err)
+		return v, fmt.Errorf("querying old value for OldSfPrincipalID: %w", err)
 	}
-	return oldValue.CoreControlPrincipalID, nil
+	return oldValue.SfPrincipalID, nil
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (m *UserMutation) ClearCoreControlPrincipalID() {
-	m.core_control_principal_id = nil
-	m.clearedFields[user.FieldCoreControlPrincipalID] = struct{}{}
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (m *UserMutation) ClearSfPrincipalID() {
+	m.sf_principal_id = nil
+	m.clearedFields[user.FieldSfPrincipalID] = struct{}{}
 }
 
-// CoreControlPrincipalIDCleared returns if the "core_control_principal_id" field was cleared in this mutation.
-func (m *UserMutation) CoreControlPrincipalIDCleared() bool {
-	_, ok := m.clearedFields[user.FieldCoreControlPrincipalID]
+// SfPrincipalIDCleared returns if the "sf_principal_id" field was cleared in this mutation.
+func (m *UserMutation) SfPrincipalIDCleared() bool {
+	_, ok := m.clearedFields[user.FieldSfPrincipalID]
 	return ok
 }
 
-// ResetCoreControlPrincipalID resets all changes to the "core_control_principal_id" field.
-func (m *UserMutation) ResetCoreControlPrincipalID() {
-	m.core_control_principal_id = nil
-	delete(m.clearedFields, user.FieldCoreControlPrincipalID)
+// ResetSfPrincipalID resets all changes to the "sf_principal_id" field.
+func (m *UserMutation) ResetSfPrincipalID() {
+	m.sf_principal_id = nil
+	delete(m.clearedFields, user.FieldSfPrincipalID)
 }
 
 // SetActive sets the "active" field.
@@ -26213,8 +26213,8 @@ func (m *UserMutation) Fields() []string {
 	if m.is_platform_admin != nil {
 		fields = append(fields, user.FieldIsPlatformAdmin)
 	}
-	if m.core_control_principal_id != nil {
-		fields = append(fields, user.FieldCoreControlPrincipalID)
+	if m.sf_principal_id != nil {
+		fields = append(fields, user.FieldSfPrincipalID)
 	}
 	if m.active != nil {
 		fields = append(fields, user.FieldActive)
@@ -26246,8 +26246,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.AvatarURL()
 	case user.FieldIsPlatformAdmin:
 		return m.IsPlatformAdmin()
-	case user.FieldCoreControlPrincipalID:
-		return m.CoreControlPrincipalID()
+	case user.FieldSfPrincipalID:
+		return m.SfPrincipalID()
 	case user.FieldActive:
 		return m.Active()
 	case user.FieldLastLoginAt:
@@ -26275,8 +26275,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAvatarURL(ctx)
 	case user.FieldIsPlatformAdmin:
 		return m.OldIsPlatformAdmin(ctx)
-	case user.FieldCoreControlPrincipalID:
-		return m.OldCoreControlPrincipalID(ctx)
+	case user.FieldSfPrincipalID:
+		return m.OldSfPrincipalID(ctx)
 	case user.FieldActive:
 		return m.OldActive(ctx)
 	case user.FieldLastLoginAt:
@@ -26329,12 +26329,12 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsPlatformAdmin(v)
 		return nil
-	case user.FieldCoreControlPrincipalID:
+	case user.FieldSfPrincipalID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCoreControlPrincipalID(v)
+		m.SetSfPrincipalID(v)
 		return nil
 	case user.FieldActive:
 		v, ok := value.(bool)
@@ -26403,8 +26403,8 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldAvatarURL) {
 		fields = append(fields, user.FieldAvatarURL)
 	}
-	if m.FieldCleared(user.FieldCoreControlPrincipalID) {
-		fields = append(fields, user.FieldCoreControlPrincipalID)
+	if m.FieldCleared(user.FieldSfPrincipalID) {
+		fields = append(fields, user.FieldSfPrincipalID)
 	}
 	if m.FieldCleared(user.FieldLastLoginAt) {
 		fields = append(fields, user.FieldLastLoginAt)
@@ -26432,8 +26432,8 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldAvatarURL:
 		m.ClearAvatarURL()
 		return nil
-	case user.FieldCoreControlPrincipalID:
-		m.ClearCoreControlPrincipalID()
+	case user.FieldSfPrincipalID:
+		m.ClearSfPrincipalID()
 		return nil
 	case user.FieldLastLoginAt:
 		m.ClearLastLoginAt()
@@ -26461,8 +26461,8 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldIsPlatformAdmin:
 		m.ResetIsPlatformAdmin()
 		return nil
-	case user.FieldCoreControlPrincipalID:
-		m.ResetCoreControlPrincipalID()
+	case user.FieldSfPrincipalID:
+		m.ResetSfPrincipalID()
 		return nil
 	case user.FieldActive:
 		m.ResetActive()

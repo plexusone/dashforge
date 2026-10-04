@@ -41,8 +41,8 @@ type Principal struct {
 	AllowedScopes []string `json:"allowed_scopes,omitempty"`
 	// App-specific metadata
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// CoreControl Principal ID for SSO federation
-	CoreControlPrincipalID *uuid.UUID `json:"core_control_principal_id,omitempty"`
+	// SystemAuth Principal ID for SSO federation
+	SfPrincipalID *uuid.UUID `json:"sf_principal_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrincipalQuery when eager-loading is set.
 	Edges        PrincipalEdges `json:"edges"`
@@ -186,7 +186,7 @@ func (*Principal) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case principal.FieldOrganizationID, principal.FieldCoreControlPrincipalID:
+		case principal.FieldOrganizationID, principal.FieldSfPrincipalID:
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case principal.FieldCapabilities, principal.FieldAllowedScopes, principal.FieldMetadata:
 			values[i] = new([]byte)
@@ -286,12 +286,12 @@ func (_m *Principal) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
-		case principal.FieldCoreControlPrincipalID:
+		case principal.FieldSfPrincipalID:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field core_control_principal_id", values[i])
+				return fmt.Errorf("unexpected type %T for field sf_principal_id", values[i])
 			} else if value.Valid {
-				_m.CoreControlPrincipalID = new(uuid.UUID)
-				*_m.CoreControlPrincipalID = *value.S.(*uuid.UUID)
+				_m.SfPrincipalID = new(uuid.UUID)
+				*_m.SfPrincipalID = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -416,8 +416,8 @@ func (_m *Principal) String() string {
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
-	if v := _m.CoreControlPrincipalID; v != nil {
-		builder.WriteString("core_control_principal_id=")
+	if v := _m.SfPrincipalID; v != nil {
+		builder.WriteString("sf_principal_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')

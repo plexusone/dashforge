@@ -123,16 +123,16 @@ func (_c *PrincipalCreate) SetMetadata(v map[string]interface{}) *PrincipalCreat
 	return _c
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_c *PrincipalCreate) SetCoreControlPrincipalID(v uuid.UUID) *PrincipalCreate {
-	_c.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_c *PrincipalCreate) SetSfPrincipalID(v uuid.UUID) *PrincipalCreate {
+	_c.mutation.SetSfPrincipalID(v)
 	return _c
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_c *PrincipalCreate) SetNillableCoreControlPrincipalID(v *uuid.UUID) *PrincipalCreate {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_c *PrincipalCreate) SetNillableSfPrincipalID(v *uuid.UUID) *PrincipalCreate {
 	if v != nil {
-		_c.SetCoreControlPrincipalID(*v)
+		_c.SetSfPrincipalID(*v)
 	}
 	return _c
 }
@@ -469,9 +469,9 @@ func (_c *PrincipalCreate) createSpec() (*Principal, *sqlgraph.CreateSpec) {
 		_spec.SetField(principal.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if value, ok := _c.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(principal.FieldCoreControlPrincipalID, field.TypeUUID, value)
-		_node.CoreControlPrincipalID = &value
+	if value, ok := _c.mutation.SfPrincipalID(); ok {
+		_spec.SetField(principal.FieldSfPrincipalID, field.TypeUUID, value)
+		_node.SfPrincipalID = &value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

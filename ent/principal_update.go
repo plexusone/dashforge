@@ -170,23 +170,23 @@ func (_u *PrincipalUpdate) ClearMetadata() *PrincipalUpdate {
 	return _u
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_u *PrincipalUpdate) SetCoreControlPrincipalID(v uuid.UUID) *PrincipalUpdate {
-	_u.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_u *PrincipalUpdate) SetSfPrincipalID(v uuid.UUID) *PrincipalUpdate {
+	_u.mutation.SetSfPrincipalID(v)
 	return _u
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_u *PrincipalUpdate) SetNillableCoreControlPrincipalID(v *uuid.UUID) *PrincipalUpdate {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_u *PrincipalUpdate) SetNillableSfPrincipalID(v *uuid.UUID) *PrincipalUpdate {
 	if v != nil {
-		_u.SetCoreControlPrincipalID(*v)
+		_u.SetSfPrincipalID(*v)
 	}
 	return _u
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (_u *PrincipalUpdate) ClearCoreControlPrincipalID() *PrincipalUpdate {
-	_u.mutation.ClearCoreControlPrincipalID()
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (_u *PrincipalUpdate) ClearSfPrincipalID() *PrincipalUpdate {
+	_u.mutation.ClearSfPrincipalID()
 	return _u
 }
 
@@ -666,11 +666,11 @@ func (_u *PrincipalUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(principal.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(principal.FieldCoreControlPrincipalID, field.TypeUUID, value)
+	if value, ok := _u.mutation.SfPrincipalID(); ok {
+		_spec.SetField(principal.FieldSfPrincipalID, field.TypeUUID, value)
 	}
-	if _u.mutation.CoreControlPrincipalIDCleared() {
-		_spec.ClearField(principal.FieldCoreControlPrincipalID, field.TypeUUID)
+	if _u.mutation.SfPrincipalIDCleared() {
+		_spec.ClearField(principal.FieldSfPrincipalID, field.TypeUUID)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1285,23 +1285,23 @@ func (_u *PrincipalUpdateOne) ClearMetadata() *PrincipalUpdateOne {
 	return _u
 }
 
-// SetCoreControlPrincipalID sets the "core_control_principal_id" field.
-func (_u *PrincipalUpdateOne) SetCoreControlPrincipalID(v uuid.UUID) *PrincipalUpdateOne {
-	_u.mutation.SetCoreControlPrincipalID(v)
+// SetSfPrincipalID sets the "sf_principal_id" field.
+func (_u *PrincipalUpdateOne) SetSfPrincipalID(v uuid.UUID) *PrincipalUpdateOne {
+	_u.mutation.SetSfPrincipalID(v)
 	return _u
 }
 
-// SetNillableCoreControlPrincipalID sets the "core_control_principal_id" field if the given value is not nil.
-func (_u *PrincipalUpdateOne) SetNillableCoreControlPrincipalID(v *uuid.UUID) *PrincipalUpdateOne {
+// SetNillableSfPrincipalID sets the "sf_principal_id" field if the given value is not nil.
+func (_u *PrincipalUpdateOne) SetNillableSfPrincipalID(v *uuid.UUID) *PrincipalUpdateOne {
 	if v != nil {
-		_u.SetCoreControlPrincipalID(*v)
+		_u.SetSfPrincipalID(*v)
 	}
 	return _u
 }
 
-// ClearCoreControlPrincipalID clears the value of the "core_control_principal_id" field.
-func (_u *PrincipalUpdateOne) ClearCoreControlPrincipalID() *PrincipalUpdateOne {
-	_u.mutation.ClearCoreControlPrincipalID()
+// ClearSfPrincipalID clears the value of the "sf_principal_id" field.
+func (_u *PrincipalUpdateOne) ClearSfPrincipalID() *PrincipalUpdateOne {
+	_u.mutation.ClearSfPrincipalID()
 	return _u
 }
 
@@ -1811,11 +1811,11 @@ func (_u *PrincipalUpdateOne) sqlSave(ctx context.Context) (_node *Principal, er
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(principal.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.CoreControlPrincipalID(); ok {
-		_spec.SetField(principal.FieldCoreControlPrincipalID, field.TypeUUID, value)
+	if value, ok := _u.mutation.SfPrincipalID(); ok {
+		_spec.SetField(principal.FieldSfPrincipalID, field.TypeUUID, value)
 	}
-	if _u.mutation.CoreControlPrincipalIDCleared() {
-		_spec.ClearField(principal.FieldCoreControlPrincipalID, field.TypeUUID)
+	if _u.mutation.SfPrincipalIDCleared() {
+		_spec.ClearField(principal.FieldSfPrincipalID, field.TypeUUID)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
