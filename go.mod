@@ -34,14 +34,11 @@ require (
 	github.com/plexusone/omnillm-core v0.18.0
 	github.com/plexusone/omnivault v0.5.0
 	github.com/plexusone/systemforge v0.11.0
+	github.com/plexusone/uiforge v0.8.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-require github.com/plexusone/uiforge v0.8.0
-
-require github.com/pb33f/go-yaml v0.1.1 // indirect
 
 require (
 	ariga.io/atlas v1.3.0 // indirect
@@ -65,9 +62,9 @@ require (
 	github.com/KimMachineGun/automemlimit v1.0.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/squirrel v1.5.4 // indirect
-	github.com/OpenRouterTeam/go-sdk v0.7.132 // indirect
+	github.com/OpenRouterTeam/go-sdk v0.9.22 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
-	github.com/anthropics/anthropic-sdk-go v1.72.0 // indirect
+	github.com/anthropics/anthropic-sdk-go v1.78.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v17 v17.0.1 // indirect
@@ -87,7 +84,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.4 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.4 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.62.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.63.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.19 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.10.1 // indirect
@@ -98,7 +95,7 @@ require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/bits-and-blooms/bitset v1.25.0 // indirect
+	github.com/bits-and-blooms/bitset v1.26.0 // indirect
 	github.com/bits-and-blooms/bloom/v3 v3.7.1 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/buger/jsonparser v1.6.1 // indirect
@@ -131,14 +128,14 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20261002000307-77d3b59017a0 // indirect
+	github.com/google/pprof v0.0.0-20261003200830-ebaad5f31b4d // indirect
 	github.com/google/s2a-go v0.1.11 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.22 // indirect
 	github.com/googleapis/gax-go/v2 v2.26.2 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
 	github.com/grokify/goauth v0.25.0 // indirect
 	github.com/grokify/guardsql v0.2.0
-	github.com/grokify/mogo v0.74.9 // indirect
+	github.com/grokify/mogo v0.75.0 // indirect
 	github.com/grokify/oscompat v0.5.0 // indirect
 	github.com/grokify/sogo v0.15.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
@@ -172,6 +169,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ngrok/sqlmw v0.0.0-20220520173518-97c9c04efc79 // indirect
 	github.com/openai/openai-go v1.12.0 // indirect
+	github.com/pb33f/go-yaml v0.1.1 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.2 // indirect
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 // indirect
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect
@@ -212,7 +210,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/pretty v1.2.2 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/zclconf/go-cty v1.19.0 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
@@ -258,7 +256,7 @@ require (
 	golang.org/x/time v0.16.0 // indirect
 	golang.org/x/tools v0.51.0 // indirect
 	google.golang.org/api v0.300.0 // indirect
-	google.golang.org/genai v1.71.0 // indirect
+	google.golang.org/genai v1.72.0 // indirect
 	google.golang.org/genproto v0.0.0-20260928230214-8a89bd6388cc // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260928230214-8a89bd6388cc // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260928230214-8a89bd6388cc // indirect
