@@ -39,7 +39,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require github.com/plexusone/uiforge v0.1.0
+require github.com/plexusone/uiforge v0.8.0
 
 require github.com/pb33f/go-yaml v0.1.1 // indirect
 
