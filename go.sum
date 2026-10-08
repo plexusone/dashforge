@@ -459,8 +459,8 @@ github.com/plexusone/omni-openrouter v0.2.0 h1:HCZVJ4XT3aSvSlKxZ2KAcYNrgw923Y4NH
 github.com/plexusone/omni-openrouter v0.2.0/go.mod h1:xivHRuhqxe+YGU/RYwj6mIiZe/jCdKvs3hYnVHFGwwE=
 github.com/plexusone/omnillm v0.17.0 h1:UXnDDOjZnSnVTixhS0OxsMW6LmX7lToJ5HmTdADCNw0=
 github.com/plexusone/omnillm v0.17.0/go.mod h1:6qEWL2WuGMrB+TxMsuNYLVpORO0nF7wLfWRfN4feBzY=
-github.com/plexusone/omnillm-core v0.18.0 h1:JnONiIe08W+83hsyxyFHSouk0jkBY2o7/SzvJxF3mYI=
-github.com/plexusone/omnillm-core v0.18.0/go.mod h1:180U/oa67fly3+T3h1sL/pBMvcjIKR+bvSEkAGnalMY=
+github.com/plexusone/omnillm-core v0.18.1 h1:Pp/F7L9edGlPtd/OvTq39/H2XttIXRN9K5cf+KcARW0=
+github.com/plexusone/omnillm-core v0.18.1/go.mod h1:qX6C1tOcLoDa6C4sgMUUgjX/zjM9CfBXG/pmnK7lveA=
 github.com/plexusone/omniobserve v0.12.0 h1:WT6iIgd/ORWfW14BTBcauYk1asV53TZ4zy3gjrjhens=
 github.com/plexusone/omniobserve v0.12.0/go.mod h1:31Orh80n0p5y6ViK8gdvXu6iSZI++Ok8kngkKk2ty2o=
 github.com/plexusone/omnistorage-core v0.5.1 h1:tvsfTcJln6ZixKL75aE7tMf3yyP94hFDef7ASGlQBe8=
