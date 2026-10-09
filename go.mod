@@ -31,7 +31,7 @@ require (
 	github.com/lib/pq v1.12.3
 	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/plexusone/omnillm v0.17.0
-	github.com/plexusone/omnillm-core v0.18.0
+	github.com/plexusone/omnillm-core v0.18.1
 	github.com/plexusone/omnivault v0.5.0
 	github.com/plexusone/systemforge v0.11.0
 	github.com/plexusone/uiforge v0.8.0
