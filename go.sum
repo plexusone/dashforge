@@ -301,12 +301,14 @@ github.com/googleapis/gax-go/v2 v2.26.2 h1:ydkmNXxj7bEmmeK5AihkKnWxyOyBR9TDebvp5
 github.com/googleapis/gax-go/v2 v2.26.2/go.mod h1:sMKqnMesnKH+3wiRJROcttA+cJoZoGbZl1vDQ8XYtGk=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 h1:JeSE6pjso5THxAzdVpqr6/geYxZytqFMBCOtn/ujyeo=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674/go.mod h1:r4w70xmWCQKmi1ONH4KIaBptdivuRPyosB9RmPlGEwA=
+github.com/grokify/datacatalog v0.1.0 h1:Gv/FlrxEB5QkiTdfDZd9n2915t7K91H8GgUJvLnUN3g=
+github.com/grokify/datacatalog v0.1.0/go.mod h1:FDfIRBPFrK7pxIZo/WBjampTtmo9vc/SLjn5fZ/7G2w=
 github.com/grokify/goauth v0.25.0 h1:YzkzfSoBPPDc3fVwldngHehhc8ZqQWrv/PyR7xMPZys=
 github.com/grokify/goauth v0.25.0/go.mod h1:9dwrmlIm92sgoE/0hnOrnhu9E0D2l701K5SLCXsj2HE=
 github.com/grokify/godolt v0.3.0 h1:aFBrRKUXDWe7UME9PH/xT+G/fVfQCNOrDgf2mS9xC9o=
 github.com/grokify/godolt v0.3.0/go.mod h1:NX3DZszMrfksxOKY1fHz3BgJqPOgUmlU6FkX/nhhsZA=
-github.com/grokify/guardsql v0.2.0 h1:zv6PiBVnRWup/fZs/tc19DZ+oAEDwU56wqvmJLSx9BQ=
-github.com/grokify/guardsql v0.2.0/go.mod h1:Lh4YjGwFwfI4Ygy3TKbSmpmFmBkdkolS/U6U0xtPh2I=
+github.com/grokify/guardsql v0.3.0 h1:Ip43cLo6i1VBnKrjRii7ZB/tF50WQbj9BKa5IeZkSsI=
+github.com/grokify/guardsql v0.3.0/go.mod h1:lA42KNXkMJyy3XX5oOV2wtKIIF9q9aDhGnorGaJnxSM=
 github.com/grokify/mogo v0.75.0 h1:YVOGu49NWvltMfG9wh3aarRD6CTF7y0llEFU+HU9drc=
 github.com/grokify/mogo v0.75.0/go.mod h1:FLksmFRywriEucyYLAGyub7C0po49Yc/nHc9q9gX67w=
 github.com/grokify/oscompat v0.5.0 h1:qGUym1Jt+yecBmBM7FnimvuUWLs8VVRCxotpHTzaWH0=

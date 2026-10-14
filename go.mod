@@ -40,6 +40,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
+require github.com/grokify/datacatalog v0.1.0 // indirect
+
 require (
 	ariga.io/atlas v1.3.0 // indirect
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.12-20260825204119-511051f7f437.2 // indirect
@@ -134,7 +136,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.26.2 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
 	github.com/grokify/goauth v0.25.0 // indirect
-	github.com/grokify/guardsql v0.2.0
+	github.com/grokify/guardsql v0.3.0
 	github.com/grokify/mogo v0.75.0 // indirect
 	github.com/grokify/oscompat v0.5.0 // indirect
 	github.com/grokify/sogo v0.15.0 // indirect
