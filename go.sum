@@ -307,8 +307,8 @@ github.com/grokify/goauth v0.25.0 h1:YzkzfSoBPPDc3fVwldngHehhc8ZqQWrv/PyR7xMPZys
 github.com/grokify/goauth v0.25.0/go.mod h1:9dwrmlIm92sgoE/0hnOrnhu9E0D2l701K5SLCXsj2HE=
 github.com/grokify/godolt v0.3.0 h1:aFBrRKUXDWe7UME9PH/xT+G/fVfQCNOrDgf2mS9xC9o=
 github.com/grokify/godolt v0.3.0/go.mod h1:NX3DZszMrfksxOKY1fHz3BgJqPOgUmlU6FkX/nhhsZA=
-github.com/grokify/guardsql v0.3.0 h1:Ip43cLo6i1VBnKrjRii7ZB/tF50WQbj9BKa5IeZkSsI=
-github.com/grokify/guardsql v0.3.0/go.mod h1:lA42KNXkMJyy3XX5oOV2wtKIIF9q9aDhGnorGaJnxSM=
+github.com/grokify/guardsql v0.4.0 h1:jjOSY4oCGLMQn5r3KKV95NONl5rfjV8khCScZ8ya4LQ=
+github.com/grokify/guardsql v0.4.0/go.mod h1:lA42KNXkMJyy3XX5oOV2wtKIIF9q9aDhGnorGaJnxSM=
 github.com/grokify/mogo v0.75.0 h1:YVOGu49NWvltMfG9wh3aarRD6CTF7y0llEFU+HU9drc=
 github.com/grokify/mogo v0.75.0/go.mod h1:FLksmFRywriEucyYLAGyub7C0po49Yc/nHc9q9gX67w=
 github.com/grokify/oscompat v0.5.0 h1:qGUym1Jt+yecBmBM7FnimvuUWLs8VVRCxotpHTzaWH0=
