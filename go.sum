@@ -312,8 +312,8 @@ github.com/grokify/guardsql v0.4.0 h1:jjOSY4oCGLMQn5r3KKV95NONl5rfjV8khCScZ8ya4L
 github.com/grokify/guardsql v0.4.0/go.mod h1:lA42KNXkMJyy3XX5oOV2wtKIIF9q9aDhGnorGaJnxSM=
 github.com/grokify/mogo v0.75.0 h1:YVOGu49NWvltMfG9wh3aarRD6CTF7y0llEFU+HU9drc=
 github.com/grokify/mogo v0.75.0/go.mod h1:FLksmFRywriEucyYLAGyub7C0po49Yc/nHc9q9gX67w=
-github.com/grokify/oscompat v0.7.0 h1:aD36tcBnPQRvxQGtuclr0qG87zv6yh5e2FSPETBO+2E=
-github.com/grokify/oscompat v0.7.0/go.mod h1:Ekex/WzHaA39LNt5xbeQRASo74NEXAIqBlqdvNF2oUM=
+github.com/grokify/oscompat v0.9.0 h1:9IqHoh+YTM+v4Fw/40vT60HyZ756pqOe7v1DT9XBVfc=
+github.com/grokify/oscompat v0.9.0/go.mod h1:Ekex/WzHaA39LNt5xbeQRASo74NEXAIqBlqdvNF2oUM=
 github.com/grokify/sogo v0.16.0 h1:vRpfpJ2aI3iRHIkf9uBAJzmBExqxop1eYO6ttoBfoT4=
 github.com/grokify/sogo v0.16.0/go.mod h1:pUjZDDpUoxb4d2hJDTfIDirFldUVuDIgmGJLo/C4vPg=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 h1:UH//fgunKIs4JdUbpDl1VZCDaL56wXCB/5+wF6uHfaI=
@@ -470,8 +470,8 @@ github.com/plexusone/omniobserve v0.12.0 h1:WT6iIgd/ORWfW14BTBcauYk1asV53TZ4zy3g
 github.com/plexusone/omniobserve v0.12.0/go.mod h1:31Orh80n0p5y6ViK8gdvXu6iSZI++Ok8kngkKk2ty2o=
 github.com/plexusone/omnistorage-core v0.5.2 h1:vhascjTnSx3ITquf70d50o/B7cYeIUbJwUwzFVKqwB8=
 github.com/plexusone/omnistorage-core v0.5.2/go.mod h1:YGmwdm36lhgkl+NvQn89QDcteJiC3EGLoUcCO5ZUplg=
-github.com/plexusone/omnivault v0.5.0 h1:7oZwP1KNS+XQ1ksoZoKnLS9PV0TQ93b5NEuxO0T2Hwg=
-github.com/plexusone/omnivault v0.5.0/go.mod h1:LQNyI6gTygb3ht4yLhLpHIdcOVALOTGnaO1oJn6+2KE=
+github.com/plexusone/omnivault v0.6.0 h1:a0virroALv1WTOpCYGfq4NUChfkqksnY0ON9rEHg7Ig=
+github.com/plexusone/omnivault v0.6.0/go.mod h1:So6UyUzZkR+c7GvfEFjkGiVRI6Z7I1YzLHieEfgyIFo=
 github.com/plexusone/systemforge v0.11.0 h1:wn/WZ7Bkd79ZfaF0EkAHpolyHHp59ZBL/zyFE+Xervk=
 github.com/plexusone/systemforge v0.11.0/go.mod h1:wvvMdyoCDyMqLK8GTxa6yzuBcSPNsxn8NXEmSUtdBuU=
 github.com/plexusone/uiforge v0.8.0 h1:ADvNF3CX4Q/juYNFZyBpie6IhDeO5Qh2RQMqWwXNulc=
