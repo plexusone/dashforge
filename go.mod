@@ -136,7 +136,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.27.0 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
 	github.com/grokify/goauth v0.25.0 // indirect
-	github.com/grokify/guardsql v0.3.0
+	github.com/grokify/guardsql v0.4.0
 	github.com/grokify/mogo v0.75.0 // indirect
 	github.com/grokify/oscompat v0.7.0 // indirect
 	github.com/grokify/sogo v0.16.0 // indirect
