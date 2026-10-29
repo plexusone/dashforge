@@ -32,7 +32,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/plexusone/omnillm v0.17.1
 	github.com/plexusone/omnillm-core v0.18.1
-	github.com/plexusone/omnivault v0.5.0
+	github.com/plexusone/omnivault v0.6.0
 	github.com/plexusone/systemforge v0.11.0
 	github.com/plexusone/uiforge v0.8.0
 	github.com/spf13/cobra v1.10.2
@@ -138,7 +138,7 @@ require (
 	github.com/grokify/goauth v0.25.0 // indirect
 	github.com/grokify/guardsql v0.4.0
 	github.com/grokify/mogo v0.75.0 // indirect
-	github.com/grokify/oscompat v0.7.0 // indirect
+	github.com/grokify/oscompat v0.9.0 // indirect
 	github.com/grokify/sogo v0.16.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.1.0 // indirect
