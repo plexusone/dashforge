@@ -29,7 +29,7 @@ require (
 	github.com/grokify/godolt v0.3.0
 	github.com/jackc/pgx/v5 v5.12.0
 	github.com/lib/pq v1.12.3
-	github.com/mattn/go-sqlite3 v1.14.52
+	github.com/mattn/go-sqlite3 v1.14.53
 	github.com/plexusone/omnillm v0.17.1
 	github.com/plexusone/omnillm-core v0.18.1
 	github.com/plexusone/omnivault v0.6.0
